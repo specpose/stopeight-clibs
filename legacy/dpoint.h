@@ -1,12 +1,14 @@
 #ifndef DPOINT_H
 #define DPOINT_H
 
+#include "legacy_global.h"
+
 #include <QDebug>
 #include <QPointF>
 #include <QDataStream>
 #include <cmath>
 
-class dpoint : public QPointF
+class LEGACYSHARED_EXPORT dpoint : public QPointF
 {
 public:
     dpoint();
@@ -29,7 +31,7 @@ public:
 
 };
 
-inline bool operator==(const dpoint &p1, const dpoint &p2)
+LEGACYSHARED_EXPORT inline bool operator==(const dpoint &p1, const dpoint &p2)
 {
     if (p1.position==p2.position){
         return true;
@@ -38,9 +40,9 @@ inline bool operator==(const dpoint &p1, const dpoint &p2)
     }
 }
 
-QDebug operator<<(QDebug dbg, const dpoint &dp);
+LEGACYSHARED_EXPORT QDebug operator<<(QDebug dbg, const dpoint &dp);
 
-QDataStream &operator<<(QDataStream &out, const dpoint &dp);
-QDataStream &operator>>(QDataStream &in, dpoint &dp);
+LEGACYSHARED_EXPORT QDataStream &operator<<(QDataStream &out, const dpoint &dp);
+LEGACYSHARED_EXPORT QDataStream &operator>>(QDataStream &in, dpoint &dp);
 
 #endif // DPOINT_H

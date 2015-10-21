@@ -5,18 +5,9 @@
 
 template<> ListBase<dpoint>::ListBase() : QList<dpoint>::QList()
 {
-    id = 0;
 }
 
-// only used for load from file command
-// later converted in listanalyzer constructor
-/*template<> ListBase<QPointF>::ListBase() : QList<QPointF>::QList()
-{
-    id = 0;
-}*/
-
 template<> ListBase<dpoint> ListBase<dpoint>::loadSPFile(QString& fileName)
-//template<typename T> ListAnalyzer<T> ListAnalyzer<T>::loadSPFile(QString& fileName)
 {
 
     QFile file(fileName);

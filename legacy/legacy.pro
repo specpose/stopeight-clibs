@@ -11,11 +11,11 @@ TEMPLATE = lib
 
 DEFINES += LEGACY_LIBRARY
 
-SOURCES += legacy.cpp \
+SOURCES += \
     listbase.cpp \
     dpoint.cpp
 
-HEADERS += legacy.h\
+HEADERS +=\
         legacy_global.h \
     listbase.h \
     dpoint.h
