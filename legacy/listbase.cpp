@@ -7,7 +7,7 @@ template<> ListBase<dpoint>::ListBase() : QList<dpoint>::QList()
 {
 }
 
-template<> ListBase<dpoint> ListBase<dpoint>::loadSPFile(QString& fileName)
+template<> ListBase<dpoint> ListBase<dpoint>::loadSPFile(QString fileName)
 {
 
     QFile file(fileName);
@@ -35,4 +35,8 @@ template<> ListBase<dpoint> ListBase<dpoint>::loadSPFile(QString& fileName)
         input.push_back(p);
     }
     return input;
+}
+
+template<> ListBase<dpoint> ListBase<dpoint>::open(std::string fileName){
+    return ListBase<dpoint>::loadSPFile(QString::fromStdString(fileName));
 }

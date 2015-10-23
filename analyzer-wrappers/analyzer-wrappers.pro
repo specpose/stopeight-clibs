@@ -1,32 +1,37 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2015-10-21T20:20:25
+# Project created by QtCreator 2015-10-23T14:10:32
 #
 #-------------------------------------------------
-QT       -= gui
+QMAKE_CC = gcc-4.7
+QMAKE_CXX = g++-4.7
+QMAKE_CXXFLAGS += -std=c++11
 
-TARGET = legacy
+QT       -= core gui
+CONFIG += console
+CONFIG -= qt
+
+TARGET = analyzer-wrappers
 TEMPLATE = lib
 
-DEFINES += LEGACY_LIBRARY
+DEFINES += ANALYZERWRAPPERS_LIBRARY
 
 INCLUDEPATH += $$PWD/../analyzer/
+INCLUDEPATH += /usr/include/python2.7/
+//INCLUDEPATH += /usr/include/numpy/
 
-SOURCES += \
-    listbase.cpp \
-    dpoint.cpp
+SOURCES += analyzerwrappers.cpp
 
-HEADERS +=\
-        legacy_global.h \
-    listbase.h \
-    dpoint.h
+HEADERS += analyzerwrappers.h\
+        analyzer-wrappers_global.h \
+    windowshack2.h
 
 symbian {
     MMP_RULES += EXPORTUNFROZEN
-    TARGET.UID3 = 0xE93DCC36
+    TARGET.UID3 = 0xEC40E797
     TARGET.CAPABILITY = 
     TARGET.EPOCALLOWDLLDATA = 1
-    addFiles.sources = legacy.dll
+    addFiles.sources = analyzer-wrappers.dll
     addFiles.path = !:/sys/bin
     DEPLOYMENT += addFiles
 }
