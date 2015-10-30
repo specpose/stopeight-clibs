@@ -5,19 +5,19 @@
 #-------------------------------------------------
 QT       -= gui
 
-TARGET = legacy-wrappers
+TARGET = stopeight-clibs-legacy-wrappers
 TEMPLATE = lib
 
 DEFINES += LEGACYWRAPPERS_LIBRARY
 
-INCLUDEPATH += $$PWD/../legacy/
+INCLUDEPATH += $$PWD/../legacy/include/
 INCLUDEPATH += /usr/include/python2.7/
 //INCLUDEPATH += /usr/include/numpy/
 
-SOURCES += legacywrappers.cpp
+SOURCES += \
+    interfacepython.cpp
 
-HEADERS += legacywrappers.h\
-        legacy-wrappers_global.h \
+HEADERS +=\
     interfacepython.h
 
 symbian {
@@ -39,10 +39,10 @@ unix:!symbian {
     INSTALLS += target
 }
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../legacy-build/release/ -llegacy
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../legacy-build/debug/ -llegacy
-else:symbian: LIBS += -llegacy
-else:unix: LIBS += -L$$PWD/../legacy-build/ -llegacy
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../legacy-build/release/ -lstopeight-clibs-legacy
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../legacy-build/debug/ -lstopeight-clibs-legacy
+else:symbian: LIBS += -lstopeight-clibs-legacy
+else:unix: LIBS += -L$$PWD/../legacy-build/ -lstopeight-clibs-legacy
 
 INCLUDEPATH += $$PWD/../legacy-build
 DEPENDPATH += $$PWD/../legacy-build

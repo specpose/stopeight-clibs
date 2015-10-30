@@ -1,6 +1,0 @@
-#ifndef ANALYZERWRAPPERS_GLOBAL_H
-#define ANALYZERWRAPPERS_GLOBAL_H
-
-#include "windowshack2.h"
-
-#endif // ANALYZERWRAPPERS_GLOBAL_H

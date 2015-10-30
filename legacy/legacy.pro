@@ -5,21 +5,21 @@
 #-------------------------------------------------
 QT       -= gui
 
-TARGET = legacy
+TARGET = stopeight-clibs-legacy
 TEMPLATE = lib
 
 DEFINES += LEGACY_LIBRARY
 
-INCLUDEPATH += $$PWD/../analyzer/
+//INCLUDEPATH += $$PWD/../analyzer/
 
 SOURCES += \
-    listbase.cpp \
-    dpoint.cpp
+    src/listbase.cpp \
+    src/dpoint.cpp
 
 HEADERS +=\
-        legacy_global.h \
-    listbase.h \
-    dpoint.h
+    include/legacy_global.h \
+    include/listbase.h \
+    include/dpoint.h
 
 symbian {
     MMP_RULES += EXPORTUNFROZEN
@@ -40,10 +40,10 @@ unix:!symbian {
     INSTALLS += target
 }
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../analyzer-build/release/ -lanalyzer
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../analyzer-build/debug/ -lanalyzer
-else:symbian: LIBS += -lanalyzer
-else:unix: LIBS += -L$$PWD/../analyzer-build/ -lanalyzer
+//win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../analyzer-build/release/ -lanalyzer
+//else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../analyzer-build/debug/ -lanalyzer
+//else:symbian: LIBS += -lanalyzer
+//else:unix: LIBS += -L$$PWD/../analyzer-build/ -lanalyzer
 
-INCLUDEPATH += $$PWD/../analyzer-build
-DEPENDPATH += $$PWD/../analyzer-build
+//INCLUDEPATH += $$PWD/../analyzer-build
+//DEPENDPATH += $$PWD/../analyzer-build
