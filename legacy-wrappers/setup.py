@@ -1,7 +1,9 @@
+import os
+
 from distutils.core import setup, Extension
 
-legacy_wrapper = Extension('stopeight_clibs_legacy', include_dirs=['/usr/include/qt4','/home/fassio/Desktop/Sources/stopeight-clibs/legacy/include'],
-                   library_dirs=['/usr/lib/x86_64-linux-gnu','/home/fassio/Desktop/Sources/stopeight-clibs/legacy'],
+legacy_wrapper = Extension('stopeight_clibs_legacy', include_dirs=['/usr/include/qt4',os.getcwd()+'/../legacy/include'],
+                   library_dirs=['/usr/lib/x86_64-linux-gnu',os.getcwd()+'/../legacy'],
                    libraries=['QtCore','stopeight-clibs-legacy'],
                    sources = ['interfacepython.cpp'])
 
