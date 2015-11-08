@@ -14,12 +14,17 @@ DEFINES += LEGACY_LIBRARY
 
 SOURCES += \
     src/listbase.cpp \
-    src/dpoint.cpp
+    src/dpoint.cpp \
+    src/editorbase.cpp \
+    src/myreal.cpp
 
 HEADERS +=\
     include/legacy_global.h \
     include/listbase.h \
-    include/dpoint.h
+    include/dpoint.h \
+    include/editorinterface.h \
+    include/editorbase.h \
+    include/myreal.h
 
 symbian {
     MMP_RULES += EXPORTUNFROZEN
