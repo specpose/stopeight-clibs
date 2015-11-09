@@ -16,7 +16,10 @@ SOURCES += \
     src/listbase.cpp \
     src/dpoint.cpp \
     src/editorbase.cpp \
-    src/myreal.cpp
+    src/editorcliffs.cpp \
+    src/editorspirals.cpp \
+    src/myreal.cpp \
+    src/listiteration.cpp
 
 HEADERS +=\
     include/legacy_global.h \
@@ -24,7 +27,10 @@ HEADERS +=\
     include/dpoint.h \
     include/editorinterface.h \
     include/editorbase.h \
-    include/myreal.h
+    include/editorcliffs.h \
+    include/editorspirals.h \
+    include/myreal.h \
+    include/listiteration.h
 
 symbian {
     MMP_RULES += EXPORTUNFROZEN

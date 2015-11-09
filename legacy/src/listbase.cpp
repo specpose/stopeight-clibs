@@ -6,6 +6,14 @@ template<> ListBase<dpoint>::ListBase() : QList<dpoint>::QList()
 {
 }
 
+// Note: typename F can be any implementation of ListBase WITHOUT data members
+template<>template<typename F> ListBase<dpoint>::ListBase(F& list){
+    //downcast
+    ListBase<dpoint>& test = dynamic_cast<ListBase<dpoint>& >(list);
+    *this = test;
+    //throw "ListBase::ListBase(Type): Type does not appear to be an implementation of ListBase";
+}
+
 template<> ListBase<dpoint> ListBase<dpoint>::loadSPFile(const QString& fileName)
 {
     debug()<<"legacy::ListBase<dpoint>::loadSPFile "+fileName.toAscii();

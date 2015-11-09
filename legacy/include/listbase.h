@@ -16,7 +16,11 @@
 template<typename T> class LEGACYSHARED_EXPORT ListBase : public QList<T>
 {
 public:
+    //has to be templated because of QList
     ListBase<T>();
+
+    //templated function to return ListBase T from any ListBase implementation F specified here.
+    template<typename F> ListBase<T>(F& list);
 
     // method for access from python
     ListBase<dpoint> open(const std::string fileName);
@@ -24,5 +28,7 @@ public:
     ListBase<dpoint> loadSPFile(const QString &fileName);
 
 };
+
+//template<typename From, typename To> static To convert(From list);
 
 #endif // LISTBASE_H

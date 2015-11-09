@@ -9,10 +9,14 @@
 
 #include "editorinterface.h"
 #include "listbase.h"
+#include "listiteration.h"
+#include <QList>
 #include "myreal.h"
 
 template<typename T> struct ListStorage{
+    // input is always the raw data either from file or pen/mouse stroke
     T input;
+    // output is initially input but gets reduced to T-C-T... in automatic
     T output;
 };
 
@@ -20,17 +24,26 @@ class EditorBase : public virtual EditorInterface
 {
 public:
     EditorBase();
-    virtual ~EditorBase();
+    virtual ~EditorBase();// =0;
 
     void resetLists();
     void addPoint(QPointF p);
     ListBase<dpoint> getOutput();
     void flushOutput();
 
-    virtual void automatic() =0;
+    virtual QList<dpoint> processSegment(QList<dpoint> list) =0;
+    virtual void process(ListBase<dpoint> toBeProcessed) =0;
+    void automatic();
 
 protected:
     bool checkPrecision(const ListBase<dpoint> list);
+    void setOutput(ListBase<dpoint> list);
+
+    const void mainIterator(const QList<dpoint> constCliffs,QList<QList<dpoint> >& slicesRef);
+
+
+
+private:
     ListStorage<ListBase<dpoint> > data;
 
 };
