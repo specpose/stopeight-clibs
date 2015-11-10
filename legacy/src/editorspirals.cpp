@@ -56,7 +56,7 @@ QList<dpoint> EditorSpirals::processSegment(QList<dpoint> list){
         //cliff.removeIllegalPoints();
         debug()<<"Points "<<cliff.first().position<<" - "<<cliff.last().position;
         debug()<<"Number of points in Segment: "<<cliff.length();
-        debug()<<"Length of Curve is: "<<cliff.sumLength();
+        //debug()<<"Length of Curve is: "<<cliff.sumLength();
         //cliff.requireMinimumLength(1);
         /*debug()<<"Area of Curve is: "<<cliff.sumOfDxAreasRotY();
         debug()<<"Spiral-Area of Curve is:"<<cliff.measureSpiral();

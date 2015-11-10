@@ -28,7 +28,7 @@ public:
 
     void resetLists();
     void addPoint(QPointF p);
-    ListBase<dpoint> getOutput();
+    ListBase<dpoint>& getOutput();
     void flushOutput();
 
     virtual QList<dpoint> processSegment(QList<dpoint> list) =0;

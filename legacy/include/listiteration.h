@@ -8,9 +8,9 @@ template<typename T> class ListIteration : public QList<T>
 {
 public:
 
-    template<typename F> ListIteration<T>(F list);
+    template<typename F> ListIteration<T>(F& list);
 
-    QList<T> chopCopy(int startPosition, int endPosition);
+    QList<dpoint> chopCopy(int startPosition, int endPosition);
 
 };
 

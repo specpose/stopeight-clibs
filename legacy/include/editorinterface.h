@@ -7,7 +7,7 @@ class EditorInterface
 {
 public:
     //int maxPoints;
-     virtual ListBase<dpoint> getOutput() =0;
+     virtual ListBase<dpoint>& getOutput() =0;
      virtual void flushOutput() =0;
 
 

@@ -23,7 +23,7 @@ void EditorBase::addPoint(QPointF p){
     }
 }
 
-ListBase<dpoint> EditorBase::getOutput(){
+ListBase<dpoint> &EditorBase::getOutput(){
     return this->data.output;
 }
 
@@ -43,7 +43,6 @@ void EditorBase::automatic(){
 
 const void EditorBase::mainIterator(const QList<dpoint> constCliffs,QList<QList<dpoint> >& slicesRef){
     ListIteration<dpoint> out = ListIteration<dpoint>(this->getOutput());
-    //ListBase<dpoint> out = this->getOutput();
     int currentSegment = 0;
     //maemo works: check cliff size
     if (constCliffs.size()==0){

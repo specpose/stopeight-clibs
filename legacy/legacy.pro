@@ -14,23 +14,23 @@ DEFINES += LEGACY_LIBRARY
 
 SOURCES += \
     src/listbase.cpp \
-    src/dpoint.cpp \
+    src/listiteration.cpp \
+    src/listrotator.cpp \
+    src/listinitializer.cpp \
     src/editorbase.cpp \
-    src/editorcliffs.cpp \
-    src/editorspirals.cpp \
-    src/myreal.cpp \
-    src/listiteration.cpp
+    src/dpoint.cpp \
+    src/myreal.cpp
 
 HEADERS +=\
     include/legacy_global.h \
     include/listbase.h \
-    include/dpoint.h \
+    include/listiteration.h \
+    include/listrotator.h \
+    include/listinitializer.h \
     include/editorinterface.h \
     include/editorbase.h \
-    include/editorcliffs.h \
-    include/editorspirals.h \
-    include/myreal.h \
-    include/listiteration.h
+    include/dpoint.h \
+    include/myreal.h
 
 symbian {
     MMP_RULES += EXPORTUNFROZEN

@@ -20,6 +20,7 @@ public:
     ListBase<T>();
 
     //templated function to return ListBase T from any ListBase implementation F specified here.
+    //this should be C++11 move F&& constructor
     template<typename F> ListBase<T>(F& list);
 
     // method for access from python

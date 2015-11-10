@@ -2,6 +2,7 @@
 #define SPIRALS_H
 
 #include "editorbase.h"
+#include "listrotator.h"
 
 class EditorSpirals : public EditorBase
 {
