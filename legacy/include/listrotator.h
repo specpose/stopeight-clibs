@@ -1,3 +1,6 @@
+// Copyright (C) 2009-2015 Specific Purpose Software GmbH
+// GNU Lesser General Public License, version 2.1
+
 #ifndef LISTROTATOR_H
 #define LISTROTATOR_H
 
@@ -20,9 +23,9 @@
 template<typename T> class ListRotator : public ListBase<T>
 {
 public:
-    ListRotator();
-    template<typename F> ListRotator<T>(F list);
-
+    ListRotator<T>();
+    //template<typename F> ListRotator<T>(F& list);
+    //template<typename F> void operator=(F& list);
 
     void rotateSegmentToXAxis();
     //void rotateLastVectorToYAxis();

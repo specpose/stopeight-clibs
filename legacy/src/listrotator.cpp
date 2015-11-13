@@ -1,3 +1,6 @@
+// Copyright (C) 2009-2015 Specific Purpose Software GmbH
+// GNU Lesser General Public License, version 2.1
+
 #include "include/listrotator.h"
 
 //#define debug() QDebug::QDebug(QtDebugMsg)
@@ -5,14 +8,15 @@
 
 template<> ListRotator<dpoint>::ListRotator() : ListBase<dpoint>() {}
 
+// Note: ALL datamembers of target class destroyed
+/*template<>template<typename F> ListRotator<dpoint>::ListRotator(F& list){
+    *this = static_cast<ListRotator<dpoint>& >(list);
+}*/
 
-// Note: typename F can be any implementation of ListBase WITHOUT data members
-template<>template<typename F> ListRotator<dpoint>::ListRotator(F list){
-    //downcast or upcast?
-    ListRotator<dpoint>& test = dynamic_cast<ListRotator<dpoint>& >(list);
-    *this = test;
-}
-
+// Note: ALL datamembers of target class destroyed
+/*template<>template<typename F> void ListRotator<dpoint>::operator=(F& list){
+    this->swap(list);
+}*/
 
 template <> void ListRotator<dpoint>::moveRotToZero(){
     QTransform transMat;

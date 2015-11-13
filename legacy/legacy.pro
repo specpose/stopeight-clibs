@@ -13,24 +13,24 @@ DEFINES += LEGACY_LIBRARY
 //INCLUDEPATH += $$PWD/../analyzer/
 
 SOURCES += \
-    src/listbase.cpp \
     src/listiteration.cpp \
     src/listrotator.cpp \
+    src/listbase.cpp \
     src/listinitializer.cpp \
-    src/editorbase.cpp \
     src/dpoint.cpp \
-    src/myreal.cpp
+    src/myreal.cpp \
+    src/spiralscalculator.cpp
 
 HEADERS +=\
-    include/legacy_global.h \
-    include/listbase.h \
     include/listiteration.h \
     include/listrotator.h \
+    include/listbase.h \
+    include/legacy_global.h \
     include/listinitializer.h \
     include/editorinterface.h \
-    include/editorbase.h \
     include/dpoint.h \
-    include/myreal.h
+    include/myreal.h \
+    include/spiralscalculator.h
 
 symbian {
     MMP_RULES += EXPORTUNFROZEN

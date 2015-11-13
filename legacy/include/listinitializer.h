@@ -1,3 +1,6 @@
+// Copyright (C) 2009-2015 Specific Purpose Software GmbH
+// GNU Lesser General Public License, version 2.1
+
 #ifndef LISTINITIALIZER_H
 #define LISTINITIALIZER_H
 
@@ -12,6 +15,9 @@ template<typename T> class ListInitializer : public ListRotator<T>
 public:
     // Overrides of QList
     ListInitializer();
+    //template<typename F> ListInitializer<T>(F& list);
+    //template<typename F> void operator=(F& list);
+
     void removeAt(int i);
 
     //void appendTail();

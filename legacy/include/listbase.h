@@ -1,3 +1,6 @@
+// Copyright (C) 2009-2015 Specific Purpose Software GmbH
+// GNU Lesser General Public License, version 2.1
+
 #ifndef LISTBASE_H
 #define LISTBASE_H
 
@@ -19,17 +22,18 @@ public:
     //has to be templated because of QList
     ListBase<T>();
 
-    //templated function to return ListBase T from any ListBase implementation F specified here.
     //this should be C++11 move F&& constructor
-    template<typename F> ListBase<T>(F& list);
+    //template<typename F> ListBase<T>(F& list);
+    //template<typename F> void operator=(F& list);
 
     // method for access from python
-    ListBase<dpoint> open(const std::string fileName);
+    static ListBase<dpoint> open(const std::string fileName);
     // method for access from legacy editor
-    ListBase<dpoint> loadSPFile(const QString &fileName);
+    static ListBase<dpoint> loadSPFile(const QString &fileName);
 
 };
 
 //template<typename From, typename To> static To convert(From list);
+
 
 #endif // LISTBASE_H

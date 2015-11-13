@@ -1,3 +1,6 @@
+// Copyright (C) 2009-2015 Specific Purpose Software GmbH
+// GNU Lesser General Public License, version 2.1
+
 #ifndef LEGACY_GLOBAL_H
 #define LEGACY_GLOBAL_H
 

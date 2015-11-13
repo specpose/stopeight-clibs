@@ -1,3 +1,6 @@
+// Copyright (C) 2009-2015 Specific Purpose Software GmbH
+// GNU Lesser General Public License, version 2.1
+
 #ifndef DPOINT_H
 #define DPOINT_H
 
@@ -41,7 +44,6 @@ LEGACYSHARED_EXPORT inline bool operator==(const dpoint &p1, const dpoint &p2)
 }
 
 LEGACYSHARED_EXPORT QDebug operator<<(QDebug dbg, const dpoint &dp);
-
 LEGACYSHARED_EXPORT QDataStream &operator<<(QDataStream &out, const dpoint &dp);
 LEGACYSHARED_EXPORT QDataStream &operator>>(QDataStream &in, dpoint &dp);
 

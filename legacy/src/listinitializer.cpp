@@ -1,3 +1,6 @@
+// Copyright (C) 2009-2015 Specific Purpose Software GmbH
+// GNU Lesser General Public License, version 2.1
+
 #include "include/listinitializer.h"
 
 //#define debug() QDebug::QDebug(QtDebugMsg)
@@ -6,6 +9,17 @@
 template<> ListInitializer<dpoint>::ListInitializer() : ListRotator<dpoint>() {
     //calcTail = QList<dpoint>();
 }
+
+// Note: ALL datamembers of target class destroyed
+/*template<>template<typename F> ListInitializer<dpoint>::ListInitializer(F& list){
+    *this = static_cast<ListInitializer<dpoint>& >(list);
+}*/
+
+// Note: ALL datamembers of target class destroyed
+/*template<>template<typename F> void ListInitializer<dpoint>::operator=(F& list){
+    this->swap(list);
+}*/
+
 
 template <> void ListInitializer<dpoint>::removeAt(int i) {
     if (i<0) {

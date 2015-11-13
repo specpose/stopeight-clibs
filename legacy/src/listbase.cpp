@@ -1,3 +1,6 @@
+// Copyright (C) 2009-2015 Specific Purpose Software GmbH
+// GNU Lesser General Public License, version 2.1
+
 #include "include/listbase.h"
 
 //using namespace legacy;
@@ -6,12 +9,20 @@ template<> ListBase<dpoint>::ListBase() : QList<dpoint>::QList()
 {
 }
 
-// Note: typename F can be any implementation of ListBase WITHOUT data members
-template<>template<typename F> ListBase<dpoint>::ListBase(F& list){
-    ListBase<dpoint>& test = static_cast<ListBase<dpoint>& >(list);
-    *this = test;
-    //throw "ListBase::ListBase(Type): Type does not appear to be an implementation of ListBase";
-}
+// Note: ALL datamembers of target class destroyed
+/*template<>template<typename F> ListBase<dpoint>::ListBase(F& list){
+    *this = static_cast<ListBase<dpoint>& >(list);
+}*/
+
+// Note: ALL datamembers of target class destroyed
+/*template<>template<typename F> void ListBase<dpoint>::operator=(F& list){
+    // does this use =
+    //this->QList(list);
+    // this does
+    //this->ListBase(F)
+    // this is not supposed to
+    this->swap(list);
+}*/
 
 template<> ListBase<dpoint> ListBase<dpoint>::loadSPFile(const QString& fileName)
 {
