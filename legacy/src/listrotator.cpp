@@ -9,14 +9,14 @@
 template<> ListRotator<dpoint>::ListRotator() : ListBase<dpoint>() {}
 
 // Note: ALL datamembers of target class destroyed
-/*template<>template<typename F> ListRotator<dpoint>::ListRotator(F& list){
+template<>template<typename F> ListRotator<dpoint>::ListRotator(F& list){
     *this = static_cast<ListRotator<dpoint>& >(list);
-}*/
+}
 
 // Note: ALL datamembers of target class destroyed
-/*template<>template<typename F> void ListRotator<dpoint>::operator=(F& list){
+template<>template<typename F> void ListRotator<dpoint>::operator=(F& list){
     this->swap(list);
-}*/
+}
 
 template <> void ListRotator<dpoint>::moveRotToZero(){
     QTransform transMat;

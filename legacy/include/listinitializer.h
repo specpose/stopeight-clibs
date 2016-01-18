@@ -15,8 +15,8 @@ template<typename T> class ListInitializer : public ListRotator<T>
 public:
     // Overrides of QList
     ListInitializer();
-    //template<typename F> ListInitializer<T>(F& list);
-    //template<typename F> void operator=(F& list);
+    template<typename F> ListInitializer<T>(F& list);
+    template<typename F> void operator=(F& list);
 
     void removeAt(int i);
 

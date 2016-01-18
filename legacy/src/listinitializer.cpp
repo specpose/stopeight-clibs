@@ -11,14 +11,14 @@ template<> ListInitializer<dpoint>::ListInitializer() : ListRotator<dpoint>() {
 }
 
 // Note: ALL datamembers of target class destroyed
-/*template<>template<typename F> ListInitializer<dpoint>::ListInitializer(F& list){
+template<>template<typename F> ListInitializer<dpoint>::ListInitializer(F& list){
     *this = static_cast<ListInitializer<dpoint>& >(list);
-}*/
+}
 
 // Note: ALL datamembers of target class destroyed
-/*template<>template<typename F> void ListInitializer<dpoint>::operator=(F& list){
+template<>template<typename F> void ListInitializer<dpoint>::operator=(F& list){
     this->swap(list);
-}*/
+}
 
 
 template <> void ListInitializer<dpoint>::removeAt(int i) {

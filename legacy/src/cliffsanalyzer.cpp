@@ -1,0 +1,61 @@
+// Copyright (C) 2009-2015 Specific Purpose Software GmbH
+// GNU Lesser General Public License, version 2.1
+
+#include "include/cliffsanalyzer.h"
+
+template<> CliffsAnalyzer<dpoint>::CliffsAnalyzer() : ListRotator<dpoint>() {}
+
+// Note: ALL datamembers of target class destroyed
+template<>template<typename F> CliffsAnalyzer<dpoint>::CliffsAnalyzer(F& list){
+    *this = static_cast<CliffsAnalyzer<dpoint>& >(list);
+}
+
+template <> int CliffsAnalyzer<dpoint>::hasIllegalSegment(){
+    ListRotator<dpoint> rotator = ListRotator<dpoint>(this);
+    // has to change to steepest possible?
+    rotator.rotateSegmentToXAxis();
+    //rotateLastVectorToYAxis();
+
+    for (int i=0;i<rotator.size()-1;i++){
+        if ((rotator.at(i+1).rot.x()<=rotator.at(i).rot.x())
+                //&&(rotator.at(i+1).rot.y()<HIGHPASS_LOW_LIMIT)
+                )
+        {
+            //debug() << "Illegal Segment found at " << rotator.at(i+1);
+            return rotator.at(i+1).position;
+        }
+    }
+    return -1;
+}
+
+template<> ListBase<dpoint> CliffsAnalyzer<dpoint>::getFirstLegalSegment(){
+    CliffsAnalyzer<dpoint> result = CliffsAnalyzer<dpoint>();
+    if (this->size()>1){
+
+        bool foundOne=false;
+        for (int i=0;i<this->size();i++){
+            result<<this->at(i);
+            if (result.hasIllegalSegment()!=-1){
+                foundOne=true;
+                break;
+            }
+        }
+        if (foundOne){
+            result.removeLast();
+        }
+    } else {
+        //throw "ListAnalyzer::getFirstLegalSegment: segment size is below 2";
+        for (int i=0;i<this->size();i++){
+            result<<this->at(i);
+        }
+    }
+    for (int i=0;i<result.size();i++){
+        this->removeFirst();
+    }
+
+    ////only do this when needed for calculation or display
+    // always do this to return valid result
+    result.rotateSegmentToXAxis();
+
+    return result;
+}

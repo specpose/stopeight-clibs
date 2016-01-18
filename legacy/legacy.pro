@@ -19,7 +19,12 @@ SOURCES += \
     src/listinitializer.cpp \
     src/dpoint.cpp \
     src/myreal.cpp \
-    src/spiralscalculator.cpp
+    src/spiralscalculator.cpp \
+    src/spiralsanalyzer.cpp \
+    src/cliffscalculator.cpp \
+    src/cliffsanalyzer.cpp \
+    src/areaanalyzer.cpp \
+    src/areacalculator.cpp
 
 HEADERS +=\
     include/listiteration.h \
@@ -30,7 +35,12 @@ HEADERS +=\
     include/editorinterface.h \
     include/dpoint.h \
     include/myreal.h \
-    include/spiralscalculator.h
+    include/spiralscalculator.h \
+    include/spiralsanalyzer.h \
+    include/cliffscalculator.h \
+    include/cliffsanalyzer.h \
+    include/areaanalyzer.h \
+    include/areacalculator.h
 
 symbian {
     MMP_RULES += EXPORTUNFROZEN

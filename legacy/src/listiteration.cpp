@@ -6,14 +6,14 @@
 template<> ListIteration<dpoint>::ListIteration() : ListBase(){}
 
 // Note: ALL datamembers of target class destroyed
-/*template<>template<typename F> ListIteration<dpoint>::ListIteration(F& list){
+template<>template<typename F> ListIteration<dpoint>::ListIteration(F& list){
     *this = static_cast<ListIteration<dpoint>& >(list);
-}*/
+}
 
 // Note: ALL datamembers of target class destroyed
-/*template<>template<typename F> void ListIteration<dpoint>::operator=(F& list){
+template<>template<typename F> void ListIteration<dpoint>::operator=(F& list){
     this->swap(list);
-}*/
+}
 
 template<> ListBase<dpoint> ListIteration<dpoint>::chopCopy(int startPosition, int endPosition){
     ListBase<dpoint> filet;

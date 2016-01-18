@@ -12,9 +12,6 @@ public:
     SpiralsCalculator<T>();
     template<typename F> SpiralsCalculator<T>(F& list);
 
-private:
-    // Segment-Radius-Area
-    static qreal area(qreal diameter, qreal base);
 };
 
 #endif // SPIRALSCALCULATOR_H
