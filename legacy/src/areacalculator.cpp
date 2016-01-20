@@ -7,7 +7,8 @@ template<> AreaCalculator<dpoint>::AreaCalculator() : ListInitializer<dpoint>() 
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> AreaCalculator<dpoint>::AreaCalculator(F& list){
-    *this = static_cast<AreaCalculator<dpoint>& >(list);
+    ListInitializer<dpoint> c = static_cast<ListInitializer<dpoint>& >(list);
+    *this= static_cast<AreaCalculator<dpoint>& >(c);
 }
 
 

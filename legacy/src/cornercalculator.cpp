@@ -7,5 +7,6 @@ template<> CornerCalculator<dpoint>::CornerCalculator() : ListInitializer<dpoint
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> CornerCalculator<dpoint>::CornerCalculator(F& list){
-    *this = static_cast<CornerCalculator<dpoint>& >(list);
+    ListInitializer<dpoint> c = static_cast<ListInitializer<dpoint>& >(list);
+    *this= static_cast<CornerCalculator<dpoint>& >(c);
 }

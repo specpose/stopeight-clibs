@@ -21,8 +21,8 @@ template<> qreal AreaAnalyzer<dpoint>::area(qreal diameter, qreal base){
     return criteria;
 }
 
-/*template<> ListBase<dpoint> AreaAnalyzer<dpoint>::getArea(qreal limit,QPointF START,qreal preceding){
-    ListRotator<dpoint> result = ListRotator<dpoint>();
+template<> ListBase<dpoint> AreaAnalyzer<dpoint>::getArea(qreal limit,QPointF start,qreal preceding){
+    AreaCalculator<dpoint> result = AreaCalculator<dpoint>();
 
     bool foundOne=false;
 
@@ -41,7 +41,7 @@ template<> qreal AreaAnalyzer<dpoint>::area(qreal diameter, qreal base){
                 // calculate current triangle based on iteration
                 // we need area starting point for this!
                 // currentArea += triangle
-                currentArea += ListAnalyzer<dpoint>::triangleArea(START,result.first(),result.last());
+                currentArea += triangleArea(start,result.first(),result.last());
             }
             // instead of this we could be using an implementation that sums up doubleTriangles
             currentArea += result.sumOfDxAreasRotY();
@@ -57,14 +57,14 @@ template<> qreal AreaAnalyzer<dpoint>::area(qreal diameter, qreal base){
             //qreal criteria = fabs(ListAnalyzer<dpoint>::area(diameter,limit,preceding));
             //debug()<<"ListAnalyzer::getArea::Criteria is: "<<criteria;
 
-            // IF preceding + currentArea >= norm: norm is area(fullDIAMETER from START, pi or e, 0)
+            // IF preceding + currentArea >= norm: norm is area(fullDIAMETER from start, pi or e, 0)
 
-            ListAnalyzer<dpoint> StartEnd = ListAnalyzer<dpoint>();
-            StartEnd << START << result.last();
+            AreaCalculator<dpoint> StartEnd = AreaCalculator<dpoint>();
+            StartEnd << start << result.last();
             qreal diameter = StartEnd.lengthFromStartToEnd();
             // using sumOfDx would require having all preceding legalSegments from start and adding up sums
 
-            qreal norm = ListAnalyzer<dpoint>::area(diameter,limit);//,0);
+            qreal norm = area(diameter,limit);//,0);
             //debug()<<"Comparison #"<<i;
             if (norm<0){throw "ListAnalyzer::getArea: norm is below zero";}
 
@@ -95,7 +95,7 @@ template<> qreal AreaAnalyzer<dpoint>::area(qreal diameter, qreal base){
     //this->rotateSegmentToXAxis();
 
     return result;
-}*/
+}
 
 template<> ListBase<dpoint> AreaAnalyzer<dpoint>::getFirstArea(qreal limit){
     dpoint result = dpoint();

@@ -7,7 +7,8 @@ template<> TurnCalculator<dpoint>::TurnCalculator() : ListInitializer<dpoint>() 
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> TurnCalculator<dpoint>::TurnCalculator(F& list){
-    *this = static_cast<TurnCalculator<dpoint>& >(list);
+    ListInitializer<dpoint> c = static_cast<ListInitializer<dpoint>& >(list);
+    *this= static_cast<TurnCalculator<dpoint>& >(c);
 }
 
 // this has performance penalty!

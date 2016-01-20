@@ -7,7 +7,8 @@ template<> CornerNormalizer<dpoint>::CornerNormalizer() : CornerCalculator<dpoin
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> CornerNormalizer<dpoint>::CornerNormalizer(F& list){
-    *this = static_cast<CornerNormalizer<dpoint>& >(list);
+    ListInitializer<dpoint> c = static_cast<ListInitializer<dpoint>& >(list);
+    *this= static_cast<CornerNormalizer<dpoint>& >(c);
 }
 
 // Note: ALL datamembers of target class destroyed

@@ -7,10 +7,8 @@ template<> AreaNormalizer<dpoint>::AreaNormalizer() : AreaCalculator<dpoint>() {
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> AreaNormalizer<dpoint>::AreaNormalizer(F& list){
-    //*this = static_cast<AreaNormalizer<dpoint>& >(list);
     ListInitializer<dpoint> c = static_cast<ListInitializer<dpoint>& >(list);
     *this= static_cast<AreaNormalizer<dpoint>& >(c);
-    //*this=list;
 }
 
 //hdojo version

@@ -7,5 +7,6 @@ template<> SpiralsCalculator<dpoint>::SpiralsCalculator() : ListInitializer<dpoi
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> SpiralsCalculator<dpoint>::SpiralsCalculator(F& list){
-    *this = static_cast<SpiralsCalculator<dpoint>& >(list);
+    ListInitializer<dpoint> c = static_cast<ListInitializer<dpoint>& >(list);
+    *this= static_cast<SpiralsCalculator<dpoint>& >(c);
 }
