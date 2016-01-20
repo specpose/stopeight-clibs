@@ -15,6 +15,8 @@ public:
 
     qreal lengthAt(int i);
 
+    // Note: this is simple reversal. it is not checking order. Should be static.
+    void reverse();
 private:
     qreal lengthOf(QPointF difference);
 

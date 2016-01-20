@@ -30,7 +30,9 @@ SOURCES += \
     src/areanormalizer.cpp \
     src/cornercalculator.cpp \
     src/cornernormalizer.cpp \
-    src/calculator.cpp
+    src/calculator.cpp \
+    src/spirals.cpp \
+    src/analyzer.cpp
 
 HEADERS +=\
     include/listiteration.h \
@@ -52,7 +54,9 @@ HEADERS +=\
     include/areanormalizer.h \
     include/cornercalculator.h \
     include/cornernormalizer.h \
-    include/calculator.h
+    include/calculator.h \
+    include/spirals.h \
+    include/analyzer.h
 
 symbian {
     MMP_RULES += EXPORTUNFROZEN

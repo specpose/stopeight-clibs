@@ -42,3 +42,12 @@ template <> qreal Calculator<dpoint>::lengthAt(int position){
         return 0;
     }
 }
+
+template <> void Calculator<dpoint>::reverse(){
+    ListInitializer<dpoint> reversed= ListInitializer<dpoint>();
+    for (int i=this->size()-1;i>=0;i--){
+        reversed << this->at(i);
+    }
+    this->clear();
+    this->append(reversed);
+}
