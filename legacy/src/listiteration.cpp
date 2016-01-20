@@ -3,7 +3,7 @@
 
 #include "include/listiteration.h"
 
-template<> ListIteration<dpoint>::ListIteration() : ListBase(){}
+template<> ListIteration<dpoint>::ListIteration() : ListBase<dpoint>() {}
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> ListIteration<dpoint>::ListIteration(F& list){

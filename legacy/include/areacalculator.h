@@ -4,9 +4,9 @@
 #ifndef AREACALCULATOR_H
 #define AREACALCULATOR_H
 
-#include "listrotator.h"
+#include "listinitializer.h"
 
-template<typename T> class AreaCalculator : public ListRotator<T>
+template<typename T> class AreaCalculator : public ListInitializer<T>
 {
 public:
     AreaCalculator<T>();
@@ -15,9 +15,12 @@ public:
     // a.k.a integration up to triangle / curvature not included
     qreal sumOfDxAreasRotY();
 
-private:
-    // Segment-Radius-Area
-    static qreal area(qreal diameter, qreal base);
+    // should be static OR member of List
+    qreal triangleArea(QPointF A, QPointF B, QPointF C);
+    // "pure" diameter
+    qreal lengthFromStartToEnd();
+
+
 };
 
 #endif // AREACALCULATOR_H

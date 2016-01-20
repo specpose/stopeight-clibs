@@ -4,9 +4,9 @@
 #ifndef CLIFFSCALCULATOR_H
 #define CLIFFSCALCULATOR_H
 
-#include "listrotator.h"
+#include "listinitializer.h"
 
-template<typename T> class CliffsCalculator : public ListRotator<T>
+template<typename T> class CliffsCalculator : public ListInitializer<T>
 {
 public:
     CliffsCalculator<T>();

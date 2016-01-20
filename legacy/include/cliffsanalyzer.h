@@ -5,9 +5,9 @@
 #define CLIFFSANALYZER_H
 
 #include "listbase.h"
-#include "listrotator.h"
+#include "cliffscalculator.h"
 
-template<typename T> class CliffsAnalyzer : public ListRotator<T>
+template<typename T> class CliffsAnalyzer : public CliffsCalculator<T>
 {
 public:
     CliffsAnalyzer<T>();

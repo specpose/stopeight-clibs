@@ -6,7 +6,7 @@
 //#define debug() QDebug::QDebug(QtDebugMsg)
 #define debug() QNoDebug()
 
-template<> ListInitializer<dpoint>::ListInitializer() : ListRotator<dpoint>() {
+template<> ListInitializer<dpoint>::ListInitializer() : ListRotator<dpoint>(){
     //calcTail = QList<dpoint>();
 }
 

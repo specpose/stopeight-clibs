@@ -3,7 +3,7 @@
 
 #include "include/cliffsanalyzer.h"
 
-template<> CliffsAnalyzer<dpoint>::CliffsAnalyzer() : ListRotator<dpoint>() {}
+template<> CliffsAnalyzer<dpoint>::CliffsAnalyzer() : CliffsCalculator<dpoint>() {}
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> CliffsAnalyzer<dpoint>::CliffsAnalyzer(F& list){

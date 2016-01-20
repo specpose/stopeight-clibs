@@ -24,7 +24,13 @@ SOURCES += \
     src/cliffscalculator.cpp \
     src/cliffsanalyzer.cpp \
     src/areaanalyzer.cpp \
-    src/areacalculator.cpp
+    src/areacalculator.cpp \
+    src/turnnormalizer.cpp \
+    src/turncalculator.cpp \
+    src/areanormalizer.cpp \
+    src/cornercalculator.cpp \
+    src/cornernormalizer.cpp \
+    src/calculator.cpp
 
 HEADERS +=\
     include/listiteration.h \
@@ -40,7 +46,13 @@ HEADERS +=\
     include/cliffscalculator.h \
     include/cliffsanalyzer.h \
     include/areaanalyzer.h \
-    include/areacalculator.h
+    include/areacalculator.h \
+    include/turnnormalizer.h \
+    include/turncalculator.h \
+    include/areanormalizer.h \
+    include/cornercalculator.h \
+    include/cornernormalizer.h \
+    include/calculator.h
 
 symbian {
     MMP_RULES += EXPORTUNFROZEN

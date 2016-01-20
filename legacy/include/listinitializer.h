@@ -10,7 +10,7 @@
 #include "listrotator.h"
 //#include <limits>
 
-template<typename T> class ListInitializer : public ListRotator<T>
+template<typename T> class ListInitializer : public ListRotator<dpoint>
 {
 public:
     // Overrides of QList

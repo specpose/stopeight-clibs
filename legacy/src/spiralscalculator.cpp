@@ -3,7 +3,7 @@
 
 #include "include/spiralscalculator.h"
 
-template<> SpiralsCalculator<dpoint>::SpiralsCalculator() : ListRotator<dpoint>() {}
+template<> SpiralsCalculator<dpoint>::SpiralsCalculator() : ListInitializer<dpoint>() {}
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> SpiralsCalculator<dpoint>::SpiralsCalculator(F& list){

@@ -4,9 +4,9 @@
 #ifndef SPIRALSCALCULATOR_H
 #define SPIRALSCALCULATOR_H
 
-#include "listrotator.h"
+#include "listinitializer.h"
 
-template<typename T> class SpiralsCalculator : public ListRotator<T>
+template<typename T> class SpiralsCalculator : public ListInitializer<T>
 {
 public:
     SpiralsCalculator<T>();

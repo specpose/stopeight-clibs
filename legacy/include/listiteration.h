@@ -6,6 +6,7 @@
 
 #include "dpoint.h"
 #include "listbase.h"
+
 template<typename T> class ListIteration : public ListBase<T>
 {
 public:
