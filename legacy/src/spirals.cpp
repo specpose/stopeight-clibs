@@ -1,3 +1,6 @@
+// Copyright (C) 2009-2015 Specific Purpose Software GmbH
+// GNU Lesser General Public License, version 2.1
+
 #include "include/spirals.h"
 
 #define MAX_POINTS 5
@@ -5,12 +8,14 @@
 //#define LIMIT_TEST M_PIl
 #define LIMIT_ITERATION_STEP 0.1
 
-template<> Spirals<dpoint>::Spirals() : ListBase<dpoint>() {}
+template<> Spirals<dpoint>::Spirals() : ListInitializer<dpoint>() {}
 
 // Note: typename F can be any implementation of ListBase WITHOUT data members
 template<>template<typename F> Spirals<dpoint>::Spirals(F& list){
-    Spirals<dpoint>& test = dynamic_cast<Spirals<dpoint>& >(list);
-    *this = test;
+    ListInitializer<dpoint> c = static_cast<ListInitializer<dpoint>& >(list);
+    *this= static_cast<Spirals<dpoint>& >(c);
+    //Spirals<dpoint>& test = dynamic_cast<Spirals<dpoint>& >(list);
+    //*this = test;
 }
 
 template<> QList<dpoint> Spirals<dpoint>::findAreas(ListBase<dpoint> &stroke, qreal limit){

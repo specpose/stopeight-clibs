@@ -31,9 +31,9 @@ SOURCES += \
     src/cornercalculator.cpp \
     src/cornernormalizer.cpp \
     src/calculator.cpp \
-    src/spirals.cpp \
     src/analyzer.cpp \
     src/editorbase.cpp \
+    src/spirals.cpp \
     src/editorspirals.cpp
 
 HEADERS +=\
@@ -57,9 +57,9 @@ HEADERS +=\
     include/cornercalculator.h \
     include/cornernormalizer.h \
     include/calculator.h \
-    include/spirals.h \
     include/analyzer.h \
     include/editorbase.h \
+    include/spirals.h \
     include/editorspirals.h
 
 symbian {

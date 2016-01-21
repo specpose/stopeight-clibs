@@ -3,7 +3,6 @@
 
 #include "editorbase.h"
 #include "spirals.h"
-#include "listrotator.h"
 
 class EditorSpirals : public EditorBase
 {
@@ -11,10 +10,11 @@ public:
     EditorSpirals();
     //~EditorSpirals();
 
-private:
+protected:
     // automatic detection of "spirals" that don't include any illegal segments, which would make derivations invalid.
     void process(ListBase<dpoint> toBeProcessed);
 
+private:
     static QList<dpoint> processSegment(QList<dpoint> list);
 };
 

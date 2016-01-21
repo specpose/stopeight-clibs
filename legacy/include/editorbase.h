@@ -13,6 +13,7 @@
 #include <QList>
 #include "myreal.h"
 
+
 template<typename T> struct ListStorage{
     // input is always the raw data either from file or pen/mouse stroke
     T input;
@@ -20,7 +21,7 @@ template<typename T> struct ListStorage{
     T output;
 };
 
-class EditorBase : public virtual EditorInterface
+class EditorBase : public EditorInterface
 {
 public:
     EditorBase();
@@ -34,6 +35,8 @@ public:
     void automatic();
 
     //only these two have to be provided by implementations
+    //static QList<dpoint> processSegment(QList<dpoint> list);
+    //void process(ListBase<dpoint> toBeProcessed);
     static QList<dpoint> (*processSegment)(QList<dpoint> list);// =0;
     virtual void process(ListBase<dpoint> toBeProcessed) =0;
 

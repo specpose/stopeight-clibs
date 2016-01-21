@@ -1,10 +1,14 @@
-#ifndef SPIRALS_H
-#define SPIRALS_H
+// Copyright (C) 2009-2015 Specific Purpose Software GmbH
+// GNU Lesser General Public License, version 2.1
 
+//#ifndef SPIRALS_H
+//#define SPIRALS_H
+
+#include "listinitializer.h"
+#include "areaanalyzer.h"
 #include "analyzer.h"
-#include "spiralsanalyzer.h"
 
-template<typename T> class Spirals : public ListBase<T>
+template<typename T> class Spirals : public ListInitializer<T>
 {
 public:
     Spirals<T>();
@@ -19,4 +23,4 @@ private:
 
 };
 
-#endif // SPIRALS_H
+//#endif // SPIRALS_H

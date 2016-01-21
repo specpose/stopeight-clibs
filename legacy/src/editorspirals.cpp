@@ -7,13 +7,14 @@ EditorSpirals::EditorSpirals() : EditorBase(){
 //    EditorBase::~EditorBase();
 //}
 
-//void EditorSpirals::process(ListBase<dpoint> toBeProcessed){
-//    // use of output is a hack
-//    if (this->getOutput().size()>0) {
-//        /* SHARED CLIFFS&SPIRALS */
-//        QList<dpoint> cliffs;
+void EditorSpirals::process(ListBase<dpoint> toBeProcessed){
+    // use of output is a hack
+    if (this->getOutput().size()>0) {
+        /* SHARED CLIFFS&SPIRALS */
+        QList<dpoint> cliffs;
 
-//        /* SPIRALS */
+        /* SPIRALS */
+        Spirals<dpoint> test2;
 //        Spirals<dpoint>& spirals = Spirals<dpoint>(&toBeProcessed);
 //        bool pleaseReverse = false;
 //        bool& pleaseReverseRef = {pleaseReverse};
@@ -50,8 +51,8 @@ EditorSpirals::EditorSpirals() : EditorBase(){
 //        //hack
 //        //this->setOutput(this->getOutput().clear());
 //        this->setOutput(result);//this->data.output.append(result);
-//    }
-//}
+    }
+}
 
 // this is a drop-in replacement for processSegment used for clarifying math
 QList<dpoint> EditorSpirals::processSegment(QList<dpoint> list){
