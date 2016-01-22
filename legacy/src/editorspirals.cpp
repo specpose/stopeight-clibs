@@ -14,43 +14,46 @@ void EditorSpirals::process(ListBase<dpoint> toBeProcessed){
         QList<dpoint> cliffs;
 
         /* SPIRALS */
-        Spirals<dpoint> test2;
-//        Spirals<dpoint>& spirals = Spirals<dpoint>(&toBeProcessed);
-//        bool pleaseReverse = false;
-//        bool& pleaseReverseRef = {pleaseReverse};
+        Spirals<dpoint> spirals = Spirals<dpoint>(toBeProcessed);
+        //Spirals<dpoint>& spirals = Spirals<dpoint>(&toBeProcessed);
+        bool pleaseReverse = false;
+        bool& pleaseReverseRef = {pleaseReverse};
 
-//        cliffs= findSpirals(spirals,pleaseReverseRef);
-//        if (pleaseReverse) {
-//            // bug this will also give us a reversed result!
-//            this->setOutput(this->getOutput().reverseOrder());
-//        }
+        cliffs= Spirals<dpoint>::findSpirals(spirals,pleaseReverseRef);
+        if (pleaseReverse) {
+            // bug this will also give us a reversed result!
+            Analyzer<dpoint> rev = Analyzer<dpoint>(this->getOutput());
+            rev.reverseOrder();
+            this->setOutput(ListBase<dpoint>(rev));
+            //this->setOutput(this->getOutput().reverseOrder());
+        }
 
-//        /* SHARED After this cliffs is const */
-//        const QList<dpoint> constCliffs = cliffs;
+        /* SHARED After this cliffs is const */
+        const QList<dpoint> constCliffs = cliffs;
 
-//        /* SHARED CLIFFS&SPIRALS, But replace cornerMeasuring?? */
-//        QList<QList<dpoint> > slices= QList<QList<dpoint> >();
-//        QList<QList<dpoint> >& slicesRef(slices);
+        /* SHARED CLIFFS&SPIRALS, But replace cornerMeasuring?? */
+        QList<QList<dpoint> > slices= QList<QList<dpoint> >();
+        QList<QList<dpoint> >& slicesRef(slices);
 
-//        mainIterator(constCliffs,slicesRef);
-//        const QList<QList<dpoint> > constSlices= slices;
+        mainIterator(constCliffs,slicesRef);
+        const QList<QList<dpoint> > constSlices= slices;
 
-//        ListBase<dpoint> result = ListBase<dpoint>();
+        ListBase<dpoint> result = ListBase<dpoint>();
 
-//        /* SPIRALS&CLIFFS check */
-//        consistencyCheck(constCliffs);
+        /* SPIRALS&CLIFFS check */
+        SpiralsAnalyzer<dpoint>::consistencyCheck(constCliffs);
 
-//        /* SHARED */
-//        result = populateTurns(constSlices);
+        /* SHARED */
+        result = Analyzer<dpoint>::populateTurns(this->getOutput(),constSlices);
 
-//        //// bug we should undo reversal on result if previously reversed
-//        //if (pleaseReverse){
-//        //    result.reverseOrder();
-//        //}
+        //// bug we should undo reversal on result if previously reversed
+        //if (pleaseReverse){
+        //    result.reverseOrder();
+        //}
 
-//        //hack
-//        //this->setOutput(this->getOutput().clear());
-//        this->setOutput(result);//this->data.output.append(result);
+        //hack
+        //this->setOutput(this->getOutput().clear());
+        this->setOutput(result);//this->data.output.append(result);
     }
 }
 

@@ -13,7 +13,6 @@
 #include <QList>
 #include "myreal.h"
 
-
 template<typename T> struct ListStorage{
     // input is always the raw data either from file or pen/mouse stroke
     T input;
@@ -41,6 +40,7 @@ public:
     virtual void process(ListBase<dpoint> toBeProcessed) =0;
 
 protected:
+
     static bool checkPrecision(const ListBase<dpoint> list);
     void setOutput(ListBase<dpoint> list);
 

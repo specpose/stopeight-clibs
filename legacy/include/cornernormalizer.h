@@ -6,6 +6,7 @@
 
 #include "cornercalculator.h"
 #include "calculator.h"
+#include "straightscalculator.h"
 
 
 template<typename T> class CornerNormalizer : public CornerCalculator<T>
@@ -17,6 +18,10 @@ public:
 
     void requireMinimumLength(qreal length);
 
+    // utilities for line-detection
+    // turncalculator.h
+    // editorbase.h
+    dpoint getPointInTheMiddle();
 };
 
 #endif // CORNERNORMALIZER_H

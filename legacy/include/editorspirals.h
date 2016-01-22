@@ -3,6 +3,7 @@
 
 #include "editorbase.h"
 #include "spirals.h"
+#include "spiralsanalyzer.h"
 
 class EditorSpirals : public EditorBase
 {

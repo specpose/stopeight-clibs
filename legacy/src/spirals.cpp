@@ -12,7 +12,7 @@ template<> Spirals<dpoint>::Spirals() : ListInitializer<dpoint>() {}
 
 // Note: typename F can be any implementation of ListBase WITHOUT data members
 template<>template<typename F> Spirals<dpoint>::Spirals(F& list){
-    ListInitializer<dpoint> c = static_cast<ListInitializer<dpoint>& >(list);
+    ListInitializer<dpoint>& c = static_cast<ListInitializer<dpoint>& >(list);
     *this= static_cast<Spirals<dpoint>& >(c);
     //Spirals<dpoint>& test = dynamic_cast<Spirals<dpoint>& >(list);
     //*this = test;

@@ -6,6 +6,8 @@
 
 #include "calculator.h"
 #include "listinitializer.h"
+#include "listiteration.h"
+#include "cornernormalizer.h"
 
 template<typename T> class Analyzer : public Calculator<T>
 {
@@ -17,6 +19,9 @@ public:
     // careful: this is changing order
     // does not change index-numbering variable
     void reverseOrder();
+
+    // make static
+    static Calculator<dpoint> populateTurns(const ListBase<dpoint> &originalData, const QList<QList<dpoint> > slices);
 
 };
 

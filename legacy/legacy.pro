@@ -34,7 +34,8 @@ SOURCES += \
     src/analyzer.cpp \
     src/editorbase.cpp \
     src/spirals.cpp \
-    src/editorspirals.cpp
+    src/editorspirals.cpp \
+    src/straightscalculator.cpp
 
 HEADERS +=\
     include/listiteration.h \
@@ -60,7 +61,8 @@ HEADERS +=\
     include/analyzer.h \
     include/editorbase.h \
     include/spirals.h \
-    include/editorspirals.h
+    include/editorspirals.h \
+    include/straightscalculator.h
 
 symbian {
     MMP_RULES += EXPORTUNFROZEN

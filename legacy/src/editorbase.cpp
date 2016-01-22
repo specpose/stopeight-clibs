@@ -96,6 +96,7 @@ bool EditorBase::checkPrecision(const ListBase<dpoint> list){
     return false;
 }
 
+
 //void EditorBase::process(ListAnalyzer<dpoint> toBeProcessed){
 //    throw "ERROR: EditorBase::process called. this should be superclass-call";
 //}

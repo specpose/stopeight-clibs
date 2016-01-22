@@ -99,7 +99,7 @@ template<> ListBase<dpoint> AreaAnalyzer<dpoint>::getArea(qreal limit,QPointF st
 
 template<> ListBase<dpoint> AreaAnalyzer<dpoint>::getFirstArea(qreal limit){
     dpoint result = dpoint();
-    // needs to be a COPY
+    // needs to be and is a COPY
     CliffsAnalyzer<dpoint> calculator = *this;
 
     QList<dpoint> temp = QList<dpoint>();
