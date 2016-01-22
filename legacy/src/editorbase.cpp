@@ -1,3 +1,6 @@
+// Copyright (C) 2009-2015 Specific Purpose Software GmbH
+// GNU Lesser General Public License, version 2.1
+
 #include "include/editorbase.h"
 
 EditorBase::EditorBase() : EditorInterface() {
@@ -23,7 +26,7 @@ void EditorBase::addPoint(QPointF p){
     }
 }
 
-ListBase<dpoint> &EditorBase::getOutput(){
+ListBase<dpoint>& EditorBase::getOutput(){
     return this->data.output;
 }
 

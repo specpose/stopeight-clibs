@@ -5,6 +5,7 @@
 #define AREACALCULATOR_H
 
 #include "listinitializer.h"
+#include "calculator.h"
 
 template<typename T> class AreaCalculator : public ListInitializer<T>
 {

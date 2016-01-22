@@ -1,3 +1,6 @@
+// Copyright (C) 2009-2015 Specific Purpose Software GmbH
+// GNU Lesser General Public License, version 2.1
+
 #ifndef EditorBase_H
 #define EditorBase_H
 
@@ -36,7 +39,8 @@ public:
     //only these two have to be provided by implementations
     //static QList<dpoint> processSegment(QList<dpoint> list);
     //void process(ListBase<dpoint> toBeProcessed);
-    static QList<dpoint> (*processSegment)(QList<dpoint> list);// =0;
+    QList<dpoint> (*processSegment)(QList<dpoint> list);// =0;
+    //static QList<dpoint> (*processSegment)(QList<dpoint> list);// =0;
     virtual void process(ListBase<dpoint> toBeProcessed) =0;
 
 protected:

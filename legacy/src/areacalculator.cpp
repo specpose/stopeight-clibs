@@ -53,3 +53,24 @@ template <> qreal AreaCalculator<dpoint>::sumOfDxAreasRotY(){
     }
     return fabs(sum);
 }
+
+template <> qreal AreaCalculator<dpoint>::lengthFromStartToEnd(){
+    dpoint start = this->first();
+    dpoint end = this->last();
+    return Calculator<dpoint>::lengthOf(end-start);
+}
+
+template <> qreal AreaCalculator<dpoint>::triangleArea(QPointF A, QPointF B, QPointF C)
+{
+    AreaCalculator<dpoint> a = AreaCalculator<dpoint>();
+    a << C << B;
+    AreaCalculator<dpoint> b = AreaCalculator<dpoint>();
+    b << A << C;
+    AreaCalculator<dpoint> c = AreaCalculator<dpoint>();
+    c << A << B;
+    qreal s = ((a.lengthFromStartToEnd())+(b.lengthFromStartToEnd())+(c.lengthFromStartToEnd()))/2;
+    qreal Area = sqrt( s * (s-a.lengthFromStartToEnd()) * (s-b.lengthFromStartToEnd()) * (s-c.lengthFromStartToEnd()) );
+    if (Area<0){throw "AreaCalculator::triangleArea: is below zero";}
+
+    return Area;
+}
