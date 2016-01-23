@@ -12,7 +12,7 @@ template<>template<typename F> TurnNormalizer<dpoint>::TurnNormalizer(F& list){
 }
 
 #include "include/areanormalizer.h"
-//template TurnNormalizer<dpoint>::TurnNormalizer(AreaNormalizer<dpoint>* const& list);
+template TurnNormalizer<dpoint>::TurnNormalizer(AreaNormalizer<dpoint>& list);
 
 
 // Note: ALL datamembers of target class destroyed

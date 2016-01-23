@@ -11,6 +11,11 @@ template<>template<typename F> AreaNormalizer<dpoint>::AreaNormalizer(F& list){
     *this= static_cast<AreaNormalizer<dpoint>& >(c);
 }
 
+// Note: ALL datamembers of target class destroyed
+template<>template<typename F> void AreaNormalizer<dpoint>::operator=(F& list){
+    this->swap(list);
+}
+
 //hdojo version
 template <> void AreaNormalizer<dpoint>::removeInlays(){
     if (this->size()>4){
@@ -32,21 +37,16 @@ template <> void AreaNormalizer<dpoint>::removeInlays(){
 template <>void AreaNormalizer<dpoint>::areaFilters(){
     TurnNormalizer<dpoint> a = TurnNormalizer<dpoint>(this);
     a.smoothingJitter(0);
-    *this=a;
-    //*this=static_cast<AreaNormalizer<dpoint>& >(a);
-    //this->smoothingJitter(0);
-    CornerNormalizer<dpoint> b = this;
+    CornerNormalizer<dpoint> b = CornerNormalizer<dpoint>(a);
     b.requireMinimumLength(9);
-    *this=b;
-    //*this=static_cast<AreaNormalizer<dpoint>& >(b);
-    //this->requireMinimumLength(9);
-    this->rotateSegmentToXAxis();
+    b.rotateSegmentToXAxis();
 
     //Port: UNUSED
     //this->risingJitter(0);
 
-
+    *this=AreaNormalizer<dpoint>(b);
     //debug()<<"Before removeInlays: "<<this->size();
     this->removeInlays();
     //debug()<<"After removeInlays: "<<this->size();
+
 }

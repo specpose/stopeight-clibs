@@ -7,7 +7,10 @@ template<> AreaAnalyzer<dpoint>::AreaAnalyzer() : AreaNormalizer<dpoint>() {}
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> AreaAnalyzer<dpoint>::AreaAnalyzer(F& list){
-    *this = static_cast<AreaAnalyzer<dpoint>& >(list);
+    ListInitializer<dpoint> c = static_cast<ListInitializer<dpoint>& >(list);
+    // ListBase to AreaAnalyzer NOT ok
+    *this= static_cast<AreaAnalyzer<dpoint>& >(c);
+    //*this = static_cast<AreaAnalyzer<dpoint>& >(list);
 }
 
 // listbase to AreaAnalyzer NOT ok
@@ -178,5 +181,4 @@ template<> ListBase<dpoint> AreaAnalyzer<dpoint>::getFirstArea(qreal limit){
     }
     return area;
 }
-
 

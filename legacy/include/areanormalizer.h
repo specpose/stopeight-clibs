@@ -13,6 +13,7 @@ template<typename T> class AreaNormalizer : public AreaCalculator<T>
 public:
     AreaNormalizer<T>();
     template<typename F> AreaNormalizer<T>(F& list);
+    template<typename F> void operator=(F& list);
 
     // these methods are being used for cleaning up the segments before the corner detection
     void areaFilters();

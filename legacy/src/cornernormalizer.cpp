@@ -12,6 +12,8 @@ template<>template<typename F> CornerNormalizer<dpoint>::CornerNormalizer(F& lis
 }
 
 template CornerNormalizer<dpoint>::CornerNormalizer(ListBase<dpoint>& list);
+#include "include/areanormalizer.h"
+template CornerNormalizer<dpoint>::CornerNormalizer(TurnNormalizer<dpoint>& list);
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> void CornerNormalizer<dpoint>::operator=(F& list){
@@ -30,7 +32,7 @@ template <> void CornerNormalizer<dpoint>::requireMinimumLength(qreal lnt){
             break;
         }
     }
-    *this=calc;
+    *this=CornerNormalizer<dpoint>(calc);
     if (foundOne){
         requireMinimumLength(lnt);
     }
