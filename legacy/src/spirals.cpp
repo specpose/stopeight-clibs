@@ -14,9 +14,10 @@ template<> Spirals<dpoint>::Spirals() : ListInitializer<dpoint>() {}
 template<>template<typename F> Spirals<dpoint>::Spirals(F& list){
     ListInitializer<dpoint>& c = static_cast<ListInitializer<dpoint>& >(list);
     *this= static_cast<Spirals<dpoint>& >(c);
-    //Spirals<dpoint>& test = dynamic_cast<Spirals<dpoint>& >(list);
-    //*this = test;
 }
+
+template Spirals<dpoint>::Spirals(ListBase<dpoint>& list);
+
 
 template<> QList<dpoint> Spirals<dpoint>::findAreas(ListBase<dpoint> &stroke, qreal limit){
     AreaAnalyzer<dpoint> spiral = AreaAnalyzer<dpoint>(stroke);

@@ -20,8 +20,8 @@ public:
     // does not change index-numbering variable
     void reverseOrder();
 
-    // make static
-    static Calculator<dpoint> populateTurns(const ListBase<dpoint> &originalData, const QList<QList<dpoint> > slices);
+    // make const?
+    static Calculator<dpoint> populateTurns(ListBase<dpoint> originalData, const QList<QList<dpoint> > slices);
 
 };
 

@@ -45,10 +45,12 @@ public:
 
 protected:
 
-    static bool checkPrecision(const ListBase<dpoint> list);
+    static bool checkPrecision(const ListBase<dpoint>& list);
+    //static bool checkPrecision(const ListBase<dpoint> list);
     void setOutput(ListBase<dpoint> list);
 
-    const void mainIterator(const QList<dpoint> constCliffs,QList<QList<dpoint> >& slicesRef);
+    const void mainIterator(const QList<dpoint>& constCliffs,QList<QList<dpoint> >& slicesRef);
+    //const void mainIterator(const QList<dpoint> constCliffs,QList<QList<dpoint> >& slicesRef);
 
 
 

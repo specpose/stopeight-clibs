@@ -10,6 +10,9 @@ template<>template<typename F> AreaAnalyzer<dpoint>::AreaAnalyzer(F& list){
     *this = static_cast<AreaAnalyzer<dpoint>& >(list);
 }
 
+// listbase to AreaAnalyzer NOT ok
+template AreaAnalyzer<dpoint>::AreaAnalyzer(ListBase<dpoint>& list);
+
 // Segment-Radius-Area
 template<> qreal AreaAnalyzer<dpoint>::area(qreal diameter, qreal base){
     qreal squareOfRadius = pow(diameter/2,2);

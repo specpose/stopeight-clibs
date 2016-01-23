@@ -7,8 +7,14 @@ template<> CliffsAnalyzer<dpoint>::CliffsAnalyzer() : CliffsCalculator<dpoint>()
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> CliffsAnalyzer<dpoint>::CliffsAnalyzer(F& list){
-    *this = static_cast<CliffsAnalyzer<dpoint>& >(list);
+    ListInitializer<dpoint> c = static_cast<ListInitializer<dpoint>& >(list);
+    *this= static_cast<CliffsAnalyzer<dpoint>& >(c);
 }
+
+#include "include/areaanalyzer.h"
+//area to cliff ok
+template CliffsAnalyzer<dpoint>::CliffsAnalyzer(AreaAnalyzer<dpoint>& list);
+
 
 template <> int CliffsAnalyzer<dpoint>::hasIllegalSegment(){
     ListRotator<dpoint> rotator = ListRotator<dpoint>(this);

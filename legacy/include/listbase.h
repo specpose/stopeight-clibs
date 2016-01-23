@@ -34,6 +34,9 @@ public:
 
 };
 
+template class ListBase<dpoint>;
+//template ListBase<dpoint>::ListBase(ListBase<dpoint>& list);
+//template void ListBase<dpoint>::operator=(ListBase<dpoint>& list);
 //template<typename From, typename To> static To convert(From list);
 
 

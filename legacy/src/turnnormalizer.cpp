@@ -11,6 +11,10 @@ template<>template<typename F> TurnNormalizer<dpoint>::TurnNormalizer(F& list){
     *this= static_cast<TurnNormalizer<dpoint>& >(c);
 }
 
+#include "include/areanormalizer.h"
+//template TurnNormalizer<dpoint>::TurnNormalizer(AreaNormalizer<dpoint>* const& list);
+
+
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> void TurnNormalizer<dpoint>::operator=(F& list){
     this->swap(list);

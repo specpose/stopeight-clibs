@@ -11,6 +11,8 @@ template<>template<typename F> CornerNormalizer<dpoint>::CornerNormalizer(F& lis
     *this= static_cast<CornerNormalizer<dpoint>& >(c);
 }
 
+template CornerNormalizer<dpoint>::CornerNormalizer(ListBase<dpoint>& list);
+
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> void CornerNormalizer<dpoint>::operator=(F& list){
     this->swap(list);

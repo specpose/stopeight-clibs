@@ -19,3 +19,5 @@ template <> qreal StraightsCalculator<dpoint>::sumLength(){
     }
     return sumLength;
 }
+
+

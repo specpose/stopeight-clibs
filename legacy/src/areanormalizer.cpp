@@ -30,7 +30,7 @@ template <> void AreaNormalizer<dpoint>::removeInlays(){
 }
 
 template <>void AreaNormalizer<dpoint>::areaFilters(){
-    TurnNormalizer<dpoint> a = this;
+    TurnNormalizer<dpoint> a = TurnNormalizer<dpoint>(this);
     a.smoothingJitter(0);
     *this=a;
     //*this=static_cast<AreaNormalizer<dpoint>& >(a);

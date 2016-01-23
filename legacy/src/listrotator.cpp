@@ -13,6 +13,10 @@ template<>template<typename F> ListRotator<dpoint>::ListRotator(F& list){
     *this = static_cast<ListRotator<dpoint>& >(list);
 }
 
+template ListRotator<dpoint>::ListRotator(QList<dpoint>& list);
+#include "include/cliffsanalyzer.h"
+template ListRotator<dpoint>::ListRotator(CliffsAnalyzer<dpoint>& list);
+
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> void ListRotator<dpoint>::operator=(F& list){
     this->swap(list);

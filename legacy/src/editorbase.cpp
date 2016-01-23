@@ -44,7 +44,7 @@ void EditorBase::automatic(){
     this->process(this->getOutput());
 }
 
-const void EditorBase::mainIterator(const QList<dpoint> constCliffs,QList<QList<dpoint> >& slicesRef){
+const void EditorBase::mainIterator(const QList<dpoint>& constCliffs,QList<QList<dpoint> >& slicesRef){
     ListIteration<dpoint> out = ListIteration<dpoint>(this->getOutput());
     int currentSegment = 0;
     //maemo works: check cliff size
@@ -83,7 +83,7 @@ const void EditorBase::mainIterator(const QList<dpoint> constCliffs,QList<QList<
 }
 
 
-bool EditorBase::checkPrecision(const ListBase<dpoint> list){
+bool EditorBase::checkPrecision(const ListBase<dpoint> &list){
     /*
       Check if the list contains float values and set precision to high
       */

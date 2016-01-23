@@ -10,6 +10,8 @@ template<>template<typename F> ListIteration<dpoint>::ListIteration(F& list){
     *this = static_cast<ListIteration<dpoint>& >(list);
 }
 
+template ListIteration<dpoint>::ListIteration(ListBase<dpoint>& list);
+
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> void ListIteration<dpoint>::operator=(F& list){
     this->swap(list);
