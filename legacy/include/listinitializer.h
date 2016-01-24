@@ -31,6 +31,7 @@ protected:
     //void addTail(QList<dpoint> tail){calcTail=QList<dpoint>();calcTail=tail;}
 
 private:
+    template<typename F> ListInitializer<T>(const F& list);
     //void removeAtPos(int pos);
 
 };

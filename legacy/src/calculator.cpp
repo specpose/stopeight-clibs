@@ -11,6 +11,12 @@ template<>template<typename F> Calculator<dpoint>::Calculator(F& list){
     *this= static_cast<Calculator<dpoint>& >(c);
 }
 
+#include "include/straightscalculator.h"
+template Calculator<dpoint>::Calculator(StraightsCalculator<dpoint>& list);
+#include "include/cornernormalizer.h"
+template Calculator<dpoint>::Calculator(CornerNormalizer<dpoint>& list);
+
+
 template <> qreal Calculator<dpoint>::lengthOf(QPointF difference){
     return sqrt(pow(difference.x(),2)+pow(difference.y(),2));
 }

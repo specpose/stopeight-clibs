@@ -17,7 +17,7 @@ template CliffsAnalyzer<dpoint>::CliffsAnalyzer(AreaAnalyzer<dpoint>& list);
 
 
 template <> int CliffsAnalyzer<dpoint>::hasIllegalSegment(){
-    ListRotator<dpoint> rotator = ListRotator<dpoint>(this);
+    ListRotator<dpoint> rotator = ListRotator<dpoint>(*this);
     // has to change to steepest possible?
     rotator.rotateSegmentToXAxis();
     //rotateLastVectorToYAxis();

@@ -7,10 +7,15 @@ template<> ListIteration<dpoint>::ListIteration() : ListBase<dpoint>() {}
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> ListIteration<dpoint>::ListIteration(F& list){
-    *this = static_cast<ListIteration<dpoint>& >(list);
+    ListBase<dpoint> c = static_cast<ListBase<dpoint>& >(list);
+    *this = static_cast<ListIteration<dpoint>& >(c);
+    //*this = static_cast<ListIteration<dpoint>& >(list);
 }
 
 template ListIteration<dpoint>::ListIteration(ListBase<dpoint>& list);
+#include "include/areaanalyzer.h"
+template ListIteration<dpoint>::ListIteration(AreaAnalyzer<dpoint>& list);
+
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> void ListIteration<dpoint>::operator=(F& list){

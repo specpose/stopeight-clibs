@@ -30,7 +30,7 @@ template<> void Analyzer<dpoint>::reverseOrder(){
     this->append(reversed);
 }
 
-template<> Calculator<dpoint> Analyzer<dpoint>::populateTurns(ListBase<dpoint> originalData, const QList<QList<dpoint> > slices){
+template<> Calculator<dpoint> Analyzer<dpoint>::populateTurns(ListBase<dpoint> &originalData, const QList<QList<dpoint> > slices){
     Calculator<dpoint> result;
     for (int k=0;k<slices.size();k++){
         for (int l=0;l<slices[k].size()-1;l++){

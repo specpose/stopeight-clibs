@@ -22,7 +22,7 @@ template<>template<typename F> void CornerNormalizer<dpoint>::operator=(F& list)
 
 template <> void CornerNormalizer<dpoint>::requireMinimumLength(qreal lnt){
     bool foundOne = false;
-    Calculator<dpoint> calc = Calculator<dpoint>(this);
+    Calculator<dpoint> calc = Calculator<dpoint>(*this);
     for (int i=calc.size()-2;i>0;i--){
 
         if (calc.lengthAt(i)<lnt){
@@ -39,7 +39,7 @@ template <> void CornerNormalizer<dpoint>::requireMinimumLength(qreal lnt){
 }
 
 template<> dpoint CornerNormalizer<dpoint>::getPointInTheMiddle(){
-    StraightsCalculator<dpoint> myself = StraightsCalculator<dpoint>(this);
+    StraightsCalculator<dpoint> myself = StraightsCalculator<dpoint>(*this);
     if (myself.size()>2){
         QPointF middle;
 

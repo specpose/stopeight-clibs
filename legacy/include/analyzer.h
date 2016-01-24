@@ -21,7 +21,7 @@ public:
     void reverseOrder();
 
     // make const?
-    static Calculator<dpoint> populateTurns(ListBase<dpoint> originalData, const QList<QList<dpoint> > slices);
+    static Calculator<dpoint> populateTurns(ListBase<dpoint>& originalData, const QList<QList<dpoint> > slices);
 
 };
 

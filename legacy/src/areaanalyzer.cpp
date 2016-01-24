@@ -167,8 +167,8 @@ template<> ListBase<dpoint> AreaAnalyzer<dpoint>::getFirstArea(qreal limit){
     }
     ListBase<dpoint> area = ListBase<dpoint>();
     if (foundOne){
-        ListIteration<dpoint> util = this;
-        //ListIteration<dpoint> util = ListIteration<dpoint>(this);
+        //ListIteration<dpoint> util = this;
+        ListIteration<dpoint> util = ListIteration<dpoint>(*this);
         area = util.chopCopy(util.first().position,result.position);
         //area = ListBase<dpoint>(util.chopCopy(util.first().position,result.position));
         //debug()<<"Area has "<<illegalSegmentCounter<<" legal segments.";
