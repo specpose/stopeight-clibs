@@ -20,11 +20,6 @@ protected:
 
 private:
     static QList<dpoint> processSegment(QList<dpoint> list);
-
-    //ListStorage<ListBase<dpoint> > data;
-
-    ListBase<dpoint> d1;
-    ListBase<dpoint> d2;
 };
 
 #endif // SPIRALS_H

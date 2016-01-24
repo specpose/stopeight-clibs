@@ -18,14 +18,18 @@
 
 template<typename T> struct ListStorage{
     //can not be used because compiler will require empty constructor in implementation instantiation
-    //ListStorage(ListBase<dpoint>& a,ListBase<dpoint>& b){input=a;output=b;}
-    void set(ListBase<dpoint>* a,ListBase<dpoint>* b){input=a;output=b;}
+    ListStorage<T>() : input(T()), output(T()){}
+
+    //specialisation:
+    //ListStorage<ListBase<dpoint> >(){this.input=ListBase<dpoint>();this->output=ListBase<dpoint>(); }
+    //ListStorage(ListBase<dpoint>* a,ListBase<dpoint>* b){input=a;output=b;}
+    //ListStorage<ListBase<dpoint> > init(){input=ListBase<dpoint>();output=ListBase<dpoint>();return this;}
 
     // ptr has to be used because compiler will complain about uninitialized reference
     // input is always the raw data either from file or pen/mouse stroke
-    T* input;
+    T input;
     // output is initially input but gets reduced to T-C-T... in automatic
-    T* output;
+    T output;
 };
 
 //template ListStorage<ListBase<dpoint> >(ListBase<dpoint> a,ListBase<dpoint> b);
@@ -59,6 +63,7 @@ protected:
     const void mainIterator(const QList<dpoint>& constCliffs,QList<QList<dpoint> >& slicesRef);
     //const void mainIterator(const QList<dpoint> constCliffs,QList<QList<dpoint> >& slicesRef);
 
+private:
     ListStorage<ListBase<dpoint> > data;
 
 };

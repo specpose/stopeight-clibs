@@ -7,16 +7,6 @@
 //#define debug() QNoDebug()
 
 EditorSpirals::EditorSpirals() : EditorBase(){
-    //EditorBase is abstract, its not instantiated
-
-    //ListBase<dpoint>* d1 = new ListBase<dpoint>();
-    //ListBase<dpoint>* d2 = new ListBase<dpoint>();
-    d1 = ListBase<dpoint>();
-    d2 = ListBase<dpoint>();
-
-    //ListStorage<ListBase<dpoint> > store = ListStorage<ListBase<dpoint> >(d1,d2);
-    ListStorage<ListBase<dpoint> > store;
-    store.set(&d1,&d2);
 }
 
 //EditorSpirals::~EditorSpirals(){
