@@ -17,11 +17,18 @@
 #include "myreal.h"
 
 template<typename T> struct ListStorage{
+    //can not be used because compiler will require empty constructor in implementation instantiation
+    //ListStorage(ListBase<dpoint>& a,ListBase<dpoint>& b){input=a;output=b;}
+    void set(ListBase<dpoint>* a,ListBase<dpoint>* b){input=a;output=b;}
+
+    // ptr has to be used because compiler will complain about uninitialized reference
     // input is always the raw data either from file or pen/mouse stroke
-    T input;
+    T* input;
     // output is initially input but gets reduced to T-C-T... in automatic
-    T output;
+    T* output;
 };
+
+//template ListStorage<ListBase<dpoint> >(ListBase<dpoint> a,ListBase<dpoint> b);
 
 class EditorBase : public EditorInterface
 {
@@ -52,9 +59,6 @@ protected:
     const void mainIterator(const QList<dpoint>& constCliffs,QList<QList<dpoint> >& slicesRef);
     //const void mainIterator(const QList<dpoint> constCliffs,QList<QList<dpoint> >& slicesRef);
 
-
-
-private:
     ListStorage<ListBase<dpoint> > data;
 
 };

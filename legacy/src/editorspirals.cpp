@@ -3,7 +3,20 @@
 
 #include "include/editorspirals.h"
 
+#define debug() QDebug(QtDebugMsg)//::QDebug(QtDebugMsg)
+//#define debug() QNoDebug()
+
 EditorSpirals::EditorSpirals() : EditorBase(){
+    //EditorBase is abstract, its not instantiated
+
+    //ListBase<dpoint>* d1 = new ListBase<dpoint>();
+    //ListBase<dpoint>* d2 = new ListBase<dpoint>();
+    d1 = ListBase<dpoint>();
+    d2 = ListBase<dpoint>();
+
+    //ListStorage<ListBase<dpoint> > store = ListStorage<ListBase<dpoint> >(d1,d2);
+    ListStorage<ListBase<dpoint> > store;
+    store.set(&d1,&d2);
 }
 
 //EditorSpirals::~EditorSpirals(){
@@ -11,6 +24,7 @@ EditorSpirals::EditorSpirals() : EditorBase(){
 //}
 
 void EditorSpirals::process(ListBase<dpoint> toBeProcessed){
+    debug()<<"EditorSpirals::process reached with data"<<this->getOutput().size();
     // use of output is a hack
     if (this->getOutput().size()>0) {
         /* SHARED CLIFFS&SPIRALS */
@@ -57,6 +71,8 @@ void EditorSpirals::process(ListBase<dpoint> toBeProcessed){
         //hack
         //this->setOutput(this->getOutput().clear());
         this->setOutput(result);//this->data.output.append(result);
+    } else {
+        throw "EditorSpirals::process called without any data";
     }
 }
 

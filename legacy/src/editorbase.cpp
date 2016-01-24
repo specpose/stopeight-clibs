@@ -3,45 +3,81 @@
 
 #include "include/editorbase.h"
 
+#define debug() QDebug(QtDebugMsg)//::QDebug(QtDebugMsg)
+//#define debug() QNoDebug()
+
 EditorBase::EditorBase() : EditorInterface() {
-    this->data.input = ListBase<dpoint>();
-    this->data.output = ListBase<dpoint>();
+
 }
 
 EditorBase::~EditorBase(){
-    this->data.input.~ListBase();
-    this->data.output.~ListBase();
+    if (data.input){
+    this->data.input->~ListBase();
+    }
+    if (data.output) {
+    this->data.output->~ListBase();
+    }
 }
 
 void EditorBase::resetLists(){
-    this->data.input.clear();
-    this->data.output.clear();
+    if (data.input){
+    this->data.input->clear();
+    } else {
+        throw "EditorBase::resetLists has not been initialized";
+    }
+    if (data.output) {
+    this->data.output->clear();
+    } else {
+        throw "EditorBase::resetLists has not been initialized";
+    }
 }
 
 void EditorBase::addPoint(QPointF p){
+    if (data.input){
      if (p.x()>=0 && p.y()>=0){
          dpoint newpoint(p);
-         newpoint.position = this->data.input.size();
-        this->data.input.push_back(newpoint);
+         newpoint.position = this->data.input->size();
+        this->data.input->push_back(newpoint);
+    }
+    } else {
+        throw "EditorBase::addPoint has not been initialized";
     }
 }
 
 ListBase<dpoint>& EditorBase::getOutput(){
-    return this->data.output;
+    if (data.output){
+    return *(this->data.output);
+    } else {
+        throw "EditorBase::getOutput has not been initialized";
+    }
 }
 
 void EditorBase::setOutput(ListBase<dpoint> list){
-    this->data.output=list;
+    *(this->data.output)=list;
 }
 
 void EditorBase::flushOutput(){
-    this->data.output.clear();
-    //output.setQList(input);
-    this->data.output.append(this->data.input);
+    if (data.output){
+    this->data.output->clear();
+    } else {
+        throw "EditorBase::flushOutput has not been initialized";
+    }
+    //output->setQList(input);
+    if (data.output){
+    this->data.output->append(*(this->data.input));
+    } else {
+        throw "EditorBase::flushOutput has not been initialized";
+    }
 }
 
 void EditorBase::automatic(){
+    this->flushOutput();
+    debug()<<"Computation started with data size "<<this->data.output->size();
+    if (data.output){
     this->process(this->getOutput());
+    } else {
+        throw "EditorBase::automatic has not been initialized";
+    }
 }
 
 const void EditorBase::mainIterator(const QList<dpoint>& constCliffs,QList<QList<dpoint> >& slicesRef){
