@@ -3,11 +3,11 @@
 
 #include "include/straightscalculator.h"
 
-template<> StraightsCalculator<dpoint>::StraightsCalculator() : ListInitializer<dpoint>() {}
+template<> StraightsCalculator<dpoint>::StraightsCalculator() : ListSwitchable<dpoint>() {}
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> StraightsCalculator<dpoint>::StraightsCalculator(F& list){
-    ListInitializer<dpoint> c = static_cast<ListInitializer<dpoint>& >(list);
+    ListSwitchable<dpoint> c = static_cast<ListSwitchable<dpoint>& >(list);
     *this= static_cast<StraightsCalculator<dpoint>& >(c);
 }
 

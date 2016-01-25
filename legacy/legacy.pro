@@ -13,10 +13,10 @@ DEFINES += LEGACY_LIBRARY
 //INCLUDEPATH += $$PWD/../analyzer/
 
 SOURCES += \
-    src/listiteration.cpp \
+    src/listcopyable.cpp \
     src/listrotator.cpp \
     src/listbase.cpp \
-    src/listinitializer.cpp \
+    src/listswitchable.cpp \
     src/dpoint.cpp \
     src/myreal.cpp \
     src/spiralscalculator.cpp \
@@ -38,11 +38,11 @@ SOURCES += \
     src/straightscalculator.cpp
 
 HEADERS +=\
-    include/listiteration.h \
+    include/listcopyable.h \
     include/listrotator.h \
     include/listbase.h \
     include/legacy_global.h \
-    include/listinitializer.h \
+    include/listswitchable.h \
     include/editorinterface.h \
     include/dpoint.h \
     include/myreal.h \

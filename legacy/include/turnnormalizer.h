@@ -5,7 +5,7 @@
 #define TURNNORMALIZER_H
 
 #include "turncalculator.h"
-#include "listinitializer.h"
+#include "listswitchable.h"
 
 template<typename T> class TurnNormalizer : public TurnCalculator<T>
 {

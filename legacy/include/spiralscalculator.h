@@ -4,9 +4,9 @@
 #ifndef SPIRALSCALCULATOR_H
 #define SPIRALSCALCULATOR_H
 
-#include "listinitializer.h"
+#include "listswitchable.h"
 
-template<typename T> class SpiralsCalculator : public ListInitializer<T>
+template<typename T> class SpiralsCalculator : public ListSwitchable<T>
 {
 public:
     SpiralsCalculator<T>();

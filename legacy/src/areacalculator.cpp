@@ -3,11 +3,11 @@
 
 #include "include/areacalculator.h"
 
-template<> AreaCalculator<dpoint>::AreaCalculator() : ListInitializer<dpoint>() {}
+template<> AreaCalculator<dpoint>::AreaCalculator() : ListSwitchable<dpoint>() {}
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> AreaCalculator<dpoint>::AreaCalculator(F& list){
-    ListInitializer<dpoint> c = static_cast<ListInitializer<dpoint>& >(list);
+    ListSwitchable<dpoint> c = static_cast<ListSwitchable<dpoint>& >(list);
     *this= static_cast<AreaCalculator<dpoint>& >(c);
 }
 

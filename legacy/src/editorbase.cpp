@@ -61,7 +61,7 @@ template<> void EditorBase<ListBase<dpoint> >::automatic(){
 }
 
 template<> const void EditorBase<ListBase<dpoint> >::mainIterator(const QList<dpoint>& constCliffs,QList<QList<dpoint> >& slicesRef){
-    ListIteration<dpoint> out = ListIteration<dpoint>(this->getOutput());
+    ListCopyable<dpoint> out = ListCopyable<dpoint>(this->getOutput());
     int currentSegment = 0;
     //maemo works: check cliff size
     if (constCliffs.size()==0){

@@ -4,11 +4,11 @@
 //#ifndef SPIRALS_H
 //#define SPIRALS_H
 
-#include "listinitializer.h"
+#include "listswitchable.h"
 #include "areaanalyzer.h"
 #include "analyzer.h"
 
-template<typename T> class Spirals : public ListInitializer<T>
+template<typename T> class Spirals : public ListSwitchable<T>
 {
 public:
     Spirals<T>();

@@ -3,10 +3,10 @@
 
 #include "include/cornercalculator.h"
 
-template<> CornerCalculator<dpoint>::CornerCalculator() : ListInitializer<dpoint>() {}
+template<> CornerCalculator<dpoint>::CornerCalculator() : ListSwitchable<dpoint>() {}
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> CornerCalculator<dpoint>::CornerCalculator(F& list){
-    ListInitializer<dpoint> c = static_cast<ListInitializer<dpoint>& >(list);
+    ListSwitchable<dpoint> c = static_cast<ListSwitchable<dpoint>& >(list);
     *this= static_cast<CornerCalculator<dpoint>& >(c);
 }

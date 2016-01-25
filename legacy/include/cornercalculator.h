@@ -4,9 +4,9 @@
 #ifndef CORNERCALCULATOR_H
 #define CORNERCALCULATOR_H
 
-#include "listinitializer.h"
+#include "listswitchable.h"
 
-template<typename T> class CornerCalculator : public ListInitializer<T>
+template<typename T> class CornerCalculator : public ListSwitchable<T>
 {
 public:
     CornerCalculator<T>();

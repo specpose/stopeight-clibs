@@ -7,7 +7,7 @@ template<> AreaNormalizer<dpoint>::AreaNormalizer() : AreaCalculator<dpoint>() {
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> AreaNormalizer<dpoint>::AreaNormalizer(F& list){
-    ListInitializer<dpoint> c = static_cast<ListInitializer<dpoint>& >(list);
+    ListSwitchable<dpoint> c = static_cast<ListSwitchable<dpoint>& >(list);
     *this= static_cast<AreaNormalizer<dpoint>& >(c);
 }
 
@@ -20,7 +20,7 @@ template<>template<typename F> void AreaNormalizer<dpoint>::operator=(F& list){
 template <> void AreaNormalizer<dpoint>::removeInlays(){
     if (this->size()>4){
         for (int i=0;i<this->size()-4;i++) {
-            ListInitializer<dpoint> first, second, third;
+            ListSwitchable<dpoint> first, second, third;
             first << this->at(0)<< this->at(1)<< this->at(2);first.rotateSegmentToXAxis(); qreal firstValue = first.at(1).rot.y();
             second << this->at(1)<<this->at(2)<<this->at(3);second.rotateSegmentToXAxis(); qreal secondValue = second.at(1).rot.y();
             third << this->at(2)<<this->at(3)<<this->at(4);third.rotateSegmentToXAxis(); qreal thirdValue = third.at(1).rot.y();

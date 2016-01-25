@@ -4,10 +4,10 @@
 #ifndef CALCULATOR_H
 #define CALCULATOR_H
 
-#include "listinitializer.h"
+#include "listswitchable.h"
 
 
-template<typename T> class Calculator : public ListInitializer<T>
+template<typename T> class Calculator : public ListSwitchable<T>
 {
 public:
     Calculator<T>();

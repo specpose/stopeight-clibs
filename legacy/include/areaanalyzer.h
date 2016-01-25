@@ -6,7 +6,7 @@
 
 #include "areanormalizer.h"
 #include "cliffsanalyzer.h"
-#include "listiteration.h"
+#include "listcopyable.h"
 
 template<typename T> class AreaAnalyzer : public AreaNormalizer<T>
 {

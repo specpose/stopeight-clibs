@@ -18,7 +18,7 @@ template<>template<typename F> void Analyzer<dpoint>::operator=(F& list){
 }
 
 template<> void Analyzer<dpoint>::reverseOrder(){
-    ListInitializer<dpoint> reversed= ListInitializer<dpoint>();
+    ListSwitchable<dpoint> reversed= ListSwitchable<dpoint>();
     int pointer = 0;
     for (int i=this->size()-1;i>=0;i--){
         dpoint point = this->at(i);
@@ -36,10 +36,10 @@ template<> Calculator<dpoint> Analyzer<dpoint>::populateTurns(ListBase<dpoint> &
         for (int l=0;l<slices[k].size()-1;l++){
             result << slices[k][l];
             // this is for debugging turn detection
-            ListIteration<dpoint> iter = ListIteration<dpoint>(originalData);
+            ListCopyable<dpoint> iter = ListCopyable<dpoint>(originalData);
             ListBase<dpoint> lst = iter.chopCopy(slices[k][l].position,slices[k][l+1].position);
             CornerNormalizer<dpoint> mid = CornerNormalizer<dpoint>(lst);
-            //ListIteration<dpoint> iter = ListIteration<dpoint>(originalData->data.output);
+            //ListCopyable<dpoint> iter = ListCopyable<dpoint>(originalData->data.output);
             result << mid.getPointInTheMiddle();
             //result << (iter.chopCopy(slices[k][l].position,slices[k][l+1].position)).getPointInTheMiddle();
             //result << (originalData->data.output.chopCopy(slices[k][l].position,slices[k][l+1].position)).getPointInTheMiddle();

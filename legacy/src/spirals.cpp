@@ -8,11 +8,11 @@
 //#define LIMIT_TEST M_PIl
 #define LIMIT_ITERATION_STEP 0.1
 
-template<> Spirals<dpoint>::Spirals() : ListInitializer<dpoint>() {}
+template<> Spirals<dpoint>::Spirals() : ListSwitchable<dpoint>() {}
 
 // Note: typename F can be any implementation of ListBase WITHOUT data members
 template<>template<typename F> Spirals<dpoint>::Spirals(F& list){
-    ListInitializer<dpoint>& c = static_cast<ListInitializer<dpoint>& >(list);
+    ListSwitchable<dpoint>& c = static_cast<ListSwitchable<dpoint>& >(list);
     *this= static_cast<Spirals<dpoint>& >(c);
 }
 

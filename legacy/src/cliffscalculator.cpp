@@ -3,10 +3,10 @@
 
 #include "include/cliffscalculator.h"
 
-template<> CliffsCalculator<dpoint>::CliffsCalculator() : ListInitializer<dpoint>() {}
+template<> CliffsCalculator<dpoint>::CliffsCalculator() : ListSwitchable<dpoint>() {}
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> CliffsCalculator<dpoint>::CliffsCalculator(F& list){
-    ListInitializer<dpoint> c = static_cast<ListInitializer<dpoint>& >(list);
+    ListSwitchable<dpoint> c = static_cast<ListSwitchable<dpoint>& >(list);
     *this= static_cast<CliffsCalculator<dpoint>& >(c);
 }

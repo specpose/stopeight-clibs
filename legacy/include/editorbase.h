@@ -12,7 +12,7 @@
 
 #include "editorinterface.h"
 #include "listbase.h"
-#include "listiteration.h"
+#include "listcopyable.h"
 #include <QList>
 #include "myreal.h"
 

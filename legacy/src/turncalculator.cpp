@@ -3,11 +3,11 @@
 
 #include "include/turncalculator.h"
 
-template<> TurnCalculator<dpoint>::TurnCalculator() : ListInitializer<dpoint>() {}
+template<> TurnCalculator<dpoint>::TurnCalculator() : ListSwitchable<dpoint>() {}
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> TurnCalculator<dpoint>::TurnCalculator(F& list){
-    ListInitializer<dpoint> c = static_cast<ListInitializer<dpoint>& >(list);
+    ListSwitchable<dpoint> c = static_cast<ListSwitchable<dpoint>& >(list);
     *this= static_cast<TurnCalculator<dpoint>& >(c);
 }
 

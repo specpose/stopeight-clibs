@@ -1,29 +1,29 @@
 // Copyright (C) 2009-2015 Specific Purpose Software GmbH
 // GNU Lesser General Public License, version 2.1
 
-#include "include/listinitializer.h"
+#include "include/listswitchable.h"
 
 //#define debug() QDebug::QDebug(QtDebugMsg)
 #define debug() QNoDebug()
 
-template<> ListInitializer<dpoint>::ListInitializer() : ListRotator<dpoint>(){
+template<> ListSwitchable<dpoint>::ListSwitchable() : ListRotator<dpoint>(){
     //calcTail = QList<dpoint>();
 }
 
-#include "include/listinitializer.h"
-template ListInitializer<dpoint>::ListInitializer(ListInitializer<dpoint>& list);
+#include "include/listswitchable.h"
+template ListSwitchable<dpoint>::ListSwitchable(ListSwitchable<dpoint>& list);
 
 // Note: ALL datamembers of target class destroyed
-template<>template<typename F> ListInitializer<dpoint>::ListInitializer(F& list){
-    *this = static_cast<ListInitializer<dpoint>& >(list);
+template<>template<typename F> ListSwitchable<dpoint>::ListSwitchable(F& list){
+    *this = static_cast<ListSwitchable<dpoint>& >(list);
 }
 
 // Note: ALL datamembers of target class destroyed
-template<>template<typename F> void ListInitializer<dpoint>::operator=(F& list){
+template<>template<typename F> void ListSwitchable<dpoint>::operator=(F& list){
     this->swap(list);
 }
 
-template <> void ListInitializer<dpoint>::removeAt(int i) {
+template <> void ListSwitchable<dpoint>::removeAt(int i) {
     if (i<0) {
         debug()<<"Illegal position for point removal: "<<i;
         return;
@@ -48,7 +48,7 @@ template <> void ListInitializer<dpoint>::removeAt(int i) {
     }
 }
 
-/*template <> int ListInitializer<dpoint>::getListElementNumber(int pos){
+/*template <> int ListSwitchable<dpoint>::getListElementNumber(int pos){
     for (int i=0;i<this->size();i++){
         if (this->at(i).position==pos){
             return i;
@@ -58,17 +58,17 @@ template <> void ListInitializer<dpoint>::removeAt(int i) {
     return -1;
 }*/
 
-/*template <> void ListInitializer<dpoint>::removeAtPos(int pos){
+/*template <> void ListSwitchable<dpoint>::removeAtPos(int pos){
     // this only works because we're deleting just one!
     // performance issue
     if (getListElementNumber(pos)!=-1){
         this->removeAt(getListElementNumber(pos));
     } else {
-        throw "ListInitializer<dpoint>::removeAtPos request to remove illegal position";
+        throw "ListSwitchable<dpoint>::removeAtPos request to remove illegal position";
     }
 }*/
 
-/*template <> void ListInitializer<dpoint>::removeTail(){
+/*template <> void ListSwitchable<dpoint>::removeTail(){
     QListIterator<dpoint> i(calcTail);
     while (i.hasNext()){
         dpoint point1 = i.next();
@@ -82,7 +82,7 @@ template <> void ListInitializer<dpoint>::removeAt(int i) {
     }
 }*/
 
-/*template <> void ListInitializer<dpoint>::appendTail(){
+/*template <> void ListSwitchable<dpoint>::appendTail(){
         QListIterator<dpoint> i(calcTail);
         while ( i.hasNext() ) {
             dpoint point1 = i.next();

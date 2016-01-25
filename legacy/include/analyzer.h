@@ -5,8 +5,8 @@
 #define ANALYZER_H
 
 #include "calculator.h"
-#include "listinitializer.h"
-#include "listiteration.h"
+#include "listswitchable.h"
+#include "listcopyable.h"
 #include "cornernormalizer.h"
 
 template<typename T> class Analyzer : public Calculator<T>

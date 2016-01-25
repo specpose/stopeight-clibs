@@ -4,10 +4,10 @@
 #ifndef STRAIGHTSCALCULATOR_H
 #define STRAIGHTSCALCULATOR_H
 
-#include "listinitializer.h"
+#include "listswitchable.h"
 #include "calculator.h"
 
-template<typename T> class StraightsCalculator : public ListInitializer<T>
+template<typename T> class StraightsCalculator : public ListSwitchable<T>
 {
 public:
     StraightsCalculator<T>();

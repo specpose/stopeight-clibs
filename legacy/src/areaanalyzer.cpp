@@ -7,7 +7,7 @@ template<> AreaAnalyzer<dpoint>::AreaAnalyzer() : AreaNormalizer<dpoint>() {}
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> AreaAnalyzer<dpoint>::AreaAnalyzer(F& list){
-    ListInitializer<dpoint> c = static_cast<ListInitializer<dpoint>& >(list);
+    ListSwitchable<dpoint> c = static_cast<ListSwitchable<dpoint>& >(list);
     // ListBase to AreaAnalyzer NOT ok
     *this= static_cast<AreaAnalyzer<dpoint>& >(c);
     //*this = static_cast<AreaAnalyzer<dpoint>& >(list);
@@ -167,8 +167,8 @@ template<> ListBase<dpoint> AreaAnalyzer<dpoint>::getFirstArea(qreal limit){
     }
     ListBase<dpoint> area = ListBase<dpoint>();
     if (foundOne){
-        //ListIteration<dpoint> util = this;
-        ListIteration<dpoint> util = ListIteration<dpoint>(*this);
+        //ListCopyable<dpoint> util = this;
+        ListCopyable<dpoint> util = ListCopyable<dpoint>(*this);
         area = util.chopCopy(util.first().position,result.position);
         //area = ListBase<dpoint>(util.chopCopy(util.first().position,result.position));
         //debug()<<"Area has "<<illegalSegmentCounter<<" legal segments.";

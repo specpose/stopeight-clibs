@@ -3,11 +3,11 @@
 
 #include "include/calculator.h"
 
-template<> Calculator<dpoint>::Calculator() : ListInitializer<dpoint>() {}
+template<> Calculator<dpoint>::Calculator() : ListSwitchable<dpoint>() {}
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> Calculator<dpoint>::Calculator(F& list){
-    ListInitializer<dpoint> c = static_cast<ListInitializer<dpoint>& >(list);
+    ListSwitchable<dpoint> c = static_cast<ListSwitchable<dpoint>& >(list);
     *this= static_cast<Calculator<dpoint>& >(c);
 }
 
@@ -50,7 +50,7 @@ template <> qreal Calculator<dpoint>::lengthAt(int position){
 }
 
 template <> void Calculator<dpoint>::reverse(){
-    ListInitializer<dpoint> reversed= ListInitializer<dpoint>();
+    ListSwitchable<dpoint> reversed= ListSwitchable<dpoint>();
     for (int i=this->size()-1;i>=0;i--){
         reversed << this->at(i);
     }

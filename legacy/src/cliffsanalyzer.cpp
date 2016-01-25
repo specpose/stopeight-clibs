@@ -7,7 +7,7 @@ template<> CliffsAnalyzer<dpoint>::CliffsAnalyzer() : CliffsCalculator<dpoint>()
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> CliffsAnalyzer<dpoint>::CliffsAnalyzer(F& list){
-    ListInitializer<dpoint> c = static_cast<ListInitializer<dpoint>& >(list);
+    ListSwitchable<dpoint> c = static_cast<ListSwitchable<dpoint>& >(list);
     *this= static_cast<CliffsAnalyzer<dpoint>& >(c);
 }
 

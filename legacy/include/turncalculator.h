@@ -4,12 +4,12 @@
 #ifndef TURNCALCULATOR_H
 #define TURNCALCULATOR_H
 
-#include "listinitializer.h"
+#include "listswitchable.h"
 
 #define REGH1 true
 #define REGH2 false
 
-template<typename T> class TurnCalculator : public ListInitializer<T>
+template<typename T> class TurnCalculator : public ListSwitchable<T>
 {
 public:
     TurnCalculator<T>();

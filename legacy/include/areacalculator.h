@@ -4,10 +4,10 @@
 #ifndef AREACALCULATOR_H
 #define AREACALCULATOR_H
 
-#include "listinitializer.h"
+#include "listswitchable.h"
 #include "calculator.h"
 
-template<typename T> class AreaCalculator : public ListInitializer<T>
+template<typename T> class AreaCalculator : public ListSwitchable<T>
 {
 public:
     AreaCalculator<T>();
