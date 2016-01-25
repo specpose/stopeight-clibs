@@ -9,6 +9,7 @@
 template<typename T> EditorBase<T>::EditorBase() : EditorInterface<T>(), data(ListStorage<T>())
 {
     //Note: data has to be allocated in subclass!
+    debug()<<"EditorBase<T>::EditorBase() constructor called and data initialized";
 }
 
 template EditorBase<ListBase<dpoint> >::EditorBase();
@@ -20,8 +21,8 @@ template EditorBase<ListBase<dpoint> >::EditorBase();
 
 template<typename T> T& EditorBase<T>::getOutput(){
     //ListBase<dpoint>& ref(data.output);
+    //debug()<<"EditorBase<T>::getOutput sent "<<ref;
     //return ref;
-    debug()<<"EditorBase<T>::getOutput sent "<<data.output;
     return data.output;
 }
 
@@ -55,7 +56,7 @@ template<> void EditorBase<ListBase<dpoint> >::flushOutput(){
 
 template<> void EditorBase<ListBase<dpoint> >::automatic(){
     this->flushOutput();
-    debug()<<"Computation started with data size "<<data.output.size();
+    debug()<<"Computation started with data size "<<this->getOutput().size();
     this->process(this->getOutput());
 }
 

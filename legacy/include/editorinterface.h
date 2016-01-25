@@ -26,7 +26,7 @@ protected:
     //void process(ListBase<dpoint> toBeProcessed);
     virtual QList<dpoint> processSegment(QList<dpoint> list) =0;
     //static QList<dpoint> (*processSegment)(QList<dpoint> list);// =0;
-    virtual void process(ListBase<dpoint> toBeProcessed) =0;
+    virtual void process(ListBase<dpoint>& toBeProcessed) =0;
 
 };
 

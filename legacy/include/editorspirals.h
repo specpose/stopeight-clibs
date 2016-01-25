@@ -17,12 +17,10 @@ public:
 
 protected:
     // automatic detection of "spirals" that don't include any illegal segments, which would make derivations invalid.
-    void process(ListBase<dpoint> toBeProcessed);
+    void process(ListBase<dpoint>& toBeProcessed);
 
 private:
     QList<dpoint> processSegment(QList<dpoint> list);
-
-//    ListStorage<ListBase<dpoint> > myData;
 
 };
 

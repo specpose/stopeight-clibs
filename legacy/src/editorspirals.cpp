@@ -6,21 +6,17 @@
 #define debug() QDebug(QtDebugMsg)//::QDebug(QtDebugMsg)
 //#define debug() QNoDebug()
 
-EditorSpirals::EditorSpirals() : EditorBase()//, myData(ListStorage<ListBase<dpoint> >()),data(myData)
+EditorSpirals::EditorSpirals() : EditorBase<ListBase<dpoint> >()
 {
-   // myData = ListStorage<ListBase<dpoint> >();
-   // data = *myData;
-    data=ListStorage<ListBase<dpoint> >();
-
-
+    debug()<<"EditorSpirals<T>::EditorSpirals() constructor called";
 }
 
 //EditorSpirals::~EditorSpirals(){
 //    EditorBase::~EditorBase();
 //}
 
-void EditorSpirals::process(ListBase<dpoint> toBeProcessed){
-    debug()<<"EditorSpirals::process reached with data"<<this->getOutput().size();
+void EditorSpirals::process(ListBase<dpoint> &toBeProcessed){
+    debug()<<"EditorSpirals::process reached with data "<<this->getOutput().size();
     // use of output is a hack
     if (this->getOutput().size()>0) {
         /* SHARED CLIFFS&SPIRALS */

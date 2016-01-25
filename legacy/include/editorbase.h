@@ -42,6 +42,7 @@ public:
 
     void resetLists();
     void addPoint(QPointF p);
+    //dont make getOutput const, see reversal in spiral process
     T& getOutput();
     void flushOutput();
 
@@ -58,7 +59,7 @@ protected:
     const void mainIterator(const QList<dpoint>& constCliffs,QList<QList<dpoint> >& slicesRef);
     //const void mainIterator(const QList<dpoint> constCliffs,QList<QList<dpoint> >& slicesRef);
 
-//private:
+private:
     //should ONLY be accessed for implementation instantiation
     ListStorage<T > data;
 
