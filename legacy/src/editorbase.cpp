@@ -6,8 +6,9 @@
 #define debug() QDebug(QtDebugMsg)//::QDebug(QtDebugMsg)
 //#define debug() QNoDebug()
 
-EditorBase::EditorBase() : EditorInterface(),data(ListStorage<ListBase<dpoint> >()) {
-
+EditorBase::EditorBase() : EditorInterface(), data(ListStorage<ListBase<dpoint> >())
+{
+    //Note: data has to be allocated in subclass!
 }
 
 EditorBase::~EditorBase(){
@@ -29,6 +30,8 @@ void EditorBase::addPoint(QPointF p){
 }
 
 ListBase<dpoint>& EditorBase::getOutput(){
+    //ListBase<dpoint>& ref(data.output);
+    //return ref;
     return data.output;
 }
 

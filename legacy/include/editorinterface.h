@@ -20,6 +20,14 @@ public:
     // gets called on tablet/mouse release
      virtual void automatic() =0;
 
+protected:
+    //only these two have to be provided by implementations
+    //static QList<dpoint> processSegment(QList<dpoint> list);
+    //void process(ListBase<dpoint> toBeProcessed);
+    virtual QList<dpoint> processSegment(QList<dpoint> list) =0;
+    //static QList<dpoint> (*processSegment)(QList<dpoint> list);// =0;
+    virtual void process(ListBase<dpoint> toBeProcessed) =0;
+
 };
 
 

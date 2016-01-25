@@ -6,7 +6,13 @@
 #define debug() QDebug(QtDebugMsg)//::QDebug(QtDebugMsg)
 //#define debug() QNoDebug()
 
-EditorSpirals::EditorSpirals() : EditorBase(){
+EditorSpirals::EditorSpirals() : EditorBase()//, myData(ListStorage<ListBase<dpoint> >()),data(myData)
+{
+   // myData = ListStorage<ListBase<dpoint> >();
+   // data = *myData;
+    data=ListStorage<ListBase<dpoint> >();
+
+
 }
 
 //EditorSpirals::~EditorSpirals(){

@@ -38,7 +38,7 @@ class EditorBase : public EditorInterface
 {
 public:
     EditorBase();
-    virtual ~EditorBase();// =0;
+    ~EditorBase();
 
     void resetLists();
     void addPoint(QPointF p);
@@ -47,12 +47,7 @@ public:
 
     void automatic();
 
-    //only these two have to be provided by implementations
-    //static QList<dpoint> processSegment(QList<dpoint> list);
-    //void process(ListBase<dpoint> toBeProcessed);
-    QList<dpoint> (*processSegment)(QList<dpoint> list);// =0;
-    //static QList<dpoint> (*processSegment)(QList<dpoint> list);// =0;
-    virtual void process(ListBase<dpoint> toBeProcessed) =0;
+
 
 protected:
 
@@ -63,8 +58,10 @@ protected:
     const void mainIterator(const QList<dpoint>& constCliffs,QList<QList<dpoint> >& slicesRef);
     //const void mainIterator(const QList<dpoint> constCliffs,QList<QList<dpoint> >& slicesRef);
 
-private:
+//private:
+    //should ONLY be accessed for implementation instantiation
     ListStorage<ListBase<dpoint> > data;
+
 
 };
 

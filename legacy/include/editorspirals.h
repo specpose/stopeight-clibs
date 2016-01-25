@@ -14,12 +14,16 @@ public:
     EditorSpirals();
     //~EditorSpirals();
 
+
 protected:
     // automatic detection of "spirals" that don't include any illegal segments, which would make derivations invalid.
     void process(ListBase<dpoint> toBeProcessed);
 
 private:
-    static QList<dpoint> processSegment(QList<dpoint> list);
+    QList<dpoint> processSegment(QList<dpoint> list);
+
+//    ListStorage<ListBase<dpoint> > myData;
+
 };
 
 #endif // SPIRALS_H
