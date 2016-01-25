@@ -6,11 +6,11 @@
 
 #include "listbase.h"
 
-class EditorInterface
+template<typename T> class EditorInterface
 {
 public:
     //int maxPoints;
-     virtual ListBase<dpoint>& getOutput() =0;
+     virtual T& getOutput() =0;
      virtual void flushOutput() =0;
 
 

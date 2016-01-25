@@ -6,22 +6,39 @@
 #define debug() QDebug(QtDebugMsg)//::QDebug(QtDebugMsg)
 //#define debug() QNoDebug()
 
-EditorBase::EditorBase() : EditorInterface(), data(ListStorage<ListBase<dpoint> >())
+template<typename T> EditorBase<T>::EditorBase() : EditorInterface<T>(), data(ListStorage<T>())
 {
     //Note: data has to be allocated in subclass!
 }
 
-EditorBase::~EditorBase(){
-    data.input.~ListBase();
-    data.output.~ListBase();
+template EditorBase<ListBase<dpoint> >::EditorBase();
+
+//EditorBase::~EditorBase(){
+//    data.input.~ListBase();
+//    data.output.~ListBase();
+//}
+
+template<typename T> T& EditorBase<T>::getOutput(){
+    //ListBase<dpoint>& ref(data.output);
+    //return ref;
+    debug()<<"EditorBase<T>::getOutput sent "<<data.output;
+    return data.output;
 }
 
-void EditorBase::resetLists(){
+template ListBase<dpoint>& EditorBase<ListBase<dpoint> >::getOutput();
+
+template<typename T> void EditorBase<T>::setOutput(T list){
+    data.output=list;
+}
+
+template void EditorBase<ListBase<dpoint> >::setOutput(ListBase<dpoint> list);
+
+template<> void EditorBase<ListBase<dpoint> >::resetLists(){
     data.input.clear();
     data.output.clear();
 }
 
-void EditorBase::addPoint(QPointF p){
+template<> void EditorBase<ListBase<dpoint> >::addPoint(QPointF p){
      if (p.x()>=0 && p.y()>=0){
          dpoint newpoint(p);
          newpoint.position = data.input.size();
@@ -29,29 +46,20 @@ void EditorBase::addPoint(QPointF p){
     }
 }
 
-ListBase<dpoint>& EditorBase::getOutput(){
-    //ListBase<dpoint>& ref(data.output);
-    //return ref;
-    return data.output;
-}
-
-void EditorBase::setOutput(ListBase<dpoint> list){
-    data.output=list;
-}
-
-void EditorBase::flushOutput(){
+template<> void EditorBase<ListBase<dpoint> >::flushOutput(){
     data.output.clear();
     //output->setQList(input);
-    data.output.append(data.input);
+    setOutput(data.input);
+    //data.output.append(data.input);
 }
 
-void EditorBase::automatic(){
+template<> void EditorBase<ListBase<dpoint> >::automatic(){
     this->flushOutput();
     debug()<<"Computation started with data size "<<data.output.size();
     this->process(this->getOutput());
 }
 
-const void EditorBase::mainIterator(const QList<dpoint>& constCliffs,QList<QList<dpoint> >& slicesRef){
+template<> const void EditorBase<ListBase<dpoint> >::mainIterator(const QList<dpoint>& constCliffs,QList<QList<dpoint> >& slicesRef){
     ListIteration<dpoint> out = ListIteration<dpoint>(this->getOutput());
     int currentSegment = 0;
     //maemo works: check cliff size
@@ -90,7 +98,7 @@ const void EditorBase::mainIterator(const QList<dpoint>& constCliffs,QList<QList
 }
 
 
-bool EditorBase::checkPrecision(const ListBase<dpoint> &list){
+template<> bool EditorBase<ListBase<dpoint> >::checkPrecision(const ListBase<dpoint> &list){
     /*
       Check if the list contains float values and set precision to high
       */

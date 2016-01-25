@@ -8,7 +8,7 @@
 #include "spirals.h"
 #include "spiralsanalyzer.h"
 
-class EditorSpirals : public EditorBase
+class EditorSpirals : public EditorBase<ListBase<dpoint> >
 {
 public:
     EditorSpirals();

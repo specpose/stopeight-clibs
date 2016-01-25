@@ -34,15 +34,15 @@ template<typename T> struct ListStorage{
 
 //template ListStorage<ListBase<dpoint> >(ListBase<dpoint> a,ListBase<dpoint> b);
 
-class EditorBase : public EditorInterface
+template<typename T> class EditorBase : public EditorInterface<T>
 {
 public:
-    EditorBase();
-    ~EditorBase();
+    EditorBase<T>();
+    //~EditorBase();
 
     void resetLists();
     void addPoint(QPointF p);
-    ListBase<dpoint>& getOutput();
+    T& getOutput();
     void flushOutput();
 
     void automatic();
@@ -53,14 +53,14 @@ protected:
 
     static bool checkPrecision(const ListBase<dpoint>& list);
     //static bool checkPrecision(const ListBase<dpoint> list);
-    void setOutput(ListBase<dpoint> list);
+    void setOutput(T list);
 
     const void mainIterator(const QList<dpoint>& constCliffs,QList<QList<dpoint> >& slicesRef);
     //const void mainIterator(const QList<dpoint> constCliffs,QList<QList<dpoint> >& slicesRef);
 
 //private:
     //should ONLY be accessed for implementation instantiation
-    ListStorage<ListBase<dpoint> > data;
+    ListStorage<T > data;
 
 
 };
