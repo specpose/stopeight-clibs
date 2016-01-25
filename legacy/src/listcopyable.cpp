@@ -12,9 +12,19 @@ template<>template<typename F> ListCopyable<dpoint>::ListCopyable(F& list){
     //*this = static_cast<ListCopyable<dpoint>& >(list);
 }
 
+// Note: We only make a copy if it's been casted
+template<>template<> ListCopyable<dpoint>::ListCopyable(ListCopyable<dpoint>& list){
+    *this = list;
+}
+
+template ListCopyable<dpoint>::ListCopyable(ListCopyable<dpoint>& list);
 template ListCopyable<dpoint>::ListCopyable(ListBase<dpoint>& list);
 #include "include/areaanalyzer.h"
 template ListCopyable<dpoint>::ListCopyable(AreaAnalyzer<dpoint>& list);
+#include "include/spirals.h"
+template ListCopyable<dpoint>::ListCopyable(Spirals<dpoint>& list);
+#include "include/analyzer.h"
+template ListCopyable<dpoint>::ListCopyable(Analyzer<dpoint>& list);
 
 template<> ListBase<dpoint> ListCopyable<dpoint>::chopCopy(int startPosition, int endPosition){
     ListBase<dpoint> filet;

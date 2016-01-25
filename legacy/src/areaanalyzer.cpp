@@ -7,14 +7,14 @@ template<> AreaAnalyzer<dpoint>::AreaAnalyzer() : AreaNormalizer<dpoint>() {}
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> AreaAnalyzer<dpoint>::AreaAnalyzer(F& list){
-    ListSwitchable<dpoint> c = static_cast<ListSwitchable<dpoint>& >(list);
+    ListBase<dpoint> c = static_cast<ListBase<dpoint>& >(list);
     // ListBase to AreaAnalyzer NOT ok
     *this= static_cast<AreaAnalyzer<dpoint>& >(c);
-    //*this = static_cast<AreaAnalyzer<dpoint>& >(list);
 }
 
 // listbase to AreaAnalyzer NOT ok
 template AreaAnalyzer<dpoint>::AreaAnalyzer(ListBase<dpoint>& list);
+template AreaAnalyzer<dpoint>::AreaAnalyzer(ListCopyable<dpoint>& list);
 
 // Segment-Radius-Area
 template<> qreal AreaAnalyzer<dpoint>::area(qreal diameter, qreal base){

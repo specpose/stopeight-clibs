@@ -3,6 +3,9 @@
 
 #include "include/spirals.h"
 
+#define debug() QDebug(QtDebugMsg)//::QDebug(QtDebugMsg)
+//#define debug() QNoDebug()
+
 #define MAX_POINTS 5
 //#define LIMIT_TEST M_El
 //#define LIMIT_TEST M_PIl
@@ -19,7 +22,7 @@ template<>template<typename F> Spirals<dpoint>::Spirals(F& list){
 template Spirals<dpoint>::Spirals(ListBase<dpoint>& list);
 
 
-template<> QList<dpoint> Spirals<dpoint>::findAreas(ListBase<dpoint> &stroke, qreal limit){
+template<> QList<dpoint> Spirals<dpoint>::findAreas(ListCopyable<dpoint> &stroke, qreal limit){
     AreaAnalyzer<dpoint> spiral = AreaAnalyzer<dpoint>(stroke);
 
     QList<dpoint> result=QList<dpoint>();
@@ -43,7 +46,7 @@ template<> QList<dpoint> Spirals<dpoint>::findAreas(ListBase<dpoint> &stroke, qr
     return result;
 }
 
-template<> qreal Spirals<dpoint>::findLimit(ListBase<dpoint> toBeProcessed){
+template<> qreal Spirals<dpoint>::findLimit(ListCopyable<dpoint> toBeProcessed){
     QList<dpoint> cliffs;
     qreal MyLimit;
     //Old working:
@@ -94,8 +97,14 @@ template<> qreal Spirals<dpoint>::findLimit(ListBase<dpoint> toBeProcessed){
     return MyLimit;
 }
 
-template<> QList<dpoint> Spirals<dpoint>::findSpirals(ListBase<dpoint> toBeProcessed, bool& pleaseReverse){
-    ListBase<dpoint> forward = toBeProcessed;
+template<> QList<dpoint> Spirals<dpoint>::findSpirals(ListCopyable<dpoint> toBeProcessed, bool& pleaseReverse){
+
+    //USES ListCopyable copy constructor!
+    ListCopyable<dpoint> forward = toBeProcessed;
+
+    forward.removeLast();
+    debug()<<"Spirals<dpoint>::findSpirals forward"<<forward.size()<<" toBeProcessed "<<toBeProcessed.size();
+
     //qreal frontSpiral= toBeProcessed.measureSpiral();
     //debug()<<"Forward Spiral Size is: "<<frontSpiral;
     qreal limit = findLimit(toBeProcessed);
@@ -106,7 +115,8 @@ template<> QList<dpoint> Spirals<dpoint>::findSpirals(ListBase<dpoint> toBeProce
     reversed.reverseOrder();
     //qreal backSpiral= reversed.measureSpiral();
     //debug()<<"Backward Spiral Size is: "<<backSpiral;
-    qreal backLimit = findLimit(reversed);
+    ListCopyable<dpoint> backward = ListCopyable<dpoint>(reversed);
+    qreal backLimit = findLimit(backward);
     debug()<<"Limit from backward analysis is: "<<backLimit;
     //if (static_cast<int>(frontSpiral)!=static_cast<int>(backSpiral)){
         //throw "ShapeMatcher::process: spiral-size front/back not equal";
@@ -117,7 +127,7 @@ template<> QList<dpoint> Spirals<dpoint>::findSpirals(ListBase<dpoint> toBeProce
         debug()<< "ShapeMatcher::process: different limits found, using larger";
         if (backLimit>limit){
             debug()<<"******************* findAreas::Main **********************";
-            cliffs = findAreas(reversed,backLimit);
+            cliffs = findAreas(backward,backLimit);
             pleaseReverse = true;
             //this->data.output.reverseOrder();
         } else {

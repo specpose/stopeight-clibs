@@ -7,10 +7,15 @@ template<> Analyzer<dpoint>::Analyzer() : Calculator<dpoint>() {}
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> Analyzer<dpoint>::Analyzer(F& list){
-    *this = static_cast<Analyzer<dpoint>& >(list);
+    ListBase<dpoint> c = static_cast<ListBase<dpoint>& >(list);
+    // ListCopyable to Analyzer NOT ok
+    *this= static_cast<Analyzer<dpoint>& >(c);
+    //*this = static_cast<Analyzer<dpoint>& >(list);
 }
 
 template Analyzer<dpoint>::Analyzer(ListBase<dpoint>& list);
+template Analyzer<dpoint>::Analyzer(ListCopyable<dpoint>& list);
+
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> void Analyzer<dpoint>::operator=(F& list){

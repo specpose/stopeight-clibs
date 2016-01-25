@@ -16,23 +16,13 @@ public:
     // Overrides of QList
     ListSwitchable();
     template<typename F> ListSwitchable<T>(F& list);
+    //THIS THING CAN NOT BE COPIED
     template<typename F> void operator=(F& list);
 
     void removeAt(int i);
 
-    //void appendTail();
-    //void removeTail();
-    //int getListElementNumber(int position);
-
-    // just for debugging, otherwise private
-    //QList<dpoint> calcTail;
-
-protected:
-    //void addTail(QList<dpoint> tail){calcTail=QList<dpoint>();calcTail=tail;}
-
 private:
     template<typename F> ListSwitchable<T>(const F& list);
-    //void removeAtPos(int pos);
 
 };
 

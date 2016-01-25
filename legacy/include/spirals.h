@@ -14,12 +14,12 @@ public:
     Spirals<T>();
     template<typename F> Spirals<T>(F& list);
 
-    static QList<dpoint> findSpirals(ListBase<dpoint> output,bool& pleaseReverse);
+    static QList<dpoint> findSpirals(ListCopyable<dpoint> output,bool& pleaseReverse);
 
 private:
-    static QList<dpoint> findAreas(ListBase<dpoint>& stroke, qreal limit);
+    static QList<dpoint> findAreas(ListCopyable<dpoint>& stroke, qreal limit);
     //auxiliary function for findAreas
-    static qreal findLimit(ListBase<dpoint> toBeProcessed);
+    static qreal findLimit(ListCopyable<dpoint> toBeProcessed);
 
 };
 

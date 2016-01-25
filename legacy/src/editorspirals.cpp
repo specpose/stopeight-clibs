@@ -15,6 +15,7 @@ EditorSpirals::EditorSpirals() : EditorBase<ListBase<dpoint> >()
 //    EditorBase::~EditorBase();
 //}
 
+//toBeProcessed is modifying data.output
 void EditorSpirals::process(ListBase<dpoint> &toBeProcessed){
     debug()<<"EditorSpirals::process reached with data "<<this->getOutput().size();
     // use of output is a hack
@@ -33,7 +34,8 @@ void EditorSpirals::process(ListBase<dpoint> &toBeProcessed){
             // bug this will also give us a reversed result!
             Analyzer<dpoint> rev = Analyzer<dpoint>(this->getOutput());
             rev.reverseOrder();
-            this->setOutput(ListBase<dpoint>(rev));
+            //Not Necessary, toBeProcessed consumed
+            //this->setOutput(ListBase<dpoint>(rev));
             //this->setOutput(this->getOutput().reverseOrder());
         }
 
