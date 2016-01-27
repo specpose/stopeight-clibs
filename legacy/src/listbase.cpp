@@ -9,6 +9,10 @@ template<> ListBase<dpoint>::ListBase() : QList<dpoint>::QList()
 {
 }
 
+template<> ListBase<dpoint>::~ListBase(){
+
+}
+
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> ListBase<dpoint>::ListBase(F& list){
     *this = static_cast<ListBase<dpoint>& >(list);

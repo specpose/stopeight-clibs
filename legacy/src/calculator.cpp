@@ -7,7 +7,7 @@ template<> Calculator<dpoint>::Calculator() : ListSwitchable<dpoint>() {}
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> Calculator<dpoint>::Calculator(F& list){
-    ListSwitchable<dpoint> c = static_cast<ListSwitchable<dpoint>& >(list);
+    ListSwitchable<dpoint> c = dynamic_cast<ListSwitchable<dpoint>& >(list);
     *this= static_cast<Calculator<dpoint>& >(c);
 }
 
@@ -15,6 +15,11 @@ template<>template<typename F> Calculator<dpoint>::Calculator(F& list){
 template Calculator<dpoint>::Calculator(StraightsCalculator<dpoint>& list);
 #include "include/cornernormalizer.h"
 template Calculator<dpoint>::Calculator(CornerNormalizer<dpoint>& list);
+template Calculator<dpoint>::Calculator(ListBase<dpoint>& list);
+#include "include/analyzer.h"
+template Calculator<dpoint>::Calculator(Analyzer<dpoint>& list);
+#include "include/listcopyable.h"
+template Calculator<dpoint>::Calculator(ListCopyable<dpoint>& list);
 
 
 template <> qreal Calculator<dpoint>::lengthOf(QPointF difference){
