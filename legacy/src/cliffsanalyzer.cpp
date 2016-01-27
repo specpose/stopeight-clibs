@@ -6,14 +6,17 @@
 template<> CliffsAnalyzer<dpoint>::CliffsAnalyzer() : CliffsCalculator<dpoint>() {}
 
 // Note: ALL datamembers of target class destroyed
-template<>template<typename F> CliffsAnalyzer<dpoint>::CliffsAnalyzer(F& list){
-    ListSwitchable<dpoint> c = static_cast<ListSwitchable<dpoint>& >(list);
+template<>template<typename F> CliffsAnalyzer<dpoint>::CliffsAnalyzer(F& list) : CliffsCalculator<dpoint>(list){
+    // should be listswitchable
+    ListBase<dpoint> c = static_cast<ListBase<dpoint>& >(list);
     *this= static_cast<CliffsAnalyzer<dpoint>& >(c);
 }
 
 #include "include/areaanalyzer.h"
 //area to cliff ok
 template CliffsAnalyzer<dpoint>::CliffsAnalyzer(AreaAnalyzer<dpoint>& list);
+template CliffsAnalyzer<dpoint>::CliffsAnalyzer(ListCopyable<dpoint>& list);
+
 
 
 template <> int CliffsAnalyzer<dpoint>::hasIllegalSegment(){

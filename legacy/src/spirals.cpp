@@ -19,6 +19,7 @@ template<>template<typename F> Spirals<dpoint>::Spirals(F& list){
     *this= static_cast<Spirals<dpoint>& >(c);
 }
 
+template Spirals<dpoint>::Spirals(Spirals<dpoint>& list);
 template Spirals<dpoint>::Spirals(ListBase<dpoint>& list);
 
 
@@ -28,7 +29,7 @@ template<> QList<dpoint> Spirals<dpoint>::findAreas(ListCopyable<dpoint> &stroke
     QList<dpoint> result=QList<dpoint>();
 
     while (spiral.size()>2){
-        //    debug()<<"STROKESIZE: "<<stroke.size();
+            debug()<<"STROKESIZE: "<<spiral.size();
         //if (stroke.size()>2){
         ListBase<dpoint> area = spiral.getFirstArea(limit);
         if (area.size()>0){
@@ -100,9 +101,8 @@ template<> qreal Spirals<dpoint>::findLimit(ListCopyable<dpoint> toBeProcessed){
 template<> QList<dpoint> Spirals<dpoint>::findSpirals(ListCopyable<dpoint> toBeProcessed, bool& pleaseReverse){
 
     //USES ListCopyable copy constructor!
-    ListCopyable<dpoint> forward = toBeProcessed;
+    ListCopyable<dpoint> forward = ListCopyable<dpoint>(toBeProcessed);
 
-    forward.removeLast();
     debug()<<"Spirals<dpoint>::findSpirals forward"<<forward.size()<<" toBeProcessed "<<toBeProcessed.size();
 
     //qreal frontSpiral= toBeProcessed.measureSpiral();
@@ -110,7 +110,7 @@ template<> QList<dpoint> Spirals<dpoint>::findSpirals(ListCopyable<dpoint> toBeP
     qreal limit = findLimit(toBeProcessed);
     debug()<<"Limit from forward analysis is: "<<limit;
 
-    Analyzer<dpoint> reversed = toBeProcessed;
+    Analyzer<dpoint> reversed = Analyzer<dpoint>(toBeProcessed);
     //reversed.tripletFilters();
     reversed.reverseOrder();
     //qreal backSpiral= reversed.measureSpiral();

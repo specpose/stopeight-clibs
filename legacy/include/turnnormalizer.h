@@ -18,10 +18,6 @@ public:
     //ACL: foreign
     void smoothingJitter(int pos);
 
-private:
-    template<typename F> TurnNormalizer<T>(const F& list);
-
-
 
 };
 

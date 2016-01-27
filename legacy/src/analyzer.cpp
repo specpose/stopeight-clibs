@@ -13,6 +13,7 @@ template<>template<typename F> Analyzer<dpoint>::Analyzer(F& list){
     //*this = static_cast<Analyzer<dpoint>& >(list);
 }
 
+template Analyzer<dpoint>::Analyzer(Analyzer<dpoint>& list);
 template Analyzer<dpoint>::Analyzer(ListBase<dpoint>& list);
 template Analyzer<dpoint>::Analyzer(ListCopyable<dpoint>& list);
 

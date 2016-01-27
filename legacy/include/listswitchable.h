@@ -21,9 +21,6 @@ public:
 
     void removeAt(int i);
 
-private:
-    template<typename F> ListSwitchable<T>(const F& list);
-
 };
 
 

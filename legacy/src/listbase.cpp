@@ -18,21 +18,11 @@ template ListBase<dpoint>::ListBase(ListBase<dpoint>& list);
 #include "include/spirals.h"
 template ListBase<dpoint>::ListBase(Spirals<dpoint>& list);
 template ListBase<dpoint>::ListBase(Analyzer<dpoint>& list);
+template ListBase<dpoint>::ListBase(AreaAnalyzer<dpoint>& list);
 template ListBase<dpoint>::ListBase(CliffsAnalyzer<dpoint>& list);
 template ListBase<dpoint>::ListBase(AreaCalculator<dpoint>& list);
+template ListBase<dpoint>::ListBase(ListCopyable<dpoint>& list);
 
-// Note: ALL datamembers of target class destroyed
-template<>template<typename F> void ListBase<dpoint>::operator=(F& list){
-    // does this use =
-    //this->QList(list);
-    // this does
-    //this->ListBase(F)
-    // this is not supposed to
-    this->swap(list);
-}
-
-#include "include/areaanalyzer.h"
-template void ListBase<dpoint>::operator=(AreaAnalyzer<dpoint>& list);
 
 template<> ListBase<dpoint> ListBase<dpoint>::loadSPFile(const QString& fileName)
 {

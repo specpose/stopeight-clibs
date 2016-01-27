@@ -7,6 +7,12 @@ template<> CliffsCalculator<dpoint>::CliffsCalculator() : ListSwitchable<dpoint>
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> CliffsCalculator<dpoint>::CliffsCalculator(F& list){
-    ListSwitchable<dpoint> c = static_cast<ListSwitchable<dpoint>& >(list);
+    // should be listswitchable
+    ListBase<dpoint> c = static_cast<ListBase<dpoint>& >(list);
     *this= static_cast<CliffsCalculator<dpoint>& >(c);
 }
+
+#include "include/areaanalyzer.h"
+template CliffsCalculator<dpoint>::CliffsCalculator(AreaAnalyzer<dpoint>& list);
+template CliffsCalculator<dpoint>::CliffsCalculator(ListCopyable<dpoint>& list);
+

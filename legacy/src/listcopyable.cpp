@@ -6,14 +6,15 @@
 template<> ListCopyable<dpoint>::ListCopyable() : ListBase<dpoint>() {}
 
 // Note: ALL datamembers of target class destroyed
-template<>template<typename F> ListCopyable<dpoint>::ListCopyable(F& list){
+template<>template<typename F> ListCopyable<dpoint>::ListCopyable(F& list): ListBase<dpoint>(list){
     ListBase<dpoint> c = static_cast<ListBase<dpoint>& >(list);
     *this = static_cast<ListCopyable<dpoint>& >(c);
     //*this = static_cast<ListCopyable<dpoint>& >(list);
 }
-
 // Note: We only make a copy if it's been casted
-template<>template<> ListCopyable<dpoint>::ListCopyable(ListCopyable<dpoint>& list){
+template<>template<> ListCopyable<dpoint>::ListCopyable(ListCopyable<dpoint>& list) :ListBase<dpoint>(list){
+    debug()<<"ListCopyable::ListCopyable assignment"<<list.size();
+
     *this = list;
 }
 

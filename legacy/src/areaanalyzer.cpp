@@ -12,6 +12,7 @@ template<>template<typename F> AreaAnalyzer<dpoint>::AreaAnalyzer(F& list){
     *this= static_cast<AreaAnalyzer<dpoint>& >(c);
 }
 
+template AreaAnalyzer<dpoint>::AreaAnalyzer(AreaAnalyzer<dpoint>& list);
 // listbase to AreaAnalyzer NOT ok
 template AreaAnalyzer<dpoint>::AreaAnalyzer(ListBase<dpoint>& list);
 template AreaAnalyzer<dpoint>::AreaAnalyzer(ListCopyable<dpoint>& list);
@@ -106,7 +107,12 @@ template<> ListBase<dpoint> AreaAnalyzer<dpoint>::getArea(qreal limit,QPointF st
 template<> ListBase<dpoint> AreaAnalyzer<dpoint>::getFirstArea(qreal limit){
     dpoint result = dpoint();
     // needs to be and is a COPY
-    CliffsAnalyzer<dpoint> calculator = *this;
+    ListCopyable<dpoint> copy = ListCopyable<dpoint>(*this);
+    CliffsAnalyzer<dpoint> calculator = CliffsAnalyzer<dpoint>(copy);//static_cast<CliffsAnalyzer<dpoint> >(copy);
+    debug()<<"AreaAnalyzer::getFirstArea after copy this"<<this->size();
+    debug()<<"AreaAnalyzer::getFirstArea after copy calculator"<<calculator.size();
+
+    //CliffsAnalyzer<dpoint> calculator = *this;
 
     QList<dpoint> temp = QList<dpoint>();
 
