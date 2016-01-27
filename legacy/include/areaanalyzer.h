@@ -24,7 +24,7 @@ protected:
 
 private:
     // new Area function
-    ListBase<dpoint> getArea(qreal limit,QPointF START,qreal preceding=0);
+    ListCopyable<dpoint> getArea(qreal limit,QPointF START,qreal preceding=0);
 };
 
 #endif // AREAANALYZER_H

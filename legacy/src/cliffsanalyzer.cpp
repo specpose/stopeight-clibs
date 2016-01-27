@@ -37,7 +37,7 @@ template <> int CliffsAnalyzer<dpoint>::hasIllegalSegment(){
     return -1;
 }
 
-template<> ListBase<dpoint> CliffsAnalyzer<dpoint>::getFirstLegalSegment(){
+template<> ListCopyable<dpoint> CliffsAnalyzer<dpoint>::getFirstLegalSegment(){
     CliffsAnalyzer<dpoint> result = CliffsAnalyzer<dpoint>();
     if (this->size()>1){
 

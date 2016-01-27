@@ -6,6 +6,7 @@
 
 #include "dpoint.h"
 #include "listbase.h"
+#include "listswitchable.h"
 
 template<typename T> class ListCopyable : public ListBase<T>
 {
@@ -13,8 +14,14 @@ public:
     ListCopyable();
 
     template<typename F> ListCopyable<T>(F& list);
+    //template<typename F> ListCopyable<T>(const F list);
+    //overwrite & operator for being stolen from listswitchable and cast to listswitchable
+    //ListSwitchable<dpoint>* operator&();
 
-    ListBase<dpoint> chopCopy(int startPosition, int endPosition);
+    ListCopyable<dpoint> chopCopy(int startPosition, int endPosition);
+
+private:
+    int calls;
 
 };
 

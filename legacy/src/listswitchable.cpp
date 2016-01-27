@@ -12,6 +12,13 @@ template<> ListSwitchable<dpoint>::ListSwitchable() : ListRotator<dpoint>(){
 
 #include "include/listswitchable.h"
 template ListSwitchable<dpoint>::ListSwitchable(ListSwitchable<dpoint>& list);
+#include "include/cliffsanalyzer.h"
+template ListSwitchable<dpoint>::ListSwitchable(CliffsAnalyzer<dpoint>& list);
+#include "include/areacalculator.h"
+template ListSwitchable<dpoint>::ListSwitchable(AreaCalculator<dpoint>& list);
+template ListSwitchable<dpoint>::ListSwitchable(ListBase<dpoint>& list);
+
+
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> ListSwitchable<dpoint>::ListSwitchable(F& list){

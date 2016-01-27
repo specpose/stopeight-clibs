@@ -6,6 +6,7 @@
 
 #include "listbase.h"
 #include "cliffscalculator.h"
+#include "listcopyable.h"
 
 template<typename T> class CliffsAnalyzer : public CliffsCalculator<T>
 {
@@ -14,7 +15,7 @@ public:
     template<typename F> CliffsAnalyzer<T>(F& list);
 
     // This is the replacement for getFirstCliff
-    ListBase<dpoint> getFirstLegalSegment();
+    ListCopyable<dpoint> getFirstLegalSegment();
 
 private:
     // used by filters and analyzer
