@@ -64,7 +64,10 @@ template<> ListBase<dpoint> ListBase<dpoint>::loadSPFile(const QString& fileName
     return input;
 }
 
-template<> ListBase<dpoint> ListBase<dpoint>::open(const std::string utf8path){
-    const QString& myString = QString::fromStdString(utf8path);
+template<> ListBase<dpoint> ListBase<dpoint>::open(const char *fileName){
+    const QString& myString = QString::fromLatin1(fileName);//QString::fromStdString(utf8path);
     return ListBase<dpoint>::loadSPFile(myString);
 }
+
+//needed for wrapper!
+template ListBase<dpoint> ListBase<dpoint>::open(const char *fileName);

@@ -3,7 +3,8 @@
 # Project created by QtCreator 2015-10-21T20:20:25
 #
 #-------------------------------------------------
-QT       -= gui
+QT       += gui
+//QT       -= gui
 
 TARGET = stopeight-clibs-legacy
 TEMPLATE = lib
@@ -36,7 +37,6 @@ SOURCES += \
     src/spirals.cpp \
     src/editorspirals.cpp \
     src/straightscalculator.cpp
-
 HEADERS +=\
     include/listcopyable.h \
     include/listrotator.h \

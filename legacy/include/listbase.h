@@ -29,7 +29,7 @@ public:
     template<typename F> ListBase<T>(F& list);
 
     // method for access from python
-    static ListBase<dpoint> open(const std::string fileName);
+    static ListBase<dpoint> open(const char* fileName);
     // method for access from legacy editor
     static ListBase<dpoint> loadSPFile(const QString &fileName);
 

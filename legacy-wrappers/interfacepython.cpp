@@ -15,7 +15,7 @@ PyObject* legacy_wrappers::parse_file(PyObject *self, PyObject *args){
     if (!PyArg_ParseTuple(args, "s", &pythonpath))
         return NULL;
     ListBase<dpoint> myList = ListBase<dpoint>();
-    myList= myList.open(std::string(pythonpath));
+    myList= myList.open(pythonpath);
     return legacy_wrappers::convert(myList);
 }
 
