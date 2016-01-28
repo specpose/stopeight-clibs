@@ -6,8 +6,8 @@
 template<> AreaAnalyzer<dpoint>::AreaAnalyzer() : AreaNormalizer<dpoint>() {}
 
 // Note: ALL datamembers of target class destroyed
-template<>template<typename F> AreaAnalyzer<dpoint>::AreaAnalyzer(F& list){
-    ListSwitchable<dpoint> c = dynamic_cast<ListSwitchable<dpoint>& >(list);
+template<>template<typename F> AreaAnalyzer<dpoint>::AreaAnalyzer(F& list) : AreaNormalizer<dpoint>(list) {
+    ListBase<dpoint> c = static_cast<ListBase<dpoint>& >(list);
     // ListBase to AreaAnalyzer NOT ok
     *this= static_cast<AreaAnalyzer<dpoint>& >(c);
 }
@@ -108,7 +108,7 @@ template<> ListBase<dpoint> AreaAnalyzer<dpoint>::getFirstArea(qreal limit){
     dpoint result = dpoint();
     // needs to be and is a COPY
     ListCopyable<dpoint> copy = ListCopyable<dpoint>(*this);
-    CliffsAnalyzer<dpoint> calculator = CliffsAnalyzer<dpoint>(copy);//static_cast<CliffsAnalyzer<dpoint> >(copy);
+    CliffsAnalyzer<dpoint> calculator = CliffsAnalyzer<dpoint>(copy);
     debug()<<"AreaAnalyzer::getFirstArea after copy this"<<this->size();
     debug()<<"AreaAnalyzer::getFirstArea after copy calculator"<<calculator.size();
 
@@ -119,7 +119,12 @@ template<> ListBase<dpoint> AreaAnalyzer<dpoint>::getFirstArea(qreal limit){
 
     if (calculator.size()>1){
         ListCopyable<dpoint> tmp =ListCopyable<dpoint>(calculator.getFirstLegalSegment());
+        debug()<<"AreaAnalyzer::getFirstArea after copy getFirstLegalSegment"<<tmp.size();
+
         AreaAnalyzer<dpoint> legalSegment = AreaAnalyzer<dpoint>(tmp);
+
+        debug()<<"AreaAnalyzer::getFirstArea after cast getFirstLegalSegment"<<legalSegment.size();
+
         //legalSegment = AreaAnalyzer<dpoint>(calculator.getFirstLegalSegment());
         illegalSegmentCounter++;
         legalSegment.areaFilters();

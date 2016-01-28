@@ -6,7 +6,7 @@
 template<> TurnNormalizer<dpoint>::TurnNormalizer() : TurnCalculator<dpoint>() {}
 
 // Note: ALL datamembers of target class destroyed
-template<>template<typename F> TurnNormalizer<dpoint>::TurnNormalizer(F& list){
+template<>template<typename F> TurnNormalizer<dpoint>::TurnNormalizer(F& list) : TurnCalculator<dpoint>(list){
     ListSwitchable<dpoint> c = static_cast<ListSwitchable<dpoint>& >(list);
     *this= static_cast<TurnNormalizer<dpoint>& >(c);
 }

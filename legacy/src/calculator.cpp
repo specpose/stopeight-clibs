@@ -6,8 +6,8 @@
 template<> Calculator<dpoint>::Calculator() : ListSwitchable<dpoint>() {}
 
 // Note: ALL datamembers of target class destroyed
-template<>template<typename F> Calculator<dpoint>::Calculator(F& list){
-    ListSwitchable<dpoint> c = dynamic_cast<ListSwitchable<dpoint>& >(list);
+template<>template<typename F> Calculator<dpoint>::Calculator(F& list) : ListSwitchable<dpoint>(){
+    ListBase<dpoint> c = static_cast<ListBase<dpoint>& >(list);
     *this= static_cast<Calculator<dpoint>& >(c);
 }
 

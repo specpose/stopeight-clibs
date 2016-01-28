@@ -6,7 +6,7 @@
 template<> StraightsCalculator<dpoint>::StraightsCalculator() : ListSwitchable<dpoint>() {}
 
 // Note: ALL datamembers of target class destroyed
-template<>template<typename F> StraightsCalculator<dpoint>::StraightsCalculator(F& list){
+template<>template<typename F> StraightsCalculator<dpoint>::StraightsCalculator(F& list) : ListSwitchable<dpoint>(list){
     ListSwitchable<dpoint> c = static_cast<ListSwitchable<dpoint>& >(list);
     *this= static_cast<StraightsCalculator<dpoint>& >(c);
 }

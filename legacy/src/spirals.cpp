@@ -14,7 +14,7 @@
 template<> Spirals<dpoint>::Spirals() : ListSwitchable<dpoint>() {}
 
 // Note: typename F can be any implementation of ListBase WITHOUT data members
-template<>template<typename F> Spirals<dpoint>::Spirals(F& list){
+template<>template<typename F> Spirals<dpoint>::Spirals(F& list) : ListSwitchable<dpoint>(){
     ListSwitchable<dpoint>& c = static_cast<ListSwitchable<dpoint>& >(list);
     *this= static_cast<Spirals<dpoint>& >(c);
 }

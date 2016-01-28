@@ -9,12 +9,10 @@ template<> ListBase<dpoint>::ListBase() : QList<dpoint>::QList()
 {
 }
 
-template<> ListBase<dpoint>::~ListBase(){
-
-}
+//template<> ListBase<dpoint>::~ListBase(){}
 
 // Note: ALL datamembers of target class destroyed
-template<>template<typename F> ListBase<dpoint>::ListBase(F& list){
+template<>template<typename F> ListBase<dpoint>::ListBase(F& list) : QList<dpoint>::QList(list){
     *this = static_cast<ListBase<dpoint>& >(list);
 }
 
@@ -26,6 +24,14 @@ template ListBase<dpoint>::ListBase(AreaAnalyzer<dpoint>& list);
 template ListBase<dpoint>::ListBase(CliffsAnalyzer<dpoint>& list);
 template ListBase<dpoint>::ListBase(AreaCalculator<dpoint>& list);
 template ListBase<dpoint>::ListBase(ListCopyable<dpoint>& list);
+template ListBase<dpoint>::ListBase(TurnNormalizer<dpoint>& list);
+template ListBase<dpoint>::ListBase(Calculator<dpoint>& list);
+template ListBase<dpoint>::ListBase(ListSwitchable<dpoint>& list);
+template ListBase<dpoint>::ListBase(QList<dpoint>& list);
+template ListBase<dpoint>::ListBase(AreaNormalizer<dpoint>& list);
+template ListBase<dpoint>::ListBase(CornerNormalizer<dpoint>& list);
+
+
 
 
 template<> ListBase<dpoint> ListBase<dpoint>::loadSPFile(const QString& fileName)

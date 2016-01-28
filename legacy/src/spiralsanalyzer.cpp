@@ -6,7 +6,7 @@
 template<> SpiralsAnalyzer<dpoint>::SpiralsAnalyzer() : SpiralsCalculator<dpoint>() {}
 
 // Note: ALL datamembers of target class destroyed
-template<>template<typename F> SpiralsAnalyzer<dpoint>::SpiralsAnalyzer(F& list){
+template<>template<typename F> SpiralsAnalyzer<dpoint>::SpiralsAnalyzer(F& list) : SpiralsCalculator<dpoint>(list){
     *this = static_cast<SpiralsAnalyzer<dpoint>& >(list);
 }
 

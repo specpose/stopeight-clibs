@@ -6,7 +6,7 @@
 template<> CornerNormalizer<dpoint>::CornerNormalizer() : CornerCalculator<dpoint>() {}
 
 // Note: ALL datamembers of target class destroyed
-template<>template<typename F> CornerNormalizer<dpoint>::CornerNormalizer(F& list){
+template<>template<typename F> CornerNormalizer<dpoint>::CornerNormalizer(F& list) : CornerCalculator<dpoint>(list){
     ListSwitchable<dpoint> c = static_cast<ListSwitchable<dpoint>& >(list);
     *this= static_cast<CornerNormalizer<dpoint>& >(c);
 }

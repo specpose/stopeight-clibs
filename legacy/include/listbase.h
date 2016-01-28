@@ -22,7 +22,7 @@ public:
     //has to be templated because of QList
     ListBase<T>();
     //virtual ~ListBase()=0;
-    virtual ~ListBase();
+    //virtual ~ListBase();
 
     //this should be C++11 move F&& constructor
     //is there a copy created when using F& instead of F?

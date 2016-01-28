@@ -6,10 +6,13 @@
 template<> TurnCalculator<dpoint>::TurnCalculator() : ListSwitchable<dpoint>() {}
 
 // Note: ALL datamembers of target class destroyed
-template<>template<typename F> TurnCalculator<dpoint>::TurnCalculator(F& list){
+template<>template<typename F> TurnCalculator<dpoint>::TurnCalculator(F& list) : ListSwitchable<dpoint>(list) {
     ListSwitchable<dpoint> c = static_cast<ListSwitchable<dpoint>& >(list);
     *this= static_cast<TurnCalculator<dpoint>& >(c);
 }
+
+#include "include/areanormalizer.h"
+template TurnCalculator<dpoint>::TurnCalculator(AreaNormalizer<dpoint>& list);
 
 // this has performance penalty!
 template <> qreal TurnCalculator<dpoint>::getRegressionValueFor2Points(int pos, bool value){

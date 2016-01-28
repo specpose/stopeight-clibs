@@ -6,7 +6,7 @@
 template<> AreaCalculator<dpoint>::AreaCalculator() : ListSwitchable<dpoint>() {}
 
 // Note: ALL datamembers of target class destroyed
-template<>template<typename F> AreaCalculator<dpoint>::AreaCalculator(F& list){
+template<>template<typename F> AreaCalculator<dpoint>::AreaCalculator(F& list) : ListSwitchable<dpoint>(list){
     ListSwitchable<dpoint> c = static_cast<ListSwitchable<dpoint>& >(list);
     *this= static_cast<AreaCalculator<dpoint>& >(c);
 }

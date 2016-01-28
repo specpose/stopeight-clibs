@@ -17,12 +17,21 @@ template ListSwitchable<dpoint>::ListSwitchable(CliffsAnalyzer<dpoint>& list);
 #include "include/areacalculator.h"
 template ListSwitchable<dpoint>::ListSwitchable(AreaCalculator<dpoint>& list);
 template ListSwitchable<dpoint>::ListSwitchable(ListBase<dpoint>& list);
+#include "include/cornernormalizer.h"
+template ListSwitchable<dpoint>::ListSwitchable(CornerNormalizer<dpoint>& list);
+template ListSwitchable<dpoint>::ListSwitchable(Calculator<dpoint>& list);
+template ListSwitchable<dpoint>::ListSwitchable(ListCopyable<dpoint>& list);
+#include "include/areaanalyzer.h"
+template ListSwitchable<dpoint>::ListSwitchable(AreaAnalyzer<dpoint>& list);
+template ListSwitchable<dpoint>::ListSwitchable(TurnNormalizer<dpoint>& list);
+template ListSwitchable<dpoint>::ListSwitchable(AreaNormalizer<dpoint>& list);
 
 
 
 // Note: ALL datamembers of target class destroyed
-template<>template<typename F> ListSwitchable<dpoint>::ListSwitchable(F& list){
-    *this = static_cast<ListSwitchable<dpoint>& >(list);
+template<>template<typename F> ListSwitchable<dpoint>::ListSwitchable(F& list) : ListRotator<dpoint>(list){
+    ListBase<dpoint> c = static_cast<ListBase<dpoint>& >(list);
+    *this= static_cast<ListSwitchable<dpoint>& >(c);
 }
 
 // Note: ALL datamembers of target class destroyed

@@ -6,10 +6,17 @@
 template<> AreaNormalizer<dpoint>::AreaNormalizer() : AreaCalculator<dpoint>() {}
 
 // Note: ALL datamembers of target class destroyed
-template<>template<typename F> AreaNormalizer<dpoint>::AreaNormalizer(F& list){
-    ListSwitchable<dpoint> c = static_cast<ListSwitchable<dpoint>& >(list);
+template<>template<typename F> AreaNormalizer<dpoint>::AreaNormalizer(F& list): AreaCalculator<dpoint>(){
+    ListBase<dpoint> c = static_cast<ListBase<dpoint>& >(list);
     *this= static_cast<AreaNormalizer<dpoint>& >(c);
 }
+
+#include "include/listcopyable.h"
+template AreaNormalizer<dpoint>::AreaNormalizer(ListCopyable<dpoint>& list);
+template AreaNormalizer<dpoint>::AreaNormalizer(ListBase<dpoint>& list);
+#include "include/areaanalyzer.h"
+template AreaNormalizer<dpoint>::AreaNormalizer(AreaAnalyzer<dpoint>& list);
+
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> void AreaNormalizer<dpoint>::operator=(F& list){

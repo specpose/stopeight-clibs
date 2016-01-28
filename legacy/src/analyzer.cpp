@@ -3,11 +3,11 @@
 
 #include "include/analyzer.h"
 
-template<> Analyzer<dpoint>::Analyzer(){}
+template<> Analyzer<dpoint>::Analyzer() : Calculator(){}
 
 // Note: ALL datamembers of target class destroyed
-template<>template<typename F> Analyzer<dpoint>::Analyzer(F& list) {
-    ListSwitchable<dpoint> c = dynamic_cast<ListSwitchable<dpoint>& >(list);
+template<>template<typename F> Analyzer<dpoint>::Analyzer(F& list) : Calculator(list) {
+    ListBase<dpoint> c = static_cast<ListBase<dpoint>& >(list);
     // ListCopyable to Analyzer NOT ok
     *this= static_cast<Analyzer<dpoint>& >(c);
     //*this = static_cast<Analyzer<dpoint>& >(list);
