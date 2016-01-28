@@ -13,7 +13,6 @@
 #include "editorinterface.h"
 #include "listbase.h"
 #include "listcopyable.h"
-#include <QList>
 #include "myreal.h"
 
 template<typename T> struct ListStorage{

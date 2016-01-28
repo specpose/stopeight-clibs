@@ -16,6 +16,7 @@ class LEGACYSHARED_EXPORT dpoint : public QPointF
 public:
     dpoint();
     dpoint(const QPointF& point);
+    dpoint(const float x, const float y);
 
     QPointF rot;
     //float position;

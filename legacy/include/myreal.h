@@ -4,7 +4,7 @@
 #ifndef MYREAL_H
 #define MYREAL_H
 
-#include <QString>
+#include <QtCore/QString>
 #include <limits>
 #include <cmath>
 

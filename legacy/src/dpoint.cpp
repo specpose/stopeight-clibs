@@ -14,6 +14,12 @@ dpoint::dpoint(const QPointF& point){
     this->setY(point.y());
 }
 
+dpoint::dpoint(const float x, const float y){
+    dpoint();
+    this->setX(qreal(x));
+    this->setY(qreal(y));
+}
+
 QDebug operator<<(QDebug dbg, const dpoint &dp){
     dbg.nospace()
             << "#: " << dp.position <<"; "
