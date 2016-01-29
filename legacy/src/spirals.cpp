@@ -3,8 +3,8 @@
 
 #include "include/spirals.h"
 
-#define debug() QDebug(QtDebugMsg)//::QDebug(QtDebugMsg)
-//#define debug() QNoDebug()
+//#define debug() QDebug(QtDebugMsg)//::QDebug(QtDebugMsg)
+#define debug() QNoDebug()
 
 #define MAX_POINTS 5
 //#define LIMIT_TEST M_El

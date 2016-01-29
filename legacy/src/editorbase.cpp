@@ -3,8 +3,8 @@
 
 #include "include/editorbase.h"
 
-#define debug() QDebug(QtDebugMsg)//::QDebug(QtDebugMsg)
-//#define debug() QNoDebug()
+//#define debug() QDebug(QtDebugMsg)//::QDebug(QtDebugMsg)
+#define debug() QNoDebug()
 
 template<typename T> EditorBase<T>::EditorBase() : EditorInterface<T>(), data(ListStorage<T>())
 {

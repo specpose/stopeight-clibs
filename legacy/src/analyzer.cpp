@@ -3,6 +3,9 @@
 
 #include "include/analyzer.h"
 
+#define debug() QNoDebug()
+
+
 template<> Analyzer<dpoint>::Analyzer() : Calculator(){}
 
 // Note: ALL datamembers of target class destroyed

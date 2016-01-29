@@ -3,8 +3,8 @@
 
 #include "include/editorspirals.h"
 
-#define debug() QDebug(QtDebugMsg)//::QDebug(QtDebugMsg)
-//#define debug() QNoDebug()
+//#define debug() QDebug(QtDebugMsg)//::QDebug(QtDebugMsg)
+#define debug() QNoDebug()
 
 EditorSpirals::EditorSpirals() : EditorBase<ListBase<dpoint> >()
 {

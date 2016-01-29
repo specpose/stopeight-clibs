@@ -3,6 +3,9 @@
 
 #include "include/listcopyable.h"
 
+#define debug() QNoDebug()
+
+
 template<> ListCopyable<dpoint>::ListCopyable() : ListBase<dpoint>(),calls(0) {}
 
 // Note: ALL datamembers of target class destroyed

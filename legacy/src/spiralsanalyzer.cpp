@@ -3,6 +3,8 @@
 
 #include "include/spiralsanalyzer.h"
 
+#define debug() QNoDebug()
+
 template<> SpiralsAnalyzer<dpoint>::SpiralsAnalyzer() : SpiralsCalculator<dpoint>() {}
 
 // Note: ALL datamembers of target class destroyed

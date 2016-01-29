@@ -6,10 +6,6 @@
 
 #include "legacy_global.h"
 
-#include <QtCore/QDebug>
-#define debug() QDebug(QtDebugMsg)
-//#define debug() QNoDebug()
-
 #include <QtCore/QString>
 #include <QtCore/QFile>
 

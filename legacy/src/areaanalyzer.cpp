@@ -3,6 +3,9 @@
 
 #include "include/areaanalyzer.h"
 
+#define debug() QNoDebug()
+
+
 template<> AreaAnalyzer<dpoint>::AreaAnalyzer() : AreaNormalizer<dpoint>() {}
 
 // Note: ALL datamembers of target class destroyed

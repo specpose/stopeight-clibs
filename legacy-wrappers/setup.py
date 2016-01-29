@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import os
 
 from distutils.core import setup, Extension
@@ -9,5 +11,9 @@ legacy_wrapper = Extension('stopeight_clibs_legacy', include_dirs=['/usr/include
 
 setup( name='stopeight_clibs_legacy',
        version='0.1.0',
-       description='stopeight-clibs: Providing access to legacy-style Qt code',
-       ext_modules= [legacy_wrapper])
+       description='stopeight-clibs-legacy: Providing access to Qt based Stroke Analyzer',
+       author='Fassio Blatter',
+       license='GNU Lesser General Public License, version 2.1',
+       url='http://www.stopeight.com',
+       ext_modules= [legacy_wrapper]
+)

@@ -18,6 +18,7 @@ PyObject* legacy_wrappers::parse_file(PyObject *self, PyObject *args){
     }
     ListBase<dpoint> myList = ListBase<dpoint>();
     myList= myList.open(pythonpath);
+    printf("Loaded %d points from file %s\n",myList.size(),pythonpath);
     return legacy_wrappers::convert(myList);
 }
 
@@ -58,7 +59,7 @@ ListBase<dpoint> legacy_wrappers::parse_list(PyObject *self, PyObject *args) {
 
 PyObject* legacy_wrappers::stroke_spirals(PyObject *self, PyObject *args){
     ListBase<dpoint> list = legacy_wrappers::parse_list(self,args);
-    printf("Loaded %d into Spiral Stroke Analyzer\n",list.size());
+    printf("Loaded %d points into Spiral Stroke Analyzer\n",list.size());
     ListBase<dpoint> result = ListBase<dpoint>();
     if (list.size()>2){
         EditorSpirals editor = EditorSpirals();
@@ -66,7 +67,9 @@ PyObject* legacy_wrappers::stroke_spirals(PyObject *self, PyObject *args){
             editor.addPoint(list.at(i));
         }
         editor.automatic();
-        return legacy_wrappers::convert(editor.getOutput());
+        ListBase<dpoint> result = editor.getOutput();
+        printf("Returned %d from Spiral Stroke Analyzer\n",result.size());
+        return legacy_wrappers::convert(result);
     }
 }
 

@@ -3,6 +3,9 @@
 
 #include "include/areacalculator.h"
 
+#define debug() QNoDebug()
+
+
 template<> AreaCalculator<dpoint>::AreaCalculator() : ListSwitchable<dpoint>() {}
 
 // Note: ALL datamembers of target class destroyed

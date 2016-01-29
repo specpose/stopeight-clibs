@@ -3,7 +3,6 @@
 
 #include "include/listrotator.h"
 
-//#define debug() QDebug::QDebug(QtDebugMsg)
 #define debug() QNoDebug()
 
 template<> ListRotator<dpoint>::ListRotator() : ListBase<dpoint>() {}

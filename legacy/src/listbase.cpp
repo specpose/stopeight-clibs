@@ -3,6 +3,8 @@
 
 #include "include/listbase.h"
 
+#define debug() QNoDebug()
+
 //using namespace legacy;
 
 template<> ListBase<dpoint>::ListBase() : QList<dpoint>::QList()
