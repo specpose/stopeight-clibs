@@ -17,7 +17,20 @@ PyObject* legacy_wrappers::parse_file(PyObject *self, PyObject *args){
         return NULL;
     }
     ListBase<dpoint> myList = ListBase<dpoint>();
-    myList= myList.open(pythonpath);
+    try {
+        myList= myList.open(pythonpath);
+    } catch (const char* text){
+        printf("Error in legacy file parser %s",text);
+        PyObject* error;
+        PyErr_SetString(error,text);
+        return error;
+    } catch (...){
+        printf("Undefined error in legacy file parser");
+        PyObject* error;
+        PyErr_SetNone(error);
+        return error;
+    }
+
     printf("Loaded %d points from file %s\n",myList.size(),pythonpath);
     return legacy_wrappers::convert(myList);
 }
@@ -57,21 +70,39 @@ ListBase<dpoint> legacy_wrappers::parse_list(PyObject *self, PyObject *args) {
     return list;
 }
 
-PyObject* legacy_wrappers::stroke_spirals(PyObject *self, PyObject *args){
+PyObject* legacy_wrappers::stroke_parallel(PyObject *self, PyObject *args){
     ListBase<dpoint> list = legacy_wrappers::parse_list(self,args);
     printf("Loaded %d points into Spiral Stroke Analyzer\n",list.size());
-    ListBase<dpoint> result = ListBase<dpoint>();
     if (list.size()>2){
         EditorSpirals editor = EditorSpirals();
         for (int i=0;i<list.size();i++){
             editor.addPoint(list.at(i));
         }
-        editor.automatic();
-        ListBase<dpoint> result = editor.getOutput();
+        try {
+            editor.automatic();
+        } catch (const char* text){
+            printf("Error in parallel Stroke Analyzer: %s",text);
+            PyObject* error;
+            PyErr_SetString(error,text);
+            return error;
+        } catch (...){
+            printf("Undefined error in parallel Stroke Analyzer");
+            PyObject* error;
+            PyErr_SetNone(error);
+            return error;
+        }
+
+        ListCopyable<dpoint> result = ListCopyable<dpoint>();
+        result = editor.getOutput();
         printf("Returned %d from Spiral Stroke Analyzer\n",result.size());
         return legacy_wrappers::convert(result);
     }
 }
+
+/*
+  This is the sequential version of the stroke analyzer. It will subdivide pairs (cliffs) and triplets (turns) of immediately repeating features without further lookahead and center them.
+*/
+// Placeholder stroke_cliffs
 
 PyMODINIT_FUNC initstopeight_clibs_legacy(void)
 {
