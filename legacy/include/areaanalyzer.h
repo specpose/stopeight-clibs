@@ -17,14 +17,14 @@ public:
     /*** META-FUNCTION ***/
     ListBase<dpoint> getFirstArea(qreal limit);
 
+    // new Area function
+    ListCopyable<dpoint> getArea(qreal limit,QPointF START,qreal preceding=0);
 protected:
 
     // Segment-Radius-Area; should be non-static with diameter=lengthStartToEnd from instance
     static qreal area(qreal diameter, qreal base);
 
-private:
-    // new Area function
-    ListCopyable<dpoint> getArea(qreal limit,QPointF START,qreal preceding=0);
+
 };
 
 #endif // AREAANALYZER_H

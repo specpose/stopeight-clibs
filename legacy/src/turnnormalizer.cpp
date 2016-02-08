@@ -13,7 +13,7 @@ template<>template<typename F> TurnNormalizer<dpoint>::TurnNormalizer(F& list) :
 
 #include "include/areanormalizer.h"
 template TurnNormalizer<dpoint>::TurnNormalizer(AreaNormalizer<dpoint>& list);
-
+template TurnNormalizer<dpoint>::TurnNormalizer(CornerNormalizer<dpoint>& list);
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> void TurnNormalizer<dpoint>::operator=(F& list){
@@ -36,5 +36,25 @@ template <> void TurnNormalizer<dpoint>::smoothingJitter(int pos){
     }
     if (foundOne){
         smoothingJitter(pos+1);
+    }
+}
+
+template <> void TurnNormalizer<dpoint>::risingJitter(int pos){
+    bool foundOne = false;
+    for (int i=pos;i<this->size()-3;i++){
+        //if ( (this->sumOfRegressionAt(i) <= 0.5) &&
+        if (
+             (this->isRegLineThroughAt(i)) ){
+        //if (this->isJitterAt(i) == true) {
+            this->removeAt(i+1);
+            // danger index change
+            this->removeAt(i+1);
+            //this->removeAt(i);
+            foundOne=true;
+            break;
+        }
+    }
+    if (foundOne){
+        risingJitter(pos+1);
     }
 }

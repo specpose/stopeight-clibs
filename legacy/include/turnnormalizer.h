@@ -17,6 +17,7 @@ public:
 
     //ACL: foreign
     void smoothingJitter(int pos);
+    void risingJitter(int pos);
 
 
 };

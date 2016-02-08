@@ -5,10 +5,10 @@
 #define CLIFFSANALYZER_H
 
 #include "listbase.h"
-#include "cliffscalculator.h"
+#include "cliffsnormalizer.h"
 #include "listcopyable.h"
 
-template<typename T> class CliffsAnalyzer : public CliffsCalculator<T>
+template<typename T> class CliffsAnalyzer : public CliffsNormalizer<T>
 {
 public:
     CliffsAnalyzer<T>();
@@ -16,6 +16,9 @@ public:
 
     // This is the replacement for getFirstCliff
     ListCopyable<dpoint> getFirstLegalSegment();
+
+    ListCopyable<dpoint> getFirstCliff(qreal limit=M_PIl);
+
 
 private:
     // used by filters and analyzer

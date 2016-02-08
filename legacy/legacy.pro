@@ -36,7 +36,10 @@ SOURCES += \
     src/editorbase.cpp \
     src/spirals.cpp \
     src/editorspirals.cpp \
-    src/straightscalculator.cpp
+    src/straightscalculator.cpp \
+    src/editorcliffs.cpp \
+    src/cliffs.cpp \
+    src/cliffsnormalizer.cpp
 HEADERS +=\
     include/listcopyable.h \
     include/listrotator.h \
@@ -62,7 +65,10 @@ HEADERS +=\
     include/editorbase.h \
     include/spirals.h \
     include/editorspirals.h \
-    include/straightscalculator.h
+    include/straightscalculator.h \
+    include/editorcliffs.h \
+    include/cliffs.h \
+    include/cliffsnormalizer.h
 
 symbian {
     MMP_RULES += EXPORTUNFROZEN

@@ -13,6 +13,7 @@ template<>template<typename F> TurnCalculator<dpoint>::TurnCalculator(F& list) :
 
 #include "include/areanormalizer.h"
 template TurnCalculator<dpoint>::TurnCalculator(AreaNormalizer<dpoint>& list);
+template TurnCalculator<dpoint>::TurnCalculator(CornerNormalizer<dpoint>& list);
 
 // this has performance penalty!
 template <> qreal TurnCalculator<dpoint>::getRegressionValueFor2Points(int pos, bool value){

@@ -1,8 +1,8 @@
 // Copyright (C) 2009-2015 Specific Purpose Software GmbH
 // GNU Lesser General Public License, version 2.1
 
-#ifndef SPIRALS_H
-#define SPIRALS_H
+#ifndef EDITORSPIRALS_H
+#define EDITORSPIRALS_H
 
 #include "editorbase.h"
 #include "spirals.h"
@@ -24,4 +24,4 @@ private:
 
 };
 
-#endif // SPIRALS_H
+#endif // EDITORSPIRALS_H

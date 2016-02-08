@@ -25,8 +25,7 @@ template ListSwitchable<dpoint>::ListSwitchable(ListCopyable<dpoint>& list);
 template ListSwitchable<dpoint>::ListSwitchable(AreaAnalyzer<dpoint>& list);
 template ListSwitchable<dpoint>::ListSwitchable(TurnNormalizer<dpoint>& list);
 template ListSwitchable<dpoint>::ListSwitchable(AreaNormalizer<dpoint>& list);
-
-
+template ListSwitchable<dpoint>::ListSwitchable(CliffsNormalizer<dpoint>& list);
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> ListSwitchable<dpoint>::ListSwitchable(F& list) : ListRotator<dpoint>(list){

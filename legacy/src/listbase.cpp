@@ -32,9 +32,9 @@ template ListBase<dpoint>::ListBase(ListSwitchable<dpoint>& list);
 template ListBase<dpoint>::ListBase(QList<dpoint>& list);
 template ListBase<dpoint>::ListBase(AreaNormalizer<dpoint>& list);
 template ListBase<dpoint>::ListBase(CornerNormalizer<dpoint>& list);
-
-
-
+#include "include/cliffs.h"
+template ListBase<dpoint>::ListBase(Cliffs<dpoint>& list);
+template ListBase<dpoint>::ListBase(CliffsNormalizer<dpoint>& list);
 
 template<> ListBase<dpoint> ListBase<dpoint>::loadSPFile(const QString& fileName)
 {

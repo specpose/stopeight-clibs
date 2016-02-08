@@ -34,6 +34,9 @@ template ListCopyable<dpoint>::ListCopyable(Spirals<dpoint>& list);
 template ListCopyable<dpoint>::ListCopyable(Analyzer<dpoint>& list);
 template ListCopyable<dpoint>::ListCopyable(AreaCalculator<dpoint>& list);
 template ListCopyable<dpoint>::ListCopyable(CliffsAnalyzer<dpoint>& list);
+#include "include/cliffs.h"
+template ListCopyable<dpoint>::ListCopyable(Cliffs<dpoint>& list);
+
 
 // the crime scene: needs to know who's called
 //template<> ListSwitchable<dpoint>* ListCopyable<dpoint>::operator&(){

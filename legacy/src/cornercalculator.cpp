@@ -16,3 +16,6 @@ template CornerCalculator<dpoint>::CornerCalculator(TurnNormalizer<dpoint>& list
 #include "include/calculator.h"
 template CornerCalculator<dpoint>::CornerCalculator(Calculator<dpoint>& list);
 template CornerCalculator<dpoint>::CornerCalculator(ListBase<dpoint>& list);
+#include "include/cliffsnormalizer.h"
+template CornerCalculator<dpoint>::CornerCalculator(CliffsNormalizer<dpoint>& list);
+
