@@ -23,10 +23,10 @@ template<>template<typename F> void CliffsNormalizer<dpoint>::operator=(F& list)
 
 template <> void CliffsNormalizer<dpoint>::cliffFilters(){
     CornerNormalizer<dpoint> b = CornerNormalizer<dpoint>(*this);
-    b.requireMinimumLength(1);
-    // enabling this is good for circles, bad for certain spirals, sinus and strokes without enough input data
-    //toBeProcessed.risingJitter(0);
+    b.requireMinimumLength(2);
+    //// enabling this is good for circles, bad for certain spirals, sinus and strokes without enough input data
+    ////toBeProcessed.risingJitter(0);
     TurnNormalizer<dpoint> c = TurnNormalizer<dpoint>(b);
     c.smoothingJitter(0);
-    c.risingJitter(0);
+    //c.risingJitter(0);
 }

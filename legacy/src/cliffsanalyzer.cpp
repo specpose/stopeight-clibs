@@ -167,7 +167,6 @@ template<> ListCopyable<dpoint> CliffsAnalyzer<dpoint>::getFirstCliff(qreal limi
             }
         }
     }
-    // never reached
     // BUG: catch for calculator.size above
     result=this->last();
 

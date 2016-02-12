@@ -100,9 +100,37 @@ PyObject* legacy_wrappers::stroke_parallel(PyObject *self, PyObject *args){
 }
 
 /*
-  This is the sequential version of the stroke analyzer. It will subdivide pairs (cliffs) and triplets (turns) of immediately repeating features without further lookahead and center them.
+
 */
 // Placeholder stroke_cliffs
+PyObject* legacy_wrappers::stroke_sequential(PyObject *self, PyObject *args){
+    ListBase<dpoint> list = legacy_wrappers::parse_list(self,args);
+    printf("Loaded %d points into Cliff Stroke Analyzer\n",list.size());
+    if (list.size()>2){
+        EditorCliffs editor = EditorCliffs();
+        for (int i=0;i<list.size();i++){
+            editor.addPoint(list.at(i));
+        }
+        try {
+            editor.automatic();
+        } catch (const char* text){
+            printf("Error in sequential Stroke Analyzer: %s",text);
+            PyObject* error;
+            PyErr_SetString(error,text);
+            return error;
+        } catch (...){
+            printf("Undefined error in sequential Stroke Analyzer");
+            PyObject* error;
+            PyErr_SetNone(error);
+            return error;
+        }
+
+        ListCopyable<dpoint> result = ListCopyable<dpoint>();
+        result = editor.getOutput();
+        printf("Returned %d from Cliff Stroke Analyzer\n",result.size());
+        return legacy_wrappers::convert(result);
+    }
+}
 
 PyMODINIT_FUNC initstopeight_clibs_legacy(void)
 {
