@@ -7,13 +7,15 @@ template<> TurnNormalizer<dpoint>::TurnNormalizer() : TurnCalculator<dpoint>() {
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> TurnNormalizer<dpoint>::TurnNormalizer(F& list) : TurnCalculator<dpoint>(list){
-    ListSwitchable<dpoint> c = static_cast<ListSwitchable<dpoint>& >(list);
+    ListBase<dpoint> c = static_cast<ListBase<dpoint>& >(list);
     *this= static_cast<TurnNormalizer<dpoint>& >(c);
 }
 
 #include "include/areanormalizer.h"
 template TurnNormalizer<dpoint>::TurnNormalizer(AreaNormalizer<dpoint>& list);
 template TurnNormalizer<dpoint>::TurnNormalizer(CornerNormalizer<dpoint>& list);
+#include "include/listcopyable.h"
+template TurnNormalizer<dpoint>::TurnNormalizer(ListCopyable<dpoint>& list);
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> void TurnNormalizer<dpoint>::operator=(F& list){
@@ -57,4 +59,13 @@ template <> void TurnNormalizer<dpoint>::risingJitter(int pos){
     if (foundOne){
         risingJitter(pos+1);
     }
+}
+
+template <> void TurnNormalizer<dpoint>::tripletFilters(){
+    TurnNormalizer<dpoint> b = TurnNormalizer<dpoint>(*this);
+    //this->risingJitter(0);
+    b.smoothingJitter(0);
+    //only corners and turns need rotation: derivative
+    // rotation is absolutely needed if using crossing 0. getFirstTurn contains rotation in point removal
+    //remainingSlice.rotateSegmentToXAxis();
 }

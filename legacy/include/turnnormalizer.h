@@ -19,7 +19,7 @@ public:
     void smoothingJitter(int pos);
     void risingJitter(int pos);
 
-
+    void tripletFilters();
 };
 
 #endif // TURNNORMALIZER_H

@@ -33,6 +33,8 @@ void EditorSpirals::process(ListBase<dpoint> &toBeProcessed){
         if (pleaseReverse) {
             // bug this will also give us a reversed result!
             Analyzer<dpoint> rev = Analyzer<dpoint>(this->getOutput());
+            //DOES IT ACTUALLY WORK WITHOUT SETOUTPUT??
+            throw "SpiralsAnalyzer::pleaseReverse please fix me";
             rev.reverseOrder();
             //Not Necessary, toBeProcessed consumed
             //this->setOutput(ListBase<dpoint>(rev));

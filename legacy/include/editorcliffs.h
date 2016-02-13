@@ -7,6 +7,7 @@
 #include "editorbase.h"
 #include "cliffs.h"
 #include "spiralsanalyzer.h"
+#include "turns.h"
 
 class EditorCliffs : public EditorBase<ListBase<dpoint> >
 {

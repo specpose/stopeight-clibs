@@ -110,6 +110,7 @@ template<> QList<dpoint> Spirals<dpoint>::findSpirals(ListCopyable<dpoint> toBeP
     qreal limit = findLimit(toBeProcessed);
     debug()<<"Limit from forward analysis is: "<<limit;
 
+    //this should be a copy!
     Analyzer<dpoint> reversed = Analyzer<dpoint>(toBeProcessed);
     //reversed.tripletFilters();
     reversed.reverseOrder();

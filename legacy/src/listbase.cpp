@@ -35,6 +35,11 @@ template ListBase<dpoint>::ListBase(CornerNormalizer<dpoint>& list);
 #include "include/cliffs.h"
 template ListBase<dpoint>::ListBase(Cliffs<dpoint>& list);
 template ListBase<dpoint>::ListBase(CliffsNormalizer<dpoint>& list);
+#include "include/turnanalyzer.h"
+template ListBase<dpoint>::ListBase(TurnAnalyzer<dpoint>& list);
+#include "include/straightsanalyzer.h"
+template ListBase<dpoint>::ListBase(StraightsAnalyzer<dpoint>& list);
+template ListBase<dpoint>::ListBase(CornerAnalyzer<dpoint>& list);
 
 template<> ListBase<dpoint> ListBase<dpoint>::loadSPFile(const QString& fileName)
 {

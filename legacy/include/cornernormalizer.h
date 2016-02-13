@@ -22,6 +22,8 @@ public:
     // turncalculator.h
     // editorbase.h
     dpoint getPointInTheMiddle();
+
+    void cornerFilters();
 };
 
 #endif // CORNERNORMALIZER_H

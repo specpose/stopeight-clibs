@@ -19,8 +19,6 @@ public:
 
     ListCopyable<dpoint> getFirstCliff(qreal limit=M_PIl);
 
-
-private:
     // used by filters and analyzer
     int hasIllegalSegment();
 

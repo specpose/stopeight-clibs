@@ -7,7 +7,7 @@ template<> CornerCalculator<dpoint>::CornerCalculator() : ListSwitchable<dpoint>
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> CornerCalculator<dpoint>::CornerCalculator(F& list) : ListSwitchable<dpoint>(list){
-    ListSwitchable<dpoint> c = static_cast<ListSwitchable<dpoint>& >(list);
+    ListBase<dpoint> c = static_cast<ListBase<dpoint>& >(list);
     *this= static_cast<CornerCalculator<dpoint>& >(c);
 }
 
@@ -18,4 +18,8 @@ template CornerCalculator<dpoint>::CornerCalculator(Calculator<dpoint>& list);
 template CornerCalculator<dpoint>::CornerCalculator(ListBase<dpoint>& list);
 #include "include/cliffsnormalizer.h"
 template CornerCalculator<dpoint>::CornerCalculator(CliffsNormalizer<dpoint>& list);
-
+#include "include/listcopyable.h"
+template CornerCalculator<dpoint>::CornerCalculator(ListCopyable<dpoint>& list);
+#include "include/areanormalizer.h"
+template CornerCalculator<dpoint>::CornerCalculator(AreaNormalizer<dpoint>& list);
+template CornerCalculator<dpoint>::CornerCalculator(CornerNormalizer<dpoint>& list);

@@ -17,6 +17,9 @@ public:
     // turncalculator.h
     // getPointInTheMiddle
     qreal sumLength();
+
+    qreal sumRotYFrom(int start);
+    qreal sumOfLinesRotY();
 };
 
 #endif // STRAIGHTSCALCULATOR_H

@@ -39,7 +39,13 @@ SOURCES += \
     src/straightscalculator.cpp \
     src/editorcliffs.cpp \
     src/cliffs.cpp \
-    src/cliffsnormalizer.cpp
+    src/cliffsnormalizer.cpp \
+    src/turns.cpp \
+    src/turnanalyzer.cpp \
+    src/straightsanalyzer.cpp \
+    src/corneranalyzer.cpp \
+    src/straightsnormalizer.cpp \
+    src/corners.cpp
 HEADERS +=\
     include/listcopyable.h \
     include/listrotator.h \
@@ -68,7 +74,13 @@ HEADERS +=\
     include/straightscalculator.h \
     include/editorcliffs.h \
     include/cliffs.h \
-    include/cliffsnormalizer.h
+    include/cliffsnormalizer.h \
+    include/turns.h \
+    include/turnanalyzer.h \
+    include/straightsanalyzer.h \
+    include/corneranalyzer.h \
+    include/straightsnormalizer.h \
+    include/corners.h
 
 symbian {
     MMP_RULES += EXPORTUNFROZEN

@@ -20,6 +20,9 @@ public:
 
     ListCopyable<dpoint> chopCopy(int startPosition, int endPosition);
 
+    void reverse();
+
+    void removeIllegalPoints();
 private:
     int calls;
 

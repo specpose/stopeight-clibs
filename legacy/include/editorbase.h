@@ -16,7 +16,6 @@
 #include "myreal.h"
 
 template<typename T> struct ListStorage{
-    //can not be used because compiler will require empty constructor in implementation instantiation
     ListStorage<T>() : input(T()), output(T()){}
 
     //specialisation:
@@ -24,7 +23,6 @@ template<typename T> struct ListStorage{
     //ListStorage(ListBase<dpoint>* a,ListBase<dpoint>* b){input=a;output=b;}
     //ListStorage<ListBase<dpoint> > init(){input=ListBase<dpoint>();output=ListBase<dpoint>();return this;}
 
-    // ptr has to be used because compiler will complain about uninitialized reference
     // input is always the raw data either from file or pen/mouse stroke
     T input;
     // output is initially input but gets reduced to T-C-T... in automatic

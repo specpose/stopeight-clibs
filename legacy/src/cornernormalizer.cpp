@@ -7,7 +7,7 @@ template<> CornerNormalizer<dpoint>::CornerNormalizer() : CornerCalculator<dpoin
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> CornerNormalizer<dpoint>::CornerNormalizer(F& list) : CornerCalculator<dpoint>(list){
-    ListSwitchable<dpoint> c = static_cast<ListSwitchable<dpoint>& >(list);
+    ListBase<dpoint> c = static_cast<ListBase<dpoint>& >(list);
     *this= static_cast<CornerNormalizer<dpoint>& >(c);
 }
 
@@ -16,6 +16,10 @@ template CornerNormalizer<dpoint>::CornerNormalizer(ListBase<dpoint>& list);
 template CornerNormalizer<dpoint>::CornerNormalizer(TurnNormalizer<dpoint>& list);
 #include "include/cliffsnormalizer.h"
 template CornerNormalizer<dpoint>::CornerNormalizer(CliffsNormalizer<dpoint>& list);
+#include "include/listcopyable.h"
+template CornerNormalizer<dpoint>::CornerNormalizer(ListCopyable<dpoint>& list);
+template CornerNormalizer<dpoint>::CornerNormalizer(AreaNormalizer<dpoint>& list);
+template CornerNormalizer<dpoint>::CornerNormalizer(CornerNormalizer<dpoint>& list);
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> void CornerNormalizer<dpoint>::operator=(F& list){
@@ -38,6 +42,18 @@ template <> void CornerNormalizer<dpoint>::requireMinimumLength(qreal lnt){
     if (foundOne){
         requireMinimumLength(lnt);
     }
+}
+
+template <> void CornerNormalizer<dpoint>::cornerFilters(){
+    //debug() << "Before filter corner: ";
+    TurnNormalizer<dpoint> a = TurnNormalizer<dpoint>(*this);
+    a.smoothingJitter(0);
+    CornerNormalizer<dpoint> b = CornerNormalizer<dpoint>(a);
+    b.requireMinimumLength(1.00001);
+    ListRotator<dpoint> c = ListRotator<dpoint>(b);
+    c.rotateSegmentToXAxis();
+    //this->normalizeCorners();
+    //debug() << "After filter corner: ";
 }
 
 template<> dpoint CornerNormalizer<dpoint>::getPointInTheMiddle(){

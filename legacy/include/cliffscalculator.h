@@ -12,7 +12,9 @@ public:
     CliffsCalculator<T>();
     template<typename F> CliffsCalculator<T>(F& list);
 
-
+    QPointF delta1At(int position);
+    bool deriv1Crossed(int pos);
+    qreal inclin1At(int i);
 };
 
 #endif // CLIFFSCALCULATOR_H

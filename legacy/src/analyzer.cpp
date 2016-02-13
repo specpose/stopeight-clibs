@@ -26,6 +26,7 @@ template<>template<typename F> void Analyzer<dpoint>::operator=(F& list){
     this->swap(list);
 }
 
+// Sould only be allowed in ListCopyable
 template<> void Analyzer<dpoint>::reverseOrder(){
     ListSwitchable<dpoint> reversed= ListSwitchable<dpoint>();
     int pointer = 0;

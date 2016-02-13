@@ -36,7 +36,11 @@ template ListCopyable<dpoint>::ListCopyable(AreaCalculator<dpoint>& list);
 template ListCopyable<dpoint>::ListCopyable(CliffsAnalyzer<dpoint>& list);
 #include "include/cliffs.h"
 template ListCopyable<dpoint>::ListCopyable(Cliffs<dpoint>& list);
-
+#include "include/straightsanalyzer.h"
+template ListCopyable<dpoint>::ListCopyable(StraightsAnalyzer<dpoint>& list);
+#include "include/turnanalyzer.h"
+template ListCopyable<dpoint>::ListCopyable(TurnAnalyzer<dpoint>& list);
+template ListCopyable<dpoint>::ListCopyable(QList<dpoint>& list);
 
 // the crime scene: needs to know who's called
 //template<> ListSwitchable<dpoint>* ListCopyable<dpoint>::operator&(){
@@ -57,4 +61,28 @@ template<> ListCopyable<dpoint> ListCopyable<dpoint>::chopCopy(int startPosition
         }
     }
     return filet;
+}
+
+template <> void ListCopyable<dpoint>::reverse(){
+    ListCopyable<dpoint> reversed= ListCopyable<dpoint>();
+    for (int i=this->size()-1;i>=0;i--){
+        reversed << this->at(i);
+    }
+    this->clear();
+    this->append(reversed);
+}
+
+template <> void ListCopyable<dpoint>::removeIllegalPoints(){
+    debug() << "Before removeIllegalPoints: " <<this->size();
+    CliffsAnalyzer<dpoint> cliff = CliffsAnalyzer<dpoint>(*this);
+    while (cliff.hasIllegalSegment()!=-1){
+        for (int i=0;i<cliff.size();i++){
+            if (cliff.at(i).position == cliff.hasIllegalSegment()){
+                //debug() << "removeIllegalPoints: "<<"Removed point "<<this->at(i)<<".";
+                cliff.removeAt(i);
+                break;
+            }
+        }
+    }
+    debug() << "After removeIllegalPoints: " <<this->size();
 }

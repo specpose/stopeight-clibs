@@ -52,7 +52,7 @@ void EditorCliffs::process(ListBase<dpoint> &toBeProcessed){
 }
 
 // this is a drop-in replacement for processSegment used for clarifying math
-QList<dpoint> EditorCliffs::processSegment(QList<dpoint> list){
+/*QList<dpoint> EditorCliffs::processSegment(QList<dpoint> list){
     ListRotator<dpoint> cliff = ListRotator<dpoint>(list);
     QList<dpoint> path_section = QList<dpoint>();
     if (cliff.size()>1){
@@ -63,21 +63,111 @@ QList<dpoint> EditorCliffs::processSegment(QList<dpoint> list){
         debug()<<"Number of points in Segment: "<<cliff.length();
         //debug()<<"Length of Curve is: "<<cliff.sumLength();
         //cliff.requireMinimumLength(1);
-        /*debug()<<"Area of Curve is: "<<cliff.sumOfDxAreasRotY();
-        debug()<<"Spiral-Area of Curve is:"<<cliff.measureSpiral();
+        //debug()<<"Area of Curve is: "<<cliff.sumOfDxAreasRotY();
+        //debug()<<"Spiral-Area of Curve is:"<<cliff.measureSpiral();
         //qreal d = cliff.sumOfDx();
-        qreal d = cliff.lengthFromStartToEnd();
-        //debug()<<"Radius is: "<<d/2<<"; Segment-Radius-Area is: "<<(pow(d/2,2)*(double)M_PIl)/2;
-        debug()<<"Radius is: "<<d/2<<"; Segment-Radius-Area is: "<<ListAnalyzer<dpoint>::area(d,MyLimit);
+        //qreal d = cliff.lengthFromStartToEnd();
+        ////debug()<<"Radius is: "<<d/2<<"; Segment-Radius-Area is: "<<(pow(d/2,2)*(double)M_PIl)/2;
+        //debug()<<"Radius is: "<<d/2<<"; Segment-Radius-Area is: "<<ListAnalyzer<dpoint>::area(d,MyLimit);
 
-        //debug()<<"Diameter is: "<<d<<"; Segment-Diameter-Circumference is: "<<(d*(double)M_PIl);
-        debug()<<"Diameter is: "<<d<<"; Segment-Diameter-Circumference is: "<<ListAnalyzer<dpoint>::circumference(d,MyLimit);*/
+        ////debug()<<"Diameter is: "<<d<<"; Segment-Diameter-Circumference is: "<<(d*(double)M_PIl);
+        //debug()<<"Diameter is: "<<d<<"; Segment-Diameter-Circumference is: "<<ListAnalyzer<dpoint>::circumference(d,MyLimit);
 
         path_section << cliff.first();
         path_section << cliff.last();
         return path_section;
     } else {
-        //throw "ShapeMatcher::cornerMeasuring: this is a humongously small cliff.";
+        //throw "EditorCliffs::cornerMeasuring: this is a humongously small cliff.";
         return path_section;
     }
+}*/
+
+QList<dpoint> EditorCliffs::processSegment(QList<dpoint> cliff){
+    if (cliff.size()>2){
+        QList<dpoint> path_section = QList<dpoint>();
+        path_section << cliff.first();
+        QList<dpoint> turns = Turns<dpoint>::findTurns(cliff);
+        debug()<< "Found "<<turns.size()<<" turns in cliff";
+        for (int i=0;i<turns.size();i++){
+            debug()<< turns[i];
+        }
+        path_section << turns;
+        path_section << cliff.last();
+        return path_section;
+    } else {
+        throw "EditorCliffs::processSegment: segment size is below 3.";
+    }
 }
+
+// Not USED
+// TCT Implementation
+// FOR REFERENCE ONLY
+/*const void ShapeMatcher::cliffIterator(const QList<dpoint> constCliffs,ListCalculator<dpoint>& resultRef){
+    //for (int i=0;i<constCliffs.size()+1;i++){
+    // section commented old_implementation
+
+    // WHEREFROM:
+    ListAnalyzer<dpoint> cliff;
+
+        //maemo works: check cliff size
+        if (cliff.size()>1){
+            //only needed for debugging; crest works with scalar
+            ListAnalyzer<dpoint> bugger = cliff;
+            bugger.rotateSegmentToXAxis();
+            debug()<<bugger;
+            QList<dpoint> crests = ListAnalyzer<dpoint>();
+            crests << cliff.first() << cliff.last();
+
+            if (crests.size()>1){
+                for (int k=0;k<crests.size()-1;k++){
+                    ListAnalyzer<dpoint> crest;
+                    //if (k != (crests.size()-2) ) {
+                    //    crest = output.chopCopy(crests[k].position,crests[k+1].position-1);
+                    //} else {
+                    crest = this->data.output.chopCopy(crests[k].position,crests[k+1].position);
+                    //}
+                    if (crest.size()>1){
+
+
+                        // don't turn on first corner
+
+                        // WHEREFROM:
+                        if (crestCorners.size()>1){
+                            // don't turn on last corner
+                            for (int j=0;j<crestCorners.size()-1;j++){
+                                // don't turn on first corner
+                                ListAnalyzer<dpoint> corner;
+
+                                //maemo works: check cliff size
+                                if (corner.size()>1){
+
+                                    //debug() << "Before filter turn: ";
+                                    corner.normalizeCorners();
+                                    corner.normalizeTurns();
+                                    //debug() << "After filter turn: ";
+
+                                    dpoint turn = doTurn(corner);
+                                    // WHEREFROM:
+                                    turns << turn;
+                                    resultRef << turn;
+                                    // beziers start with cliffs/crests
+                                    if (j!=crestCorners.size()-1){
+                                        resultRef << crestCorners[j+1];
+                                    }
+                                }
+                            }
+                        }
+
+                        // don't do this if it's the last crest: it is done once by the cliff!
+                        if (k != crests.size()-2){
+                            resultRef << crests[k+1];
+                        }
+                    }
+                }
+            }
+        }
+        //maemo works: check cliff size
+        //resultRef << constCliffs[i+1];
+    //}
+
+}*/

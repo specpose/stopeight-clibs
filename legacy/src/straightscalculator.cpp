@@ -7,13 +7,16 @@ template<> StraightsCalculator<dpoint>::StraightsCalculator() : ListSwitchable<d
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> StraightsCalculator<dpoint>::StraightsCalculator(F& list) : ListSwitchable<dpoint>(list){
-    ListSwitchable<dpoint> c = static_cast<ListSwitchable<dpoint>& >(list);
+    ListBase<dpoint> c = static_cast<ListBase<dpoint>& >(list);
     *this= static_cast<StraightsCalculator<dpoint>& >(c);
 }
 
 #include "include/cornernormalizer.h"
 template StraightsCalculator<dpoint>::StraightsCalculator(CornerNormalizer<dpoint>& list);
-
+#include "include/listcopyable.h"
+template StraightsCalculator<dpoint>::StraightsCalculator(ListCopyable<dpoint>& list);
+#include "include/areanormalizer.h"
+template StraightsCalculator<dpoint>::StraightsCalculator(AreaNormalizer<dpoint>& list);
 
 template <> qreal StraightsCalculator<dpoint>::sumLength(){
     qreal sumLength = 0;
@@ -24,4 +27,20 @@ template <> qreal StraightsCalculator<dpoint>::sumLength(){
     return sumLength;
 }
 
+// being used by triplets
+template <> qreal StraightsCalculator<dpoint>::sumRotYFrom(int start){
+    qreal sumRotY = 0;
+    for (int i=start;i<this->size();i++) {
+        sumRotY += this->at(i).rot.y();
+    }
+    return sumRotY;
+}
 
+// being used by checkIfSectionIsStraight
+template <> qreal StraightsCalculator<dpoint>::sumOfLinesRotY(){
+    qreal sumRotY = 0;
+    for (int i=0;i<this->size();i++) {
+        sumRotY += fabs(this->at(i).rot.y());
+    }
+    return sumRotY;
+}
