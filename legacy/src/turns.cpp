@@ -21,13 +21,14 @@ template<> QList<dpoint> Turns<dpoint>::findTurns(ListCopyable<dpoint> toBeProce
     debug()<<"Turns::findTurns started with "<<toBeProcessed.size()<<" input points";
     QList<dpoint> result = QList<dpoint>();
     TurnAnalyzer<dpoint> crest = TurnAnalyzer<dpoint>(toBeProcessed);
+    bool foundOne = false;
     while (crest.size()>4){
         ListCopyable<dpoint> triplet = crest.getFirstTurnByTriplets();
         result<<triplet.last();
     }
     // The last one is the end of the crest
-    if (result.size()>1){
+    //if (result.size()>1){
     result.removeLast();
-    }
+    //}
     return result;
 }

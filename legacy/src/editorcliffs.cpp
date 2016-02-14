@@ -3,8 +3,8 @@
 
 #include "include/editorcliffs.h"
 
-//#define debug() QDebug(QtDebugMsg)//::QDebug(QtDebugMsg)
-#define debug() QNoDebug()
+#define debug() QDebug(QtDebugMsg)//::QDebug(QtDebugMsg)
+//#define debug() QNoDebug()
 
 EditorCliffs::EditorCliffs() : EditorBase<ListBase<dpoint> >()
 {
@@ -52,7 +52,7 @@ void EditorCliffs::process(ListBase<dpoint> &toBeProcessed){
 }
 
 // this is a drop-in replacement for processSegment used for clarifying math
-/*QList<dpoint> EditorCliffs::processSegment(QList<dpoint> list){
+QList<dpoint> EditorCliffs::processSegment(QList<dpoint> list){
     ListRotator<dpoint> cliff = ListRotator<dpoint>(list);
     QList<dpoint> path_section = QList<dpoint>();
     if (cliff.size()>1){
@@ -80,9 +80,9 @@ void EditorCliffs::process(ListBase<dpoint> &toBeProcessed){
         //throw "EditorCliffs::cornerMeasuring: this is a humongously small cliff.";
         return path_section;
     }
-}*/
+}
 
-QList<dpoint> EditorCliffs::processSegment(QList<dpoint> cliff){
+/*QList<dpoint> EditorCliffs::processSegment(QList<dpoint> cliff){
     if (cliff.size()>2){
         QList<dpoint> path_section = QList<dpoint>();
         path_section << cliff.first();
@@ -97,7 +97,7 @@ QList<dpoint> EditorCliffs::processSegment(QList<dpoint> cliff){
     } else {
         throw "EditorCliffs::processSegment: segment size is below 3.";
     }
-}
+}*/
 
 // Not USED
 // TCT Implementation
