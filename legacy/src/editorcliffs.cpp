@@ -7,7 +7,6 @@
 
 EditorCliffs::EditorCliffs() : EditorBase<ListBase<dpoint> >()
 {
-    debug()<<"EditorCliffs<T>::EditorCliffs() constructor called";
 }
 
 //EditorCliffs::~EditorCliffs(){
@@ -55,8 +54,8 @@ QList<dpoint> EditorCliffs::processSegment(QList<dpoint> list){
         cliff.rotateSegmentToXAxis();
         //debug()<<"removing illegal points because of illegal segments for debug calc.";
         //cliff.removeIllegalPoints();
-        debug()<<"Points "<<cliff.first().position<<" - "<<cliff.last().position;
-        debug()<<"Number of points in Segment: "<<cliff.length();
+        //debug()<<"Points "<<cliff.first().position<<" - "<<cliff.last().position;
+        //debug()<<"Number of points in Segment: "<<cliff.length();
         //debug()<<"Length of Curve is: "<<cliff.sumLength();
         //cliff.requireMinimumLength(1);
         //debug()<<"Area of Curve is: "<<cliff.sumOfDxAreasRotY();
@@ -84,10 +83,10 @@ QList<dpoint> EditorCliffs::processSegment(QList<dpoint> list){
         QList<dpoint> path_section = QList<dpoint>();
         path_section << cliff.first();
         QList<dpoint> turns = Turns<dpoint>::findTurns(cliff);
-        debug()<< "Found "<<turns.size()<<" turns in cliff";
-        for (int i=0;i<turns.size();i++){
-            debug()<< turns[i];
-        }
+        //debug()<< "Found "<<turns.size()<<" turns in cliff";
+        //for (int i=0;i<turns.size();i++){
+        //    debug()<< turns[i];
+        //}
         path_section << turns;
         path_section << cliff.last();
         return path_section;
@@ -111,7 +110,7 @@ QList<dpoint> EditorCliffs::processSegment(QList<dpoint> list){
             //only needed for debugging; crest works with scalar
             ListAnalyzer<dpoint> bugger = cliff;
             bugger.rotateSegmentToXAxis();
-            debug()<<bugger;
+            //debug()<<bugger;
             QList<dpoint> crests = ListAnalyzer<dpoint>();
             crests << cliff.first() << cliff.last();
 

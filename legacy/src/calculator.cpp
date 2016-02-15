@@ -20,6 +20,7 @@ template Calculator<dpoint>::Calculator(ListBase<dpoint>& list);
 template Calculator<dpoint>::Calculator(Analyzer<dpoint>& list);
 #include "include/listcopyable.h"
 template Calculator<dpoint>::Calculator(ListCopyable<dpoint>& list);
+template Calculator<dpoint>::Calculator(QList<dpoint>& list);
 
 
 template <> qreal Calculator<dpoint>::lengthOf(QPointF difference){

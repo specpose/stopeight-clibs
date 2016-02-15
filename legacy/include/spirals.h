@@ -14,7 +14,8 @@ public:
     Spirals<T>();
     template<typename F> Spirals<T>(F& list);
 
-    static QList<dpoint> findSpirals(ListCopyable<dpoint> output,bool& pleaseReverse);
+    // TODO rename this to findSpiral
+    static QList<dpoint> findSpirals(ListCopyable<dpoint> output);
 
 private:
     static QList<dpoint> findAreas(ListCopyable<dpoint>& stroke, qreal limit);

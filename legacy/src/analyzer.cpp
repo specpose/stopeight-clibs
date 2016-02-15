@@ -18,7 +18,7 @@ template<>template<typename F> Analyzer<dpoint>::Analyzer(F& list) : Calculator(
 template Analyzer<dpoint>::Analyzer(Analyzer<dpoint>& list);
 template Analyzer<dpoint>::Analyzer(ListBase<dpoint>& list);
 template Analyzer<dpoint>::Analyzer(ListCopyable<dpoint>& list);
-
+template Analyzer<dpoint>::Analyzer(QList<dpoint>& list);
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> void Analyzer<dpoint>::operator=(F& list){
@@ -26,6 +26,8 @@ template<>template<typename F> void Analyzer<dpoint>::operator=(F& list){
 }
 
 // Sould only be allowed in ListCopyable
+// TODO
+// only call ONCE
 template<> void Analyzer<dpoint>::reverseOrder(){
     ListSwitchable<dpoint> reversed= ListSwitchable<dpoint>();
     int pointer = 0;

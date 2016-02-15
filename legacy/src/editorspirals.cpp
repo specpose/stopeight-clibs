@@ -3,12 +3,11 @@
 
 #include "include/editorspirals.h"
 
-//#define debug() QDebug(QtDebugMsg)//::QDebug(QtDebugMsg)
-#define debug() QNoDebug()
+#define debug() QDebug(QtDebugMsg)//::QDebug(QtDebugMsg)
+//#define debug() QNoDebug()
 
 EditorSpirals::EditorSpirals() : EditorBase<ListBase<dpoint> >()
 {
-    debug()<<"EditorSpirals<T>::EditorSpirals() constructor called";
 }
 
 //EditorSpirals::~EditorSpirals(){
@@ -17,7 +16,6 @@ EditorSpirals::EditorSpirals() : EditorBase<ListBase<dpoint> >()
 
 //toBeProcessed is modifying data.output
 void EditorSpirals::process(ListBase<dpoint> &toBeProcessed){
-    debug()<<"EditorSpirals::process reached with data "<<this->getOutput().size();
     // use of output is a hack
     if (this->getOutput().size()>0) {
         /* SHARED CLIFFS&SPIRALS */
@@ -25,22 +23,12 @@ void EditorSpirals::process(ListBase<dpoint> &toBeProcessed){
 
         /* SPIRALS */
         Spirals<dpoint> spirals = Spirals<dpoint>(toBeProcessed);
-        //Spirals<dpoint>& spirals = Spirals<dpoint>(&toBeProcessed);
-        bool pleaseReverse = false;
-        //TODO
-        bool& pleaseReverseRef = {pleaseReverse};
-
-        cliffs= Spirals<dpoint>::findSpirals(spirals,pleaseReverseRef);
-        if (pleaseReverse) {
-            // bug this will also give us a reversed result!
-            Analyzer<dpoint> rev = Analyzer<dpoint>(this->getOutput());
-            // TODO
-            //DOES IT ACTUALLY WORK WITHOUT SETOUTPUT??
-            //throw "SpiralsAnalyzer::pleaseReverse please fix me";
-            rev.reverseOrder();
-            //Not Necessary, toBeProcessed consumed
-            //this->setOutput(ListBase<dpoint>(rev));
-            //this->setOutput(this->getOutput().reverseOrder());
+        cliffs= Spirals<dpoint>::findSpirals(spirals);
+        if (cliffs.size()>0){
+        if (cliffs.at(0).position!=0) {
+            Analyzer<dpoint> rev = Analyzer<dpoint>(cliffs);
+            rev.reverse();
+        }
         }
 
         /* SHARED After this cliffs is const */
@@ -61,14 +49,8 @@ void EditorSpirals::process(ListBase<dpoint> &toBeProcessed){
         /* SHARED */
         result = Analyzer<dpoint>::populateTurns(this->getOutput(),constSlices);
 
-        //// bug we should undo reversal on result if previously reversed
-        //if (pleaseReverse){
-        //    result.reverseOrder();
-        //}
-
         //hack
-        //this->setOutput(this->getOutput().clear());
-        this->setOutput(result);//this->data.output.append(result);
+        this->setOutput(result);
     } else {
         throw "EditorSpirals::process called without any data";
     }
@@ -81,8 +63,8 @@ QList<dpoint> EditorSpirals::processSegment(QList<dpoint> list){
         cliff.rotateSegmentToXAxis();
         //debug()<<"removing illegal points because of illegal segments for debug calc.";
         //cliff.removeIllegalPoints();
-        debug()<<"Points "<<cliff.first().position<<" - "<<cliff.last().position;
-        debug()<<"Number of points in Segment: "<<cliff.length();
+        //debug()<<"Points "<<cliff.first().position<<" - "<<cliff.last().position;
+        //debug()<<"Number of points in Segment: "<<cliff.length();
         //debug()<<"Length of Curve is: "<<cliff.sumLength();
         //cliff.requireMinimumLength(1);
         /*debug()<<"Area of Curve is: "<<cliff.sumOfDxAreasRotY();
