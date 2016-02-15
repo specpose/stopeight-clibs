@@ -32,7 +32,6 @@ template <> void CornerNormalizer<dpoint>::requireMinimumLength(qreal lnt){
     for (int i=calc.size()-2;i>0;i--){
 
         if (calc.lengthAt(i)<lnt){
-            //debug() << "requireMinimumLength: deleting "<<calc->at(i);
             calc.removeAt(i);
             foundOne = true;
             break;

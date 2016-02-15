@@ -16,6 +16,7 @@ public:
     template<typename F> CornerAnalyzer<T>(F& list);
     template<typename F> void operator=(F& list);
 
+    // implementation of "clean" math; as opposed to old_code shrinkToDeltas
     ListCopyable<dpoint> getFirstCorner();
 };
 

@@ -8,7 +8,7 @@
 #include "spirals.h"
 #include "spiralsanalyzer.h"
 
-class EditorSpirals : public EditorBase<ListBase<dpoint> >
+class LEGACYSHARED_EXPORT EditorSpirals : public EditorBase<ListBase<dpoint> >
 {
 public:
     EditorSpirals();
@@ -16,7 +16,7 @@ public:
 
 
 protected:
-    // automatic detection of "spirals" that don't include any illegal segments, which would make derivations invalid.
+    // automatic detection of "spirals" that don't include any illegal segments, which would make derivations invalid. See throw jitter detected
     void process(ListBase<dpoint>& toBeProcessed);
 
 private:

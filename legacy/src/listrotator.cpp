@@ -56,7 +56,6 @@ template <> void ListRotator<dpoint>::moveRotToZero(){
 
 template <> void ListRotator<dpoint>::rotate(double deg){
     QTransform transMat;
-    dpoint first = this->first();
     dpoint last = this->last();
 
     transMat.reset();

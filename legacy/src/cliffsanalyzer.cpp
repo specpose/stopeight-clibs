@@ -17,8 +17,6 @@ template<>template<typename F> CliffsAnalyzer<dpoint>::CliffsAnalyzer(F& list) :
 template CliffsAnalyzer<dpoint>::CliffsAnalyzer(AreaAnalyzer<dpoint>& list);
 template CliffsAnalyzer<dpoint>::CliffsAnalyzer(ListCopyable<dpoint>& list);
 
-
-
 template <> int CliffsAnalyzer<dpoint>::hasIllegalSegment(){
     ListRotator<dpoint> rotator = ListRotator<dpoint>(*this);
     // has to change to steepest possible?
@@ -62,8 +60,6 @@ template<> ListCopyable<dpoint> CliffsAnalyzer<dpoint>::getFirstLegalSegment(){
         this->removeFirst();
     }
 
-    ////only do this when needed for calculation or display
-    // always do this to return valid result
     result.rotateSegmentToXAxis();
 
     return result;
@@ -76,7 +72,6 @@ template<> ListCopyable<dpoint> CliffsAnalyzer<dpoint>::getFirstCliff(qreal limi
     //specialised internally!
     dpoint result = dpoint();
 
-    //ListAnalyzer<dpoint> calculator = *this;
     // from AreaAnalyzer::getFirstArea
     // needs to be and is a COPY
     ListCopyable<dpoint> copy = ListCopyable<dpoint>(*this);
@@ -84,53 +79,7 @@ template<> ListCopyable<dpoint> CliffsAnalyzer<dpoint>::getFirstCliff(qreal limi
 
     bool foundOne = false;
 
-    // Spirals getFirstArea implementation, now areaanalyzer
-    /*
-    int illegalSegmentCounter=0;
-
-    if (calculator.size()>1){
-        ListAnalyzer<dpoint> legalSegment = calculator.getFirstLegalSegment();
-        illegalSegmentCounter++;
-        legalSegment.areaFilters();
-        ListAnalyzer<dpoint> preceding = legalSegment.getArea(limit,legalSegment.first());
-        //debug()<<"ListAnalyzer<dpoint>::getFirstArea preceding size: "<<preceding.size();
-        if (legalSegment.size()>0){
-            foundOne = true;
-            result = preceding.last();
-        } else {
-            qreal sumOfAllPreceding = 0;
-            if (calculator.size()>1){
-                calculator.prepend(preceding.last());
-                legalSegment = calculator.getFirstLegalSegment();
-                illegalSegmentCounter++;
-                legalSegment.areaFilters();
-                preceding.areaFilters();
-                preceding = legalSegment.getArea(limit,this->first(),preceding.sumOfDxAreasRotY());
-                if (legalSegment.size()>0){
-                    foundOne = true;
-                    result = preceding.last();
-                } else {
-                    while (calculator.size()>1){
-                        calculator.prepend(preceding.last());
-                        legalSegment = calculator.getFirstLegalSegment();
-                        illegalSegmentCounter++;
-                        legalSegment.areaFilters();
-                        preceding.areaFilters();
-                        // sumOfDx over illegal segments is too agressive -> jitter/illegal separation
-                        sumOfAllPreceding += preceding.sumOfDxAreasRotY() + ListCalculator<dpoint>::area(preceding.lengthFromStartToEnd(),limit);
-                        preceding = legalSegment.getArea(limit,this->first(),sumOfAllPreceding);
-                        if (legalSegment.size()>0){
-                            foundOne = true;
-                            result = preceding.last();
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    */
+    // Spirals getFirstArea implementation was here, now areaanalyzer
 
     // directional cliffs implementation?
     // first Operation without preceding triangles and areas
@@ -186,13 +135,52 @@ template<> ListCopyable<dpoint> CliffsAnalyzer<dpoint>::getFirstCliff(qreal limi
     }
     return area;
 
+    // TCT implementation was here, now getFirstCliffTCT
 
+}
+
+//NEVER USED
+//editorcliffs implementation is using getFirstLegalSegment
+//FOR REFERENCE
+/*template<> ListCopyable<dpoint> CliffsAnalyzer<dpoint>::getFirstCliffTCT(qreal limit){
+    ListCopyable<dpoint> copy = ListCopyable<dpoint>(*this);
+    ListCopyable<dpoint> calculator = ListCopyable(*this);
     // TCT implementation?
+
+    // first Operation without preceding triangles and areas
+    while (calculator.size()>1){
+        ListCopyable<dpoint> legalSegment = calculator.getFirstLegalSegment();
+        //if (count!=0 && legalSegment.size()>0){
+        //    legalSegment.removeFirst();
+        //}
+
+        if (calculator.size()>1){
+            // + tiny bit in between
+            calculator.prepend(legalSegment.last());
+            ListAnalyzer<dpoint> area = calculator.getArea(limit,legalSegment.sumOfDxAreasRotY(),legalSegment.first());//this->first());
+            //if (count!=0 && legalSegment.size()>0){
+            //    area.removeFirst();
+            //}
+            if (this->last().position!=area.last().position){
+                // + tiny bit in between
+                calculator.prepend(area.last());
+
+                result<<area.last();
+            } else {
+                // BUG:
+                //return this->chopCopy(area.last().position, this->last().position);
+                result << this->last();
+                return result;
+            }
+        }
+    }
+    result<<this->last();
+    //return result;
     //------------------------------- Old_implementation --------------------------------------
     // Second Operation with preceding triangle and preceding Area
-    //if (calculator.size()>1){
-    //  ListAnalyzer<dpoint> legalSegment = calculator.getFirstLegalSegment();
-    /*if (legalSegment.size()>1){
+    if (calculator.size()>1){
+      ListAnalyzer<dpoint> legalSegment = calculator.getFirstLegalSegment();
+    if (legalSegment.size()>1){
             int pos = legalSegment.last().position;
 
             // +tiny little triangle between precedent and current
@@ -207,15 +195,13 @@ template<> ListCopyable<dpoint> CliffsAnalyzer<dpoint>::getFirstCliff(qreal limi
                 // + tiny bit in between
                 calculator.prepend(precedent.last());
             } else {
-                return this->chopCopy(precedent.last().position, this->last().position);
+                return copy.chopCopy(precedent.last().position, this->last().position);
             }
-        }*/
-    //debug()<<"**************** legalSegment ******************";
-    //debug()<<legalSegment;
-    //result<<legalSegment.last();
-    //}
+        }
+    result<<legalSegment.last();
+    }
     // Third Operation with preceding Area(s) plus one preceding triangle
-    /*while (calculator.size()>1){
+    while (calculator.size()>1){
         ListAnalyzer<dpoint> legalSegment = calculator.getFirstLegalSegment();
         if (legalSegment.size()>1){
             int pos = legalSegment.last().position;
@@ -236,10 +222,10 @@ template<> ListCopyable<dpoint> CliffsAnalyzer<dpoint>::getFirstCliff(qreal limi
                 // + tiny bit in between
                 calculator.prepend(precedent.last());
             } else {
-                return this->chopCopy(precedent.last().position, this->last().position);
+                return copy.chopCopy(precedent.last().position, this->last().position);
             }
         }
         result<<legalSegment.last();
     }
-    return result;*/
-}
+    return result;
+}*/

@@ -20,9 +20,6 @@ template EditorBase<ListBase<dpoint> >::EditorBase();
 //}
 
 template<typename T> T& EditorBase<T>::getOutput(){
-    //ListBase<dpoint>& ref(data.output);
-    //debug()<<"EditorBase<T>::getOutput sent "<<ref;
-    //return ref;
     return data.output;
 }
 
@@ -49,9 +46,7 @@ template<> void EditorBase<ListBase<dpoint> >::addPoint(QPointF p){
 
 template<> void EditorBase<ListBase<dpoint> >::flushOutput(){
     data.output.clear();
-    //output->setQList(input);
     setOutput(data.input);
-    //data.output.append(data.input);
 }
 
 template<> void EditorBase<ListBase<dpoint> >::automatic(){
@@ -60,22 +55,16 @@ template<> void EditorBase<ListBase<dpoint> >::automatic(){
     this->process(this->getOutput());
 }
 
-template<> const void EditorBase<ListBase<dpoint> >::mainIterator(const QList<dpoint>& constCliffs,QList<QList<dpoint> >& slicesRef){
+template<> void EditorBase<ListBase<dpoint> >::mainIterator(const QList<dpoint>& constCliffs,QList<QList<dpoint> >& slicesRef){
     ListCopyable<dpoint> out = ListCopyable<dpoint>(this->getOutput());
     int currentSegment = 0;
     //maemo works: check cliff size
     if (constCliffs.size()==0){
         currentSegment += 1;
-        debug()<<"*******************************************************************************";
-        debug()<<"Segment Number: " << currentSegment;
-        debug()<<"*******************************************************************************";
         slicesRef << this->processSegment(out);
     } else {
         for (int i=0;i<constCliffs.size();i++){
             currentSegment += 1;
-            debug()<<"*******************************************************************************";
-            debug()<<"Segment Number: " << currentSegment;
-            debug()<<"*******************************************************************************";
             if (i==0){
                 slicesRef << processSegment(out.chopCopy(out.first().position,constCliffs[i].position-1));
                 // the last one does not have an illegal point in the end:
@@ -88,9 +77,6 @@ template<> const void EditorBase<ListBase<dpoint> >::mainIterator(const QList<dp
             }
         }
         currentSegment += 1;
-        debug()<<"*******************************************************************************";
-        debug()<<"Segment Number: " << currentSegment;
-        debug()<<"*******************************************************************************";
         // it might have to hop over last point of second last segment? - bug.
         // dangerous: +1
         //slicesRef << processSegment(out.chopCopy(constCliffs[constCliffs.size()-1].position+1,out.last().position));
@@ -107,14 +93,13 @@ template<> bool EditorBase<ListBase<dpoint> >::checkPrecision(const ListBase<dpo
         if (!MyReal(list.at(i).x()).isInt() ||
             !MyReal(list.at(i).y()).isInt())
         {
-            debug() << "ShapeMatcher::eatLegalSegments detected highPrecision";
+            debug() << "EditorBase::checkPrecision detected highPrecision";
             return true;
         }
     }
-    debug() << "ShapeMatcher::eatLegalSegments found low precision";
+    debug() << "EditorBase::checkPrecision found low precision";
     return false;
 }
-
 
 //void EditorBase::process(ListAnalyzer<dpoint> toBeProcessed){
 //    throw "ERROR: EditorBase::process called. this should be superclass-call";

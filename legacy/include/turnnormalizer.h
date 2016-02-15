@@ -16,7 +16,9 @@ public:
 
 
     //ACL: foreign
+    // this will just produce a whole lot of straight lines
     void smoothingJitter(int pos);
+    // supposed to produce curves -> will be replaced by dot product intrapolation
     void risingJitter(int pos);
 
     void tripletFilters();

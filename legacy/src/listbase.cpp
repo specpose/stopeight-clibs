@@ -72,7 +72,7 @@ template<> ListBase<dpoint> ListBase<dpoint>::loadSPFile(const QString& fileName
 }
 
 template<> ListBase<dpoint> ListBase<dpoint>::open(const char *fileName){
-    const QString& myString = QString::fromLatin1(fileName);//QString::fromStdString(utf8path);
+    const QString& myString = QString::fromLatin1(fileName);
     return ListBase<dpoint>::loadSPFile(myString);
 }
 

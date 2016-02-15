@@ -6,14 +6,12 @@
 
 #define HIGHPASS_LOW_LIMIT 0.0001
 
-//#include <QList>
 #include "listrotator.h"
 //#include <limits>
 
 template<typename T> class ListSwitchable : public ListRotator<dpoint>
 {
 public:
-    // Overrides of QList
     ListSwitchable();
     template<typename F> ListSwitchable<T>(F& list);
     //THIS THING CAN NOT BE COPIED

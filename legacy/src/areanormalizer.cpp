@@ -31,12 +31,12 @@ template <> void AreaNormalizer<dpoint>::removeInlays(){
             first << this->at(0)<< this->at(1)<< this->at(2);first.rotateSegmentToXAxis(); qreal firstValue = first.at(1).rot.y();
             second << this->at(1)<<this->at(2)<<this->at(3);second.rotateSegmentToXAxis(); qreal secondValue = second.at(1).rot.y();
             third << this->at(2)<<this->at(3)<<this->at(4);third.rotateSegmentToXAxis(); qreal thirdValue = third.at(1).rot.y();
-            if (firstValue>0 && secondValue<0&&thirdValue<0 ||
-                firstValue<0 && secondValue>0&&thirdValue>0) {this->removeAt(1);this->removeInlays();break;}
-            else if (secondValue>0 && firstValue<0&&thirdValue<0 ||
-                     secondValue<0 && firstValue>0&&thirdValue>0) {this->removeAt(2);this->removeInlays();break;}
-            else if (thirdValue>0 && firstValue<0&&secondValue<0 ||
-                     thirdValue<0 && firstValue>0&&secondValue>0) {this->removeAt(3);this->removeInlays();break;}
+            if ((firstValue>0 && secondValue<0&&thirdValue<0) ||
+                (firstValue<0 && secondValue>0&&thirdValue>0)) {this->removeAt(1);this->removeInlays();break;}
+            else if ((secondValue>0 && firstValue<0&&thirdValue<0) ||
+                     (secondValue<0 && firstValue>0&&thirdValue>0)) {this->removeAt(2);this->removeInlays();break;}
+            else if ((thirdValue>0 && firstValue<0&&secondValue<0) ||
+                     (thirdValue<0 && firstValue>0&&secondValue>0)) {this->removeAt(3);this->removeInlays();break;}
         }
     }
 }
@@ -52,8 +52,6 @@ template <>void AreaNormalizer<dpoint>::areaFilters(){
     //this->risingJitter(0);
 
     *this=AreaNormalizer<dpoint>(b);
-    //debug()<<"Before removeInlays: "<<this->size();
     this->removeInlays();
-    //debug()<<"After removeInlays: "<<this->size();
 
 }

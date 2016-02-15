@@ -18,6 +18,8 @@ public:
     ListCopyable<dpoint> getFirstLegalSegment();
 
     ListCopyable<dpoint> getFirstCliff(qreal limit=M_PIl);
+    //ListCopyable<dpoint> getFirstCliffTCT(qreal limit=M_PIl);
+
 
     // used by filters and analyzer
     int hasIllegalSegment();

@@ -5,7 +5,6 @@
 
 #define debug() QNoDebug()
 
-
 template<> Analyzer<dpoint>::Analyzer() : Calculator(){}
 
 // Note: ALL datamembers of target class destroyed
@@ -33,6 +32,7 @@ template<> void Analyzer<dpoint>::reverseOrder(){
     for (int i=this->size()-1;i>=0;i--){
         dpoint point = this->at(i);
         point.position=pointer;
+        // TODO: NASTY BUG?
         reversed << this->at(i);
         pointer++;
     }
@@ -49,18 +49,11 @@ template<> Calculator<dpoint> Analyzer<dpoint>::populateTurns(ListBase<dpoint> &
             ListCopyable<dpoint> iter = ListCopyable<dpoint>(originalData);
             ListBase<dpoint> lst = iter.chopCopy(slices[k][l].position,slices[k][l+1].position);
             CornerNormalizer<dpoint> mid = CornerNormalizer<dpoint>(lst);
-            //ListCopyable<dpoint> iter = ListCopyable<dpoint>(originalData->data.output);
             result << mid.getPointInTheMiddle();
-            //result << (iter.chopCopy(slices[k][l].position,slices[k][l+1].position)).getPointInTheMiddle();
-            //result << (originalData->data.output.chopCopy(slices[k][l].position,slices[k][l+1].position)).getPointInTheMiddle();
         }
         if (k==slices.size()-1){
             result << slices[k].last();
         }
     }
-    debug()<<"*******************************************************************************";
-    debug()<<"Result: ";
-    debug()<<"*******************************************************************************";
-    debug()<<result;
     return result;
 }

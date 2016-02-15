@@ -20,8 +20,6 @@ template TurnCalculator<dpoint>::TurnCalculator(ListCopyable<dpoint>& list);
 
 // this has performance penalty!
 template <> qreal TurnCalculator<dpoint>::getRegressionValueFor2Points(int pos, bool value){
-    // segment is pointing forward for compatibility with calcTail in calculateDeltas
-    // is this PROgression?
     if (pos>=0 && pos<this->size()-3){
         ListRotator<dpoint> regSeg = ListRotator<dpoint>();
         regSeg << this->at(pos) << this->at(pos+1) << this->at(pos+2) << this->at(pos+3);

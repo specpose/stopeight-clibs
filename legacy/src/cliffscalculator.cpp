@@ -25,9 +25,6 @@ template CliffsCalculator<dpoint>::CliffsCalculator(CornerAnalyzer<dpoint>& list
 template <> QPointF CliffsCalculator<dpoint>::delta1At(int position){
 
     if (position<this->size()){
-        ////if (position<(this->size()+calcTail.size()){
-        //this->appendTail();
-        ////this->append(calcTail);
 
         // this has to change to steepest possible
         //this->rotateSegmentToXAxis();
@@ -43,24 +40,15 @@ template <> QPointF CliffsCalculator<dpoint>::delta1At(int position){
                     if (i.hasNext()){
                         point2 = i.next();
                         delta1 = point2.rot-point1.rot;
-                        ////debug()<<"delta1At: "<<delta1<<this->at(position);
-
-                        ////for (int i=0;i<calcTail.size();i++){
-                        ////    this->removeLast();
-                        ////}
-                        //this->removeTail();
                         return delta1;
                     } else {
-                        //this->removeTail();
                         return QPointF(0,0);
                     }
                 }
             } else {
-                //this->removeTail();
                 return QPointF(0,0);
             }
         } else {
-            //this->removeTail();
             return QPointF(0,0);
         }
     } else {
@@ -75,7 +63,6 @@ template <> QPointF CliffsCalculator<dpoint>::delta1At(int position){
 
 template <> qreal CliffsCalculator<dpoint>::inclin1At(int i){
     QPointF d1 = this->delta1At(i);
-    //debug()<<"delta1At.y:"<<d1.y()<<", delta1At.x:"<<d1.x()<<this->at(i);
     //if (d1.x()==0) {
     //    return 0;
     //} else {

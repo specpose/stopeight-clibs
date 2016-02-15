@@ -14,7 +14,6 @@ public:
     AreaAnalyzer<T>();
     template<typename F> AreaAnalyzer<T>(F& list);
 
-    /*** META-FUNCTION ***/
     ListBase<dpoint> getFirstArea(qreal limit);
 
     // new Area function

@@ -19,8 +19,6 @@ public:
     void requireMinimumLength(qreal length);
 
     // utilities for line-detection
-    // turncalculator.h
-    // editorbase.h
     dpoint getPointInTheMiddle();
 
     void cornerFilters();

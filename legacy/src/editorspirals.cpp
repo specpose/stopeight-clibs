@@ -27,14 +27,16 @@ void EditorSpirals::process(ListBase<dpoint> &toBeProcessed){
         Spirals<dpoint> spirals = Spirals<dpoint>(toBeProcessed);
         //Spirals<dpoint>& spirals = Spirals<dpoint>(&toBeProcessed);
         bool pleaseReverse = false;
+        //TODO
         bool& pleaseReverseRef = {pleaseReverse};
 
         cliffs= Spirals<dpoint>::findSpirals(spirals,pleaseReverseRef);
         if (pleaseReverse) {
             // bug this will also give us a reversed result!
             Analyzer<dpoint> rev = Analyzer<dpoint>(this->getOutput());
+            // TODO
             //DOES IT ACTUALLY WORK WITHOUT SETOUTPUT??
-            throw "SpiralsAnalyzer::pleaseReverse please fix me";
+            //throw "SpiralsAnalyzer::pleaseReverse please fix me";
             rev.reverseOrder();
             //Not Necessary, toBeProcessed consumed
             //this->setOutput(ListBase<dpoint>(rev));
@@ -72,7 +74,6 @@ void EditorSpirals::process(ListBase<dpoint> &toBeProcessed){
     }
 }
 
-// this is a drop-in replacement for processSegment used for clarifying math
 QList<dpoint> EditorSpirals::processSegment(QList<dpoint> list){
     ListRotator<dpoint> cliff = ListRotator<dpoint>(list);
     QList<dpoint> path_section = QList<dpoint>();

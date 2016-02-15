@@ -5,8 +5,7 @@
 
 #define SUMLENGTH_FACTOR_SUBDIVISION 1
 
-#define debug() QDebug(QtDebugMsg)//::QDebug(QtDebugMsg)
-//#define debug() QNoDebug()
+#define debug() QNoDebug()
 
 template<> TurnAnalyzer<dpoint>::TurnAnalyzer() : TurnNormalizer<dpoint>() {}
 
@@ -81,8 +80,6 @@ template <> ListCopyable<dpoint> TurnAnalyzer<dpoint>::getFirstTriplet(){
  get point in the middle of first triplet and 1st turn'
 */
 template <> ListCopyable<dpoint> TurnAnalyzer<dpoint>::getFirstTurnByTriplets(){
-    debug()<<"Turns::getFirstTurnByTriplets started";
-    debug()<<"Turns::getFirstTurnByTriplets started with this size "<<this->size();
 
     TurnAnalyzer<dpoint> result = TurnAnalyzer<dpoint>();
     ListCopyable<dpoint> origin = ListCopyable<dpoint>(*this);
@@ -97,8 +94,6 @@ template <> ListCopyable<dpoint> TurnAnalyzer<dpoint>::getFirstTurnByTriplets(){
     // we might lose 1 point here: the corner. Prepend 1 point?
     //debug()<<"fresh 1";
 
-    //overwrite calculator!
-    //this will not work because =operator override
     //calculator.freshDataSetFrom(origin);
     TurnAnalyzer<dpoint> calculator = TurnAnalyzer<dpoint>(copy2);
 

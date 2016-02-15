@@ -14,6 +14,7 @@ public:
     Corners<T>();
     template<typename F> Corners<T>(F& list);
 
+    // Note: These only work as expected, if crests have been sliced. Otherwise: Only 1st result reliable
     static QList<dpoint> findCorners(ListCopyable<dpoint> toBeProcessed);
 
 };

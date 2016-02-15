@@ -17,6 +17,7 @@ public:
     template<typename F> void operator=(F& list);
 
     ListCopyable<dpoint> getFirstTurnByTriplets();
+    // This is replacement for old_code scalar/crest approach
     ListCopyable<dpoint> getFirstTriplet();
 };
 

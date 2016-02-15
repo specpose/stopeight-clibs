@@ -3,8 +3,7 @@
 
 #include "include/editorcliffs.h"
 
-#define debug() QDebug(QtDebugMsg)//::QDebug(QtDebugMsg)
-//#define debug() QNoDebug()
+#define debug() QNoDebug()
 
 EditorCliffs::EditorCliffs() : EditorBase<ListBase<dpoint> >()
 {
@@ -17,8 +16,6 @@ EditorCliffs::EditorCliffs() : EditorBase<ListBase<dpoint> >()
 
 //toBeProcessed is modifying data.output
 void EditorCliffs::process(ListBase<dpoint> &toBeProcessed){
-    debug()<<"EditorCliffs::process reached with data "<<this->getOutput().size();
-    // use of output is a hack
     if (this->getOutput().size()>0) {
         /* SHARED CLIFFS&SPIRALS */
         Cliffs<dpoint> data = Cliffs<dpoint>(toBeProcessed);
@@ -43,14 +40,13 @@ void EditorCliffs::process(ListBase<dpoint> &toBeProcessed){
         /* SHARED */
         result = Analyzer<dpoint>::populateTurns(this->getOutput(),constSlices);
 
-        //hack
-        //this->setOutput(this->getOutput().clear());
-        this->setOutput(result);//this->data.output.append(result);
+        this->setOutput(result);
     } else {
         throw "EditorCliffs::process called without any data";
     }
 }
 
+// TODO: DUPLICATE, make this call EditorSpirals processSegment
 // this is a drop-in replacement for processSegment used for clarifying math
 QList<dpoint> EditorCliffs::processSegment(QList<dpoint> list){
     ListRotator<dpoint> cliff = ListRotator<dpoint>(list);
@@ -82,6 +78,7 @@ QList<dpoint> EditorCliffs::processSegment(QList<dpoint> list){
     }
 }
 
+// This would be original but it never worked after switching from TCT implementation
 /*QList<dpoint> EditorCliffs::processSegment(QList<dpoint> cliff){
     if (cliff.size()>2){
         QList<dpoint> path_section = QList<dpoint>();

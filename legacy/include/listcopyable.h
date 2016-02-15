@@ -14,17 +14,12 @@ public:
     ListCopyable();
 
     template<typename F> ListCopyable<T>(F& list);
-    //template<typename F> ListCopyable<T>(const F list);
-    //overwrite & operator for being stolen from listswitchable and cast to listswitchable
-    //ListSwitchable<dpoint>* operator&();
 
     ListCopyable<dpoint> chopCopy(int startPosition, int endPosition);
 
     void reverse();
 
     void removeIllegalPoints();
-private:
-    int calls;
 
 };
 

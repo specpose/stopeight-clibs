@@ -41,9 +41,6 @@ template<> ListCopyable<dpoint> AreaAnalyzer<dpoint>::getArea(qreal limit,QPoint
         for (int i=1;i<this->size();i++){
             result<<this->at(i);
 
-            // ABSOLUTELY HAVE TO DO THIS if not preprocessed by getLegalSegment:
-            // ALSO Has to be there if calculator chopped / see upstream
-            // CORRECTION: ALWAYS NEEDED
             result.rotateSegmentToXAxis();
 
             qreal currentArea = 0;
@@ -59,14 +56,6 @@ template<> ListCopyable<dpoint> AreaAnalyzer<dpoint>::getArea(qreal limit,QPoint
             if (preceding<0){throw "ListAnalyzer::getArea: preceding is below zero";}
             if (currentArea<0){throw "ListAnalyzer::getArea: currentArea is below zero";}
 
-            // old implementation
-            // does not change much:
-            //qreal diameter = result.sumOfDx();
-            //or:
-            //qreal diameter = result.lengthFromStartToEnd();
-            //qreal criteria = fabs(ListAnalyzer<dpoint>::area(diameter,limit,preceding));
-            //debug()<<"ListAnalyzer::getArea::Criteria is: "<<criteria;
-
             // IF preceding + currentArea >= norm: norm is area(fullDIAMETER from start, pi or e, 0)
 
             AreaCalculator<dpoint> StartEnd = AreaCalculator<dpoint>();
@@ -75,10 +64,8 @@ template<> ListCopyable<dpoint> AreaAnalyzer<dpoint>::getArea(qreal limit,QPoint
             // using sumOfDx would require having all preceding legalSegments from start and adding up sums
 
             qreal norm = area(diameter,limit);//,0);
-            //debug()<<"Comparison #"<<i;
             if (norm<0){throw "ListAnalyzer::getArea: norm is below zero";}
 
-            //debug()<<"#"<<result.last().position<<"Area is "<<preceding+currentArea<<" norm is "<<norm;
             //if (currentArea>=criteria){
             if ((preceding+currentArea)>=norm){
                 //debug()<<"#"<<result.last().position<<" Area "<<preceding+currentArea<<" is bigger than norm "<<norm;
@@ -101,9 +88,6 @@ template<> ListCopyable<dpoint> AreaAnalyzer<dpoint>::getArea(qreal limit,QPoint
         this->removeFirst();
     }
 
-    //only do this when needed for calculation or display
-    //this->rotateSegmentToXAxis();
-
     return result;
 }
 
@@ -112,28 +96,17 @@ template<> ListBase<dpoint> AreaAnalyzer<dpoint>::getFirstArea(qreal limit){
     // needs to be and is a COPY
     ListCopyable<dpoint> copy = ListCopyable<dpoint>(*this);
     CliffsAnalyzer<dpoint> calculator = CliffsAnalyzer<dpoint>(copy);
-    debug()<<"AreaAnalyzer::getFirstArea after copy this"<<this->size();
-    debug()<<"AreaAnalyzer::getFirstArea after copy calculator"<<calculator.size();
-
-    //CliffsAnalyzer<dpoint> calculator = *this;
 
     bool foundOne = false;
     int illegalSegmentCounter=0;
 
     if (calculator.size()>1){
         ListCopyable<dpoint> tmp =ListCopyable<dpoint>(calculator.getFirstLegalSegment());
-        debug()<<"AreaAnalyzer::getFirstArea after copy getFirstLegalSegment"<<tmp.size();
-
         AreaAnalyzer<dpoint> legalSegment = AreaAnalyzer<dpoint>(tmp);
-
-        debug()<<"AreaAnalyzer::getFirstArea after cast getFirstLegalSegment"<<legalSegment.size();
-
-        //legalSegment = AreaAnalyzer<dpoint>(calculator.getFirstLegalSegment());
         illegalSegmentCounter++;
         legalSegment.areaFilters();
         tmp = legalSegment.getArea(limit,legalSegment.first());
         AreaAnalyzer<dpoint> preceding = AreaAnalyzer<dpoint>(tmp);
-        //debug()<<"ListBase<dpoint>::getFirstArea preceding size: "<<preceding.size();
         if (legalSegment.size()>0){
             foundOne = true;
             result = preceding.last();
@@ -161,7 +134,6 @@ template<> ListBase<dpoint> AreaAnalyzer<dpoint>::getFirstArea(qreal limit){
                         preceding.areaFilters();
                         // sumOfDx over illegal segments is too agressive -> jitter/illegal separation
                         sumOfAllPreceding += preceding.sumOfDxAreasRotY() + preceding.area(preceding.lengthFromStartToEnd(),limit);
-                        //sumOfAllPreceding += preceding.sumOfDxAreasRotY() + AreaAnalyzer<dpoint>::area(preceding.lengthFromStartToEnd(),limit);
                         tmp = legalSegment.getArea(limit,this->first(),sumOfAllPreceding);
                         preceding = AreaAnalyzer<dpoint>(tmp);
                         if (legalSegment.size()>0){
@@ -178,7 +150,6 @@ template<> ListBase<dpoint> AreaAnalyzer<dpoint>::getFirstArea(qreal limit){
     if (foundOne){
         ListCopyable<dpoint> util = ListCopyable<dpoint>(*this);
         area = util.chopCopy(util.first().position,result.position);
-        //area = ListBase<dpoint>(util.chopCopy(util.first().position,result.position));
         //debug()<<"Area has "<<illegalSegmentCounter<<" legal segments.";
     } else {
         area = *this;

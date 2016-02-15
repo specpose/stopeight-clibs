@@ -7,7 +7,6 @@
 #define debug() QNoDebug()
 
 template<> ListSwitchable<dpoint>::ListSwitchable() : ListRotator<dpoint>(){
-    //calcTail = QList<dpoint>();
 }
 
 #include "include/listswitchable.h"
@@ -57,10 +56,6 @@ template <> void ListSwitchable<dpoint>::removeAt(int i) {
     if ( (i==0 )|| (i==this->size()) ){
         //this has to change to steepest possible
         rotateSegmentToXAxis();
-        //this->append(calcTail);
         //this->rotateLastVectorToYAxis();
-        //for (int i=0;i<calcTail.size();i++){
-        //    this->removeLast();
-        //}
     }
 }

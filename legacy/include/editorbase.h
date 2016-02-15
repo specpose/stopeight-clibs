@@ -18,18 +18,12 @@
 template<typename T> struct ListStorage{
     ListStorage<T>() : input(T()), output(T()){}
 
-    //specialisation:
-    //ListStorage<ListBase<dpoint> >(){this.input=ListBase<dpoint>();this->output=ListBase<dpoint>(); }
-    //ListStorage(ListBase<dpoint>* a,ListBase<dpoint>* b){input=a;output=b;}
-    //ListStorage<ListBase<dpoint> > init(){input=ListBase<dpoint>();output=ListBase<dpoint>();return this;}
-
     // input is always the raw data either from file or pen/mouse stroke
     T input;
     // output is initially input but gets reduced to T-C-T... in automatic
     T output;
 };
 
-//template ListStorage<ListBase<dpoint> >(ListBase<dpoint> a,ListBase<dpoint> b);
 
 template<typename T> class EditorBase : public EditorInterface<T>
 {
@@ -50,11 +44,9 @@ public:
 protected:
 
     static bool checkPrecision(const ListBase<dpoint>& list);
-    //static bool checkPrecision(const ListBase<dpoint> list);
     void setOutput(T list);
 
-    const void mainIterator(const QList<dpoint>& constCliffs,QList<QList<dpoint> >& slicesRef);
-    //const void mainIterator(const QList<dpoint> constCliffs,QList<QList<dpoint> >& slicesRef);
+    void mainIterator(const QList<dpoint>& constCliffs,QList<QList<dpoint> >& slicesRef);
 
 private:
     //should ONLY be accessed for implementation instantiation

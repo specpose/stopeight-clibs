@@ -18,7 +18,6 @@ public:
     //has to be templated because of QList
     ListBase<T>();
     //virtual ~ListBase()=0;
-    //virtual ~ListBase();
 
     //this should be C++11 move F&& constructor
     //is there a copy created when using F& instead of F?
@@ -32,9 +31,5 @@ public:
 };
 
 template class ListBase<dpoint>;
-//template ListBase<dpoint>::ListBase(ListBase<dpoint>& list);
-//template void ListBase<dpoint>::operator=(ListBase<dpoint>& list);
-//template<typename From, typename To> static To convert(From list);
-
 
 #endif // LISTBASE_H

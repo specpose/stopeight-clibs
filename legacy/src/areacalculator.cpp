@@ -17,7 +17,6 @@ template<>template<typename F> AreaCalculator<dpoint>::AreaCalculator(F& list) :
 // this is buggy has to be reworked. inlays are not properly removed by just subtracting them!
 template <> qreal AreaCalculator<dpoint>::sumOfDxAreasRotY(){
     qreal sum = 0;
-    // Segments don't have calcTails
     if (this->size()>1){
         for (int i = 0;i<this->size()-1;i++){
             if (this->at(i+1).rot.x()>this->at(i).rot.x()){

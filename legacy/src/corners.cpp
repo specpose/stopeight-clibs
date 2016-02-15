@@ -16,7 +16,6 @@ template<>template<typename F> Corners<dpoint>::Corners(F& list) : ListSwitchabl
 template Corners<dpoint>::Corners(ListBase<dpoint>& list);
 
 //ShapeMatcher::findCorners
-//NOT USED
 template<> QList<dpoint> Corners<dpoint>::findCorners(ListCopyable<dpoint> toBeProcessed){
     QList<dpoint> result = QList<dpoint>();
 
