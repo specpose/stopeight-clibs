@@ -87,7 +87,7 @@ template<> qreal Spirals<dpoint>::findLimit(ListCopyable<dpoint> toBeProcessed){
     return MyLimit;
 }
 
-template<> QList<dpoint> Spirals<dpoint>::findSpirals(ListCopyable<dpoint> toBeProcessed){
+template<> QList<dpoint> Spirals<dpoint>::findSpiralCliffs(ListCopyable<dpoint> toBeProcessed){
     ListCopyable<dpoint> forward = ListCopyable<dpoint>(toBeProcessed);
 
     //qreal frontSpiral= toBeProcessed.measureSpiral();
@@ -109,19 +109,22 @@ template<> QList<dpoint> Spirals<dpoint>::findSpirals(ListCopyable<dpoint> toBeP
         //throw "ShapeMatcher::process: spiral-size front/back not equal";
     //}
 
-    QList<dpoint> cliffs=QList<dpoint>();
+    // change: use reference?
+    QList<dpoint>* cliffs;
     if (limit!=backLimit){
         debug()<< "ShapeMatcher::process: different limits found, using larger";
         if (backLimit>limit){
-            cliffs = findAreas(backward,backLimit);
-            //this->data.output.reverseOrder();
+            *cliffs = findAreas(backward,backLimit);
+            Calculator<dpoint> calc = Calculator<dpoint>(cliffs);
+            calc.reverse();
+            *cliffs = calc;
         } else {
-            cliffs = findAreas(forward,limit);
+            *cliffs = findAreas(forward,limit);
         }
     } else {
         debug()<<"******************* findAreas::Main **********************";
-        cliffs = findAreas(forward,limit);
+        *cliffs = findAreas(forward,limit);
     }
-    return cliffs;
+    return *cliffs;
 }
 

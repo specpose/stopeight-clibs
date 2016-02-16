@@ -23,13 +23,7 @@ void EditorSpirals::process(ListBase<dpoint> &toBeProcessed){
 
         /* SPIRALS */
         Spirals<dpoint> spirals = Spirals<dpoint>(toBeProcessed);
-        cliffs= Spirals<dpoint>::findSpirals(spirals);
-        if (cliffs.size()>0){
-        if (cliffs.at(0).position!=0) {
-            Analyzer<dpoint> rev = Analyzer<dpoint>(cliffs);
-            rev.reverse();
-        }
-        }
+        cliffs= Spirals<dpoint>::findSpiralCliffs(spirals);
 
         /* SHARED After this cliffs is const */
         const QList<dpoint> constCliffs = cliffs;
