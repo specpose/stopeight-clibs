@@ -18,12 +18,6 @@ template StraightsCalculator<dpoint>::StraightsCalculator(ListCopyable<dpoint>& 
 #include "include/areanormalizer.h"
 template StraightsCalculator<dpoint>::StraightsCalculator(AreaNormalizer<dpoint>& list);
 
-// TODO: DONE!
-// Note: ALL datamembers of target class destroyed
-//template<>template<typename F> void StraightsCalculator<dpoint>::operator=(F& list){
-//    this->swap(list);
-//}
-
 template <> qreal StraightsCalculator<dpoint>::sumLength(){
     qreal sumLength = 0;
     Calculator<dpoint> calc = Calculator<dpoint>(*this);

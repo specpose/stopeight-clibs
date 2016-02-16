@@ -21,7 +21,6 @@ template Analyzer<dpoint>::Analyzer(ListCopyable<dpoint>& list);
 template Analyzer<dpoint>::Analyzer(QList<dpoint>& list);
 
 // Sould only be allowed in ListCopyable
-// TODO
 // only call ONCE
 template<> void Analyzer<dpoint>::reverseOrder(){
     ListSwitchable<dpoint> reversed= ListSwitchable<dpoint>();
@@ -29,8 +28,7 @@ template<> void Analyzer<dpoint>::reverseOrder(){
     for (int i=this->size()-1;i>=0;i--){
         dpoint point = this->at(i);
         point.position=pointer;
-        // TODO: NASTY BUG?
-        reversed << this->at(i);
+        reversed << point;
         pointer++;
     }
     this->clear();
