@@ -45,7 +45,6 @@ void EditorCliffs::process(ListBase<dpoint> &toBeProcessed){
     }
 }
 
-// TODO: DUPLICATE, make this call EditorSpirals processSegment
 // this is a drop-in replacement for processSegment used for clarifying math
 QList<dpoint> EditorCliffs::processSegment(QList<dpoint> list){
     ListRotator<dpoint> cliff = ListRotator<dpoint>(list);

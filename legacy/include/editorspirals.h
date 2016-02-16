@@ -4,11 +4,11 @@
 #ifndef EDITORSPIRALS_H
 #define EDITORSPIRALS_H
 
-#include "editorbase.h"
+#include "editorcliffs.h"
 #include "spirals.h"
 #include "spiralsanalyzer.h"
 
-class LEGACYSHARED_EXPORT EditorSpirals : public EditorBase<ListBase<dpoint> >
+class LEGACYSHARED_EXPORT EditorSpirals : public EditorCliffs
 {
 public:
     EditorSpirals();

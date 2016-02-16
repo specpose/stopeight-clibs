@@ -11,6 +11,7 @@
 
 class LEGACYSHARED_EXPORT EditorCliffs : public EditorBase<ListBase<dpoint> >
 {
+    friend class EditorSpirals;
 public:
     EditorCliffs();
     //~EditorCliffs();
