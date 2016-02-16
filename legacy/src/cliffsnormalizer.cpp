@@ -16,11 +16,6 @@ template CliffsNormalizer<dpoint>::CliffsNormalizer(ListCopyable<dpoint>& list);
 #include "include/areaanalyzer.h"
 template CliffsNormalizer<dpoint>::CliffsNormalizer(AreaAnalyzer<dpoint>& list);
 
-// Note: ALL datamembers of target class destroyed
-template<>template<typename F> void CliffsNormalizer<dpoint>::operator=(F& list){
-    this->swap(list);
-}
-
 template <> void CliffsNormalizer<dpoint>::cliffFilters(){
     CornerNormalizer<dpoint> b = CornerNormalizer<dpoint>(*this);
     b.requireMinimumLength(2);

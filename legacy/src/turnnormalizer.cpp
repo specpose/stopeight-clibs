@@ -17,11 +17,6 @@ template TurnNormalizer<dpoint>::TurnNormalizer(CornerNormalizer<dpoint>& list);
 #include "include/listcopyable.h"
 template TurnNormalizer<dpoint>::TurnNormalizer(ListCopyable<dpoint>& list);
 
-// Note: ALL datamembers of target class destroyed
-template<>template<typename F> void TurnNormalizer<dpoint>::operator=(F& list){
-    this->swap(list);
-}
-
 template <> void TurnNormalizer<dpoint>::smoothingJitter(int pos){
     bool foundOne = false;
     for (int i=pos;i<this->size()-3;i++){

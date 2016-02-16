@@ -18,12 +18,6 @@ template CornerAnalyzer<dpoint>::CornerAnalyzer(AreaNormalizer<dpoint>& list);
 template CornerAnalyzer<dpoint>::CornerAnalyzer(CornerNormalizer<dpoint>& list);
 template CornerAnalyzer<dpoint>::CornerAnalyzer(ListCopyable<dpoint>& list);
 
-
-// Note: ALL datamembers of target class destroyed
-template<>template<typename F> void CornerAnalyzer<dpoint>::operator=(F& list){
-    this->swap(list);
-}
-
 template <> ListCopyable<dpoint> CornerAnalyzer<dpoint>::getFirstCorner(){
     Analyzer<dpoint> result = Analyzer<dpoint>();
 

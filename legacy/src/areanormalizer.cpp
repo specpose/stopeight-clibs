@@ -17,12 +17,6 @@ template AreaNormalizer<dpoint>::AreaNormalizer(ListBase<dpoint>& list);
 #include "include/areaanalyzer.h"
 template AreaNormalizer<dpoint>::AreaNormalizer(AreaAnalyzer<dpoint>& list);
 
-
-// Note: ALL datamembers of target class destroyed
-template<>template<typename F> void AreaNormalizer<dpoint>::operator=(F& list){
-    this->swap(list);
-}
-
 //hdojo version
 template <> void AreaNormalizer<dpoint>::removeInlays(){
     if (this->size()>4){

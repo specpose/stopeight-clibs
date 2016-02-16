@@ -13,7 +13,6 @@ template<typename T> class StraightsNormalizer : public StraightsCalculator<T>
 public:
     StraightsNormalizer<T>();
     template<typename F> StraightsNormalizer<T>(F& list);
-    template<typename F> void operator=(F& list);
 
 };
 

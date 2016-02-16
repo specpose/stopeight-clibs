@@ -12,7 +12,6 @@ template<typename T> class SpiralsAnalyzer : public SpiralsCalculator<T>
 public:
     SpiralsAnalyzer<T>();
     template<typename F> SpiralsAnalyzer<T>(F& list);
-    template<typename F> void operator=(F& list);
 
     static bool consistencyCheck(QList<dpoint> cliffs);
 

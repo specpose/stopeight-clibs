@@ -14,8 +14,3 @@ template<>template<typename F> StraightsNormalizer<dpoint>::StraightsNormalizer(
 #include "include/areanormalizer.h"
 template StraightsNormalizer<dpoint>::StraightsNormalizer(AreaNormalizer<dpoint>& list);
 template StraightsNormalizer<dpoint>::StraightsNormalizer(CornerNormalizer<dpoint>& list);
-
-// Note: ALL datamembers of target class destroyed
-template<>template<typename F> void StraightsNormalizer<dpoint>::operator=(F& list){
-    this->swap(list);
-}

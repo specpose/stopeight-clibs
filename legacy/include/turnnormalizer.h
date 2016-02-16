@@ -12,7 +12,6 @@ template<typename T> class TurnNormalizer : public TurnCalculator<T>
 public:
     TurnNormalizer<T>();
     template<typename F> TurnNormalizer<T>(F& list);
-    template<typename F> void operator=(F& list);
 
 
     //ACL: foreign

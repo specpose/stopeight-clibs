@@ -20,11 +20,6 @@ template Analyzer<dpoint>::Analyzer(ListBase<dpoint>& list);
 template Analyzer<dpoint>::Analyzer(ListCopyable<dpoint>& list);
 template Analyzer<dpoint>::Analyzer(QList<dpoint>& list);
 
-// Note: ALL datamembers of target class destroyed
-template<>template<typename F> void Analyzer<dpoint>::operator=(F& list){
-    this->swap(list);
-}
-
 // Sould only be allowed in ListCopyable
 // TODO
 // only call ONCE

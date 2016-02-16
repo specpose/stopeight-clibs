@@ -110,14 +110,16 @@ template<> QList<dpoint> Spirals<dpoint>::findSpiralCliffs(ListCopyable<dpoint> 
     //}
 
     // change: use reference?
-    QList<dpoint>* cliffs;
+    QList<dpoint>* cliffs = new QList<dpoint>;
     if (limit!=backLimit){
         debug()<< "ShapeMatcher::process: different limits found, using larger";
         if (backLimit>limit){
             *cliffs = findAreas(backward,backLimit);
-            Calculator<dpoint> calc = Calculator<dpoint>(cliffs);
+            //if (cliffs->size()>0){
+            Calculator<dpoint> calc = Calculator<dpoint>(*cliffs);
             calc.reverse();
             *cliffs = calc;
+            //}
         } else {
             *cliffs = findAreas(forward,limit);
         }

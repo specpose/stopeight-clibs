@@ -12,7 +12,6 @@ template<typename T> class StraightsCalculator : public ListSwitchable<T>
 public:
     StraightsCalculator<T>();
     template<typename F> StraightsCalculator<T>(F& list);
-//    template<typename F> void operator=(F& list);
 
     // length of curve between "all"! points / curvature not included
     qreal sumLength();

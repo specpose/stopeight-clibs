@@ -17,11 +17,6 @@ template<>template<typename F> StraightsAnalyzer<dpoint>::StraightsAnalyzer(F& l
 template StraightsAnalyzer<dpoint>::StraightsAnalyzer(AreaNormalizer<dpoint>& list);
 template StraightsAnalyzer<dpoint>::StraightsAnalyzer(CornerNormalizer<dpoint>& list);
 
-// Note: ALL datamembers of target class destroyed
-template<>template<typename F> void StraightsAnalyzer<dpoint>::operator=(F& list){
-    this->swap(list);
-}
-
 template<> bool StraightsAnalyzer<dpoint>::checkIfSectionIsStraightLine(qreal sumLengthFactor){
     ListCopyable<dpoint> section;
     for (int i=0;i<this->size();i++){

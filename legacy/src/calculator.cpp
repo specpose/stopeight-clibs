@@ -22,7 +22,6 @@ template Calculator<dpoint>::Calculator(Analyzer<dpoint>& list);
 template Calculator<dpoint>::Calculator(ListCopyable<dpoint>& list);
 template Calculator<dpoint>::Calculator(QList<dpoint>& list);
 
-
 template <> qreal Calculator<dpoint>::lengthOf(QPointF difference){
     return sqrt(pow(difference.x(),2)+pow(difference.y(),2));
 }

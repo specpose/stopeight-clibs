@@ -12,11 +12,6 @@ template<>template<typename F> SpiralsAnalyzer<dpoint>::SpiralsAnalyzer(F& list)
     *this = static_cast<SpiralsAnalyzer<dpoint>& >(list);
 }
 
-// Note: ALL datamembers of target class destroyed
-template<>template<typename F> void SpiralsAnalyzer<dpoint>::operator=(F& list){
-    this->swap(list);
-}
-
 template<> bool SpiralsAnalyzer<dpoint>::consistencyCheck(QList<dpoint> cliffs){
     debug()<<"We have "<< cliffs.size() << " cliffs in input.";
     if (cliffs.size()!=0 && fmod(cliffs.size(),2) == 0){

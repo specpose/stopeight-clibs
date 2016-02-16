@@ -14,7 +14,7 @@ template<typename T> class ListSwitchable : public ListRotator<dpoint>
 public:
     ListSwitchable();
     template<typename F> ListSwitchable<T>(F& list);
-    //THIS THING CAN NOT BE COPIED
+    //THIS THING AND ALL INHERITING CAN NOT BE COPIED
     template<typename F> void operator=(F& list);
 
     void removeAt(int i);

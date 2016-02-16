@@ -14,7 +14,6 @@ template<typename T> class TurnAnalyzer : public TurnNormalizer<T>
 public:
     TurnAnalyzer<T>();
     template<typename F> TurnAnalyzer<T>(F& list);
-    template<typename F> void operator=(F& list);
 
     ListCopyable<dpoint> getFirstTurnByTriplets();
     // This is replacement for old_code scalar/crest approach

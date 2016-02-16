@@ -14,7 +14,6 @@ template<typename T> class CornerNormalizer : public CornerCalculator<T>
 public:
     CornerNormalizer<T>();
     template<typename F> CornerNormalizer<T>(F& list);
-    template<typename F> void operator=(F& list);
 
     void requireMinimumLength(qreal length);
 

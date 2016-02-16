@@ -13,7 +13,6 @@ template<typename T> class StraightsAnalyzer : public StraightsCalculator<T>
 public:
     StraightsAnalyzer<T>();
     template<typename F> StraightsAnalyzer<T>(F& list);
-    template<typename F> void operator=(F& list);
 
     bool checkIfSectionIsStraightLine(qreal sumLengthFactor);
 };

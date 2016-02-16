@@ -19,11 +19,6 @@ template<>template<typename F> TurnAnalyzer<dpoint>::TurnAnalyzer(F& list) : Tur
 template TurnAnalyzer<dpoint>::TurnAnalyzer(AreaNormalizer<dpoint>& list);
 template TurnAnalyzer<dpoint>::TurnAnalyzer(CornerNormalizer<dpoint>& list);
 
-// Note: ALL datamembers of target class destroyed
-template<>template<typename F> void TurnAnalyzer<dpoint>::operator=(F& list){
-    this->swap(list);
-}
-
 template <> ListCopyable<dpoint> TurnAnalyzer<dpoint>::getFirstTriplet(){
     StraightsAnalyzer<dpoint> result = StraightsAnalyzer<dpoint>();
     if (this->size()>1){

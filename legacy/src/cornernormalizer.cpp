@@ -21,11 +21,6 @@ template CornerNormalizer<dpoint>::CornerNormalizer(ListCopyable<dpoint>& list);
 template CornerNormalizer<dpoint>::CornerNormalizer(AreaNormalizer<dpoint>& list);
 template CornerNormalizer<dpoint>::CornerNormalizer(CornerNormalizer<dpoint>& list);
 
-// Note: ALL datamembers of target class destroyed
-template<>template<typename F> void CornerNormalizer<dpoint>::operator=(F& list){
-    this->swap(list);
-}
-
 template <> void CornerNormalizer<dpoint>::requireMinimumLength(qreal lnt){
     bool foundOne = false;
     Calculator<dpoint> calc = Calculator<dpoint>(*this);
