@@ -8,7 +8,7 @@
 #include "spirals.h"
 #include "spiralsanalyzer.h"
 
-class LEGACYSHARED_EXPORT EditorSpirals : public EditorCliffs
+class EditorSpirals : public EditorCliffs
 {
 public:
     EditorSpirals();

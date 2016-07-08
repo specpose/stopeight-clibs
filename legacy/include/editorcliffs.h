@@ -9,7 +9,7 @@
 #include "spiralsanalyzer.h"
 #include "turns.h"
 
-class LEGACYSHARED_EXPORT EditorCliffs : public EditorBase<ListBase<dpoint> >
+class EditorCliffs : public EditorBase<ListBase<dpoint> >
 {
     friend class EditorSpirals;
 public:
