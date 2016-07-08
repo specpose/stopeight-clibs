@@ -12,7 +12,7 @@
 #include "dpoint.h"
 
 /* This is being used by both the qt-based editor AND python legacy-wrappers! */
-template<typename T> class LEGACYSHARED_EXPORT ListBase : public QList<T>
+template<typename T> class ListBase : public QList<T>
 {
 public:
     //has to be templated because of QList
@@ -30,6 +30,8 @@ public:
 
 };
 
+//GCC bug?
+//extern template class ListBase<dpoint>;
 template class ListBase<dpoint>;
 
 #endif // LISTBASE_H

@@ -43,7 +43,7 @@ template ListBase<dpoint>::ListBase(CornerAnalyzer<dpoint>& list);
 
 template<> ListBase<dpoint> ListBase<dpoint>::loadSPFile(const QString& fileName)
 {
-    debug()<<"legacy::ListBase<dpoint>::loadSPFile "+fileName.toAscii();
+    debug()<<"legacy::ListBase<dpoint>::loadSPFile "+fileName.toLatin1();
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly)) {
         debug()<<"Can't read file "<<file.fileName()<<endl<<file.errorString();
