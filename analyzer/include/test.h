@@ -6,7 +6,7 @@
 
 #include "analyzer_global.h"
 
-class Test
+class ANALYZERSHARED_EXPORT Test
 {
 public:
     Test();

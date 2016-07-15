@@ -4,16 +4,15 @@
 #
 #-------------------------------------------------
 QT       += gui
-//QT       -= gui
 
 TARGET = stopeight-clibs-legacy-wrappers
 TEMPLATE = lib
 
 DEFINES += LEGACYWRAPPERS_LIBRARY
 
-win32:INCLUDEPATH += C:/Python27/include/
+win32:LIBS += -LC:/Python27/libs
+win32:INCLUDEPATH += C:/Python27/include
 else:unix:INCLUDEPATH += /usr/include/python2.7/
-//unix:INCLUDEPATH += /usr/include/numpy/
 
 SOURCES += \
     interfacepython.cpp
@@ -21,7 +20,9 @@ SOURCES += \
 HEADERS +=\
     interfacepython.h
 
-CONFIG(release, debug|release): LIBS += -L$$PWD/../legacy/build/release/ -lstopeight-clibs-legacy
-else:CONFIG(debug, debug|release): LIBS += -L$$PWD/../legacy/build/debug/ -lstopeight-clibs-legacy
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../legacy/release/ -lstopeight-clibs-legacy
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../legacy/debug/ -lstopeight-clibs-legacy
+unix:CONFIG(release, debug|release): LIBS += -L$$PWD/../legacy/build/release/ -lstopeight-clibs-legacy
+else:unix:CONFIG(debug, debug|release): LIBS += -L$$PWD/../legacy/build/debug/ -lstopeight-clibs-legacy
 
 INCLUDEPATH += $$PWD/../legacy/include/

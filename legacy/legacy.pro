@@ -8,6 +8,8 @@ QT       += gui
 TARGET = stopeight-clibs-legacy
 TEMPLATE = lib
 
+CONFIG -= lib_bundle
+
 DEFINES += LEGACY_LIBRARY
 
 SOURCES += \

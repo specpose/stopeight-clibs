@@ -10,7 +10,8 @@ TEMPLATE = lib
 
 DEFINES += ANALYZERWRAPPERS_LIBRARY
 
-win32:INCLUDEPATH += C:/Python27/include/
+win32:LIBS += -LC:/Python27/libs
+win32:INCLUDEPATH += C:/Python27/include
 else:unix:INCLUDEPATH += /usr/include/python2.7/
 //unix:INCLUDEPATH += /usr/include/numpy/
 
@@ -20,7 +21,9 @@ SOURCES += \
 HEADERS +=\
     interfacepython.h
 
-CONFIG(release, debug|release): LIBS += -L$$PWD/../analyzer/build/release/ -lstopeight-clibs-analyzer
-else:CONFIG(debug, debug|release): LIBS += -L$$PWD/../analyzer/build/debug/ -lstopeight-clibs-analyzer
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../analyzer/release/ -lstopeight-clibs-analyzer
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../analyzer/debug/ -lstopeight-clibs-analyzer
+unix:CONFIG(release, debug|release): LIBS += -L$$PWD/../analyzer/build/release/ -lstopeight-clibs-analyzer
+else:unix:CONFIG(debug, debug|release): LIBS += -L$$PWD/../analyzer/build/debug/ -lstopeight-clibs-analyzer
 
 INCLUDEPATH += $$PWD/../analyzer/include/
