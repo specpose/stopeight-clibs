@@ -4,7 +4,8 @@
 #ifndef ANALYZER_GLOBAL_H
 #define ANALYZER_GLOBAL_H
 
-#ifdef _WIN32 || _WIN64
+
+#ifdef _WIN32
 #if defined(ANALYZER_LIBRARY)
 #  define ANALYZERSHARED_EXPORT __declspec(dllexport)
 #else
