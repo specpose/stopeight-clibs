@@ -4,6 +4,14 @@
 #include "listbase.h"
 #include "editorspirals.h"
 #include "editorcliffs.h"
+
+#ifdef _WIN32
+#ifdef _DEBUG
+#undef _DEBUG
+#define DEBUG_BYPASS 1
+#endif
+#endif
+
 #include <Python.h>
 
 namespace legacy_wrappers{
@@ -27,5 +35,10 @@ static PyMethodDef stopeight_clibs_legacyMethods[] = {
 };
 
 PyMODINIT_FUNC initstopeight_clibs_legacy(void);
+
+#ifdef DEBUG_BYPASS
+#undef DEBUG_BYPASS
+#define _DEBUG 1
+#endif // DEBUG_BYPASS
 
 #endif // INTERFACEPYTHON_H

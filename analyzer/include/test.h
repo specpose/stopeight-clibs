@@ -6,7 +6,7 @@
 
 #include "analyzer_global.h"
 
-class ANALYZERSHARED_EXPORT Test
+class Test
 {
 public:
     Test();
@@ -16,5 +16,7 @@ public:
     static void hello(const char* fileName);
 
 };
+
+class ANALYZERSHARED_EXPORT Test;
 
 #endif // TEST_H

@@ -17,7 +17,6 @@ DEFINES += ANALYZERWRAPPERS_LIBRARY
 win32:LIBS += -LC:/Python27/libs
 win32:INCLUDEPATH += C:/Python27/include
 else:unix:INCLUDEPATH += /usr/include/python2.7/
-//unix:INCLUDEPATH += /usr/include/numpy/
 
 SOURCES += \
     interfacepython.cpp

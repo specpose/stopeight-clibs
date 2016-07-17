@@ -7,8 +7,10 @@ QT       += gui
 
 TARGET = stopeight-clibs-legacy
 TEMPLATE = lib
+win32:CONFIG+= staticlib
 
 CONFIG -= lib_bundle
+CONFIG += qt
 
 DEFINES += LEGACY_LIBRARY
 

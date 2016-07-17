@@ -5,8 +5,12 @@
 #-------------------------------------------------
 QT       += gui
 
-TARGET = stopeight-clibs-legacy-wrappers
 TEMPLATE = lib
+//win32:QMAKE_LFLAGS_SONAME = .pyd
+win32:TARGET = stopeight_clibs_legacy
+else:unix:TARGET = stopeight-clibs-legacy-wrappers
+CONFIG -= lib_bundle
+CONFIG += qt
 
 DEFINES += LEGACYWRAPPERS_LIBRARY
 

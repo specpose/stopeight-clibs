@@ -1,8 +1,8 @@
 QMAKE_CXXFLAGS += -std=c++11
 TEMPLATE = lib
 TARGET = stopeight-clibs-analyzer
+win32:CONFIG+= staticlib
 
-CONFIG += console
 CONFIG -= lib_bundle
 CONFIG -= qt
 

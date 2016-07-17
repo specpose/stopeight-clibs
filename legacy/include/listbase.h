@@ -34,4 +34,7 @@ public:
 //extern template class ListBase<dpoint>;
 template class ListBase<dpoint>;
 
+//Windows
+//template class LEGACYSHARED_EXPORT ListBase<dpoint>;
+
 #endif // LISTBASE_H

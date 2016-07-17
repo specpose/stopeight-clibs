@@ -2,7 +2,7 @@
 // GNU Lesser General Public License, version 2.1
 
 #include "include/test.h"
-
+#include <stdio.h>
 //using namespace analyzer;
 
 Test::Test()
@@ -12,7 +12,7 @@ Test::Test()
 Test::~Test(){}
 
 void Test::hello(const char *fileName){
-    //printf("Hello %s",fileName);
+    printf("Hello %s",fileName);
 }
 
 //manual template instantiation needed for wrapper!

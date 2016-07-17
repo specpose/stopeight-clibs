@@ -3,21 +3,23 @@
 
 #include "include/dpoint.h"
 
-dpoint::dpoint() {
+dpoint::dpoint() {//: QPointF(){
     QPointF();
     rot=QPointF();
 }
 
-dpoint::dpoint(const QPointF& point){
+dpoint::dpoint(const QPointF& point) {//: QPointF(point){
     dpoint();
     this->setX(point.x());
     this->setY(point.y());
+	//rot = QPointF();
 }
 
-dpoint::dpoint(const float x, const float y){
+dpoint::dpoint(const float x, const float y) {//:QPointF(x,y){
     dpoint();
     this->setX(qreal(x));
     this->setY(qreal(y));
+	//rot = QPointF();
 }
 
 QDebug operator<<(QDebug dbg, const dpoint &dp){

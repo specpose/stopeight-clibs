@@ -9,6 +9,7 @@
 #endif
 
 #include <Python.h>
+#include "test.h"
 
 namespace analyzer_wrappers{
 	static PyObject* hello(PyObject* self, PyObject* args);
