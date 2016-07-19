@@ -4,7 +4,7 @@ import os
 
 from distutils.core import setup, Extension
 
-legacy_wrapper = Extension('stopeight_clibs_analyzer', include_dirs=[os.getcwd()+'/../analyzer/include'],
+analyzer_wrapper = Extension('stopeight_clibs_analyzer', include_dirs=[os.getcwd()+'/../analyzer/include'],
                    library_dirs=['/usr/lib/x86_64-linux-gnu',os.getcwd()+'/../analyzer/build/debug'],
                    libraries=['stopeight-clibs-analyzer'],
                    sources = ['interfacepython.cpp'])
