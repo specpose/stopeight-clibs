@@ -76,6 +76,21 @@ QPointF layerrender::dividedBase(QPointF point1, QPointF point2, QPointF point3)
     return *intersection;
 }
 
+QList<QPointF> layerrender::quadraticbeziers(QPointF turn1, QPointF corner, QPointF turn2)
+{
+	QList<QPointF> controlPoints = layerrender::constructCubicControlPointsFromCorner(turn1, corner, turn2);
+	QPointF leftCorner = layerrender::cornerFromControl(turn1, controlPoints[0], corner);
+	QPointF rightCorner = layerrender::cornerFromControl(corner, controlPoints[1], turn2);
+
+	QList<QPointF> leftControls = layerrender::constructCubicControlPointsFromCorner(turn1, leftCorner, corner);
+
+	QList<QPointF> rightControls = layerrender::constructCubicControlPointsFromCorner(corner, rightCorner, turn2);
+
+	QList<QPointF> arc = QList<QPointF>();
+	arc << turn1 << leftControls[0] << leftCorner << leftControls[1] << corner << rightControls[0] << rightCorner << rightControls[1] << turn2;
+	return arc;
+}
+
 /* Old version using two thirds */
 QList<QPointF> layerrender::constructCubicControlPointsFromCorner(QPointF point1, QPointF point2, QPointF point3){
     qreal rotation = layerrender::getAngleOfPoint2(point1,point2,point3)/2;
