@@ -1,6 +1,6 @@
 // Copyright (C) 2009-2015 Specific Purpose Software GmbH
 
-#include "include/layerrender.h"
+#include "include/render.h"
 
 //#define debug() QDebug::QDebug(QtDebugMsg)
 #define debug() QNoDebug()
@@ -8,7 +8,7 @@
 #if defined(DEBUG) || defined(_DEBUG)
 
 /* Old version using height */
-QPointF layerrender::heightedControlFromCorner(QPointF point1, QPointF point2, QPointF point3){
+QPointF render::heightedControlFromCorner(QPointF point1, QPointF point2, QPointF point3){
     QLineF one_three,normal,vector;
     QPointF* intersection = new QPointF();
     one_three = QLineF(point1,point3);
@@ -21,21 +21,21 @@ QPointF layerrender::heightedControlFromCorner(QPointF point1, QPointF point2, Q
 }
 
 /* new version using middle */
-QPointF layerrender::controlFromCorner(QPointF point1, QPointF point2, QPointF point3){
-QLineF sidehalf=layerrender::getSeitenhalbierende(point1,point2,point3);
+QPointF render::controlFromCorner(QPointF point1, QPointF point2, QPointF point3){
+QLineF sidehalf=render::getSeitenhalbierende(point1,point2,point3);
 sidehalf.setLength(sidehalf.length()*-1);
 return sidehalf.p2();
 }
 
-QList<QPointF> layerrender::constructCubicControlPointsFromControlPoint(QPointF point1, QPointF point2, QPointF point3){
-QPointF corner = layerrender::cornerFromControl(point1,point2,point3);
-return layerrender::constructCubicControlPointsFromCorner(point1,corner,point3);
+QList<QPointF> render::constructCubicControlPointsFromControlPoint(QPointF point1, QPointF point2, QPointF point3){
+QPointF corner = render::cornerFromControl(point1,point2,point3);
+return render::constructCubicControlPointsFromCorner(point1,corner,point3);
 }
 
 #endif
 
 /* starting with point in triangle! */
-//QLineF layerrender::getSeitenhalbierende(QPointF point1, QPointF point2, QPointF point3){
+//QLineF render::getSeitenhalbierende(QPointF point1, QPointF point2, QPointF point3){
 //    QLineF one_three,vector;
 //    one_three = QLineF(point1,point3);
 //    one_three.setLength(one_three.length()/2);
@@ -44,7 +44,7 @@ return layerrender::constructCubicControlPointsFromCorner(point1,corner,point3);
 //}
 
 /* Old version using Winkelhalbierende */
-QLineF layerrender::getSeitenhalbierende(QPointF point1, QPointF point2, QPointF point3){
+QLineF render::getSeitenhalbierende(QPointF point1, QPointF point2, QPointF point3){
     QLineF line1,line2,one_three,vector;
     one_three = QLineF(point1,point3);
     //one_three.setLength(one_three.length()/2);
@@ -58,7 +58,7 @@ QLineF layerrender::getSeitenhalbierende(QPointF point1, QPointF point2, QPointF
     return vector;
 }
 
-qreal layerrender::getAngleOfPoint2(QPointF point1, QPointF point2, QPointF point3){
+qreal render::getAngleOfPoint2(QPointF point1, QPointF point2, QPointF point3){
     QLineF line1,line2;
     line1 = QLine(point2.toPoint(),point1.toPoint());
     line2 = QLine(point2.toPoint(),point3.toPoint());
@@ -66,7 +66,7 @@ qreal layerrender::getAngleOfPoint2(QPointF point1, QPointF point2, QPointF poin
     return angle;
 }
 
-QPointF layerrender::dividedBase(QPointF point1, QPointF point2, QPointF point3){
+QPointF render::dividedBase(QPointF point1, QPointF point2, QPointF point3){
     QLineF base,normal;
     base = QLine(point1.toPoint(),point3.toPoint());
     normal = base.normalVector();
@@ -76,15 +76,15 @@ QPointF layerrender::dividedBase(QPointF point1, QPointF point2, QPointF point3)
     return *intersection;
 }
 
-QList<QPointF> layerrender::quadraticbeziers(QPointF turn1, QPointF corner, QPointF turn2)
+QList<QPointF> render::quadraticbeziers(QPointF turn1, QPointF corner, QPointF turn2)
 {
-	QList<QPointF> controlPoints = layerrender::constructCubicControlPointsFromCorner(turn1, corner, turn2);
-	QPointF leftCorner = layerrender::cornerFromControl(turn1, controlPoints[0], corner);
-	QPointF rightCorner = layerrender::cornerFromControl(corner, controlPoints[1], turn2);
+    QList<QPointF> controlPoints = render::constructCubicControlPointsFromCorner(turn1, corner, turn2);
+    QPointF leftCorner = render::cornerFromControl(turn1, controlPoints[0], corner);
+    QPointF rightCorner = render::cornerFromControl(corner, controlPoints[1], turn2);
 
-	QList<QPointF> leftControls = layerrender::constructCubicControlPointsFromCorner(turn1, leftCorner, corner);
+    QList<QPointF> leftControls = render::constructCubicControlPointsFromCorner(turn1, leftCorner, corner);
 
-	QList<QPointF> rightControls = layerrender::constructCubicControlPointsFromCorner(corner, rightCorner, turn2);
+    QList<QPointF> rightControls = render::constructCubicControlPointsFromCorner(corner, rightCorner, turn2);
 
 	QList<QPointF> arc = QList<QPointF>();
 	arc << turn1 << leftControls[0] << leftCorner << leftControls[1] << corner << rightControls[0] << rightCorner << rightControls[1] << turn2;
@@ -92,15 +92,15 @@ QList<QPointF> layerrender::quadraticbeziers(QPointF turn1, QPointF corner, QPoi
 }
 
 /* Old version using two thirds */
-QList<QPointF> layerrender::constructCubicControlPointsFromCorner(QPointF point1, QPointF point2, QPointF point3){
-    qreal rotation = layerrender::getAngleOfPoint2(point1,point2,point3)/2;
+QList<QPointF> render::constructCubicControlPointsFromCorner(QPointF point1, QPointF point2, QPointF point3){
+    qreal rotation = render::getAngleOfPoint2(point1,point2,point3)/2;
     QLineF line1,line2,line3;
     line1 = QLine(point2.toPoint(),point1.toPoint());
     line2 = QLine(point2.toPoint(),point3.toPoint());
     //line3 = QLine(point1.toPoint(),point3.toPoint());
     line1.setAngle(line1.angle()+rotation-90);
     line2.setAngle(line2.angle()-rotation+90);
-    QPointF base = layerrender::dividedBase(point1,point2,point3);
+    QPointF base = render::dividedBase(point1,point2,point3);
     qreal length1,length2;
     length1=QLineF(base,point1.toPoint()).length();
     length2=QLineF(base,point3.toPoint()).length();
@@ -109,7 +109,7 @@ QList<QPointF> layerrender::constructCubicControlPointsFromCorner(QPointF point1
     //factor2= (length2/line3.length());
     line1.setLength(length1*2/3);
     line2.setLength(length2*2/3);
-    //QPointF base = layerrender::dividedBase(point1,point2,point3);
+    //QPointF base = render::dividedBase(point1,point2,point3);
     //debug() << "Length " << QLineF(point1.toPoint(),point3.toPoint()).length() << " equals" << baselengths[0] << " + " << baselengths[1];
     QList<QPointF> result;
     result.append(line1.p2());
@@ -117,17 +117,17 @@ QList<QPointF> layerrender::constructCubicControlPointsFromCorner(QPointF point1
     return result;
 }
 
-QPointF layerrender::cornerFromControl(QPointF point1, QPointF point2, QPointF point3){
-    QLineF section = layerrender::getSeitenhalbierende(point1,point2,point3);
+QPointF render::cornerFromControl(QPointF point1, QPointF point2, QPointF point3){
+    QLineF section = render::getSeitenhalbierende(point1,point2,point3);
     section.setLength(section.length()/2);
     return section.p2();
 }
 
 /* New version using Menelaos */
-/*QList<QPointF> layerrender::constructCubicControlPointsFromCorner(QPointF point1, QPointF point2, QPointF point3){
-    QLineF midSection = layerrender::getSeitenhalbierende(point1,point2,point3);
+/*QList<QPointF> render::constructCubicControlPointsFromCorner(QPointF point1, QPointF point2, QPointF point3){
+    QLineF midSection = render::getSeitenhalbierende(point1,point2,point3);
     QLineF normal = midSection.normalVector();
-    QPointF quadControl = layerrender::controlFromCorner(point1,point2,point3);
+    QPointF quadControl = render::controlFromCorner(point1,point2,point3);
     QLineF line1 = QLine(quadControl.toPoint(),point1.toPoint());
     QLineF line2 = QLine(quadControl.toPoint(),point3.toPoint());
     QPointF *intersection1 = new QPointF();
@@ -140,18 +140,18 @@ QPointF layerrender::cornerFromControl(QPointF point1, QPointF point2, QPointF p
     return result;
 }*/
 
-/*bool layerrender::isHyperbolic(QPointF point1, QPointF point2, QPointF point3){
-    QPointF sideHalf = layerrender::getSeitenhalbierende(point1,point2,point3).p2();
-    if ((layerrender::getAngleOfPoint2(point1,point2,sideHalf)>90)||
-        layerrender::getAngleOfPoint2(sideHalf,point2,point3)>90){
+/*bool render::isHyperbolic(QPointF point1, QPointF point2, QPointF point3){
+    QPointF sideHalf = render::getSeitenhalbierende(point1,point2,point3).p2();
+    if ((render::getAngleOfPoint2(point1,point2,sideHalf)>90)||
+        render::getAngleOfPoint2(sideHalf,point2,point3)>90){
         return true;
     } else {
         return false;
     }
 }*/
 
-/*bool layerrender::goneCubic(QPointF point1, QPointF point2, QPointF point3){
-    qreal angle = layerrender::getAngleOfPoint2(point1,point2,point3);
+/*bool render::goneCubic(QPointF point1, QPointF point2, QPointF point3){
+    qreal angle = render::getAngleOfPoint2(point1,point2,point3);
     if (angle>180){
         angle=360 - angle;
     }

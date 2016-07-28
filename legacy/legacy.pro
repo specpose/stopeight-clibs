@@ -47,7 +47,7 @@ SOURCES += \
     src/corneranalyzer.cpp \
     src/straightsnormalizer.cpp \
     src/corners.cpp \
-    src/layerrender.cpp
+    src/render.cpp
 HEADERS +=\
     include/listcopyable.h \
     include/listrotator.h \
@@ -83,4 +83,4 @@ HEADERS +=\
     include/corneranalyzer.h \
     include/straightsnormalizer.h \
     include/corners.h \
-    include/layerrender.h
+    include/render.h

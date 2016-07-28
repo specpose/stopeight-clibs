@@ -1,7 +1,7 @@
 // Copyright (C) 2009-2015 Specific Purpose Software GmbH
 
-#ifndef LAYERRENDER_H
-#define LAYERRENDER_H
+#ifndef RENDER_H
+#define RENDER_H
 
 #include <QDebug>
 
@@ -9,7 +9,7 @@
 #include <QVector2D>
 #include <QLineF>
 
-struct layerrender
+struct render
 {
 public:
 
@@ -40,4 +40,4 @@ private:
 	//	static bool isHyperbolic(QPointF point1, QPointF point2, QPointF point3);
 };
 
-#endif // LAYERRENDER_H
+#endif // RENDER_H
