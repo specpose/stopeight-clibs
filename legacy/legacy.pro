@@ -53,6 +53,7 @@ HEADERS +=\
     include/listrotator.h \
     include/listbase.h \
     include/legacy_global.h \
+    include/error.h \
     include/listswitchable.h \
     include/editorinterface.h \
     include/dpoint.h \

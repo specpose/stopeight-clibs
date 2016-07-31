@@ -46,8 +46,8 @@ template<> ListBase<dpoint> ListBase<dpoint>::loadSPFile(const QString& fileName
     debug()<<"legacy::ListBase<dpoint>::loadSPFile "+fileName.toLatin1();
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly)) {
-        debug()<<"Can't read file "<<file.fileName()<<endl<<file.errorString();
-        throw "MainWindow::loadSPFile: Can't read file";
+		throw legacy::alg_logic_error((file.errorString().toStdString()+file.fileName().toStdString()).c_str(),__FILE__,__func__);
+		//throw std::string(file.errorString().toStdString() + " reading file " + file.fileName().toStdString());
         //return false;
     }
     QDataStream in(&file);

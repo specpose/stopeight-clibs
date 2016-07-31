@@ -55,6 +55,18 @@ template<> void EditorBase<ListBase<dpoint> >::automatic(){
     this->process(this->getOutput());
 }
 
+template<> void EditorBase<ListBase<dpoint> >::automatic(ListBase<dpoint> list) {
+	if (list.size() > 2) {
+		for (int i = 0; i < list.size(); i++) {
+			this->addPoint(list.at(i));
+		}
+		automatic();
+	}
+	else {
+		throw std::exception("List can not be valid. At least TCT required.");
+	}
+}
+
 template<> void EditorBase<ListBase<dpoint> >::mainIterator(const QList<dpoint>& constCliffs,QList<QList<dpoint> >& slicesRef){
     ListCopyable<dpoint> out = ListCopyable<dpoint>(this->getOutput());
     int currentSegment = 0;

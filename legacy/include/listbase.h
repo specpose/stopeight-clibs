@@ -11,6 +11,8 @@
 
 #include "dpoint.h"
 
+#include "error.h"
+
 /* This is being used by both the qt-based editor AND python legacy-wrappers! */
 template<typename T> class ListBase : public QList<T>
 {

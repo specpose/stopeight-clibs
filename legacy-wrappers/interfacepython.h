@@ -4,6 +4,7 @@
 #include "listbase.h"
 #include "editorspirals.h"
 #include "editorcliffs.h"
+#include "error.h"
 
 #ifdef _WIN32
 #ifdef _DEBUG
@@ -16,8 +17,11 @@
 
 namespace legacy_wrappers{
 //private
+static PyObject* LegacyError;
+static PyObject* error(const char* message);
+static PyObject* error(legacy::alg_logic_error err);
 static PyObject* convert(ListBase<dpoint> list);
-ListBase<dpoint> parse_list(PyObject *self, PyObject *args);
+static ListBase<dpoint> parse_list(PyObject *self, PyObject *args);
 //public
 static PyObject* parse_file(PyObject* self, PyObject* args);
 static PyObject* stroke_parallel(PyObject* self, PyObject* args);
