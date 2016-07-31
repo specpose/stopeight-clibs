@@ -9,6 +9,8 @@
 #include <QVector2D>
 #include <QLineF>
 
+#include "dpoint.h"
+
 struct render
 {
 public:
@@ -19,6 +21,8 @@ public:
 #endif
 
 	static QList<QPointF> quadraticbeziers(QPointF turn1, QPointF corner, QPointF turn2);
+
+	static QList<QList<QPointF>> TCTPath(QList<dpoint> se_stroke_path);
 
 private:
 #if defined(DEBUG) || defined(_DEBUG)

@@ -91,6 +91,25 @@ QList<QPointF> render::quadraticbeziers(QPointF turn1, QPointF corner, QPointF t
 	return arc;
 }
 
+QList<QList<QPointF> > render::TCTPath(QList<dpoint> se_stroke_path) {
+	QList<QList<QPointF> > arcs = QList<QList<QPointF> >();
+	if (se_stroke_path.size() > 0) {
+		for (int i = 0; i < se_stroke_path.size() - 2; i = i + 2) {
+
+			QPointF point1, point2, point3;
+			point1 = se_stroke_path.at(i).toPoint();
+			point2 = se_stroke_path.at(i + 1).toPoint();
+			point3 = se_stroke_path.at(i + 2).toPoint();
+
+			QList<QPointF> arc = render::quadraticbeziers(point1, point2, point3);
+
+			arcs.append(arc);
+
+		}
+	}
+	return arcs;
+}
+
 /* Old version using two thirds */
 QList<QPointF> render::constructCubicControlPointsFromCorner(QPointF point1, QPointF point2, QPointF point3){
     qreal rotation = render::getAngleOfPoint2(point1,point2,point3)/2;
