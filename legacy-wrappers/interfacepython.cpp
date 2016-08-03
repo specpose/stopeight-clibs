@@ -91,6 +91,9 @@ PyObject * legacy_wrappers::TCT_to_bezier(PyObject* self, PyObject * args)
 	}
 	QList<QPointF> unpacked = QList<QPointF>();
 	for (int i = 0; i < result.size(); i++) {
+		if (i > 0) {
+			result[i].removeFirst();
+		}
 		unpacked.append(result[i]);
 	}
 	return legacy_wrappers::convert(unpacked);
