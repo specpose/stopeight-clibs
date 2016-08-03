@@ -18,6 +18,12 @@ template<>template<typename F> ListBase<dpoint>::ListBase(F& list) : QList<dpoin
     *this = static_cast<ListBase<dpoint>& >(list);
 }
 
+// would need to append constructor to QList
+//template<>template<typename F> QList<dpoint>::QList(F& list) : QList<dpoint>::QList(list) {
+//	*this = static_cast<QList<dpoint>& >(list);
+//}
+//template QList<dpoint>::QList(ListBase<dpoint>& list);
+
 template ListBase<dpoint>::ListBase(ListBase<dpoint>& list);
 #include "include/spirals.h"
 template ListBase<dpoint>::ListBase(Spirals<dpoint>& list);
@@ -71,10 +77,20 @@ template<> ListBase<dpoint> ListBase<dpoint>::loadSPFile(const QString& fileName
     return input;
 }
 
-template<> ListBase<dpoint> ListBase<dpoint>::open(const char *fileName){
+template<> QList<QPointF> ListBase<dpoint>::convert(ListBase<dpoint> list) {
+	QList<QPointF> newlist = QList<QPointF>();
+	while (!list.isEmpty()) {
+		dpoint point = list.takeFirst();
+		newlist.append(QPointF(point.x(),point.y()));
+	}
+	return newlist;
+}
+
+template<> QList<QPointF> ListBase<dpoint>::open(const char *fileName){
     const QString& myString = QString::fromLatin1(fileName);
-    return ListBase<dpoint>::loadSPFile(myString);
+    return ListBase<dpoint>::convert(ListBase<dpoint>::loadSPFile(myString));
 }
 
 //needed for wrapper!
-template ListBase<dpoint> ListBase<dpoint>::open(const char *fileName);
+//template QList<QPointF> ListBase<dpoint>::open(const char *fileName);
+template QList<QPointF> ListBase<dpoint>::convert(ListBase<dpoint> list);

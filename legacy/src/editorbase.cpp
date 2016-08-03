@@ -55,7 +55,7 @@ template<> void EditorBase<ListBase<dpoint> >::automatic(){
     this->process(this->getOutput());
 }
 
-template<> void EditorBase<ListBase<dpoint> >::automatic(ListBase<dpoint> list) {
+template<> void EditorBase<ListBase<dpoint> >::automatic(QList<QPointF> list) {
 	if (list.size() > 2) {
 		for (int i = 0; i < list.size(); i++) {
 			this->addPoint(list.at(i));

@@ -26,7 +26,8 @@ public:
     template<typename F> ListBase<T>(F& list);
 
     // method for access from python
-    static ListBase<dpoint> open(const char* fileName);
+	static QList<QPointF> convert(ListBase<dpoint> list);
+    static QList<QPointF> open(const char* fileName);
     // method for access from legacy editor
     static ListBase<dpoint> loadSPFile(const QString &fileName);
 

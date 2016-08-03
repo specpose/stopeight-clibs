@@ -16,10 +16,10 @@ PyObject* legacy_wrappers::error(legacy::alg_logic_error err) {
 	return legacy_wrappers::error(message.c_str());
 }
 
-PyObject* legacy_wrappers::convert(ListBase<dpoint> list) {
+PyObject* legacy_wrappers::convert(QList<QPointF> list) {
 	PyObject* parray = PyList_New(list.size());
 	for (int i = 0; i < list.size(); i++) {
-		dpoint qpoint = list.at(i);
+		QPointF qpoint = list.at(i);
 		PyObject* ppoint = Py_BuildValue("ff", qpoint.x(), qpoint.y());
 		PyList_SetItem(parray, i, ppoint);
 	}
@@ -31,9 +31,9 @@ PyObject* legacy_wrappers::parse_file(PyObject *self, PyObject *args) {
 	if (!PyArg_ParseTuple(args, "s", &pythonpath)) {
 		return legacy_wrappers::error("Filename is not a list");
 	}
-	ListBase<dpoint> myList = ListBase<dpoint>();
+	QList<QPointF> myList = QList<QPointF>();
 	try {
-		myList = myList.open(pythonpath);
+		myList = ListBase<dpoint>::open(pythonpath);
 	}
 	catch (legacy::alg_logic_error exc) {
 		return legacy_wrappers::error(exc);
@@ -48,9 +48,9 @@ PyObject* legacy_wrappers::parse_file(PyObject *self, PyObject *args) {
 	return legacy_wrappers::convert(myList);
 }
 
-ListBase<dpoint> legacy_wrappers::parse_list(PyObject *self, PyObject *args) {
+QList<QPointF> legacy_wrappers::parse_list(PyObject *self, PyObject *args) {
 	PyObject* obj;
-	ListBase<dpoint> list = ListBase<dpoint>();
+	QList<QPointF> list = QList<QPointF>();
 	if (!PyArg_ParseTuple(args, "O", &obj)) {
 		throw std::exception("Argument is supposed to be a list of a pair of numbers");
 	}
@@ -64,13 +64,36 @@ ListBase<dpoint> legacy_wrappers::parse_list(PyObject *self, PyObject *args) {
 		float xValue;
 		float yValue;
 		if (PyArg_ParseTuple(item, "ff", &xValue, &yValue)) {
-			list << dpoint(xValue, yValue);
+			list << QPointF(xValue, yValue);
 		}
 		else {
 			throw std::exception("Malformed number format");
 		}
 	}
 	return list;
+}
+
+PyObject * legacy_wrappers::TCT_to_bezier(PyObject* self, PyObject * args)
+{
+	QList<QList<QPointF> > result = QList<QList<QPointF> >();
+	try {
+		QList<QPointF> list = legacy_wrappers::parse_list(self, args);		
+		result = render::TCTPath(list);
+	}
+	catch (legacy::alg_logic_error exc) {
+		return legacy_wrappers::error(exc);
+	}
+	catch (const char* text) {
+		return legacy_wrappers::error(text);
+	}
+	catch (...) {
+		return legacy_wrappers::error("undefined");
+	}
+	QList<QPointF> unpacked = QList<QPointF>();
+	for (int i = 0; i < result.size(); i++) {
+		unpacked.append(result[i]);
+	}
+	return legacy_wrappers::convert(unpacked);
 }
 
 PyObject* legacy_wrappers::stroke_parallel(PyObject *self, PyObject *args) {
@@ -91,7 +114,7 @@ PyObject* legacy_wrappers::stroke_parallel(PyObject *self, PyObject *args) {
 
 	ListCopyable<dpoint> result = ListCopyable<dpoint>();
 	result = editor.getOutput();
-	return legacy_wrappers::convert(result);
+	return legacy_wrappers::convert(ListBase<dpoint>::convert(result));
 }
 
 PyObject* legacy_wrappers::stroke_sequential(PyObject *self, PyObject *args) {
@@ -112,8 +135,7 @@ PyObject* legacy_wrappers::stroke_sequential(PyObject *self, PyObject *args) {
 
 	ListCopyable<dpoint> result = ListCopyable<dpoint>();
 	result = editor.getOutput();
-	return legacy_wrappers::convert(result);
-
+	return legacy_wrappers::convert(ListBase<dpoint>::convert(result));
 }
 
 PyMODINIT_FUNC initstopeight_clibs_legacy(void)

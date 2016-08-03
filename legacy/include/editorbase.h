@@ -38,7 +38,7 @@ public:
     void flushOutput();
 
     void automatic();
-	void automatic(ListBase<dpoint> list);
+	void automatic(QList<QPointF> list);
 
 protected:
 

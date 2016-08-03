@@ -91,7 +91,7 @@ QList<QPointF> render::quadraticbeziers(QPointF turn1, QPointF corner, QPointF t
 	return arc;
 }
 
-QList<QList<QPointF> > render::TCTPath(QList<dpoint> se_stroke_path) {
+QList<QList<QPointF> > render::TCTPath(QList<QPointF> se_stroke_path) {
 	QList<QList<QPointF> > arcs = QList<QList<QPointF> >();
 	if (se_stroke_path.size() > 0) {
 		for (int i = 0; i < se_stroke_path.size() - 2; i = i + 2) {
