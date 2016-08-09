@@ -3,7 +3,7 @@
 # Project created by QtCreator 2016-07-14T14:03:43
 #
 #-------------------------------------------------
-QMAKE_CXXFLAGS += -std=c++11
+QMAKE_CXXFLAGS += -std=c++1y
 
 TEMPLATE = lib
 //win32:QMAKE_LFLAGS_SONAME = .pyd
