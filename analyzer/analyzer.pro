@@ -11,8 +11,12 @@ DEFINES += ANALYZER_LIBRARY
 win32:INCLUDEPATH += $$PWD/../../triSYCL/include/
 else:unix:INCLUDEPATH += $$PWD/../../triSYCL/include/
 
-SOURCES += src/test.cpp \
-    src/main.cpp
+win32:INCLUDEPATH += $$PWD/../../triSYCL/tests/
+else:unix:INCLUDEPATH += $$PWD/../../triSYCL/tests/
+
+
+SOURCES += src/test.cpp\
+           src/single_task.cpp
 
 HEADERS += include/test.h\
            include/analyzer_global.h
