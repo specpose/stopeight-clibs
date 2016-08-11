@@ -8,15 +8,13 @@ CONFIG -= qt
 
 DEFINES += ANALYZER_LIBRARY
 
+win32:INCLUDEPATH += C:/boost_1_61_0/
 win32:INCLUDEPATH += $$PWD/../../triSYCL/include/
 else:unix:INCLUDEPATH += $$PWD/../../triSYCL/include/
-
-win32:INCLUDEPATH += $$PWD/../../triSYCL/tests/
-else:unix:INCLUDEPATH += $$PWD/../../triSYCL/tests/
-
 
 SOURCES += src/test.cpp\
            src/single_task.cpp
 
 HEADERS += include/test.h\
+           include/single_task.h\
            include/analyzer_global.h

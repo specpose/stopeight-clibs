@@ -24,8 +24,8 @@ SOURCES += \
 HEADERS +=\
     interfacepython.h
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../analyzer/release/ -lstopeight-clibs-analyzer
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../analyzer/debug/ -lstopeight-clibs-analyzer
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../analyzer/stopeight-clibs-analyzer/x64/Release/ -lstopeight-clibs-analyzer
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../analyzer/stopeight-clibs-analyzer/x64/Debug/ -lstopeight-clibs-analyzer
 unix:CONFIG(release, debug|release): LIBS += -L$$PWD/../analyzer/build/release/ -lstopeight-clibs-analyzer
 else:unix:CONFIG(debug, debug|release): LIBS += -L$$PWD/../analyzer/build/debug/ -lstopeight-clibs-analyzer
 

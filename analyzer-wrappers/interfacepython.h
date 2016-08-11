@@ -12,6 +12,8 @@
 #include "test.h"
 
 namespace analyzer_wrappers{
+	static PyObject* AnalyzerError;
+	static PyObject* error(const char* message);
 	static PyObject* hello(PyObject* self, PyObject* args);
 }
 

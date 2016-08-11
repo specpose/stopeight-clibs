@@ -5,18 +5,19 @@
 #define TEST_H
 
 #include "analyzer_global.h"
+#include "single_task.h"
 
 class Test
 {
 public:
-    Test();
-    ~Test();
+	__declspec(dllexport) Test();
+	__declspec(dllexport) ~Test();
 
     // method for access from python
-    static void hello(const char* fileName);
+	__declspec(dllexport) static void hello(const char* fileName);
 
 };
 
-class ANALYZERSHARED_EXPORT Test;
+//class ANALYZERSHARED_EXPORT Test;
 
 #endif // TEST_H

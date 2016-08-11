@@ -1,5 +1,10 @@
 #include "interfacepython.h"
 
+PyObject* analyzer_wrappers::error(const char* message) {
+	PyErr_SetString(analyzer_wrappers::AnalyzerError, message);
+	return NULL;
+}
+
 PyObject* analyzer_wrappers::hello(PyObject *self, PyObject *args) {
 	const char *name;
 	if (PyArg_ParseTuple(args, "s", &name)) {
@@ -29,5 +34,11 @@ PyObject* analyzer_wrappers::hello(PyObject *self, PyObject *args) {
 
 PyMODINIT_FUNC initstopeight_clibs_analyzer(void)
 {
-    (void) Py_InitModule("stopeight_clibs_analyzer", stopeight_clibs_analyzerMethods);
+	PyObject* my_mod = Py_InitModule("stopeight_clibs_analyzer", stopeight_clibs_analyzerMethods);
+	if (my_mod == NULL)
+		return;
+
+	analyzer_wrappers::AnalyzerError = PyErr_NewException((char*)("stopeight_clibs_analyzer.error"), NULL, NULL);
+	Py_INCREF(analyzer_wrappers::AnalyzerError);
+	PyModule_AddObject(my_mod, "error", analyzer_wrappers::AnalyzerError);
 }
