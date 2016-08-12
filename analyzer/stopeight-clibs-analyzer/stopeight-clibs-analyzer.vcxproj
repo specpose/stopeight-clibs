@@ -20,8 +20,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\analyzer_global.h" />
+    <ClInclude Include="..\include\single_task.h" />
     <ClInclude Include="..\include\test.h" />
-    <ClInclude Include="..\src\single_task.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\single_task.cpp" />
@@ -63,18 +63,22 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <SourcePath>$(ProjectDir)\..;$(VC_SourcePath)</SourcePath>
     <IncludePath>C:\boost_1_61_0;$(ProjectDir)\..\..\..\triSYCL\include;$(ProjectDir)\..;$(IncludePath)</IncludePath>
+    <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <SourcePath>$(ProjectDir)\..;$(VC_SourcePath)</SourcePath>
     <IncludePath>C:\boost_1_61_0;$(ProjectDir)\..\..\..\triSYCL\include;$(ProjectDir)\..;$(IncludePath)</IncludePath>
+    <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <SourcePath>$(ProjectDir)\..;$(VC_SourcePath)</SourcePath>
     <IncludePath>C:\boost_1_61_0;$(ProjectDir)\..\..\..\triSYCL\include;$(ProjectDir)\..;$(IncludePath)</IncludePath>
+    <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <SourcePath>$(ProjectDir)\..;$(VC_SourcePath)</SourcePath>
     <IncludePath>C:\boost_1_61_0;$(ProjectDir)\..\..\..\triSYCL\include;$(ProjectDir)\..;$(IncludePath)</IncludePath>
+    <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
