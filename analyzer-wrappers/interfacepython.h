@@ -1,6 +1,9 @@
 #ifndef INTERFACEPYTHON_H
 #define INTERFACEPYTHON_H
 
+#include "error.h"
+
+
 #ifdef _WIN32
 #ifdef _DEBUG
 #undef _DEBUG
@@ -12,8 +15,11 @@
 #include "test.h"
 
 namespace analyzer_wrappers{
+//private
 	static PyObject* AnalyzerError;
 	static PyObject* error(const char* message);
+	static PyObject* error(analyzer::alg_logic_error err);
+//public
 	static PyObject* hello(PyObject* self, PyObject* args);
 }
 
@@ -29,6 +35,5 @@ PyMODINIT_FUNC initstopeight_clibs_analyzer(void);
 #undef DEBUG_BYPASS
 #define _DEBUG 1
 #endif // DEBUG_BYPASS
-
 
 #endif // INTERFACEPYTHON_H

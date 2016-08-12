@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\analyzer_global.h" />
+    <ClInclude Include="..\include\error.h" />
     <ClInclude Include="..\include\single_task.h" />
     <ClInclude Include="..\include\test.h" />
   </ItemGroup>

@@ -1,32 +1,41 @@
 #include "interfacepython.h"
+#include <iostream>
 
 PyObject* analyzer_wrappers::error(const char* message) {
 	PyErr_SetString(analyzer_wrappers::AnalyzerError, message);
 	return NULL;
 }
 
+PyObject* analyzer_wrappers::error(analyzer::alg_logic_error err) {
+	std::string message = std::string();
+	message += err.fi_name;
+	message += "::";
+	message += err.fu_name;
+	message += ": ";
+	message += err.what();
+	return analyzer_wrappers::error(message.c_str());
+}
+
 PyObject* analyzer_wrappers::hello(PyObject *self, PyObject *args) {
 	const char *name;
 	if (PyArg_ParseTuple(args, "s", &name)) {
-		printf("Hello from %s in hello\n", name);
 		try {
 			Test tester = Test();
 			tester.hello(name);
 			return 0;
 		}
+		catch (analyzer::alg_logic_error exc) {
+			return analyzer_wrappers::error(exc);
+		}
 		catch (const char* text) {
-			printf("Error in %s: %s\n", __func__, text);
-			PyObject* error;
-			PyErr_SetString(error, text);
-			return error;
+			return analyzer_wrappers::error(text);
 		}
 		catch (...) {
-
-			printf("Error in %s: %s\n", __func__, " undefined");
-			PyObject* error;
-			PyErr_SetNone(error);
-			return error;
+			return analyzer_wrappers::error("undefined");
 		}
+	}
+	else {
+		return analyzer_wrappers::error("What is the name?");
 	}
 	return NULL;
 }

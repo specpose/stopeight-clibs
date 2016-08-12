@@ -7,14 +7,14 @@
 #include "analyzer_global.h"
 #include "single_task.h"
 
-class Test
+class __declspec(dllexport) Test
 {
 public:
-	__declspec(dllexport) Test();
-	__declspec(dllexport) ~Test();
+	Test();
+	~Test();
 
     // method for access from python
-	__declspec(dllexport) static void hello(const char* fileName);
+	static void hello(const char* fileName);
 
 };
 
