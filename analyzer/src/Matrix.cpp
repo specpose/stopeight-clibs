@@ -4,8 +4,8 @@
 #include "include/Matrix.h"
 #include <iostream>
 
-template<typename datatype> Matrix<datatype>::Matrix(int dimensions) : elem(new datatype[dimensions]), dimensions(dimensions){
-	std::cout << "const dimensions is " << this->dimensions << "\n";
+template<typename datatype> Matrix<datatype>::Matrix(int dimensions) : elems(dimensions*dimensions), dimensions(dimensions) {
+	std::cout << "const dimensions is " << elems.size() << "\n";
 }
 
-template<typename datatype> Matrix<datatype>::~Matrix() { delete[] elem; }
+template<typename datatype> Matrix<datatype>::~Matrix() { elems.~valarray(); }

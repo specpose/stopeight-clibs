@@ -5,9 +5,6 @@
 #define TEST_H
 
 #include "analyzer_global.h"
-#include "single_task.h"
-#include "Matrix.h"
-
 
 class ANALYZERSHARED_EXPORT Test
 {

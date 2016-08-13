@@ -2,15 +2,16 @@
 // GNU Lesser General Public License, version 2.1
 
 #include "analyzer_global.h"
-//#include "cl_platform.h"
+#include "cl_platform.h"
+#include <valarray>
 
-template<typename datatype=double> class Matrix {
+template<typename datatype=cl_double> class Matrix {
 public:
 	Matrix(int dimensions);
 	~Matrix();
 private:
-	datatype* elem;
+	std::valarray<datatype> elems;
 	const int dimensions;
 };
 
-template class ANALYZERSHARED_EXPORT Matrix<double>;
+template class ANALYZERSHARED_EXPORT Matrix<cl_double>;
