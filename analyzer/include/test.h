@@ -9,7 +9,7 @@
 #include "Matrix.h"
 
 
-class __declspec(dllexport) Test
+class ANALYZERSHARED_EXPORT Test
 {
 public:
 	Test();
@@ -19,7 +19,5 @@ public:
 	static void hello(const char* fileName);
 
 };
-
-//class ANALYZERSHARED_EXPORT Test;
 
 #endif // TEST_H

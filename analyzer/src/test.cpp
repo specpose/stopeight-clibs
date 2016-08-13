@@ -13,9 +13,6 @@ Test::Test()
 Test::~Test(){}
 
 void Test::hello(const char *fileName){
-	std::cout << "Hello " << fileName << "Number from SYCL single_task "<<number();
+	std::cout << "Hello " << fileName << "Number from SYCL single_task "<<number()<<"\n";
 	Matrix<> test = Matrix<>(3);
 }
-
-//manual template instantiation needed for wrapper!
-//void Test::hello(const char *fileName);

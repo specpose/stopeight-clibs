@@ -13,4 +13,4 @@ private:
 	const int dimensions;
 };
 
-template class __declspec(dllexport) Matrix<double>;
+template class ANALYZERSHARED_EXPORT Matrix<double>;

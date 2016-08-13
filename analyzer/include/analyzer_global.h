@@ -4,27 +4,13 @@
 #ifndef ANALYZER_GLOBAL_H
 #define ANALYZER_GLOBAL_H
 
-
-#if defined(_WIN32) || defined(_WIN64) || defined(WIN32) || defined(WIN64)
+#if _MSC_VER && !__INTEL_COMPILER // COMPILER
 //  Microsoft
-#if defined(ANALYZER_LIBRARY)
 #define ANALYZERSHARED_EXPORT __declspec(dllexport)
-#else
-#define ANALYZERSHARED_EXPORT __declspec(dllimport)
-#endif
-#elif defined(__linux__) || defined(UNIX) || defined(__unix__) || defined(LINUX)
-//  GCC
-#if defined(ANALYZER_LIBRARY)
-#  define ANALYZERSHARED_EXPORT
-//#  define ANALYZERSHARED_EXPORT Q_DECL_EXPORT
-#else
-#  define ANALYZERSHARED_EXPORT
-//#  define ANALYZERSHARED_EXPORT Q_DECL_IMPORT
-#endif
-#else
+#else // COMPILER
 //  do nothing and hope for the best?
 #define ANALYZERSHARED_EXPORT
 #pragma WARNING: Unknown dynamic link import/export semantics.
-#endif
+#endif // COMPILER
 
 #endif // ANALYZER_GLOBAL_H
