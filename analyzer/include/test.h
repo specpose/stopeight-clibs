@@ -6,6 +6,8 @@
 
 #include "analyzer_global.h"
 #include "single_task.h"
+#include "Matrix.h"
+
 
 class __declspec(dllexport) Test
 {

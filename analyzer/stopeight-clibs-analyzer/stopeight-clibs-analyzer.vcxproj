@@ -21,10 +21,12 @@
   <ItemGroup>
     <ClInclude Include="..\include\analyzer_global.h" />
     <ClInclude Include="..\include\error.h" />
+    <ClInclude Include="..\include\Matrix.h" />
     <ClInclude Include="..\include\single_task.h" />
     <ClInclude Include="..\include\test.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\Matrix.cpp" />
     <ClCompile Include="..\src\single_task.cpp" />
     <ClCompile Include="..\src\test.cpp" />
   </ItemGroup>
@@ -63,22 +65,22 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <SourcePath>$(ProjectDir)\..;$(VC_SourcePath)</SourcePath>
-    <IncludePath>C:\boost_1_61_0;$(ProjectDir)\..\..\..\triSYCL\include;$(ProjectDir)\..;$(IncludePath)</IncludePath>
+    <IncludePath>C:\boost_1_61_0;$(ProjectDir)\..\..\..\OpenCL-Headers;$(ProjectDir)\..\..\..\triSYCL\include;$(ProjectDir)\..;$(IncludePath)</IncludePath>
     <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <SourcePath>$(ProjectDir)\..;$(VC_SourcePath)</SourcePath>
-    <IncludePath>C:\boost_1_61_0;$(ProjectDir)\..\..\..\triSYCL\include;$(ProjectDir)\..;$(IncludePath)</IncludePath>
+    <IncludePath>C:\boost_1_61_0;$(ProjectDir)\..\..\..\OpenCL-Headers;$(ProjectDir)\..\..\..\triSYCL\include;$(ProjectDir)\..;$(IncludePath)</IncludePath>
     <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <SourcePath>$(ProjectDir)\..;$(VC_SourcePath)</SourcePath>
-    <IncludePath>C:\boost_1_61_0;$(ProjectDir)\..\..\..\triSYCL\include;$(ProjectDir)\..;$(IncludePath)</IncludePath>
+    <IncludePath>C:\boost_1_61_0;$(ProjectDir)\..\..\..\OpenCL-Headers;$(ProjectDir)\..\..\..\triSYCL\include;$(ProjectDir)\..;$(IncludePath)</IncludePath>
     <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <SourcePath>$(ProjectDir)\..;$(VC_SourcePath)</SourcePath>
-    <IncludePath>C:\boost_1_61_0;$(ProjectDir)\..\..\..\triSYCL\include;$(ProjectDir)\..;$(IncludePath)</IncludePath>
+    <IncludePath>C:\boost_1_61_0;$(ProjectDir)\..\..\..\OpenCL-Headers;$(ProjectDir)\..\..\..\triSYCL\include;$(ProjectDir)\..;$(IncludePath)</IncludePath>
     <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup>
