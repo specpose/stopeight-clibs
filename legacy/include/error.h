@@ -1,4 +1,6 @@
-#pragma once
+#ifndef ERROR_H
+#define ERROR_H
+
 #include <stdexcept>
 
 namespace legacy {
@@ -8,3 +10,5 @@ namespace legacy {
 		const char* fu_name;
 	};
 }
+
+#endif // ERROR_H

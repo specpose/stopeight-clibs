@@ -1,4 +1,8 @@
 #include "interfacepython.h"
+#include "render.h"
+#include "editorspirals.h"
+#include "editorcliffs.h"
+
 #include <iostream>
 
 PyObject* legacy_wrappers::error(const char* message) {
@@ -141,6 +145,23 @@ PyObject* legacy_wrappers::stroke_sequential(PyObject *self, PyObject *args) {
 	return legacy_wrappers::convert(ListBase<dpoint>::convert(result));
 }
 
+#ifdef PY_MAJOR_VERSION
+#if PY_MAJOR_VERSION >= 3
+
+PyMODINIT_FUNC PyInit_stopeight_clibs_legacy(void)
+{
+	PyObject* my_mod = PyModule_Create(&legacymodule);
+	if (my_mod == NULL)
+		return NULL;
+
+	legacy_wrappers::LegacyError = PyErr_NewException((char*)("stopeight_clibs_legacy.error"), NULL, NULL);
+	Py_INCREF(legacy_wrappers::LegacyError);
+	PyModule_AddObject(my_mod, "error", legacy_wrappers::LegacyError);
+	return my_mod;
+}
+
+#else // #if PY_MAJOR_VERSION >= 3
+
 PyMODINIT_FUNC initstopeight_clibs_legacy(void)
 {
 	PyObject* my_mod = Py_InitModule("stopeight_clibs_legacy", stopeight_clibs_legacyMethods);
@@ -150,5 +171,7 @@ PyMODINIT_FUNC initstopeight_clibs_legacy(void)
 	legacy_wrappers::LegacyError = PyErr_NewException((char*)("stopeight_clibs_legacy.error"), NULL, NULL);
 	Py_INCREF(legacy_wrappers::LegacyError);
 	PyModule_AddObject(my_mod, "error", legacy_wrappers::LegacyError);
-
 }
+
+#endif // #if PY_MAJOR_VERSION >= 3
+#endif // PY_MAJOR_VERSION

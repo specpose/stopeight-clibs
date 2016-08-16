@@ -1,12 +1,11 @@
 #ifndef INTERFACEPYTHON_H
 #define INTERFACEPYTHON_H
 
-#include "editorspirals.h"
-#include "editorcliffs.h"
-#include "error.h"
-#include "render.h"
 
-#ifdef _WIN32
+#include <QList>
+#include <QPointF>
+
+#ifdef _WINDOWS
 #ifdef _DEBUG
 #undef _DEBUG
 #define DEBUG_BYPASS 1
@@ -14,6 +13,8 @@
 #endif
 
 #include <Python.h>
+#include "error.h"
+
 
 namespace legacy_wrappers{
 //private
@@ -41,7 +42,26 @@ static PyMethodDef stopeight_clibs_legacyMethods[] = {
     {NULL, NULL, 0, NULL}        /* Sentinel */
 };
 
+#ifdef PY_MAJOR_VERSION
+#if PY_MAJOR_VERSION >= 3
+
+static struct PyModuleDef legacymodule = {
+	PyModuleDef_HEAD_INIT,
+	"stopeight_clibs_legacy",   /* name of module */
+	NULL, /* module documentation, may be NULL */
+	-1,       /* size of per-interpreter state of the module,
+			  or -1 if the module keeps state in global variables. */
+	stopeight_clibs_legacyMethods
+};
+
+PyMODINIT_FUNC PyInit_stopeight_clibs_legacy(void);
+
+#else // PY_MAJOR_VERSION >= 3
+
 PyMODINIT_FUNC initstopeight_clibs_legacy(void);
+
+#endif // PY_MAJOR_VERSION >= 3
+#endif // PY_MAJOR_VERSION
 
 #ifdef DEBUG_BYPASS
 #undef DEBUG_BYPASS
