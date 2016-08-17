@@ -6,7 +6,6 @@
 QMAKE_CXXFLAGS += -std=c++1y
 
 TEMPLATE = lib
-//win32:QMAKE_LFLAGS_SONAME = .pyd
 win32:TARGET = stopeight_clibs_analyzer
 else:unix:TARGET = stopeight-clibs-analyzer-wrappers
 CONFIG -= lib_bundle

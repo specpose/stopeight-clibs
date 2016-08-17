@@ -41,6 +41,27 @@ PyObject* analyzer_wrappers::hello(PyObject *self, PyObject *args) {
 }
 
 
+#ifdef PY_MAJOR_VERSION
+#if PY_MAJOR_VERSION >= 3
+
+PyMODINIT_FUNC PyInit_stopeight_clibs_analyzer(void)
+{
+	// Python 3.5
+	//PyObject* my_mod = Py_InitModule("stopeight_clibs_analyzer", stopeight_clibs_analyzerMethods);
+	PyObject* my_mod = PyModule_Create(&analyzermodule);
+	if (my_mod == NULL)
+		// return;
+		return NULL;
+
+	analyzer_wrappers::AnalyzerError = PyErr_NewException((char*)("stopeight_clibs_analyzer.error"), NULL, NULL);
+	Py_INCREF(analyzer_wrappers::AnalyzerError);
+	PyModule_AddObject(my_mod, "error", analyzer_wrappers::AnalyzerError);
+	// Python 3.5 Was nothing
+	return my_mod;
+}
+
+#else // #if PY_MAJOR_VERSION >= 3
+
 PyMODINIT_FUNC initstopeight_clibs_analyzer(void)
 {
 	PyObject* my_mod = Py_InitModule("stopeight_clibs_analyzer", stopeight_clibs_analyzerMethods);
@@ -51,3 +72,6 @@ PyMODINIT_FUNC initstopeight_clibs_analyzer(void)
 	Py_INCREF(analyzer_wrappers::AnalyzerError);
 	PyModule_AddObject(my_mod, "error", analyzer_wrappers::AnalyzerError);
 }
+
+#endif // #if PY_MAJOR_VERSION >= 3
+#endif // PY_MAJOR_VERSION
