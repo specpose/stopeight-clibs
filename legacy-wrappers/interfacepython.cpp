@@ -154,7 +154,7 @@ PyMODINIT_FUNC PyInit_stopeight_clibs_legacy(void)
 	if (my_mod == NULL)
 		return NULL;
 
-	legacy_wrappers::LegacyError = PyErr_NewException((char*)("stopeight_clibs_legacy.error"), NULL, NULL);
+	legacy_wrappers::LegacyError = PyErr_NewException("stopeight_clibs_legacy.error", NULL, NULL);
 	Py_INCREF(legacy_wrappers::LegacyError);
 	PyModule_AddObject(my_mod, "error", legacy_wrappers::LegacyError);
 	return my_mod;

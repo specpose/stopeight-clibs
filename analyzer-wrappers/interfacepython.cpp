@@ -53,7 +53,7 @@ PyMODINIT_FUNC PyInit_stopeight_clibs_analyzer(void)
 		// return;
 		return NULL;
 
-	analyzer_wrappers::AnalyzerError = PyErr_NewException((char*)("stopeight_clibs_analyzer.error"), NULL, NULL);
+	analyzer_wrappers::AnalyzerError = PyErr_NewException("stopeight_clibs_analyzer.error", NULL, NULL);
 	Py_INCREF(analyzer_wrappers::AnalyzerError);
 	PyModule_AddObject(my_mod, "error", analyzer_wrappers::AnalyzerError);
 	// Python 3.5 Was nothing
