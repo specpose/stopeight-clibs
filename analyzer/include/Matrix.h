@@ -5,13 +5,18 @@
 #include "cl_platform.h"
 #include <valarray>
 
+/*
+	A square, row-major, dense matrix
+*/
+
 template<typename datatype=cl_double> class Matrix {
 public:
 	Matrix(int dimensions);
+	Matrix(std::initializer_list<datatype> list);
 	~Matrix();
+	int dimensions() { return sqrt(elems.size()); };
 private:
 	std::valarray<datatype> elems;
-	const int dimensions;
 };
 
 template class ANALYZERSHARED_EXPORT Matrix<cl_double>;
