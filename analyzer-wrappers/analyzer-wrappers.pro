@@ -13,9 +13,9 @@ CONFIG -= qt
 
 DEFINES += ANALYZERWRAPPERS_LIBRARY
 
-win32:LIBS += -LC:/Python27/libs
-win32:INCLUDEPATH += C:/Python27/include
-else:unix:INCLUDEPATH += /usr/include/python2.7/
+win32:LIBS += -LC:/Python35/libs
+win32:INCLUDEPATH += C:/Python35/include
+else:unix:INCLUDEPATH += /usr/include/python3.5/
 
 SOURCES += \
     interfacepython.cpp

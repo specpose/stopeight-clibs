@@ -13,8 +13,11 @@ win32:INCLUDEPATH += $$PWD/../../triSYCL/include/
 else:unix:INCLUDEPATH += $$PWD/../../triSYCL/include/
 
 SOURCES += src/test.cpp\
+           src/Matrix.cpp\
            src/single_task.cpp
 
 HEADERS += include/test.h\
+           include/error.h\
+           include/Matrix.h\
            include/single_task.h\
            include/analyzer_global.h
