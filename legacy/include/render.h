@@ -22,7 +22,7 @@ public:
 
 	static QList<QPointF> quadraticbeziers(QPointF turn1, QPointF corner, QPointF turn2);
 
-	static QList<QList<QPointF>> TCTPath(QList<QPointF> se_stroke_path);
+    static QList<QList<QPointF> > TCTPath(QList<QPointF> se_stroke_path);
 
 private:
 #if defined(DEBUG) || defined(_DEBUG)

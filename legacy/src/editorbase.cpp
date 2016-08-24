@@ -63,7 +63,7 @@ template<> void EditorBase<ListBase<dpoint> >::automatic(QList<QPointF> list) {
 		automatic();
 	}
 	else {
-		throw std::exception("List can not be valid. At least TCT required.");
+        throw std::runtime_error("List can not be valid. At least TCT required.");
 	}
 }
 
