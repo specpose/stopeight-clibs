@@ -16,6 +16,17 @@ template CliffsNormalizer<dpoint>::CliffsNormalizer(ListCopyable<dpoint>& list);
 #include "include/areaanalyzer.h"
 template CliffsNormalizer<dpoint>::CliffsNormalizer(AreaAnalyzer<dpoint>& list);
 
+/*
+
+template <> void ListNormalizer<dpoint>::cliffFilters(){
+    this->requireMinimumLength(1);
+    // enabling this is good for circles, bad for certain spirals, sinus and strokes without enough input data
+    //toBeProcessed.risingJitter(0);
+    this->smoothingJitter(0);
+    this->risingJitter(0);
+}
+ */
+
 template <> void CliffsNormalizer<dpoint>::cliffFilters(){
     CornerNormalizer<dpoint> b = CornerNormalizer<dpoint>(*this);
     b.requireMinimumLength(2);

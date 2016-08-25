@@ -56,6 +56,17 @@ template <> void TurnNormalizer<dpoint>::risingJitter(int pos){
     }
 }
 
+/*
+
+template <> void ListNormalizer<dpoint>::tripletFilters(){
+    //this->risingJitter(0);
+    this->smoothingJitter(0);
+    //only corners and turns need rotation: derivative
+    // rotation is absolutely needed if using crossing 0. getFirstTurn contains rotation in point removal
+    //remainingSlice.rotateSegmentToXAxis();
+}
+ */
+
 template <> void TurnNormalizer<dpoint>::tripletFilters(){
     TurnNormalizer<dpoint> b = TurnNormalizer<dpoint>(*this);
     //this->risingJitter(0);

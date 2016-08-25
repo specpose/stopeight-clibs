@@ -35,6 +35,20 @@ template <> void AreaNormalizer<dpoint>::removeInlays(){
     }
 }
 
+/*
+
+
+template <>void ListNormalizer<dpoint>::areaFilters(){
+    //this->smoothingJitter(0);
+    //this->risingJitter(0);
+    debug()<<"Before removeInlays: "<<this->size();
+    debug()<< this;
+    this->removeInlays();
+    debug()<<"After removeInlays: "<<this->size();
+}
+
+ */
+
 template <>void AreaNormalizer<dpoint>::areaFilters(){
     TurnNormalizer<dpoint> a = TurnNormalizer<dpoint>(*this);
     a.smoothingJitter(0);
