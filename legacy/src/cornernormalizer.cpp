@@ -38,21 +38,10 @@ template <> void CornerNormalizer<dpoint>::requireMinimumLength(qreal lnt){
     }
 }
 
-/*
-
-template <> void ListNormalizer<dpoint>::cornerFilters(){
-    //debug() << "Before filter corner: ";
-    this->smoothingJitter(0);
-    this->requireMinimumLength(1.00001);
-    this->rotateSegmentToXAxis();
-    //this->normalizeCorners();
-    //debug() << "After filter corner: ";
-}
-
- */
 
 template <> void CornerNormalizer<dpoint>::cornerFilters(){
-    //debug() << "Before filter corner: ";
+	// CHECKPRECISION?!
+	//debug() << "Before filter corner: ";
     TurnNormalizer<dpoint> a = TurnNormalizer<dpoint>(*this);
     a.smoothingJitter(0);
     CornerNormalizer<dpoint> b = CornerNormalizer<dpoint>(a);

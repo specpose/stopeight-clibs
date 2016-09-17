@@ -35,31 +35,24 @@ template <> void AreaNormalizer<dpoint>::removeInlays(){
     }
 }
 
-/*
-
-
-template <>void ListNormalizer<dpoint>::areaFilters(){
-    //this->smoothingJitter(0);
-    //this->risingJitter(0);
-    debug()<<"Before removeInlays: "<<this->size();
-    debug()<< this;
-    this->removeInlays();
-    debug()<<"After removeInlays: "<<this->size();
-}
-
- */
-
 template <>void AreaNormalizer<dpoint>::areaFilters(){
-    TurnNormalizer<dpoint> a = TurnNormalizer<dpoint>(*this);
-    a.smoothingJitter(0);
-    CornerNormalizer<dpoint> b = CornerNormalizer<dpoint>(a);
-    b.requireMinimumLength(9);
-    b.rotateSegmentToXAxis();
+	if (this->checkPrecision()) {
+		//this->smoothingJitter(0);
+		//this->risingJitter(0);
+		this->removeInlays();
+	}
+	else {
+		TurnNormalizer<dpoint> a = TurnNormalizer<dpoint>(*this);
+		a.smoothingJitter(0);
+		CornerNormalizer<dpoint> b = CornerNormalizer<dpoint>(a);
+		b.requireMinimumLength(9);
+		b.rotateSegmentToXAxis();
 
-    //Port: UNUSED
-    //this->risingJitter(0);
+		//Port: UNUSED
+		//this->risingJitter(0);
 
-    *this=AreaNormalizer<dpoint>(b);
-    this->removeInlays();
+		*this = AreaNormalizer<dpoint>(b);
+		this->removeInlays();
+	}
 
 }

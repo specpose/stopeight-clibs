@@ -13,7 +13,7 @@
 #include "editorinterface.h"
 #include "listbase.h"
 #include "listcopyable.h"
-#include "myreal.h"
+//#include "myreal.h"
 
 template<typename T> struct ListStorage{
     ListStorage<T>() : input(T()), output(T()){}
@@ -42,7 +42,6 @@ public:
 
 protected:
 
-    static bool checkPrecision(const ListBase<dpoint>& list);
     void setOutput(T list);
 
     void mainIterator(const QList<dpoint>& constCliffs,QList<QList<dpoint> >& slicesRef);

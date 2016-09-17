@@ -97,22 +97,6 @@ template<> void EditorBase<ListBase<dpoint> >::mainIterator(const QList<dpoint>&
 }
 
 
-template<> bool EditorBase<ListBase<dpoint> >::checkPrecision(const ListBase<dpoint> &list){
-    /*
-      Check if the list contains float values and set precision to high
-      */
-    for (int i=0;i<list.size();i++){
-        if (!MyReal(list.at(i).x()).isInt() ||
-            !MyReal(list.at(i).y()).isInt())
-        {
-            debug() << "EditorBase::checkPrecision detected highPrecision";
-            return true;
-        }
-    }
-    debug() << "EditorBase::checkPrecision found low precision";
-    return false;
-}
-
 //void EditorBase::process(ListAnalyzer<dpoint> toBeProcessed){
 //    throw "ERROR: EditorBase::process called. this should be superclass-call";
 //}

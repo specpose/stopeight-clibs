@@ -10,6 +10,7 @@
 #include <QtCore/QFile>
 
 #include "dpoint.h"
+#include "myreal.h"
 
 #include "error.h"
 
@@ -30,6 +31,9 @@ public:
     static QList<QPointF> open(const char* fileName);
     // method for access from legacy editor
     static ListBase<dpoint> loadSPFile(const QString &fileName);
+
+protected:
+	bool checkPrecision();
 
 };
 

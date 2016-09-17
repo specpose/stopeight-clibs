@@ -94,3 +94,17 @@ template<> QList<QPointF> ListBase<dpoint>::open(const char *fileName){
 //needed for wrapper!
 //template QList<QPointF> ListBase<dpoint>::open(const char *fileName);
 template QList<QPointF> ListBase<dpoint>::convert(ListBase<dpoint> list);
+
+template<> bool ListBase<dpoint>::checkPrecision() {
+	/*
+	Check if the list contains float values and set precision to high
+	*/
+	for (int i = 0; i<this->size(); i++) {
+		if (!MyReal(this->at(i).x()).isInt() ||
+			!MyReal(this->at(i).y()).isInt())
+		{
+			return true;
+		}
+	}
+	return false;
+}
