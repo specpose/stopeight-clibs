@@ -52,7 +52,9 @@ template<> ListBase<dpoint> ListBase<dpoint>::loadSPFile(const QString& fileName
     debug()<<"legacy::ListBase<dpoint>::loadSPFile "+fileName.toLatin1();
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly)) {
-		throw legacy::alg_logic_error((file.errorString().toStdString()+file.fileName().toStdString()).c_str(),__FILE__,__func__);
+		//C++11
+		//throw legacy::alg_logic_error((file.errorString().toStdString()+file.fileName().toStdString()).c_str(),__FILE__,__func__);
+		throw legacy::alg_logic_error((file.errorString().toStdString()+file.fileName().toStdString()).c_str(),__FILE__,"");
 		//throw std::string(file.errorString().toStdString() + " reading file " + file.fileName().toStdString());
         //return false;
     }
@@ -93,7 +95,7 @@ template<> QList<QPointF> ListBase<dpoint>::open(const char *fileName){
 
 //needed for wrapper!
 //template QList<QPointF> ListBase<dpoint>::open(const char *fileName);
-template QList<QPointF> ListBase<dpoint>::convert(ListBase<dpoint> list);
+//template QList<QPointF> ListBase<dpoint>::convert(ListBase<dpoint> list);
 
 template<> bool ListBase<dpoint>::checkPrecision() {
 	/*

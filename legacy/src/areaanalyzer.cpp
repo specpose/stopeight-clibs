@@ -78,7 +78,9 @@ template<> ListCopyable<dpoint> AreaAnalyzer<dpoint>::getArea(qreal limit,QPoint
         }
     }
     else {
-        throw legacy::alg_logic_error("Before area search segment size is below 2",__FILE__,__func__);
+		throw legacy::alg_logic_error("Before area search segment size is below 2",__FILE__,"");
+		//C++11
+        //throw legacy::alg_logic_error("Before area search segment size is below 2",__FILE__,__func__);
         for (int i=0;i<this->size();i++){
             result<<this->at(i);
         }

@@ -20,7 +20,7 @@ template<>template<> ListCopyable<dpoint>::ListCopyable(ListCopyable<dpoint>& li
     *this = list;
 }
 
-template ListCopyable<dpoint>::ListCopyable(ListCopyable<dpoint>& list);
+//template ListCopyable<dpoint>::ListCopyable(ListCopyable<dpoint>& list);
 template ListCopyable<dpoint>::ListCopyable(ListBase<dpoint>& list);
 #include "include/areaanalyzer.h"
 template ListCopyable<dpoint>::ListCopyable(AreaAnalyzer<dpoint>& list);
