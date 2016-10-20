@@ -35,6 +35,7 @@ public:
     void addPoint(QPointF p);
     //dont make getOutput const, see reversal in spiral process
     T& getOutput();
+	QList<QPointF> getConvertedOutput();
     void flushOutput();
 
     void automatic();

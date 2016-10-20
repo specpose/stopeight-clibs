@@ -27,10 +27,15 @@ public:
     template<typename F> ListBase<T>(F& list);
 
     // method for access from python
-	static QList<QPointF> convert(ListBase<dpoint> list);
     static QList<QPointF> open(const char* fileName);
     // method for access from legacy editor
-    static ListBase<dpoint> loadSPFile(const QString &fileName);
+    static QList<QPointF> loadSPFile(const QString &fileName);
+	// for old files
+//	static ListBase<dpoint> loadSPFile(const QString &fileName);
+	// method for access from both
+	static QList<QPointF> convert(ListBase<dpoint> list);
+
+
 
 protected:
 	bool checkPrecision();
@@ -39,9 +44,10 @@ protected:
 
 //GCC bug?
 //extern template class ListBase<dpoint>;
-template class ListBase<dpoint>;
 
 //Windows
-//template class LEGACYSHARED_EXPORT ListBase<dpoint>;
+template class LEGACYSHARED_EXPORT ListBase<dpoint>;
+template class LEGACYSHARED_EXPORT ListBase<QPointF>;
+
 
 #endif // LISTBASE_H

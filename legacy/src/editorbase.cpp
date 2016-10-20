@@ -25,6 +25,17 @@ template<typename T> T& EditorBase<T>::getOutput(){
 
 template ListBase<dpoint>& EditorBase<ListBase<dpoint> >::getOutput();
 
+
+template<typename T> QList<QPointF> EditorBase<T>::getConvertedOutput() {
+	QList<QPointF> newlist = QList<QPointF>();
+	for (int i = 0; i < data.output.size(); i++) {
+		newlist.append(QPointF(data.output[i].x(),data.output[i].y()));
+	}
+	return newlist;
+}
+
+template QList<QPointF> EditorBase<ListBase<dpoint> >::getConvertedOutput();
+
 template<typename T> void EditorBase<T>::setOutput(T list){
     data.output=list;
 }

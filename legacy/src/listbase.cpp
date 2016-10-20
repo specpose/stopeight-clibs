@@ -13,6 +13,7 @@ template<> ListBase<dpoint>::ListBase() : QList<dpoint>::QList()
 
 //template<> ListBase<dpoint>::~ListBase(){}
 
+
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> ListBase<dpoint>::ListBase(F& list) : QList<dpoint>::QList(list){
     *this = static_cast<ListBase<dpoint>& >(list);
@@ -47,7 +48,7 @@ template ListBase<dpoint>::ListBase(TurnAnalyzer<dpoint>& list);
 template ListBase<dpoint>::ListBase(StraightsAnalyzer<dpoint>& list);
 template ListBase<dpoint>::ListBase(CornerAnalyzer<dpoint>& list);
 
-template<> ListBase<dpoint> ListBase<dpoint>::loadSPFile(const QString& fileName)
+template<> QList<QPointF> ListBase<QPointF>::loadSPFile(const QString& fileName)
 {
     debug()<<"legacy::ListBase<dpoint>::loadSPFile "+fileName.toLatin1();
     QFile file(fileName);
@@ -70,11 +71,11 @@ template<> ListBase<dpoint> ListBase<dpoint>::loadSPFile(const QString& fileName
     }
 
     dpoint p;
-    ListBase<dpoint> input;
+    QList<QPointF> input;
     input.clear();
     while (!in.atEnd()) {
         in >> p;
-        input.push_back(p);
+        input.push_back(QPointF(p.x(),p.y()));
     }
     return input;
 }
@@ -90,7 +91,9 @@ template<> QList<QPointF> ListBase<dpoint>::convert(ListBase<dpoint> list) {
 
 template<> QList<QPointF> ListBase<dpoint>::open(const char *fileName){
     const QString& myString = QString::fromLatin1(fileName);
-    return ListBase<dpoint>::convert(ListBase<dpoint>::loadSPFile(myString));
+    //return ListBase<dpoint>::convert(ListBase<dpoint>::loadSPFile(myString));
+	return ListBase<QPointF>::loadSPFile(myString);
+
 }
 
 //needed for wrapper!
