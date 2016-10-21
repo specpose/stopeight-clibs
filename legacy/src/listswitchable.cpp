@@ -9,6 +9,13 @@
 template<> ListSwitchable<dpoint>::ListSwitchable() : ListRotator<dpoint>(){
 }
 
+
+// Note: ALL datamembers of target class destroyed
+template<>template<typename F> ListSwitchable<dpoint>::ListSwitchable(F& list) : ListRotator<dpoint>(list){
+    ListBase<dpoint> c = static_cast<ListBase<dpoint>& >(list);
+    *this= static_cast<ListSwitchable<dpoint>& >(c);
+}
+
 #include "include/listswitchable.h"
 template ListSwitchable<dpoint>::ListSwitchable(ListSwitchable<dpoint>& list);
 #include "include/cliffsanalyzer.h"
@@ -29,15 +36,47 @@ template ListSwitchable<dpoint>::ListSwitchable(CliffsNormalizer<dpoint>& list);
 template ListSwitchable<dpoint>::ListSwitchable(CornerAnalyzer<dpoint>& list);
 
 // Note: ALL datamembers of target class destroyed
-template<>template<typename F> ListSwitchable<dpoint>::ListSwitchable(F& list) : ListRotator<dpoint>(list){
-    ListBase<dpoint> c = static_cast<ListBase<dpoint>& >(list);
-    *this= static_cast<ListSwitchable<dpoint>& >(c);
-}
-
-// Note: ALL datamembers of target class destroyed
 template<>template<typename F> void ListSwitchable<dpoint>::operator=(F& list){
     this->swap(list);
 }
+
+template<>template<typename F> void ListSwitchable<dpoint>::operator=(const F& list){
+    //REQUIRES PHYSICAL COPY: ERROR MSVC
+    //MEMORY LEAK
+    ListBase<dpoint> copy = ListBase<dpoint>(list);
+    *this = static_cast<ListSwitchable<dpoint> &>(copy);
+    //throw std::runtime_error("ListSwitchable assigned with const");
+}
+
+#include "include/cliffscalculator.h"
+template void ListSwitchable<dpoint>::operator=(CliffsCalculator<dpoint>& list);
+template void ListSwitchable<dpoint>::operator=(const CliffsCalculator<dpoint>& list);
+#include "include/areacalculator.h"
+template void ListSwitchable<dpoint>::operator=(AreaCalculator<dpoint>& list);
+template void ListSwitchable<dpoint>::operator=(const AreaCalculator<dpoint>& list);
+#include "include/turncalculator.h"
+template void ListSwitchable<dpoint>::operator=(TurnCalculator<dpoint>& list);
+template void ListSwitchable<dpoint>::operator=(const TurnCalculator<dpoint>& list);
+#include "include/cornercalculator.h"
+template void ListSwitchable<dpoint>::operator=(CornerCalculator<dpoint>& list);
+template void ListSwitchable<dpoint>::operator=(const CornerCalculator<dpoint>& list);
+#include "include/calculator.h"
+template void ListSwitchable<dpoint>::operator=(Calculator<dpoint>& list);
+template void ListSwitchable<dpoint>::operator=(const Calculator<dpoint>& list);
+#include "include/spirals.h"
+template void ListSwitchable<dpoint>::operator=(Spirals<dpoint>& list);
+template void ListSwitchable<dpoint>::operator=(const Spirals<dpoint>& list);
+template void ListSwitchable<dpoint>::operator=(StraightsCalculator<dpoint>& list);
+template void ListSwitchable<dpoint>::operator=(const StraightsCalculator<dpoint>& list);
+#include "include/cliffs.h"
+template void ListSwitchable<dpoint>::operator=(Cliffs<dpoint>& list);
+template void ListSwitchable<dpoint>::operator=(const Cliffs<dpoint>& list);
+#include "include/turns.h"
+template void ListSwitchable<dpoint>::operator=(Turns<dpoint>& list);
+template void ListSwitchable<dpoint>::operator=(const Turns<dpoint>& list);
+#include "include/corners.h"
+template void ListSwitchable<dpoint>::operator=(Corners<dpoint>& list);
+template void ListSwitchable<dpoint>::operator=(const Corners<dpoint>& list);
 
 template <> void ListSwitchable<dpoint>::removeAt(int i) {
     if (i<0) {

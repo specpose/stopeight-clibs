@@ -19,6 +19,10 @@ template<>template<typename F> ListBase<dpoint>::ListBase(F& list) : QList<dpoin
     *this = static_cast<ListBase<dpoint>& >(list);
 }
 
+template<>template<typename F> ListBase<dpoint>::ListBase(const F& list) : QList<dpoint>::QList(list){
+    *this = list;
+}
+
 // would need to append constructor to QList
 //template<>template<typename F> QList<dpoint>::QList(F& list) : QList<dpoint>::QList(list) {
 //	*this = static_cast<QList<dpoint>& >(list);
@@ -33,6 +37,7 @@ template ListBase<dpoint>::ListBase(AreaAnalyzer<dpoint>& list);
 template ListBase<dpoint>::ListBase(CliffsAnalyzer<dpoint>& list);
 template ListBase<dpoint>::ListBase(AreaCalculator<dpoint>& list);
 template ListBase<dpoint>::ListBase(ListCopyable<dpoint>& list);
+template ListBase<dpoint>::ListBase(const ListCopyable<dpoint>& list);
 template ListBase<dpoint>::ListBase(TurnNormalizer<dpoint>& list);
 template ListBase<dpoint>::ListBase(Calculator<dpoint>& list);
 template ListBase<dpoint>::ListBase(ListSwitchable<dpoint>& list);
@@ -47,6 +52,19 @@ template ListBase<dpoint>::ListBase(TurnAnalyzer<dpoint>& list);
 #include "include/straightsanalyzer.h"
 template ListBase<dpoint>::ListBase(StraightsAnalyzer<dpoint>& list);
 template ListBase<dpoint>::ListBase(CornerAnalyzer<dpoint>& list);
+template ListBase<dpoint>::ListBase(const CliffsCalculator<dpoint>& list);
+template ListBase<dpoint>::ListBase(const AreaCalculator<dpoint>& list);
+template ListBase<dpoint>::ListBase(const TurnCalculator<dpoint>& list);
+template ListBase<dpoint>::ListBase(const CornerCalculator<dpoint>& list);
+template ListBase<dpoint>::ListBase(const Calculator<dpoint>& list);
+template ListBase<dpoint>::ListBase(const Spirals<dpoint>& list);
+template ListBase<dpoint>::ListBase(const StraightsCalculator<dpoint>& list);
+template ListBase<dpoint>::ListBase(const Cliffs<dpoint>& list);
+#include "include/turns.h"
+template ListBase<dpoint>::ListBase(const Turns<dpoint>& list);
+#include "include/corners.h"
+template ListBase<dpoint>::ListBase(const Corners<dpoint>& list);
+
 
 template<> QList<QPointF> ListBase<QPointF>::loadSPFile(const QString& fileName)
 {

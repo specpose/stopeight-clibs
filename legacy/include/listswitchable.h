@@ -16,6 +16,8 @@ public:
     template<typename F> ListSwitchable<T>(F& list);
     //THIS THING AND ALL INHERITING CAN NOT BE COPIED
     template<typename F> void operator=(F& list);
+    template<typename F> void operator=(const F& list);
+
 
     void removeAt(int i);
 
