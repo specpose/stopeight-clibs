@@ -80,7 +80,7 @@ template<> void EditorBase<ListBase<dpoint> >::automatic(QList<QPointF> list) {
 	}
 }
 
-template<> void EditorBase<ListBase<dpoint> >::mainIterator( QList<dpoint>& constCliffs,QList<QList<dpoint> >& slicesRef){
+template<> void EditorBase<ListBase<dpoint> >::mainIterator(const QList<dpoint>& constCliffs,QList<QList<dpoint> >& slicesRef){
     ListCopyable<dpoint> out = ListCopyable<dpoint>(this->getOutput());
     int currentSegment = 0;
     //maemo works: check cliff size
