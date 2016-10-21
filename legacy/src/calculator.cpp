@@ -11,6 +11,7 @@ template<>template<typename F> Calculator<dpoint>::Calculator(F& list) : ListSwi
     *this= static_cast<Calculator<dpoint>& >(c);
 }
 
+template Calculator<dpoint>::Calculator(Calculator<dpoint>& list);
 #include "include/straightscalculator.h"
 template Calculator<dpoint>::Calculator(StraightsCalculator<dpoint>& list);
 #include "include/cornernormalizer.h"

@@ -25,6 +25,8 @@ public:
     //this should be C++11 move F&& constructor
     //is there a copy created when using F& instead of F?
     template<typename F> ListBase<T>(F& list);
+    //template<typename F> ListBase<T>(const F& list);
+
 
     // method for access from python
     static QList<QPointF> open(const char* fileName);
@@ -46,8 +48,8 @@ protected:
 //extern template class ListBase<dpoint>;
 
 //Windows
-template class LEGACYSHARED_EXPORT ListBase<dpoint>;
-template class LEGACYSHARED_EXPORT ListBase<QPointF>;
+//template class LEGACYSHARED_EXPORT ListBase<dpoint>;
+//template class LEGACYSHARED_EXPORT ListBase<QPointF>;
 
 
 #endif // LISTBASE_H

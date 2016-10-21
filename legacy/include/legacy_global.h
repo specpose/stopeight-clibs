@@ -24,7 +24,7 @@
 #else
 	//  do nothing and hope for the best?
 	#define LEGACYSHARED_EXPORT
-	#pragma WARNING: Unknown dynamic link import/export semantics.
+    #pragma WARNING Unknown dynamic link semantics.
 #endif
 
 #endif // LEGACY_GLOBAL_H

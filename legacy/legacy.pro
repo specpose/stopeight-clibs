@@ -84,4 +84,5 @@ HEADERS +=\
     include/corneranalyzer.h \
     include/straightsnormalizer.h \
     include/corners.h \
-    include/render.h
+    include/render.h \
+    include/legacy_export.h
