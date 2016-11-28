@@ -16,6 +16,7 @@ public:
     template<typename F> CornerNormalizer<T>(F& list);
 
     void requireMinimumLength(qreal length);
+	void intRaster(qreal threshold);
 
     // utilities for line-detection
     dpoint getPointInTheMiddle();

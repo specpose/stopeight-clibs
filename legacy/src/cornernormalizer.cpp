@@ -38,6 +38,18 @@ template <> void CornerNormalizer<dpoint>::requireMinimumLength(qreal lnt){
     }
 }
 
+template<>void CornerNormalizer<dpoint>::intRaster(qreal threshold)
+{
+	ListCopyable<dpoint> newlist = ListCopyable<dpoint>();
+	for (int i = 0; i < this->size(); i++) {
+		if ( (fmod(this->at(i).x(),1) <=threshold) &&
+			 (fmod(this->at(i).y(),1) <= threshold) ) {
+			newlist << this->at(i);
+		}
+	}
+	*this = CornerNormalizer<dpoint>(newlist);
+}
+
 
 template <> void CornerNormalizer<dpoint>::cornerFilters(){
 	// CHECKPRECISION?!
@@ -99,9 +111,9 @@ template<> dpoint CornerNormalizer<dpoint>::getPointInTheMiddle(){
             return middle;
         }
     }else if (myself.size()==1) {
-        //throw "CornerNormalizer<dpoint>::getPointInTheMiddle: Tried to get middle from 1 point?";
+        throw legacy::alg_logic_error("Tried to get middle from 1 point",__FILE__,"");
         return myself.at(0);
     } else {
-        throw "CornerNormalizer<dpoint>::getPointInTheMiddle: Size is "+myself.size();
+		throw legacy::alg_logic_error("Tried to get middle from 0 points", __FILE__, "");
     }
 }
