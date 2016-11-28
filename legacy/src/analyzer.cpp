@@ -46,7 +46,7 @@ template<> Calculator<dpoint> Analyzer<dpoint>::populateTurns(ListBase<dpoint> &
             CornerNormalizer<dpoint> mid = CornerNormalizer<dpoint>(lst);
             result << mid.getPointInTheMiddle();
         }
-        if (k==slices.size()-1){
+        if ((k==slices.size()-1) && (slices[k].size()>0)){
             result << slices[k].last();
         }
     }
