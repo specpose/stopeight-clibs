@@ -37,10 +37,41 @@ template <> void AreaNormalizer<dpoint>::removeInlays(){
 
 template <>void AreaNormalizer<dpoint>::areaFilters(){
 	if (this->checkPrecision()) {
+		//START OLD
 		//this->smoothingJitter(0);
 		//this->risingJitter(0);
+		//END OLD
+
+
+		CornerNormalizer<dpoint> zero = CornerNormalizer<dpoint>(*this);
+		zero.requireMinimumLength(5);
+
+		//from linux wacom only:
+		//smoothing0
+		//rising0
+		//removeinlays
+		//
+
+		TurnNormalizer<dpoint> a = TurnNormalizer<dpoint>(zero);
+		a.risingJitter(0);
+		//a.smoothingJitter(0);
+		a.risingJitter(0);
+
+		//
+
+		CornerNormalizer<dpoint> b = CornerNormalizer<dpoint>(a);
+		//from below
+		b.requireMinimumLength(7);
+		//
+		b.rotateSegmentToXAxis();
+		*this = AreaNormalizer<dpoint>(b);
 		this->removeInlays();
 	}
+	//if (this->checkPrecision()) {
+	//	CornerNormalizer<dpoint> a = CornerNormalizer<dpoint>(*this);
+	//	a.intRaster(0.2);
+	//	*this = AreaNormalizer<dpoint>(a);
+	//}
 	else {
 		TurnNormalizer<dpoint> a = TurnNormalizer<dpoint>(*this);
 		a.smoothingJitter(0);
