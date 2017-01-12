@@ -5,15 +5,17 @@
 
 //#include "sycl/helpers/sycl_buffers.hpp"
 //#include "CL/sycl/buffer/detail/buffer_waiter.hpp"
+#include <sycl/helpers/sycl_iterator.hpp>
+
 
 namespace grapher {
 
-	template<typename T> grapher::Buffer<T>::Buffer(size_t s) : buf(sycl::helpers::make_temp_buffer<T>(s))
+	template<typename T> grapher::Buffer<T>::Buffer(const T* storage, size_t size) : buf( cl::sycl::buffer<T>( storage, cl::sycl::range<1>(size) ))
 	{
 	}
 
-	template grapher::Buffer<float>::Buffer(size_t);
-	template grapher::Buffer<double>::Buffer(size_t);
+	template grapher::Buffer<float>::Buffer(const float* storage, size_t size);
+	template grapher::Buffer<double>::Buffer(const double* storage, size_t size);
 
 	template<typename T> grapher::Buffer<T>::~Buffer() {
 		//int zero = 0;
@@ -21,6 +23,7 @@ namespace grapher {
 		//get_destructor_future fails IncRef, commandgroup not yet created?
 		//if omitted fails DecRef
 		//buf.implementation->~buffer_waiter();
+		buf.~buffer();
 		//auto waiter = cl::sycl::detail::waiter<T, 1>( buf.implementation-> );
 		//waiter.~buffer_waiter();
 		//delete buf;
@@ -29,27 +32,33 @@ namespace grapher {
 	template grapher::Buffer<float>::~Buffer();
 	template grapher::Buffer<double>::~Buffer();
 
-	template<typename T>
-	size_t Buffer<T>::getSize()
+	template<typename T> size_t Buffer<T>::size()
 	{
 		return buf.get_size();
 	}
 
-	template size_t Buffer<float>::getSize();
-	template size_t Buffer<double>::getSize();
+	template size_t Buffer<float>::size();
+	template size_t Buffer<double>::size();
 
-	template<typename T>void*const* Buffer<T>::get_sycl_buffer()
+	template<typename T> T& Buffer<T>::at(size_t _Pos)
 	{
-		//buf.get_access(cl::sycl::access::mode::write,)
-		//void*const* ptr = begin(buf);
-		//return ptr;
-		return nullptr;
-		//return buf.implementation.get();
-		//return buf.reference;
+		//array is on heap, not stack!
+		auto access = buf.template get_access<cl::sycl::access::mode::write>();
+		auto it = sycl::helpers::HostAccessorIterator<T, cl::sycl::access::mode::write>(access, buf.get_size());
+		//auto range = buf.get_range();
+		//auto range = cl::sycl::range<1>(buf.get_range());
+		//return (T&)buf.data();
+		//return (T&)std::get<0>(range);
+		//test = new std::vector<float>(size());
+		//return test->at(0);
+		//ERROR
+		//std::vector<float>::reference ptr2 = test->at(0);
+		decltype(buf)::reference ptr2 = access[0];
+		return ptr2;
 	}
 
-	template void*const* Buffer<float>::get_sycl_buffer();
-	template void*const* Buffer<double>::get_sycl_buffer();
+	template float& Buffer<float>::at(size_t _Pos);
+	//template double& Buffer<double>::at(size_t _Pos);
 
 }
 

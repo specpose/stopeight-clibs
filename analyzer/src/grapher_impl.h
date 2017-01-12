@@ -7,14 +7,17 @@ namespace grapher {
 	template<typename T>class Buffer
 	{
 	public:
-		Buffer(size_t s);
-		~Buffer();
+		Buffer<T>(const T* storage,size_t size);
+		~Buffer<T>();
 
-		size_t getSize();
-		void*const* get_sycl_buffer();
+		size_t size();
+		T& at(size_t _Pos);
 
 	private:
-
-		cl::sycl::buffer<T, 1> buf;
+		//not possible, cant write to pointer of std::array
+		//only construct buffer later from std::vector?
+		cl::sycl::buffer<T> buf;
+		float* ptr;
+		std::vector<float>* test;
 	};
 }

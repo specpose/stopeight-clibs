@@ -16,13 +16,13 @@ void grapher::samples_To_VG(Iterator begin, Iterator end)
 	//sycl::sycl_heterogeneous_execution_policy<class testname> pol;
 	sycl::sycl_execution_policy<> independent;
 	{//sync: buffer
-		cl::sycl::default_selector h;
+		cl::sycl::default_selector h; //default sycl device
 		//different queues?
-		{//queue(s)
+		{//queue(s): it's a functor(handle)
 			cl::sycl::queue sequential(h);
 			//all kernels
 			sycl::sycl_execution_policy<class for_each1> task1(sequential);
-			sycl::impl::transform(task1, begin, end,begin, [](float f) {return 3.3f; });
+			sycl::impl::transform(task1, begin, end,begin, [](float f) {return 3.3f; });//its doing queue stuff internally -> not sycl inside sycl
 		}//kernels sync
 	}//destruct: buffer
 }
