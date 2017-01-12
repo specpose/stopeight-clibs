@@ -21,12 +21,15 @@ namespace grapher {
 		size_t size();
 		T& at(size_t _Pos);
 
+//		sycl::helpers::BufferIterator<T, std::allocator<T>> rmrbegin();
+//		sycl::helpers::BufferIterator<T, std::allocator<T>> rmrend();
+
+		//template<typename... stl_args, typename=Enable_if<sizeof...(stl_args)==0> >void execute_stl(void(*_func)(stl_args...),stl_args... _a);
+		void execute_stl();
+
+
 	private:
-		//not possible, cant write to pointer of std::array
-		//only construct buffer later from std::vector?
-//		cl::sycl::buffer<T, 1> buf;
-//		float* ptr;
-//		std::vector<float>* test;
+//		cl::sycl::buffer<T> buf;
 	};
 }
 #endif
