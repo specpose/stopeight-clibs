@@ -11,14 +11,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\algo.h" />
     <ClInclude Include="..\include\analyzer_global.h" />
     <ClInclude Include="..\include\error.h" />
-    <ClInclude Include="..\include\grapher.h" />
     <ClInclude Include="..\include\vector_graph.hpp" />
     <ClInclude Include="..\include\Matrix.h" />
     <ClInclude Include="..\include\single_task.h" />
     <ClInclude Include="..\include\test.h" />
+    <ClInclude Include="..\src\algo_impl.h" />
     <ClInclude Include="..\src\grapher_impl.h" />
   </ItemGroup>
   <ItemGroup>
