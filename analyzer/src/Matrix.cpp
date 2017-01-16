@@ -15,7 +15,7 @@ template<typename datatype> Matrix<datatype>::Matrix(int dim) : elems(CL_DBL_MIN
 template<typename datatype> Matrix<datatype>::Matrix(std::initializer_list<datatype> list) {
 	elems = std::valarray<datatype>{ list };
 	//const size_t indexes[]{ 2,5,8 };
-	size_t indexes[dimensions()];
+	//size_t indexes[dimensions()];
 	//for (int i; i < list.size(); ++i) {
 	//	indexes << std::modulus<int>((i+1) / dimensions());
 
@@ -24,7 +24,7 @@ template<typename datatype> Matrix<datatype>::Matrix(std::initializer_list<datat
 	//	}
 	//}
 	//std::valarray<datatype> elems2 = elems[std::valarray<size_t>(indexes, dimensions())];
-	for (auto i : indexes) std::cout << i<< ", ";
+	//for (auto i : indexes) std::cout << i<< ", ";
 	std::cout << "\n";
 }
 
