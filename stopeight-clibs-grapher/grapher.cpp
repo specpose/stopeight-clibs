@@ -4,6 +4,8 @@
 #include "stdafx.h"
 
 #include "grapher_impl.h"
+#include "algo_impl.h"
+#include <experimental/algorithm>
 
 namespace grapher {
 
@@ -24,7 +26,7 @@ namespace grapher {
 	template<typename T> void Buffer<T>::execute_stl()
 	{
 				//par
-				//grapher::samples_To_VG(task1, sycl::helpers::begin(buf), sycl::helpers::end(buf), sycl::helpers::begin(buf));//its doing queue stuff internally -> not sycl inside sycl
+				grapher::samples_To_VG(std::experimental::parallel::par, std::begin(buf), std::end(buf), std::begin(buf));//its doing queue stuff internally -> not sycl inside sycl
 	}
 	//specialization
 	//template<> template<typename... stl_args> void Buffer<float>::execute_stl(void(*_func)(stl_args...));
