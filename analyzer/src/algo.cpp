@@ -5,9 +5,6 @@
 
 //double define
 #include <sycl/execution_policy>
-//#include <experimental/execution_policy>
-//#include "sycl/algorithm/for_each.hpp"
-#include <vector>
 
 template <class ExecutionPolicy, class Iterator, class OutputIterator>
 void grapher::samples_To_VG(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2)
@@ -16,7 +13,6 @@ void grapher::samples_To_VG(ExecutionPolicy& task1, Iterator begin, Iterator end
 	//all kernels
 	sycl::sycl_execution_policy<class transform1> task1_sub1(sequential);
 	sycl::impl::transform(task1_sub1, begin, end,begin2, [](float f) {return 3.3f; });//its doing queue stuff internally -> not sycl inside sycl
-	
 }
 
 
