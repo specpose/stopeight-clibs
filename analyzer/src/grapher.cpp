@@ -3,10 +3,14 @@
 
 #include "grapher_impl.h"
 
+#include <memory>
+
 //begin()function
 #include <sycl/helpers/sycl_iterator.hpp>
 //begin()function
 
+//msvc compile
+#include "algo_impl.h"
 
 namespace grapher {
 
@@ -43,8 +47,12 @@ namespace grapher {
 	template grapher::Buffer<double>::~Buffer();
 
 	//template<typename T> template<typename... stl_args> void Buffer<T>::execute_stl(void(*_func)(stl_args...))
-	template<typename T> void Buffer<T>::execute_stl()
+	template<typename T> std::vector<T> Buffer<T>::execute_stl()
 	{
+		auto output = sycl::helpers::make_temp_buffer<T>(buf.get_count());
+		std::vector<T> result = std::vector<T>(output.get_count());
+		std::shared_ptr<T> result_data{ &result.at(0) };
+		output.set_final_data(result_data);
 		//sycl::sycl_heterogeneous_execution_policy<class testname> pol;
 		sycl::sycl_execution_policy<> independent;
 		{//sync: buffer
@@ -53,22 +61,26 @@ namespace grapher {
 			{//queue(s): it's a functor(handle)
 				cl::sycl::queue sequential(h);
 				//all kernels
-				sycl::sycl_execution_policy<class for_each1> task1(sequential);
+				//msvc compile
+				//sycl::sycl_execution_policy<class for_each1> task1(sequential);
+				sycl::sycl_execution_policy<> task1(sequential);
 				//void(*_func)(decltype(buf)...);
 				//_func = grapher::samples_To_VG<decltype(task1),decltype(buf), decltype(buf)>&;
 				//_func(task1, sycl::helpers::begin(buf), sycl::helpers::end(buf), sycl::helpers::begin(buf));
-				//grapher::samples_To_VG(task1, sycl::helpers::begin(buf), sycl::helpers::end(buf), sycl::helpers::begin(buf));//its doing queue stuff internally -> not sycl inside sycl
+				grapher::samples_To_VG(task1, sycl::helpers::begin(buf), sycl::helpers::end(buf), sycl::helpers::begin(output));//its doing queue stuff internally -> not sycl inside sycl
 			}//kernels sync
 		}//destruct: buffer
+		return result;
 	}
 	//specialization
 	//template<> template<typename... stl_args> void Buffer<float>::execute_stl(void(*_func)(stl_args...));
-	template void Buffer<float>::execute_stl();
+	template std::vector<float> Buffer<float>::execute_stl();
 	//explicit instantiation
 	//template template void Buffer<float>::execute_stl(void(iteratorstart, iteratorend), iteratorstart, iteratorend);
 
 	template<typename T> size_t Buffer<T>::size()
 	{
+		//careful size in bytes, not count!
 		return buf.get_size();
 	}
 
@@ -78,7 +90,7 @@ namespace grapher {
 	template<typename T> T& Buffer<T>::at(size_t _Pos)
 	{
 		//array is on heap, not stack!
-		auto access = buf.template get_access<cl::sycl::access::mode::write>();
+		auto access = buf.template get_access<cl::sycl::access::mode::read>();
 		//auto it = sycl::helpers::HostAccessorIterator<T, cl::sycl::access::mode::write>(access, buf.get_size());
 		//auto range = cl::sycl::range<1>(buf.get_range());
 		//return (T&)buf.data();
@@ -107,4 +119,5 @@ namespace grapher {
 }
 
 //weird double defined symbol error for sycl::device from msvc
+//msvc compile
 #include "algo.cpp"

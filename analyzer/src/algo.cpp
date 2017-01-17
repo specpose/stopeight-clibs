@@ -19,8 +19,9 @@ void grapher::samples_To_VG(ExecutionPolicy& task1, Iterator begin, Iterator end
 	
 }
 
+
 // Taken from msvc symbol error
-using fvect = std::_Vector_iterator<std::_Vector_val<std::_Simple_types<float>>>;
-//using dvect = std::_Vector_iterator<std::_Vector_val<std::_Simple_types<double>>>;
-template void grapher::samples_To_VG(sycl::sycl_execution_policy<>& task1, fvect begin, fvect end, fvect begin2);
+using fvect = sycl::helpers::BufferIterator<float,std::allocator<float> >;
+using fexec = sycl::sycl_execution_policy<>;
+template void grapher::samples_To_VG(fexec& task1, fvect begin, fvect end, fvect begin2);
 //template void grapher::samples_To_VG(dvect begin, dvect end, dvect begin2);
