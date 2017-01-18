@@ -17,7 +17,7 @@ namespace grapher {
 		sycl::helpers::BufferIterator<T, std::allocator<T>> rmrend();*/
 
 		//template<typename... stl_args, typename=Enable_if<sizeof...(stl_args)==0> >void execute_stl(void(*_func)(stl_args...),stl_args... _a);
-		std::vector<T> operator()(int resolution, int sampleRate);
+		std::vector<T> operator()(int samplesPerPixel);
 
 
 	private:

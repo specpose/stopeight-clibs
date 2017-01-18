@@ -27,7 +27,7 @@ namespace grapher {
 	template grapher::Buffer<double>::~Buffer();
 
 	//template<typename T> template<typename... stl_args> void Buffer<T>::execute_stl(void(*_func)(stl_args...))
-	template<typename T> std::vector<T> Buffer<T>::operator()(int resolution, int sampleRate)
+	template<typename T> std::vector<T> Buffer<T>::operator()(int samplesPerPixel)
 	{
 		std::vector<T> result = std::vector<T>(buf.get_count());
 		cl::sycl::buffer<T> output(result.data(), cl::sycl::range<1>(result.size()));
@@ -45,14 +45,14 @@ namespace grapher {
 				//void(*_func)(decltype(buf)...);
 				//_func = grapher::samples_To_VG<decltype(task1),decltype(buf), decltype(buf)>&;
 				//_func(task1, sycl::helpers::begin(buf), sycl::helpers::end(buf), sycl::helpers::begin(buf));
-				grapher::samples_To_VG(task1, sycl::helpers::begin(buf), sycl::helpers::end(buf), sycl::helpers::begin(output));//its doing queue stuff internally -> not sycl inside sycl
+				(grapher::samples_To_VG(samplesPerPixel))(task1, sycl::helpers::begin(buf), sycl::helpers::end(buf), sycl::helpers::begin(output));//its doing queue stuff internally -> not sycl inside sycl
 			}//kernels sync
 		}//destruct: buffer
 		return result;
 	}
 	//specialization
 	//template<> template<typename... stl_args> void Buffer<float>::execute_stl(void(*_func)(stl_args...));
-	template std::vector<float> Buffer<float>::operator()(int resolution, int sampleRate);
+	template std::vector<float> Buffer<float>::operator()(int samplesPerPixel);
 	//explicit instantiation
 	//template template void Buffer<float>::execute_stl(void(iteratorstart, iteratorend), iteratorstart, iteratorend);
 
