@@ -27,7 +27,7 @@ namespace grapher {
 	template grapher::Buffer<double>::~Buffer();
 
 	//template<typename T> template<typename... stl_args> void Buffer<T>::execute_stl(void(*_func)(stl_args...))
-	template<typename T> std::vector<T> Buffer<T>::execute_stl()
+	template<typename T> std::vector<T> Buffer<T>::operator()(int resolution, int sampleRate)
 	{
 		std::vector<T> result = std::vector<T>(buf.get_count());
 		cl::sycl::buffer<T> output(result.data(), cl::sycl::range<1>(result.size()));
@@ -52,7 +52,7 @@ namespace grapher {
 	}
 	//specialization
 	//template<> template<typename... stl_args> void Buffer<float>::execute_stl(void(*_func)(stl_args...));
-	template std::vector<float> Buffer<float>::execute_stl();
+	template std::vector<float> Buffer<float>::operator()(int resolution, int sampleRate);
 	//explicit instantiation
 	//template template void Buffer<float>::execute_stl(void(iteratorstart, iteratorend), iteratorstart, iteratorend);
 
