@@ -15,6 +15,6 @@ Test::Test()
 Test::~Test(){}
 
 void Test::hello(const char *fileName){
-	std::cout << "Hello " << fileName << ": Number from SYCL single_task "<<number()<<"\n";
+	std::cout << "Hello " << fileName << ": My Number from SYCL single_task "<<number()<<"\n";
 	Matrix<> test{1,2,3,4,5,6,7,8,9};
 }

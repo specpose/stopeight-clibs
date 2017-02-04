@@ -5,6 +5,8 @@
 #include <iostream>
 #include <functional>
 
+#define CL_DBL_MIN          2.225073858507201383090e-308
+
 template<typename datatype> Matrix<datatype>::Matrix(int dim) : elems(CL_DBL_MIN,dim*dim) {
 	std::cout << "dimensions is " << dimensions() << "\n";
 	

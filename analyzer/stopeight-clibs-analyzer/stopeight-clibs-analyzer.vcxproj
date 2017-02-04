@@ -13,11 +13,14 @@
   <ItemGroup>
     <ClInclude Include="..\include\analyzer_global.h" />
     <ClInclude Include="..\include\error.h" />
+    <ClInclude Include="..\include\grapher.h" />
+    <ClInclude Include="..\include\vector_graph.hpp" />
     <ClInclude Include="..\include\Matrix.h" />
     <ClInclude Include="..\include\single_task.h" />
     <ClInclude Include="..\include\test.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\grapher.cpp" />
     <ClCompile Include="..\src\Matrix.cpp" />
     <ClCompile Include="..\src\single_task.cpp" />
     <ClCompile Include="..\src\test.cpp" />
@@ -47,12 +50,12 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <SourcePath>$(ProjectDir)\..;$(VC_SourcePath)</SourcePath>
-    <IncludePath>C:\boost_1_61_0;$(ProjectDir)\..\..\..\OpenCL-Headers;$(ProjectDir)\..\..\..\triSYCL\include;$(ProjectDir)\..;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)\..;$(IncludePath)</IncludePath>
     <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <SourcePath>$(ProjectDir)\..;$(VC_SourcePath)</SourcePath>
-    <IncludePath>C:\boost_1_61_0;$(ProjectDir)\..\..\..\OpenCL-Headers;$(ProjectDir)\..\..\..\triSYCL\include;$(ProjectDir)\..;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)\..;$(IncludePath)</IncludePath>
     <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup>
@@ -61,6 +64,8 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeTypeInfo Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</RuntimeTypeInfo>
       <RuntimeTypeInfo Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</RuntimeTypeInfo>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\boost_1_61_0;$(ProjectDir)\..\..\..\triSYCL\include;$(ProjectDir)\..\..\..\SyclParallelSTL\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\boost_1_61_0;$(ProjectDir)\..\..\..\triSYCL\include;$(ProjectDir)\..\..\..\SyclParallelSTL\include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Lib />
     <Lib />

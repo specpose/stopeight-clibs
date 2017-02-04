@@ -2,14 +2,15 @@
 // GNU Lesser General Public License, version 2.1
 
 #include "analyzer_global.h"
-#include "cl_platform.h"
+//#include "cl_platform.h"
 #include <valarray>
 
 /*
 	A square, row-major, dense matrix
 */
 
-template<typename datatype=cl_double> class Matrix {
+//template<typename datatype=cl_double> class Matrix {
+template<typename datatype = double> class Matrix {
 public:
 	Matrix(int dimensions);
 	Matrix(std::initializer_list<datatype> list);
@@ -19,4 +20,5 @@ private:
 	std::valarray<datatype> elems;
 };
 
-template class ANALYZERSHARED_EXPORT Matrix<cl_double>;
+//template class ANALYZERSHARED_EXPORT Matrix<cl_double>;
+template class ANALYZERSHARED_EXPORT Matrix<double>;
