@@ -6,16 +6,26 @@
 
 #include "analyzer_global.h"
 
+#include <iostream>
+
+// grapher.h is compiled by msvc, grapher_impl.h is compiled by llvm4
+// Hide everything SYCL
+//#include "sycl/helpers/sycl_buffers.hpp"
+
 namespace grapher {
 
-class ANALYZERSHARED_EXPORT Test2
-{
-public:
+	template<typename T>class Buffer
+	{
+	public:
+		Buffer(size_t s);
+		~Buffer();
 
-	template<typename T> void create_sycl_buffer(size_t s);
+		void*const* get_sycl_buffer();
 
-};
+	private:
 
+//		cl::sycl::buffer<T, 1> buf;
+	};
 }
 
 #endif

@@ -18,6 +18,7 @@
     <ClInclude Include="..\include\Matrix.h" />
     <ClInclude Include="..\include\single_task.h" />
     <ClInclude Include="..\include\test.h" />
+    <ClInclude Include="..\src\grapher_impl.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\grapher.cpp" />
