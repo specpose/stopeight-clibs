@@ -10,6 +10,7 @@ namespace grapher {
 		Buffer(size_t s);
 		~Buffer();
 
+		size_t getSize();
 		void*const* get_sycl_buffer();
 
 	private:
