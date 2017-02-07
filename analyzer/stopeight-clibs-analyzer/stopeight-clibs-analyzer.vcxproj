@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\algo.h" />
     <ClInclude Include="..\include\analyzer_global.h" />
     <ClInclude Include="..\include\error.h" />
     <ClInclude Include="..\include\grapher.h" />
@@ -21,6 +22,7 @@
     <ClInclude Include="..\src\grapher_impl.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\include\algo.cpp" />
     <ClCompile Include="..\src\grapher.cpp" />
     <ClCompile Include="..\src\Matrix.cpp" />
     <ClCompile Include="..\src\single_task.cpp" />
