@@ -22,7 +22,7 @@
     <ClInclude Include="..\src\grapher_impl.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\include\algo.cpp" />
+    <ClCompile Include="..\src\algo.cpp" />
     <ClCompile Include="..\src\grapher.cpp" />
     <ClCompile Include="..\src\Matrix.cpp" />
     <ClCompile Include="..\src\single_task.cpp" />

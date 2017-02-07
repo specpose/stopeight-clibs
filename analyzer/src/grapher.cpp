@@ -3,8 +3,8 @@
 
 #include "grapher_impl.h"
 
-#include "sycl/helpers/sycl_buffers.hpp"
-#include "CL/sycl/buffer/detail/buffer_waiter.hpp"
+//#include "sycl/helpers/sycl_buffers.hpp"
+//#include "CL/sycl/buffer/detail/buffer_waiter.hpp"
 
 namespace grapher {
 
@@ -40,6 +40,9 @@ namespace grapher {
 
 	template<typename T>void*const* Buffer<T>::get_sycl_buffer()
 	{
+		//buf.get_access(cl::sycl::access::mode::write,)
+		//void*const* ptr = begin(buf);
+		//return ptr;
 		return nullptr;
 		//return buf.implementation.get();
 		//return buf.reference;
@@ -49,3 +52,6 @@ namespace grapher {
 	template void*const* Buffer<double>::get_sycl_buffer();
 
 }
+
+//weird double defined symbol error for sycl::device from msvc
+#include "algo.cpp"
