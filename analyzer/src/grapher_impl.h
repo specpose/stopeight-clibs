@@ -1,13 +1,17 @@
 #pragma once
 
+//#include "preloaderif.h"
+
 #include "sycl/helpers/sycl_buffers.hpp"
 
 namespace grapher {
 
-	template<typename T>class Buffer
+	template<typename T>class Buffer //: public PreloaderIF<T>
 	{
 	public:
-		Buffer<T>(const T* storage,size_t size);
+		//Buffer<T>() {};
+		Buffer<T>(const T* storage, size_t size);
+		Buffer<T>(std::unique_ptr<std::vector<T>>& s);
 		~Buffer<T>();
 
 		/*size_t size();
