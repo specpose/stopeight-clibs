@@ -12,8 +12,10 @@ namespace grapher {
 	template<typename T>class PreloaderIF
 	{
 	public:
-		PreloaderIF<T>(std::unique_ptr<std::vector<T>>& s);
-		virtual ~PreloaderIF<T>() {};
+		//makes implementation!!
+		//PreloaderIF<T>();
+		PreloaderIF<T>(std::vector<T>* s);
+		virtual ~PreloaderIF<T>(){};
 
 		virtual std::vector<T> operator()(int samplesPerPixel) =0;
 	};

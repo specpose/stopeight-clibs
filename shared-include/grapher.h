@@ -19,7 +19,8 @@ namespace grapher {
 	template<typename T>class Buffer : public PreloaderIF<T>
 	{
 	public:
-		Buffer<T>(std::unique_ptr<std::vector<T>>& s);
+		//Buffer<T>();
+		Buffer<T>(std::vector<T>* s);
 		~Buffer<T>();
 
 		std::vector<T> operator()(int samplesPerPixel);

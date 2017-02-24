@@ -13,23 +13,28 @@
 
 namespace grapher {
 
-	/*template<typename T> grapher::Buffer<T>::Buffer(const T* storage, size_t size)
-		: buf(std::vector<T>(size))
-	{
-		buf.assign(storage, (storage + size));
-	}
-	template grapher::Buffer<float>::Buffer(const float* storage, size_t size);
-	template grapher::Buffer<double>::Buffer(const double* storage, size_t size);*/
+	template<typename T> grapher::Buffer<T>::Buffer() {
 
-	template<typename T> grapher::Buffer<T>::Buffer(std::unique_ptr<std::vector<T>>& s)
+	}
+
+	template<typename T> grapher::Buffer<T>::Buffer(std::vector<T>* s)
+		: PreloaderIF{ *this }
+		, buf(s)
+	{
+		//buf.assign(storage, (storage + size));
+	}
+	template grapher::Buffer<float>::Buffer(std::vector<float>* s);
+	template grapher::Buffer<double>::Buffer(std::vector<double>* s);
+
+/*	template<typename T> grapher::Buffer<T>::Buffer(std::unique_ptr<std::vector<T>> s)
 //		: PreloaderIF{ *this }
 		: PreloaderIF()
 //		, buf(s)
 		, buf{s}
 	{
 	}
-	template grapher::Buffer<float>::Buffer(std::unique_ptr<std::vector<float>>& s);
-	template grapher::Buffer<double>::Buffer(std::unique_ptr<std::vector<double>>& s);
+	template grapher::Buffer<float>::Buffer(std::unique_ptr<std::vector<float>> s);
+	template grapher::Buffer<double>::Buffer(std::unique_ptr<std::vector<double>> s);*/
 
 	template<typename T> grapher::Buffer<T>::~Buffer() {
 	}
@@ -39,7 +44,7 @@ namespace grapher {
 	template<typename T> std::vector<T> Buffer<T>::operator()(int samplesPerPixel)
 	{
 		//std::vector<T> output = std::vector<T>((buf.get())->size());
-		std::vector<T> output = std::vector<T>();
+		std::vector<T> output = std::vector<T>(buf->size());
 				//par
 		//(grapher::samples_To_VG(samplesPerPixel))(std::experimental::parallel::par_vec, std::begin(*buf), std::end(*buf), std::begin(output));
 		(grapher::samples_To_VG(samplesPerPixel))(dummy_policy, std::begin(*buf), std::end(*buf), std::begin(output));
