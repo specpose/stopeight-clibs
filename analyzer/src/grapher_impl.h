@@ -1,16 +1,15 @@
 #pragma once
 
-//#include "preloaderif.h"
+#include "preloaderif.h"
 
 #include "sycl/helpers/sycl_buffers.hpp"
 
 namespace grapher {
 
-	template<typename T>class Buffer //: public PreloaderIF<T>
+	template<typename T>class Buffer : public PreloaderIF<T>
 	{
 	public:
-		//Buffer<T>() {};
-		Buffer<T>(const T* storage, size_t size);
+		//Buffer<T>(const T* storage, size_t size);
 		Buffer<T>(std::unique_ptr<std::vector<T>>& s);
 		~Buffer<T>();
 
@@ -20,7 +19,6 @@ namespace grapher {
 		sycl::helpers::BufferIterator<T, std::allocator<T>> rmrbegin();
 		sycl::helpers::BufferIterator<T, std::allocator<T>> rmrend();*/
 
-		//template<typename... stl_args, typename=Enable_if<sizeof...(stl_args)==0> >void execute_stl(void(*_func)(stl_args...),stl_args... _a);
 		std::vector<T> operator()(int samplesPerPixel);
 
 

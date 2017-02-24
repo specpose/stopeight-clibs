@@ -14,18 +14,16 @@
 
 namespace grapher {
 	/* Assumes continuos allocation. Alternative: Audio read from within SyCL functor. Todo: Use the same allocator for storage class and buffer.*/
-	template<typename T> grapher::Buffer<T>::Buffer(const T* storage, size_t size)
+	/*template<typename T> grapher::Buffer<T>::Buffer(const T* storage, size_t size)
 		 : buf(cl::sycl::buffer<T>(storage, cl::sycl::range<1>(size)))
 	{
 	}
 	template grapher::Buffer<float>::Buffer(const float* storage, size_t size);
-	template grapher::Buffer<double>::Buffer(const double* storage, size_t size);
+	template grapher::Buffer<double>::Buffer(const double* storage, size_t size);*/
 
 	template<typename T> grapher::Buffer<T>::Buffer(std::unique_ptr<std::vector<T>>& s)
-		//: PreloaderIF{ *this }
-		// PreloaderIF()
-		: buf( cl::sycl::buffer<T>( const_cast<T*>(&s->at(0)), cl::sycl::range<1>(s->size()) ))
-		//, Buffer()
+		: PreloaderIF{ *this }
+		, buf( cl::sycl::buffer<T>( const_cast<T*>(&s->at(0)), cl::sycl::range<1>(s->size()) ))
 	{
 	}
 	template grapher::Buffer<float>::Buffer(std::unique_ptr<std::vector<float>>& s);
@@ -36,7 +34,6 @@ namespace grapher {
 	template grapher::Buffer<float>::~Buffer();
 	template grapher::Buffer<double>::~Buffer();
 
-	//template<typename T> template<typename... stl_args> void Buffer<T>::execute_stl(void(*_func)(stl_args...))
 	template<typename T> std::vector<T> Buffer<T>::operator()(int samplesPerPixel)
 	{
 		std::vector<T> result = std::vector<T>(buf.get_count());
@@ -61,7 +58,6 @@ namespace grapher {
 		return result;
 	}
 	//specialization
-	//template<> template<typename... stl_args> void Buffer<float>::execute_stl(void(*_func)(stl_args...));
 	template std::vector<float> Buffer<float>::operator()(int samplesPerPixel);
 	//explicit instantiation
 	//template template void Buffer<float>::execute_stl(void(iteratorstart, iteratorend), iteratorstart, iteratorend);

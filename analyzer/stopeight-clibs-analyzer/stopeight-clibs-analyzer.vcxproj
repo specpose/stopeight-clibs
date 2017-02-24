@@ -70,8 +70,8 @@
       </RuntimeTypeInfo>
       <RuntimeTypeInfo Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </RuntimeTypeInfo>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)\..\..\..\OpenCL-Headers;C:\boost_1_63_0;$(ProjectDir)\..\..\..\triSYCL\include;$(ProjectDir)\..\..\..\SyclParallelSTL\include;</AdditionalIncludeDirectories>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)\..\..\..\OpenCL-Headers;C:\boost_1_63_0;$(ProjectDir)\..\..\..\triSYCL\include;$(ProjectDir)\..\..\..\SyclParallelSTL\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)\..\..\..\OpenCL-Headers;C:\boost_1_63_0;$(ProjectDir)\..\..\..\triSYCL\include;$(ProjectDir)\..\..\..\SyclParallelSTL\include;$(ProjectDir)\..\..\..\stopeight-clibs\shared-include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)\..\..\..\OpenCL-Headers;C:\boost_1_63_0;$(ProjectDir)\..\..\..\triSYCL\include;$(ProjectDir)\..\..\..\SyclParallelSTL\include;$(ProjectDir)\..\..\..\stopeight-clibs\shared-include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Lib />
     <Lib />
