@@ -4,8 +4,12 @@
 #include "stdafx.h"
 
 #include "grapher_impl.h"
-//#include "algo_impl.h"
+
 //#include <experimental/algorithm>
+
+//#include "algo.h"
+
+#include "dummy.h"
 
 namespace grapher {
 
@@ -18,8 +22,10 @@ namespace grapher {
 	template grapher::Buffer<double>::Buffer(const double* storage, size_t size);*/
 
 	template<typename T> grapher::Buffer<T>::Buffer(std::unique_ptr<std::vector<T>>& s)
-		: PreloaderIF{ *this }
-		, buf(s)
+//		: PreloaderIF{ *this }
+		: PreloaderIF()
+//		, buf(s)
+		, buf{s}
 	{
 	}
 	template grapher::Buffer<float>::Buffer(std::unique_ptr<std::vector<float>>& s);
@@ -32,9 +38,13 @@ namespace grapher {
 
 	template<typename T> std::vector<T> Buffer<T>::operator()(int samplesPerPixel)
 	{
+		//std::vector<T> output = std::vector<T>((buf.get())->size());
+		std::vector<T> output = std::vector<T>();
 				//par
-				//grapher::samples_To_VG(std::experimental::parallel::par, std::begin(buf), std::end(buf), std::begin(buf));//its doing queue stuff internally -> not sycl inside sycl
-		return std::vector<T>(0);
+		//(grapher::samples_To_VG(samplesPerPixel))(std::experimental::parallel::par_vec, std::begin(*buf), std::end(*buf), std::begin(output));
+		(grapher::samples_To_VG(samplesPerPixel))(dummy_policy, std::begin(*buf), std::end(*buf), std::begin(output));
+
+		return output;
 	}
 	//specialization
 	template std::vector<float> Buffer<float>::operator()(int samplesPerPixel);
@@ -73,4 +83,4 @@ namespace grapher {
 }
 
 //weird double defined symbol error for sycl::device from msvc
-//#include "algo.cpp"
+#include "algo.cpp"

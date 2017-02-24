@@ -10,7 +10,7 @@
 //begin()function
 
 //msvc compile
-#include "algo_impl.h"
+#include "algo.h"
 
 namespace grapher {
 	/* Assumes continuos allocation. Alternative: Audio read from within SyCL functor. Todo: Use the same allocator for storage class and buffer.*/

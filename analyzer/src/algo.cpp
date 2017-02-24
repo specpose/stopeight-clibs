@@ -1,7 +1,7 @@
 // Copyright (C) 2017 Fassio Blatter
 // GNU Lesser General Public License, version 2.1
 
-#include "algo_impl.h"
+#include "algo.h"
 //double define
 #include <sycl/execution_policy>
 
@@ -51,7 +51,7 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 	//buffer double pair (shorter!)
 	//__add_scalars(samplesPerPixel)
 	//move output data to outputiterator
-	std::copy<decltype(sycl::helpers::begin(b1)),decltype(begin2)>(sycl::helpers::begin(b1), sycl::helpers::end(b1), begin2);
+	//std::copy<decltype(sycl::helpers::begin(b1)),decltype(begin2)>(sycl::helpers::begin(b1), sycl::helpers::end(b1), begin2);
 }
 template void grapher::samples_To_VG::operator()(fexec& task1, fvect begin, fvect end, fvect begin2);
 //template void grapher::samples_To_VG(dvect begin, dvect end, dvect begin2);
