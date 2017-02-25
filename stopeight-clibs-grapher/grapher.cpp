@@ -41,10 +41,10 @@ namespace grapher {
 	template grapher::Buffer<float>::~Buffer();
 	template grapher::Buffer<double>::~Buffer();
 
-	template<typename T> std::vector<T> Buffer<T>::operator()(int samplesPerPixel)
+	template<typename T> std::vector<std::pair<float, float>> Buffer<T>::operator()(int samplesPerPixel)
 	{
 		//std::vector<T> output = std::vector<T>((buf.get())->size());
-		std::vector<T> output = std::vector<T>(buf->size());
+		std::vector<std::pair<float,float>> output = std::vector<std::pair<float,float>>(buf->size());
 				//par
 		//(grapher::samples_To_VG(samplesPerPixel))(std::experimental::parallel::par_vec, std::begin(*buf), std::end(*buf), std::begin(output));
 		(grapher::samples_To_VG(samplesPerPixel))(dummy_policy, std::begin(*buf), std::end(*buf), std::begin(output));
@@ -52,7 +52,7 @@ namespace grapher {
 		return output;
 	}
 	//specialization
-	template std::vector<float> Buffer<float>::operator()(int samplesPerPixel);
+	template std::vector<std::pair<float, float>> Buffer<float>::operator()(int samplesPerPixel);
 	//explicit instantiation
 	//template template void Buffer<float>::execute_stl(void(iteratorstart, iteratorend), iteratorstart, iteratorend);
 

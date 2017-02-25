@@ -16,14 +16,14 @@
 
 namespace grapher {
 
-	template<typename T>class Buffer : public PreloaderIF<T>
+	template<typename T>class Buffer : public PreloaderIF<T, std::vector<std::pair<float, float>>>
 	{
 	public:
 		//Buffer<T>();
 		Buffer<T>(std::vector<T>* s);
 		~Buffer<T>();
 
-		std::vector<T> operator()(int samplesPerPixel);
+		std::vector<std::pair<float, float>> operator()(int samplesPerPixel);
 	};
 }
 #endif

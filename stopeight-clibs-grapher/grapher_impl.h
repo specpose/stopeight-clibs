@@ -6,7 +6,7 @@
 
 namespace grapher {
 
-	template<typename T>class Buffer : public PreloaderIF<T>
+	template<typename T>class Buffer : public PreloaderIF<T, std::vector<std::pair<float, float>>>
 	{
 	public:
 		Buffer<T>();
@@ -19,7 +19,7 @@ namespace grapher {
 		std::_Vector_iterator<std::_Vector_val<std::_Simple_types<T>>> rmrbegin();
 		std::_Vector_iterator<std::_Vector_val<std::_Simple_types<T>>> rmrend();*/
 
-		std::vector<T> operator()(int samplesPerPixel);
+		std::vector<std::pair<float, float>> operator()(int samplesPerPixel);
 
 
 	private:

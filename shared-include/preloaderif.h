@@ -9,15 +9,15 @@
 
 namespace grapher {
 
-	template<typename T>class PreloaderIF
+	template<typename T,typename ReturnType>class PreloaderIF
 	{
 	public:
 		//makes implementation!!
 		//PreloaderIF<T>();
-		PreloaderIF<T>(std::vector<T>* s);
-		virtual ~PreloaderIF<T>(){};
+		PreloaderIF<T,ReturnType>(std::vector<T>* s);
+		virtual ~PreloaderIF<T,ReturnType>(){};
 
-		virtual std::vector<T> operator()(int samplesPerPixel) =0;
+		virtual ReturnType operator()(int samplesPerPixel) =0;
 	};
 }
 
