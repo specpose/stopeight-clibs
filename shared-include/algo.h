@@ -10,7 +10,7 @@ namespace grapher {
 		__calculate_rotations();
 		~__calculate_rotations();
 
-		template <class ExecutionPolicy, class Iterator, class OutputIterator>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2);
+		template <class ExecutionPolicy, class Iterator, class OutputIterator>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2,std::random_access_iterator_tag);
 	};
 
 	class samples_To_VG {
