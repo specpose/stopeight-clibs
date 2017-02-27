@@ -36,8 +36,8 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 {
 	//binary,not unary
 	std::transform(begin, end, begin2,begin2, [](double rot, std::pair<double, double> vec) {
-		double x = (cos(rot)*vec.first - sin(rot)*vec.first);
-		double y = (sin(rot)*vec.second + cos(rot)*vec.second);
+		double x = (cos(rot)*vec.first - sin(rot)*vec.second);
+		double y = (sin(rot)*vec.first + cos(rot)*vec.second);
 		std::pair<double, double> p{ x , y };
 		return p;
 	});
@@ -84,7 +84,7 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 	//__calculate_rotations()(task1, begin, end, std::begin(rotations), typename std::iterator_traits<Iterator>::iterator_category{});
 	__calculate_rotations()(task1, begin, end, std::begin(rotations), Iterator::iterator_category{});
 	//buffer double pair; length of vector in x-direction depends on sampleRate and window-pixels; will be rotated below
-	std::vector<std::pair<double, double>> vectors = std::vector<std::pair<double, double>>(size, {1 / _samplesPerPixel, 0.0f} );
+	std::vector<std::pair<double, double>> vectors = std::vector<std::pair<double, double>>(size, std::pair<double,double>{1.0f / _samplesPerPixel, 0.0f} );
 	//__apply_rotation_matrix
 	__apply_rotation_matrix()(task1, std::begin(rotations), std::end(rotations), std::begin(vectors), Iterator::iterator_category{});
 	//buffer double pair (shorter!)
