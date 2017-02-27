@@ -44,7 +44,8 @@ namespace grapher {
 	template<typename T> std::vector<std::pair<float, float>> Buffer<T>::operator()(int samplesPerPixel)
 	{
 		//std::vector<T> output = std::vector<T>((buf.get())->size());
-		std::vector<std::pair<float,float>> output = std::vector<std::pair<float,float>>(buf->size());
+		//std::vector<std::pair<float,float>> output = std::vector<std::pair<float,float>>(buf->size());
+		std::vector<std::pair<float, float>> output = std::vector<std::pair<float, float>>(grapher::samples_To_VG_final_size(buf->size(),samplesPerPixel));
 				//par
 		//(grapher::samples_To_VG(samplesPerPixel))(std::experimental::parallel::par_vec, std::begin(*buf), std::end(*buf), std::begin(output));
 		(grapher::samples_To_VG(samplesPerPixel))(dummy_policy, std::begin(*buf), std::end(*buf), std::begin(output));

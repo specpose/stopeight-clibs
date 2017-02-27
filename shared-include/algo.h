@@ -26,6 +26,8 @@ namespace grapher {
 		int _samplesPerPixel;
 	};
 
+	int samples_To_VG_final_size(int inputSize, int samplesPerPixel);
+
 	class samples_To_VG {
 	public:
 		samples_To_VG(int samplesPerPixel);

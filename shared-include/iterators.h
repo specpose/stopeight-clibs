@@ -8,30 +8,24 @@ namespace stopeight {
 	//has to be random access; is forward
 	template<typename IteratorType> class block_iterator : public std::iterator<std::forward_iterator_tag,
 																				std::pair<IteratorType,IteratorType> > {
-		//typedef typename std::iterator::iterator_category iterator_category;
-		//typedef typename std::iterator::value_type value_type;
-		//typedef typename _Iter::difference_type difference_type;
-		//typedef typename _Iter::pointer pointer;
-		//typedef typename _Iter::reference reference;
 	public:
-		// std::distance
-		// end: modulus
-		// constructor from start
-		// constructor from end
-		// iterator->endgetter?
-		explicit block_iterator(IteratorType rand, IteratorType rand2, const int seg_size) : _first(rand), _last(rand2), _pos(0), _seg_size(seg_size) {};
+		explicit block_iterator(IteratorType& rand, IteratorType& rand2, const int seg_size=1) : _first(rand), _last(rand2), _pos(0), _seg_size(seg_size) {
+			if (_seg_size > std::distance(_first, _last)) {
+				_seg_size = std::distance(_first, _last);
+			}
+			//case _first>_last
+		};
 		//const, arg const
-		bool operator==(block_iterator<IteratorType>& b) {
-			std::pair<IteratorType, IteratorType> a = construct();
-			//if ((a.first = b.first) && (a.second == b.second))
-			if ((*a->first == *(*be).first) && (*a->second == *(*be).second))
+		bool operator==( block_iterator<IteratorType>& b) {
+			std::pair<IteratorType, IteratorType> a* = construct();
+			if ((a->first == b->first) && (a->second == b->second))
 				return true;
 			return false;
 		};
 		//const, arg const
-		bool operator!=(block_iterator<IteratorType>& be) {
+		bool operator!=( block_iterator<IteratorType>& b) {
 			std::pair<IteratorType, IteratorType>* a = construct();
-			if ( (*a->first != *(*be).first) || (*a->second != *(*be).second) )
+			if ((a->first != b->first) || (a->second != b->second))
 				return true;
 			return false;
 		};
@@ -48,46 +42,49 @@ namespace stopeight {
 		std::pair<IteratorType, IteratorType>& operator*() {
 			std::pair<IteratorType, IteratorType>& a = *(construct());
 			return a;
-		};
+		}
 		//const
 		std::pair<IteratorType, IteratorType>* operator->() {
 			std::pair<IteratorType, IteratorType>* a = construct();
 			return a;
-		};
+		}
 		//This should be in container or independent function
 		//full iterator with pos set from outside,
 		//or short iterator with pos=0
-		block_iterator end() {
+		/*block_iterator end() {
 			return blockiterator<IteratorType>(_first, _first, _seg_size);
-			/*int d = std::distance(_first, _last)
-			int i = d / _seg_size;
-			IteratorType current,end;
-			if (remainder() == 0)
-				current = _first + (i - 1)*_seg_size;
-			else
-				current = _first + (i)*_seg_size;*/
-		}
+			//int d = std::distance(_first, _last)
+			//int i = d / _seg_size;
+			//IteratorType current,end;
+			//if (remainder() == 0)
+			//	current = _first + (i - 1)*_seg_size;
+			//else
+			//	current = _first + (i)*_seg_size;
+		}*/
 
 
 	private:
-		//std::distance
-		bool _legalPos() { return ((_first + _pos) < _last); };
+		//if _seg_size=1 and std::distance =1, pos=0, then legal and remainder=0 => current, end=last-1
+		bool _legalPos() { return (_pos < std::distance(_first, _last)); };
 		int remainder() { return std::distance(_first, _last) % _seg_size; };
 		std::pair<IteratorType, IteratorType>* construct() {
-			auto current = _first + _pos;
-			auto end = current;
 			if (_legalPos()) {
-				if (std::distance(_first + _pos, _last) >= _seg_size)
-					end += _seg_size;
-				else
-					end += remainder();
+				IteratorType& current = _first + _pos;
+				if (std::distance(current, _last) >= _seg_size){
+					IteratorType& end = current + _seg_size;
+					return new std::pair<IteratorType, IteratorType>{ current,end };
+				} else {
+					IteratorType& end = current + remainder();
+					return new std::pair<IteratorType, IteratorType>{ current,end };
+				}
 			}
 			else {
-				current, end = _last;
+				IteratorType& current = _last;
+				IteratorType& end = _last;
+				return new std::pair<IteratorType, IteratorType>{ current,end };
 			}
-			return new std::pair<IteratorType, IteratorType>{current,end};
 		};
-		IteratorType _first,_last;
+		IteratorType& _first,_last;
 		int _pos, _seg_size;
 	};
 }
