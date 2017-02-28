@@ -24,6 +24,12 @@ namespace grapher {
 		~Buffer<T>();
 
 		std::vector<std::pair<float, float>> operator()(int samplesPerPixel);
+
+	private:
+		//needs to be there to avoid crt error
+		//hack: length of pointer on amd_win10_64
+		//doesnt work; crash when remove in debug from presonus
+		char buf[6];
 	};
 }
 #endif
