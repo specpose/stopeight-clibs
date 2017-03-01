@@ -15,18 +15,26 @@ namespace grapher {
 		template <class ExecutionPolicy, class Iterator, class OutputIterator>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2, std::forward_iterator_tag);
 	};
 
-	class __add_vectors {
+	class _sum_blocks {
 	public:
-		__add_vectors(int samplesPerPixel);
-		~__add_vectors();
-
 		template <class ExecutionPolicy, class Iterator, class OutputIterator>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2, std::random_access_iterator_tag);
-
-	private:
-		int _samplesPerPixel;
 	};
 
 	int samples_To_VG_final_size(int inputSize, int samplesPerPixel);
+
+	/*template<class Iterator> class blocks {
+	public:
+		blocks<Iterator>(int seg_size=1);
+		~blocks<Iterator>();
+
+		//is a forward iterator
+		Iterator operator()(Iterator it);
+
+	private:
+		int _seg_size;
+		int _counter = 0;
+		Iterator _first;
+	};*/
 
 	class samples_To_VG {
 	public:
