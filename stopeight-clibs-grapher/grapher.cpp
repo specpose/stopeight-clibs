@@ -14,17 +14,29 @@
 namespace grapher {
 
 	template<typename T> grapher::Buffer<T>::Buffer() {
-
 	}
 
 	template<typename T> grapher::Buffer<T>::Buffer(std::vector<T>* s)
 		: PreloaderIF{ *this }
 		, buf(s)
+		, _showSamples(1)
+		, _samplesPerVector(1)
+		, _unitaryLength(1.0f)
 	{
 		//buf.assign(storage, (storage + size));
 	}
 	template grapher::Buffer<float>::Buffer(std::vector<float>* s);
 	template grapher::Buffer<double>::Buffer(std::vector<double>* s);
+
+	template<typename T> grapher::Buffer<T>::Buffer(std::vector<T>* s, int showSamples, int samplesPerVector, double unitaryLength)
+		: grapher::Buffer<T>(s)
+	{
+		_showSamples = showSamples;
+		_samplesPerVector = samplesPerVector;
+		_unitaryLength = unitaryLength;
+	}
+	template grapher::Buffer<float>::Buffer(std::vector<float>* s, int showSamples, int samplesPerVector, double unitaryLength);
+	template grapher::Buffer<double>::Buffer(std::vector<double>* s, int showSamples, int samplesPerVector, double unitaryLength);
 
 /*	template<typename T> grapher::Buffer<T>::Buffer(std::unique_ptr<std::vector<T>> s)
 //		: PreloaderIF{ *this }
@@ -41,17 +53,19 @@ namespace grapher {
 	template grapher::Buffer<float>::~Buffer();
 	template grapher::Buffer<double>::~Buffer();
 
-	template<typename T> std::vector<std::pair<float, float>> Buffer<T>::operator()(int samplesPerPixel)
+	template<typename T> std::vector<std::pair<float, float>> Buffer<T>::operator()()
 	{
-		std::vector<std::pair<float, float>> output = std::vector<std::pair<float, float>>(grapher::samples_To_VG_final_size(buf->size(),samplesPerPixel));
+		int vectorSize = grapher::samples_To_VG_vectorSize(buf->size(), _samplesPerVector);
+		double vectorLength = grapher::samples_To_VG_vectorLength(_showSamples, _unitaryLength);
+		std::vector<std::pair<float, float>> output = std::vector<std::pair<float, float>>(vectorSize);
 				//par
 		//(grapher::samples_To_VG(samplesPerPixel))(std::experimental::parallel::par_vec, std::begin(*buf), std::end(*buf), std::begin(output));
-		(grapher::samples_To_VG(samplesPerPixel))(dummy_policy, std::begin(*buf), std::end(*buf), std::begin(output));
+		(grapher::samples_To_VG(_samplesPerVector,vectorLength))(dummy_policy, std::begin(*buf), std::end(*buf), std::begin(output));
 
 		return output;
 	}
 	//specialization
-	template std::vector<std::pair<float, float>> Buffer<float>::operator()(int samplesPerPixel);
+	template std::vector<std::pair<float, float>> Buffer<float>::operator()();
 	//explicit instantiation
 	//template template void Buffer<float>::execute_stl(void(iteratorstart, iteratorend), iteratorstart, iteratorend);
 

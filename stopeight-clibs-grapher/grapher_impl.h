@@ -11,6 +11,8 @@ namespace grapher {
 	public:
 		Buffer<T>();
 		Buffer<T>(std::vector<T>* s);
+		explicit Buffer<T>(std::vector<T>* s, int showSamples, int samplesPerVector=1, double unitaryLength = 1);
+
 		~Buffer<T>();
 
 		/*size_t size();
@@ -19,10 +21,12 @@ namespace grapher {
 		std::_Vector_iterator<std::_Vector_val<std::_Simple_types<T>>> rmrbegin();
 		std::_Vector_iterator<std::_Vector_val<std::_Simple_types<T>>> rmrend();*/
 
-		std::vector<std::pair<float, float>> operator()(int samplesPerPixel);
+		std::vector<std::pair<float, float>> operator()();
 
 
 	private:
 		std::vector<T>* buf;
+		int _samplesPerVector,_showSamples;
+		double _unitaryLength;
 	};
 }

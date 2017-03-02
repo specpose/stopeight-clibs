@@ -17,6 +17,7 @@ namespace stopeight {
 		{
 			int n = 0;
 			int o = this->size()-1;
+			int _endFull = endFull(_vec.size(), _seg_size);
 			for (int i = seg_size; i <= _endFull; i += seg_size) {
 				auto v = std::pair<std::vector<DataType>::iterator, std::vector<DataType>::iterator>(std::begin(_vec) + i - seg_size, std::begin(_vec) + i - 1);
 				this->at(n++) = v;
@@ -28,18 +29,23 @@ namespace stopeight {
 			}
 		};
 
-	private:
-		int calculateSize(int vec_size, int seg_size) {
+		static int calculateSize(int vec_size, int seg_size) {
 			if ((vec_size%seg_size) == 0) {
-				_endFull = vec_size;
 				return vec_size / seg_size;
 			}
 			else {
-				_endFull = vec_size - (vec_size%seg_size);
 				return (vec_size / seg_size) + 1;
 			}
 		};
-		int _endFull;
+
+	private:
+		//needed in initializer
+		static int endFull(int vec_size, int seg_size) {
+			if ((vec_size % seg_size) == 0)
+				return vec_size;
+			else
+				return vec_size - (vec_size%seg_size);
+		}
 		std::vector<DataType> _vec;
 		int _seg_size;
 	};

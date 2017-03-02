@@ -25,17 +25,18 @@ using vector_vectors = std::_Vector_iterator<std::_Vector_val<std::_Simple_types
 #include "dummy.h"
 using fexec = dummy;
 
-//specialization
 template <class ExecutionPolicy, class Iterator, class OutputIterator> void grapher::__calculate_rotations::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, std::random_access_iterator_tag)
 {
 	//binary,not unary
 	std::transform(begin, end - 1, begin + 1, ++begin2, [](double a, double b) {
-		return asin(b - a);
+		int average_df = 0.1f;
+		//return asin(b - a);
+		//return asin((b - a)/average_df);
+		return 300*asin(b - a);
 	});
 }
 template void grapher::__calculate_rotations::operator()(fexec& task1, vector_single begin, vector_single end, vector_single begin2, std::random_access_iterator_tag);
 
-//specialization
 template <class ExecutionPolicy, class Iterator, class OutputIterator> void grapher::__apply_rotation_matrix::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, std::forward_iterator_tag)
 {
 	//binary,not unary
@@ -48,7 +49,6 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 }
 template void grapher::__apply_rotation_matrix::operator()(fexec& task1, vector_single begin, vector_single end, vector_pair begin2, std::forward_iterator_tag);
 
-//specialization
 template <class ExecutionPolicy, class Iterator, class OutputIterator> void grapher::_sum_blocks::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, std::random_access_iterator_tag)
 {
 
@@ -65,38 +65,15 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 }
 template void grapher::_sum_blocks::operator()(fexec& task1, vector_vectors begin, vector_vectors end, vector_pair begin2, std::random_access_iterator_tag);
 
-int grapher::samples_To_VG_final_size(int inputSize, int _samplesPerPixel) {
-	int reduced_size = inputSize / _samplesPerPixel;
-	if ((inputSize % _samplesPerPixel) != 0)
-		reduced_size++;
-	return reduced_size;
+int grapher::samples_To_VG_vectorSize(int inputSize, int samplesPerVector) {
+	return stopeight::blocks<element>::calculateSize(inputSize,samplesPerVector);
 }
 
-/*template<typename Iterator> grapher::blocks<Iterator>::blocks(int seg_size) : _seg_size(seg_size), _counter(0), {
+double grapher::samples_To_VG_vectorLength(int showSamples, double unitaryLength) {
+	return unitaryLength / showSamples;
 }
-template<typename Iterator> grapher::blocks<Iterator>::~blocks() {
-}
-//partial specialization
-template<typename Iterator> Iterator grapher::blocks<Iterator>::operator()(Iterator it)
-{
-	if (_counter == 0) {
-		_first = it;
-	}
-	//if not counter = segsize, return empty
-	//transform without return?
-	//problems: first and last piece (if remainder)
-	const int c = ++_counter;
-	if (c==(_seg_size-1)){
-		return _first;
-	}
-	else if (c == _seg_size) {
-		_counter = 0;
-		return it;
-	}
-}
-template vector_pair grapher::blocks<vector_pair>::operator()(vector_pair it);*/
 
-grapher::samples_To_VG::samples_To_VG(int samplesPerPixel) : _samplesPerPixel(samplesPerPixel) {
+grapher::samples_To_VG::samples_To_VG(int samplesPerVector,double vectorLength) : _samplesPerVector(samplesPerVector), _vectorLength(vectorLength) {
 }
 grapher::samples_To_VG::~samples_To_VG() {
 }
@@ -105,26 +82,22 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 	//par
 	//std::experimental::parallel::transform(task1, begin, end, begin, [](float f) {return 3.3f; });
 
-	//buffer double single
 	size_t size = std::distance(begin, end);
 	std::vector<double> rotations = std::vector<double>(size, 0.0f);
-	//__calculate_rotations
 	__calculate_rotations()(task1, begin, end, std::begin(rotations), Iterator::iterator_category{});
 
-	//buffer double pair; length of vector in x-direction depends on sampleRate and window-pixels; will be rotated below
-	std::vector<element> vectors = std::vector<element>(size, element{1.0f / _samplesPerPixel, 0.0f});
-	//__apply_rotation_matrix
+	std::vector<element> vectors = std::vector<element>(size, element{ _vectorLength, 0.0f});
 	__apply_rotation_matrix()(task1, std::begin(rotations), std::end(rotations), std::begin(vectors), Iterator::iterator_category{});
 
-	//buffer double pair (shorter!)
-	//__add_vectors(samplesPerPixel)
-	std::vector<element> out_vectors = std::vector<element>(vectors.size(), { double(0.0f), double(0.0f) });
-	std::fill<decltype(std::begin(vectors))>(std::begin(out_vectors), std::end(out_vectors), element{1.0f, 1.0f});
-	stopeight::blocks<element> vectors2 = stopeight::blocks<element>(std::move(vectors),_samplesPerPixel);
-	_sum_blocks()(task1, std::begin(vectors2), std::end(vectors2), std::begin(out_vectors), Iterator::iterator_category{});
+	stopeight::blocks<element> blocks_vector = stopeight::blocks<element>(std::move(vectors),_samplesPerVector);
 
-	//result_vector.shrink_to_fit
-	//move output data to outputiterator
-	std::copy<decltype(std::begin(vectors)), OutputIterator>(std::begin(out_vectors), std::begin(out_vectors)+samples_To_VG_final_size(vectors.size(),_samplesPerPixel), begin2);
+	std::vector<element> out_vectors = std::vector<element>(vectors.size(), { double(0.0f), double(0.0f) });
+	std::fill<typename std::vector<element>::iterator>(std::begin(out_vectors), std::end(out_vectors), element{ 1.0f, 1.0f });
+	//std::fill<decltype(std::begin(vectors))>(std::begin(out_vectors), std::end(out_vectors), element{ 1.0f, 1.0f });
+
+	_sum_blocks()(task1, std::begin(blocks_vector), std::end(blocks_vector), std::begin(out_vectors), Iterator::iterator_category{});
+
+	std::copy<typename std::vector<element>::iterator, OutputIterator>(std::begin(out_vectors), std::end(out_vectors), begin2);
+	//std::copy<decltype(std::begin(vectors)), OutputIterator>(std::begin(out_vectors), std::end(out_vectors), begin2);
 }
 template void grapher::samples_To_VG::operator()(fexec& task1, vector_single begin, vector_single end, vector_pair begin2);

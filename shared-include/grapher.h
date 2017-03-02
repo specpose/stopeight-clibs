@@ -19,17 +19,19 @@ namespace grapher {
 	template<typename T>class Buffer : public PreloaderIF<T, std::vector<std::pair<float, float>>>
 	{
 	public:
-		//Buffer<T>();
 		Buffer<T>(std::vector<T>* s);
+		Buffer<T>(std::vector<T>* s, int showSamples, int samplesPerVector=1, double unitaryLength = 1);
 		~Buffer<T>();
 
-		std::vector<std::pair<float, float>> operator()(int samplesPerPixel);
+		std::vector<std::pair<float, float>> operator()();
 
 	private:
 		//needs to be there to avoid crt error
 		//hack: length of pointer on amd_win10_64
 		//doesnt work; crash when remove in debug from presonus
-		char buf[6];
+		char buf[6];//sizeofPTR
+		char _samplesPerVectorp[sizeof(int)], _showSamples[sizeof(int)];
+		char _unitaryLength[sizeof(double)];
 	};
 }
 #endif

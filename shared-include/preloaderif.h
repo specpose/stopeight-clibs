@@ -17,7 +17,7 @@ namespace grapher {
 		PreloaderIF<T,ReturnType>(std::vector<T>* s);
 		virtual ~PreloaderIF<T,ReturnType>(){};
 
-		virtual ReturnType operator()(int samplesPerPixel) =0;
+		virtual ReturnType operator()() =0;
 	};
 }
 
