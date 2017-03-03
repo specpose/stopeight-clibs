@@ -14,7 +14,7 @@
 
 #include <vector>
 
-using element = std::pair<double, double>;
+#include "shared_types.h"
 using it_element = std::pair<typename std::vector<element>::iterator, typename std::vector<element>::iterator>;
 
 using vector_single = std::_Vector_iterator<std::_Vector_val<std::_Simple_types<double>>>;
@@ -55,7 +55,8 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 	std::transform(begin, end, begin2, [](it_element block) {
 		if (block.first != block.second) {
 			return std::accumulate(block.first, block.second, element{ 0.0f,0.0f }, [](element v1, element v2) {
-				return element{ v1.first + v2.first, v1.second + v2.second };
+				return v1 + v2;
+				//return element{ v1.first + v2.first, v1.second + v2.second };
 			});
 		}
 		else {
@@ -64,6 +65,22 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 	});
 }
 template void grapher::_sum_blocks::operator()(fexec& task1, vector_vectors begin, vector_vectors end, vector_pair begin2, std::random_access_iterator_tag);
+
+template <class ExecutionPolicy, class Iterator, class OutputIterator> void grapher::_append::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, std::forward_iterator_tag)
+{
+	class my_add {
+	public:
+		my_add() : cache(element{0.0f,0.0f}) {};
+		element operator()(element e) {
+			cache = cache +e;
+			return cache;
+		};
+	private:
+		element cache;
+	};
+	std::transform(begin, end, begin2, my_add());
+}
+template void grapher::_append::operator()(fexec& task1, vector_pair begin, vector_pair end, vector_pair begin2, std::forward_iterator_tag);
 
 int grapher::samples_To_VG_vectorSize(int inputSize, int samplesPerVector) {
 	return stopeight::blocks<element>::calculateSize(inputSize,samplesPerVector);
@@ -96,6 +113,8 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 	std::fill<typename std::vector<element>::iterator>(std::begin(out_vectors), std::end(out_vectors), element{ 1.0f, 1.0f });
 
 	_sum_blocks()(task1, std::begin(blocks_vector), std::end(blocks_vector), std::begin(out_vectors), Iterator::iterator_category{});
+
+	_append()(task1, std::begin(out_vectors), std::end(out_vectors), std::begin(out_vectors), Iterator::iterator_category{});
 
 	std::copy<typename std::vector<element>::iterator, OutputIterator>(std::begin(out_vectors), std::end(out_vectors), begin2);
 }

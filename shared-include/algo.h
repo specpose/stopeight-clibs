@@ -23,7 +23,13 @@ namespace grapher {
 		template <class ExecutionPolicy, class Iterator, class OutputIterator>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2, std::random_access_iterator_tag);
 	};
 
-	int samples_To_VG_vectorSize(int inputSize, int samplesPerVector);
+	//specialization: 1 iterator_category, 2 value_types
+	class _append {
+	public:
+		template <class ExecutionPolicy, class Iterator, class OutputIterator>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2, std::forward_iterator_tag);
+	};
+
+	int samples_To_VG_vectorSize(int inputSize, int samplesPerVector=1);
 	double samples_To_VG_vectorLength(int showSamples, double unitaryLength = 1);
 
 	class samples_To_VG {
