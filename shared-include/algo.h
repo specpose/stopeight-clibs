@@ -31,6 +31,7 @@ namespace grapher {
 
 	int samples_To_VG_vectorSize(int inputSize, int samplesPerVector=1);
 	double samples_To_VG_vectorLength(int showSamples, double unitaryLength = 1);
+	template <class Iterator> std::pair<std::pair<double,double>, std::pair<double, double>> samples_To_VG_lengthPos(Iterator begin, Iterator end, double vectorLength, double unitaryLength);
 
 	class samples_To_VG {
 	public:

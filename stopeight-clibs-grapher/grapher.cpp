@@ -62,6 +62,8 @@ namespace grapher {
 		//(grapher::samples_To_VG(samplesPerPixel))(std::experimental::parallel::par_vec, std::begin(*buf), std::end(*buf), std::begin(output));
 		(grapher::samples_To_VG(_samplesPerVector,vectorLength))(dummy_policy, std::begin(*buf), std::end(*buf), std::begin(output));
 
+		_center = grapher::samples_To_VG_lengthPos(std::begin(output), std::end(output), vectorLength, _unitaryLength);
+
 		return output;
 	}
 	//specialization

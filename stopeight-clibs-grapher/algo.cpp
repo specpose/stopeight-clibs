@@ -14,7 +14,8 @@
 
 #include <vector>
 
-#include "shared_types.h"
+using element = std::pair<double, double>;
+element operator+(const element& a, const element& b) { return element{ a.first + b.first, a.second + b.second }; };
 using it_element = std::pair<typename std::vector<element>::iterator, typename std::vector<element>::iterator>;
 
 using vector_single = std::_Vector_iterator<std::_Vector_val<std::_Simple_types<double>>>;
@@ -90,6 +91,30 @@ double grapher::samples_To_VG_vectorLength(int showSamples, double unitaryLength
 	return unitaryLength / showSamples;
 }
 
+template<class Iterator> std::pair<element,element> grapher::samples_To_VG_lengthPos(Iterator begin, Iterator end, double vectorLength, double unitaryLength){
+	auto center = std::pair<element,element>{ element{ 0.0f,0.0f }, element{ 0.0f,0.0f } };
+	auto vectorSize = std::distance(begin,end);
+	if ((vectorSize % 2) == 0) {
+		auto middle = begin + ((vectorSize / 2)-1);
+		auto next = middle++;
+		center = std::pair<element,element>{element(*middle),element(*next)};
+		return center;
+	}
+	else {
+		if (vectorSize == 1) {
+			return std::pair<element, element>{element{ begin->first / 2,begin->second / 2 }, element{ begin->first, begin->second }};
+		}
+		else {
+			auto middle = begin + ((vectorSize / 2));
+			auto next = middle++;
+			auto offsetcenter = element{ (middle->first + next->first) / 2,(middle->second + next->second) / 2 };
+			center = std::pair<element, element>{ offsetcenter,element(*next) };
+			return center;
+		}
+	}
+}
+template std::pair<element,element> grapher::samples_To_VG_lengthPos(vector_pair begin, vector_pair end, double vectorLength, double unitaryLength);
+
 grapher::samples_To_VG::samples_To_VG(int samplesPerVector,double vectorLength) : _samplesPerVector(samplesPerVector), _vectorLength(vectorLength) {
 }
 grapher::samples_To_VG::~samples_To_VG() {
@@ -105,6 +130,11 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 
 	std::vector<element> vectors = std::vector<element>(size, element{ _vectorLength, 0.0f});
 	__apply_rotation_matrix()(task1, std::begin(rotations), std::end(rotations), std::begin(vectors), Iterator::iterator_category{});
+
+	//after append, but before blocks
+	//save copy
+	//append
+	//find _center
 
 	stopeight::blocks<element> blocks_vector = stopeight::blocks<element>(std::move(vectors),_samplesPerVector);
 
