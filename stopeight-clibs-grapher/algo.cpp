@@ -91,13 +91,12 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 
 	stopeight::blocks<element> blocks_vector = stopeight::blocks<element>(std::move(vectors),_samplesPerVector);
 
-	std::vector<element> out_vectors = std::vector<element>(vectors.size(), { double(0.0f), double(0.0f) });
+	//std::vector<element> out_vectors = std::vector<element>(vectors.size(), { double(0.0f), double(0.0f) });
+	std::vector<element> out_vectors = std::vector<element>(blocks_vector.size(), { double(0.0f), double(0.0f) });
 	std::fill<typename std::vector<element>::iterator>(std::begin(out_vectors), std::end(out_vectors), element{ 1.0f, 1.0f });
-	//std::fill<decltype(std::begin(vectors))>(std::begin(out_vectors), std::end(out_vectors), element{ 1.0f, 1.0f });
 
 	_sum_blocks()(task1, std::begin(blocks_vector), std::end(blocks_vector), std::begin(out_vectors), Iterator::iterator_category{});
 
 	std::copy<typename std::vector<element>::iterator, OutputIterator>(std::begin(out_vectors), std::end(out_vectors), begin2);
-	//std::copy<decltype(std::begin(vectors)), OutputIterator>(std::begin(out_vectors), std::end(out_vectors), begin2);
 }
 template void grapher::samples_To_VG::operator()(fexec& task1, vector_single begin, vector_single end, vector_pair begin2);
