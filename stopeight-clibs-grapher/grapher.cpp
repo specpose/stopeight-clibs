@@ -53,7 +53,7 @@ namespace grapher {
 	template grapher::Buffer<float>::~Buffer();
 	template grapher::Buffer<double>::~Buffer();
 
-	template<typename T> std::vector<std::pair<float, float>> Buffer<T>::operator()()
+	template<typename T> std::pair<std::vector<std::pair<float, float>>, std::vector<std::pair<float, float>>> Buffer<T>::operator()()
 	{
 		int size = buf->size();
 		if ((size % 2) != 0)
@@ -62,22 +62,22 @@ namespace grapher {
 		double vectorLength = grapher::samples_To_VG_vectorLength(_showSamples, _unitaryLength);
 		std::vector<std::pair<float, float>> left = std::vector<std::pair<float, float>>(vectorSize);
 		std::vector<std::pair<float, float>> right = std::vector<std::pair<float, float>>(vectorSize);
-		std::vector<std::pair<float, float>> output = std::vector<std::pair<float, float>>(vectorSize * 2);
+		//std::vector<std::pair<float, float>> output = std::vector<std::pair<float, float>>(vectorSize * 2);
 				//par
 		//(grapher::samples_To_VG(samplesPerPixel))(std::experimental::parallel::par_vec, std::begin(*buf), std::end(*buf), std::begin(output));
-		(grapher::samples_To_VG(_samplesPerVector, vectorLength))(dummy_policy, std::begin(*buf), std::end(*buf), std::begin(output));
-		//(grapher::samples_To_VG(_samplesPerVector,vectorLength))(dummy_policy, std::begin(*buf), std::begin(*buf)+((size/2)-1), std::begin(left));
-		//(grapher::samples_To_VG(_samplesPerVector, vectorLength))(dummy_policy, std::begin(*buf)+(size / 2), std::end(*buf), std::begin(right));
+		//(grapher::samples_To_VG(_samplesPerVector, vectorLength))(dummy_policy, std::begin(*buf), std::end(*buf), std::begin(output));
+		(grapher::samples_To_VG(_samplesPerVector,vectorLength))(dummy_policy, std::begin(*buf), std::begin(*buf)+(size/2), std::begin(left));
+		(grapher::samples_To_VG(_samplesPerVector, vectorLength))(dummy_policy, std::begin(*buf)+(size / 2), std::end(*buf), std::begin(right));
 
 		//_center = grapher::samples_To_VG_lengthPos(std::begin(output), std::end(output), vectorLength, _unitaryLength);
 
 		//std::copy(std::begin(left), std::end(left), std::begin(output));
 		//std::copy(std::begin(right), std::end(right), std::begin(output) + (output.size() / 2));
 		//2nd is not appended
-		return output;
+		return std::pair<std::vector<std::pair<float, float>>, std::vector<std::pair<float, float>>>{left,right};
 	}
 	//specialization
-	template std::vector<std::pair<float, float>> Buffer<float>::operator()();
+	template std::pair<std::vector<std::pair<float, float>>, std::vector<std::pair<float, float>>> Buffer<float>::operator()();
 	//explicit instantiation
 	//template template void Buffer<float>::execute_stl(void(iteratorstart, iteratorend), iteratorstart, iteratorend);
 

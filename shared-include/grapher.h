@@ -16,14 +16,14 @@
 
 namespace grapher {
 
-	template<typename T>class Buffer : public PreloaderIF<T, std::vector<std::pair<float, float>>>
+	template<typename T>class Buffer : public PreloaderIF<T, std::pair<std::vector<std::pair<float, float>>, std::vector<std::pair<float, float>>>>
 	{
 	public:
 		Buffer<T>(std::vector<T>* s);
 		Buffer<T>(std::vector<T>* s, int showSamples, int samplesPerVector=1, double unitaryLength = 1);
 		~Buffer<T>();
 
-		std::vector<std::pair<float, float>> operator()();
+		std::pair<std::vector<std::pair<float, float>>, std::vector<std::pair<float, float>>> operator()();
 
 	private:
 		//needs to be there to avoid crt error
