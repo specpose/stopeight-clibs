@@ -91,7 +91,7 @@ double grapher::samples_To_VG_vectorLength(int showSamples, double unitaryLength
 	return unitaryLength / showSamples;
 }
 
-template<class Iterator> std::pair<element,element> grapher::samples_To_VG_lengthPos(Iterator begin, Iterator end, double vectorLength, double unitaryLength){
+/*template<class Iterator> std::pair<element,element> grapher::samples_To_VG_lengthPos(Iterator begin, Iterator end, double vectorLength, double unitaryLength){
 	auto center = std::pair<element,element>{ element{ 0.0f,0.0f }, element{ 0.0f,0.0f } };
 	auto vectorSize = std::distance(begin,end);
 	if ((vectorSize % 2) == 0) {
@@ -113,7 +113,7 @@ template<class Iterator> std::pair<element,element> grapher::samples_To_VG_lengt
 		}
 	}
 }
-template std::pair<element,element> grapher::samples_To_VG_lengthPos(vector_pair begin, vector_pair end, double vectorLength, double unitaryLength);
+template std::pair<element,element> grapher::samples_To_VG_lengthPos(vector_pair begin, vector_pair end, double vectorLength, double unitaryLength);*/
 
 grapher::samples_To_VG::samples_To_VG(int samplesPerVector,double vectorLength) : _samplesPerVector(samplesPerVector), _vectorLength(vectorLength) {
 }

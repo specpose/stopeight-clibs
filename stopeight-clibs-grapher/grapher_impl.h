@@ -28,6 +28,6 @@ namespace grapher {
 		std::vector<T>* buf;
 		int _samplesPerVector,_showSamples;
 		double _unitaryLength;
-		std::pair<std::pair<double, double>, std::pair<double, double>> _center;
+		//std::pair<std::pair<double, double>, std::pair<double, double>> _center;
 	};
 }

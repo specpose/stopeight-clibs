@@ -19,7 +19,7 @@ namespace grapher {
 	template<typename T> grapher::Buffer<T>::Buffer(std::vector<T>* s)
 		: PreloaderIF{ *this }
 		, buf(s)
-		, _showSamples(1)
+		, _showSamples(0)
 		, _samplesPerVector(1)
 		, _unitaryLength(1.0f)
 	{
@@ -55,15 +55,25 @@ namespace grapher {
 
 	template<typename T> std::vector<std::pair<float, float>> Buffer<T>::operator()()
 	{
-		int vectorSize = grapher::samples_To_VG_vectorSize(buf->size(), _samplesPerVector);
+		int size = buf->size();
+		if ((size % 2) != 0)
+			throw std::exception("Uneven number of samples can not be split in two");
+		int vectorSize = grapher::samples_To_VG_vectorSize(size/2, _samplesPerVector);
 		double vectorLength = grapher::samples_To_VG_vectorLength(_showSamples, _unitaryLength);
-		std::vector<std::pair<float, float>> output = std::vector<std::pair<float, float>>(vectorSize);
+		std::vector<std::pair<float, float>> left = std::vector<std::pair<float, float>>(vectorSize);
+		std::vector<std::pair<float, float>> right = std::vector<std::pair<float, float>>(vectorSize);
+		std::vector<std::pair<float, float>> output = std::vector<std::pair<float, float>>(vectorSize * 2);
 				//par
 		//(grapher::samples_To_VG(samplesPerPixel))(std::experimental::parallel::par_vec, std::begin(*buf), std::end(*buf), std::begin(output));
-		(grapher::samples_To_VG(_samplesPerVector,vectorLength))(dummy_policy, std::begin(*buf), std::end(*buf), std::begin(output));
+		(grapher::samples_To_VG(_samplesPerVector, vectorLength))(dummy_policy, std::begin(*buf), std::end(*buf), std::begin(output));
+		//(grapher::samples_To_VG(_samplesPerVector,vectorLength))(dummy_policy, std::begin(*buf), std::begin(*buf)+((size/2)-1), std::begin(left));
+		//(grapher::samples_To_VG(_samplesPerVector, vectorLength))(dummy_policy, std::begin(*buf)+(size / 2), std::end(*buf), std::begin(right));
 
-		_center = grapher::samples_To_VG_lengthPos(std::begin(output), std::end(output), vectorLength, _unitaryLength);
+		//_center = grapher::samples_To_VG_lengthPos(std::begin(output), std::end(output), vectorLength, _unitaryLength);
 
+		//std::copy(std::begin(left), std::end(left), std::begin(output));
+		//std::copy(std::begin(right), std::end(right), std::begin(output) + (output.size() / 2));
+		//2nd is not appended
 		return output;
 	}
 	//specialization

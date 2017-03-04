@@ -32,7 +32,7 @@ namespace grapher {
 		char buf[6];//sizeofPTR
 		char _samplesPerVectorp[sizeof(int)], _showSamples[sizeof(int)];
 		char _unitaryLength[sizeof(double)];
-		char _center[sizeof(std::pair<std::pair<double, double>, std::pair<double, double>>)];
+		//char _center[sizeof(std::pair<std::pair<double, double>, std::pair<double, double>>)];
 	};
 }
 #endif
