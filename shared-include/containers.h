@@ -30,11 +30,16 @@ namespace stopeight {
 		};
 
 		static int calculateSize(int vec_size, int seg_size) {
-			if ((vec_size%seg_size) == 0) {
-				return vec_size / seg_size;
+			if (vec_size >= seg_size) {
+				if ((vec_size%seg_size) == 0) {
+					return vec_size / seg_size;
+				}
+				else {
+					return (vec_size / seg_size) + 1;
+				}
 			}
 			else {
-				return (vec_size / seg_size) + 1;
+				return 1;
 			}
 		};
 
