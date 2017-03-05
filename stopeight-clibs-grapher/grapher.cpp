@@ -60,16 +60,18 @@ namespace grapher {
 			throw std::exception("Uneven number of samples can not be split in two");
 		int vectorSize = grapher::samples_To_VG_vectorSize(size/2, _samplesPerVector);
 		double vectorLength = grapher::samples_To_VG_vectorLength(_showSamples, _unitaryLength);
-		std::vector<sp::element> left = std::vector<sp::element>(vectorSize);
+		std::vector<sp::element> left = std::vector<sp::element>(vectorSize+1);
 		std::vector<sp::element> right = std::vector<sp::element>(vectorSize);
 		//sp::result output = std::vector<sp::element>(vectorSize * 2);
 
 		//par
 		//(grapher::samples_To_VG(samplesPerPixel))(std::experimental::parallel::par_vec, std::begin(*buf), std::end(*buf), std::begin(output));
 		//(grapher::samples_To_VG(_samplesPerVector, vectorLength))(dummy_policy, std::begin(*buf), std::end(*buf), std::begin(output));
-		//Add connecting piece to left
-		(grapher::samples_To_VG(_samplesPerVector,vectorLength))(dummy_policy, std::begin(*buf), std::begin(*buf)+(size/2)+1, std::begin(left));
+		(grapher::samples_To_VG(_samplesPerVector,vectorLength))(dummy_policy, std::begin(*buf), std::begin(*buf)+(size/2), std::begin(left));
 		(grapher::samples_To_VG(_samplesPerVector, vectorLength))(dummy_policy, std::begin(*buf)+(size / 2), std::end(*buf), std::begin(right));
+
+		//Add connecting piece to left
+		left.back() = (sp::element{*(std::begin(*buf)+(size/2)-1),*(std::begin(*buf) + (size / 2) )});
 
 		return sp::result{left,right};
 		//return sp::result{ output };
