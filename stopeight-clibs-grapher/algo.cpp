@@ -3,7 +3,8 @@
 
 #include "stdafx.h"
 
-#include <experimental/algorithm>
+#include <experimental/algorithm>//CYCLIC DEPENDENCY
+#include "shared_types.h"//CYCLIC DEPENDENCY
 #include <experimental/impl/algorithm_impl.h>
 
 #include "algo.h"
@@ -14,12 +15,12 @@
 
 #include <vector>
 
-using element = std::pair<double, double>;
-element operator+(const element& a, const element& b) { return element{ a.first + b.first, a.second + b.second }; };
-using it_element = std::pair<typename std::vector<element>::iterator, typename std::vector<element>::iterator>;
+//using element = std::pair<double, double>;
+//element operator+(const element& a, const element& b) { return element{ a.first + b.first, a.second + b.second }; };
+using it_element = std::pair<typename std::vector<sp::element>::iterator, typename std::vector<sp::element>::iterator>;
 
 using vector_single = std::_Vector_iterator<std::_Vector_val<std::_Simple_types<double>>>;
-using vector_pair = std::_Vector_iterator<std::_Vector_val<std::_Simple_types<element>>>;
+using vector_pair = std::_Vector_iterator<std::_Vector_val<std::_Simple_types<sp::element>>>;
 
 using vector_vectors = std::_Vector_iterator<std::_Vector_val<std::_Simple_types<it_element>>>;
 //using fexec = std::experimental::parallel::parallel_vector_execution_policy;
@@ -31,9 +32,8 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 	//binary,not unary
 	std::transform(begin, end - 1, begin + 1, ++begin2, [](double a, double b) {
 		int average_df = 0.1f;
-		//return asin(b - a);
 		//return asin((b - a)/average_df);
-		return 300*asin(b - a);
+		return sp::_angle(a,b);
 	});
 }
 template void grapher::__calculate_rotations::operator()(fexec& task1, vector_single begin, vector_single end, vector_single begin2, std::random_access_iterator_tag);
@@ -41,10 +41,10 @@ template void grapher::__calculate_rotations::operator()(fexec& task1, vector_si
 template <class ExecutionPolicy, class Iterator, class OutputIterator> void grapher::__apply_rotation_matrix::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, std::forward_iterator_tag)
 {
 	//binary,not unary
-	std::transform(begin, end, begin2, begin2, [](double rot, element vec) {
+	std::transform(begin, end, begin2, begin2, [](double rot, sp::element vec) {
 		double x = (cos(rot)*vec.first - sin(rot)*vec.second);
 		double y = (sin(rot)*vec.first + cos(rot)*vec.second);
-		element p{ x , y };
+		sp::element p{ x , y };
 		return p;
 	});
 }
@@ -55,9 +55,8 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 
 	std::transform(begin, end, begin2, [](it_element block) {
 		if (block.first != block.second) {
-			return std::accumulate(block.first, block.second, element{ 0.0f,0.0f }, [](element v1, element v2) {
+			return std::accumulate(block.first, block.second, sp::element{ 0.0f,0.0f }, [](sp::element v1, sp::element v2) {
 				return v1 + v2;
-				//return element{ v1.first + v2.first, v1.second + v2.second };
 			});
 		}
 		else {
@@ -71,20 +70,20 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 {
 	class my_add {
 	public:
-		my_add() : cache(element{0.0f,0.0f}) {};
-		element operator()(element e) {
+		my_add() : cache(sp::element{0.0f,0.0f}) {};
+		sp::element operator()(sp::element e) {
 			cache = cache +e;
 			return cache;
 		};
 	private:
-		element cache;
+		sp::element cache;
 	};
 	std::transform(begin, end, begin2, my_add());
 }
 template void grapher::_append::operator()(fexec& task1, vector_pair begin, vector_pair end, vector_pair begin2, std::forward_iterator_tag);
 
 int grapher::samples_To_VG_vectorSize(int inputSize, int samplesPerVector) {
-	return stopeight::blocks<element>::calculateSize(inputSize,samplesPerVector);
+	return stopeight::blocks<sp::element>::calculateSize(inputSize,samplesPerVector);
 }
 
 double grapher::samples_To_VG_vectorLength(int showSamples, double unitaryLength) {
@@ -128,7 +127,7 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 	std::vector<double> rotations = std::vector<double>(size, 0.0f);
 	__calculate_rotations()(task1, begin, end, std::begin(rotations), Iterator::iterator_category{});
 
-	std::vector<element> vectors = std::vector<element>(size, element{ _vectorLength, 0.0f});
+	std::vector<sp::element> vectors = std::vector<sp::element>(size, sp::element{ _vectorLength, 0.0f});
 	__apply_rotation_matrix()(task1, std::begin(rotations), std::end(rotations), std::begin(vectors), Iterator::iterator_category{});
 
 	//after append, but before blocks
@@ -136,16 +135,16 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 	//append
 	//find _center
 
-	stopeight::blocks<element> blocks_vector = stopeight::blocks<element>(std::move(vectors),_samplesPerVector);
+	stopeight::blocks<sp::element> blocks_vector = stopeight::blocks<sp::element>(std::move(vectors),_samplesPerVector);
 
 	//std::vector<element> out_vectors = std::vector<element>(vectors.size(), { double(0.0f), double(0.0f) });
-	std::vector<element> out_vectors = std::vector<element>(blocks_vector.size(), { double(0.0f), double(0.0f) });
-	std::fill<typename std::vector<element>::iterator>(std::begin(out_vectors), std::end(out_vectors), element{ 1.0f, 1.0f });
+	std::vector<sp::element> out_vectors = std::vector<sp::element>(blocks_vector.size(), { double(0.0f), double(0.0f) });
+	std::fill<typename std::vector<sp::element>::iterator>(std::begin(out_vectors), std::end(out_vectors), sp::element{ 1.0f, 1.0f });
 
 	_sum_blocks()(task1, std::begin(blocks_vector), std::end(blocks_vector), std::begin(out_vectors), Iterator::iterator_category{});
 
 	_append()(task1, std::begin(out_vectors), std::end(out_vectors), std::begin(out_vectors), Iterator::iterator_category{});
 
-	std::copy<typename std::vector<element>::iterator, OutputIterator>(std::begin(out_vectors), std::end(out_vectors), begin2);
+	std::copy<typename std::vector<sp::element>::iterator, OutputIterator>(std::begin(out_vectors), std::end(out_vectors), begin2);
 }
 template void grapher::samples_To_VG::operator()(fexec& task1, vector_single begin, vector_single end, vector_pair begin2);

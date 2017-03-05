@@ -53,31 +53,29 @@ namespace grapher {
 	template grapher::Buffer<float>::~Buffer();
 	template grapher::Buffer<double>::~Buffer();
 
-	template<typename T> std::pair<std::vector<std::pair<float, float>>, std::vector<std::pair<float, float>>> Buffer<T>::operator()()
+	template<typename T> sp::result Buffer<T>::operator()()
 	{
 		int size = buf->size();
 		if ((size % 2) != 0)
 			throw std::exception("Uneven number of samples can not be split in two");
 		int vectorSize = grapher::samples_To_VG_vectorSize(size/2, _samplesPerVector);
 		double vectorLength = grapher::samples_To_VG_vectorLength(_showSamples, _unitaryLength);
-		std::vector<std::pair<float, float>> left = std::vector<std::pair<float, float>>(vectorSize);
-		std::vector<std::pair<float, float>> right = std::vector<std::pair<float, float>>(vectorSize);
-		//std::vector<std::pair<float, float>> output = std::vector<std::pair<float, float>>(vectorSize * 2);
-				//par
+		std::vector<sp::element> left = std::vector<sp::element>(vectorSize);
+		std::vector<sp::element> right = std::vector<sp::element>(vectorSize);
+		//sp::result output = std::vector<sp::element>(vectorSize * 2);
+
+		//par
 		//(grapher::samples_To_VG(samplesPerPixel))(std::experimental::parallel::par_vec, std::begin(*buf), std::end(*buf), std::begin(output));
 		//(grapher::samples_To_VG(_samplesPerVector, vectorLength))(dummy_policy, std::begin(*buf), std::end(*buf), std::begin(output));
-		(grapher::samples_To_VG(_samplesPerVector,vectorLength))(dummy_policy, std::begin(*buf), std::begin(*buf)+(size/2), std::begin(left));
+		//Add connecting piece to left
+		(grapher::samples_To_VG(_samplesPerVector,vectorLength))(dummy_policy, std::begin(*buf), std::begin(*buf)+(size/2)+1, std::begin(left));
 		(grapher::samples_To_VG(_samplesPerVector, vectorLength))(dummy_policy, std::begin(*buf)+(size / 2), std::end(*buf), std::begin(right));
 
-		//_center = grapher::samples_To_VG_lengthPos(std::begin(output), std::end(output), vectorLength, _unitaryLength);
-
-		//std::copy(std::begin(left), std::end(left), std::begin(output));
-		//std::copy(std::begin(right), std::end(right), std::begin(output) + (output.size() / 2));
-		//2nd is not appended
-		return std::pair<std::vector<std::pair<float, float>>, std::vector<std::pair<float, float>>>{left,right};
+		return sp::result{left,right};
+		//return sp::result{ output };
 	}
 	//specialization
-	template std::pair<std::vector<std::pair<float, float>>, std::vector<std::pair<float, float>>> Buffer<float>::operator()();
+	template sp::result Buffer<float>::operator()();
 	//explicit instantiation
 	//template template void Buffer<float>::execute_stl(void(iteratorstart, iteratorend), iteratorstart, iteratorend);
 

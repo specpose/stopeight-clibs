@@ -2,11 +2,13 @@
 
 #include <vector>
 
+#include "shared_types.h"
+
 #include "preloaderif.h"
 
 namespace grapher {
 
-	template<typename T>class Buffer : public PreloaderIF<T, std::pair<std::vector<std::pair<float, float>>, std::vector<std::pair<float, float>>>>
+	template<typename T>class Buffer : public PreloaderIF<T, sp::result>
 	{
 	public:
 		Buffer<T>();
@@ -21,7 +23,7 @@ namespace grapher {
 		std::_Vector_iterator<std::_Vector_val<std::_Simple_types<T>>> rmrbegin();
 		std::_Vector_iterator<std::_Vector_val<std::_Simple_types<T>>> rmrend();*/
 
-		std::pair<std::vector<std::pair<float, float>>, std::vector<std::pair<float, float>>> operator()();
+		sp::result operator()();
 
 
 	private:
