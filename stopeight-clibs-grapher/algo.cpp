@@ -29,11 +29,13 @@ using fexec = dummy;
 
 template <class ExecutionPolicy, class Iterator, class OutputIterator> void grapher::__calculate_rotations::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, std::random_access_iterator_tag)
 {
+	std::adjacent_difference(begin, end, begin);
+	*begin = 0.0f;
 	//binary,not unary
-	std::transform(begin, end - 1, begin + 1, ++begin2, [](double a, double b) {
+	std::transform(begin, end-1, ++begin2, [](double diff) {
 		int average_df = 0.1f;
 		//return asin((b - a)/average_df);
-		return sp::_angle(a,b);
+		return sp::_angle(diff);
 	});
 }
 template void grapher::__calculate_rotations::operator()(fexec& task1, vector_single begin, vector_single end, vector_single begin2, std::random_access_iterator_tag);
