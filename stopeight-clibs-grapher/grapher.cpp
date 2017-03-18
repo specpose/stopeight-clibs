@@ -23,7 +23,6 @@ namespace grapher {
 		, _samplesPerVector(1)
 		, _unitaryLength(1.0f)
 	{
-		//buf.assign(storage, (storage + size));
 	}
 	template grapher::Buffer<float>::Buffer(std::vector<float>* s);
 	template grapher::Buffer<double>::Buffer(std::vector<double>* s);
@@ -56,34 +55,32 @@ namespace grapher {
 	template<typename T> sp::result Buffer<T>::operator()()
 	{
 		const int size = buf->size();
+		int add = 0;
 		if ((size % 2) != 0)
-			throw std::exception("Uneven number of samples can not be split in two");
-		int vectorSize = grapher::samples_To_VG_vectorSize(size/2, _samplesPerVector);
+			add = 1;
+		//	throw std::exception("Uneven number of samples can not be split in two");
+		int vectorSize = grapher::samples_To_VG_vectorSize((size/2), _samplesPerVector);
 		double vectorLength = grapher::samples_To_VG_vectorLength(_showSamples, _unitaryLength);
-		std::vector<sp::element> left;// = std::vector<sp::element>(vectorSize + 1);
-		std::vector<sp::element> right;// = std::vector<sp::element>(vectorSize);
-		//sp::result output = std::vector<sp::element>(vectorSize * 2);
+		std::vector<sp::element> output;
 
 		//par
 		//(grapher::samples_To_VG(samplesPerPixel))(std::experimental::parallel::par_vec, std::begin(*buf), std::end(*buf), std::begin(output));
-		//(grapher::samples_To_VG(_samplesPerVector, vectorLength))(dummy_policy, std::begin(*buf), std::end(*buf), std::begin(output));
 		if (vectorSize > 1) {
-			left = std::vector<sp::element>(vectorSize + 1);
-			right = std::vector<sp::element>(vectorSize);
-			(grapher::samples_To_VG(_samplesPerVector,vectorLength))(dummy_policy, std::begin(*buf), std::begin(*buf)+(size/2), std::begin(left));
-			(grapher::samples_To_VG(_samplesPerVector, vectorLength))(dummy_policy, std::begin(*buf)+(size / 2), std::end(*buf), std::begin(right));
-			//Add connecting piece to left
-			left.back() = (sp::element{ *(std::begin(*buf) + (size / 2) - 1),*(std::begin(*buf) + (size / 2)) });
+			//+ hard-coded middle; only if samplesPervector !=1
+			if (_samplesPerVector != 1)
+				add++;
+			output = std::vector<sp::element>((vectorSize * 2) + add);
+			(grapher::samples_To_VG(_samplesPerVector, vectorLength,std::vector<int>(1,size/2)))(dummy_policy, std::begin(*buf), std::end(*buf), std::begin(output));
+		
 		}
 		else if (vectorSize ==1) {
-			left = std::vector<sp::element>(vectorSize);
-			right = std::vector<sp::element>(vectorSize);
-			(grapher::samples_To_VG(_samplesPerVector, vectorLength))(dummy_policy, std::begin(*buf), std::begin(*buf) + (size / 2), std::begin(left));
-			(grapher::samples_To_VG(_samplesPerVector, vectorLength))(dummy_policy, std::begin(*buf) + (size / 2), std::end(*buf), std::begin(right));
+			//case add=1 untested
+			add += 2;
+			output = std::vector<sp::element>((vectorSize * 2)+ add);
+			(grapher::samples_To_VG(_samplesPerVector, vectorLength, std::vector<int>(1, 1)))(dummy_policy, std::begin(*buf), std::end(*buf), std::begin(output));
 		}
 
-		return sp::result{left,right};
-		//return sp::result{ output };
+		return sp::result{ output };
 	}
 	//specialization
 	template sp::result Buffer<float>::operator()();

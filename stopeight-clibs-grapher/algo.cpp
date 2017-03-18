@@ -15,8 +15,6 @@
 
 #include <vector>
 
-//using element = std::pair<double, double>;
-//element operator+(const element& a, const element& b) { return element{ a.first + b.first, a.second + b.second }; };
 using it_element = std::pair<typename std::vector<sp::element>::iterator, typename std::vector<sp::element>::iterator>;
 
 using vector_single = std::_Vector_iterator<std::_Vector_val<std::_Simple_types<double>>>;
@@ -33,7 +31,7 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 	*begin = 0.0f;
 	//binary,not unary
 	std::transform(begin, end-1, ++begin2, [](double diff) {
-		int average_df = 0.1f;
+		double average_df = 0.1f;
 		//return asin((b - a)/average_df);
 		return sp::_angle(diff);
 	});
@@ -42,6 +40,7 @@ template void grapher::__calculate_rotations::operator()(fexec& task1, vector_si
 
 template <class ExecutionPolicy, class Iterator, class OutputIterator> void grapher::__apply_rotation_matrix::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, std::forward_iterator_tag)
 {
+	//rotations are absolute, not relative to previous vector(prerotate to previous, THEN apply rotation)?!
 	//binary,not unary
 	std::transform(begin, end, begin2, begin2, [](double rot, sp::element vec) {
 		double x = (cos(rot)*vec.first - sin(rot)*vec.second);
@@ -56,13 +55,15 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 {
 
 	std::transform(begin, end, begin2, [](it_element block) {
+		//both can be nonempty; preserve type of last
 		if (block.first != block.second) {
 			return std::accumulate(block.first, block.second, sp::element{ 0.0f,0.0f }, [](sp::element v1, sp::element v2) {
-				return v1 + v2;
+				v2 += v1;
+				return v2;
 			});
 		}
 		else {
-			return *block.first;
+			return *block.first;//second could be last+1
 		}
 	});
 }
@@ -74,8 +75,10 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 	public:
 		my_add() : cache(sp::element{0.0f,0.0f}) {};
 		sp::element operator()(sp::element e) {
-			cache = cache +e;
-			return cache;
+			auto newvalue = e;//type preserved
+			newvalue += cache;//type preserved
+			cache += e;//type mutating
+			return newvalue;
 		};
 	private:
 		sp::element cache;
@@ -92,31 +95,7 @@ double grapher::samples_To_VG_vectorLength(int showSamples, double unitaryLength
 	return unitaryLength / showSamples;
 }
 
-/*template<class Iterator> std::pair<element,element> grapher::samples_To_VG_lengthPos(Iterator begin, Iterator end, double vectorLength, double unitaryLength){
-	auto center = std::pair<element,element>{ element{ 0.0f,0.0f }, element{ 0.0f,0.0f } };
-	auto vectorSize = std::distance(begin,end);
-	if ((vectorSize % 2) == 0) {
-		auto middle = begin + ((vectorSize / 2)-1);
-		auto next = middle++;
-		center = std::pair<element,element>{element(*middle),element(*next)};
-		return center;
-	}
-	else {
-		if (vectorSize == 1) {
-			return std::pair<element, element>{element{ begin->first / 2,begin->second / 2 }, element{ begin->first, begin->second }};
-		}
-		else {
-			auto middle = begin + ((vectorSize / 2));
-			auto next = middle++;
-			auto offsetcenter = element{ (middle->first + next->first) / 2,(middle->second + next->second) / 2 };
-			center = std::pair<element, element>{ offsetcenter,element(*next) };
-			return center;
-		}
-	}
-}
-template std::pair<element,element> grapher::samples_To_VG_lengthPos(vector_pair begin, vector_pair end, double vectorLength, double unitaryLength);*/
-
-grapher::samples_To_VG::samples_To_VG(int samplesPerVector,double vectorLength) : _samplesPerVector(samplesPerVector), _vectorLength(vectorLength) {
+grapher::samples_To_VG::samples_To_VG(int samplesPerVector,double vectorLength, std::vector<int> fixPoints_indices) : _samplesPerVector(samplesPerVector), _vectorLength(vectorLength), _fixPoint_indices(fixPoints_indices) {
 }
 grapher::samples_To_VG::~samples_To_VG() {
 }
@@ -132,18 +111,51 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 	std::vector<sp::element> vectors = std::vector<sp::element>(size, sp::element{ _vectorLength, 0.0f});
 	__apply_rotation_matrix()(task1, std::begin(rotations), std::end(rotations), std::begin(vectors), Iterator::iterator_category{});
 
+	std::vector<std::vector<sp::element>> vectors_sliced = std::vector<std::vector<sp::element>>{};
 	//after append, but before blocks
-	//save copy
-	//append
-	//find _center
+	//fixpoints; needs container access
+	int i = 0;
+	for (auto index : _fixPoint_indices) {
 
-	stopeight::blocks<sp::element> blocks_vector = stopeight::blocks<sp::element>(std::move(vectors),_samplesPerVector);
+		//pre-fixpoint
+		if (index > 0) {
+			std::vector<sp::element> v = std::vector<sp::element>(index - i);
+			std::move(std::begin(vectors)+i, std::begin(vectors)+index, std::begin(v));
+			vectors_sliced.push_back(v);
+		}
 
-	//std::vector<element> out_vectors = std::vector<element>(vectors.size(), { double(0.0f), double(0.0f) });
-	std::vector<sp::element> out_vectors = std::vector<sp::element>(blocks_vector.size(), { double(0.0f), double(0.0f) });
-	std::fill<typename std::vector<sp::element>::iterator>(std::begin(out_vectors), std::end(out_vectors), sp::element{ 1.0f, 1.0f });
+		//make it a fixPoint
+		vectors.at(index) = sp::turn<double>(std::move(vectors.at(index)));
 
-	_sum_blocks()(task1, std::begin(blocks_vector), std::end(blocks_vector), std::begin(out_vectors), Iterator::iterator_category{});
+		//Note: last can not be fixPoint
+		if (index < std::distance(std::begin(vectors), std::end(vectors))) {
+			//append point following to mini segment
+			int pointFollowingFixpoint = index +1;
+			std::vector<sp::element> v = std::vector<sp::element>((pointFollowingFixpoint)-index);
+			std::move(std::begin(vectors) + index, std::begin(vectors) + (pointFollowingFixpoint), std::begin(v));
+			vectors_sliced.push_back(v);
+			i = pointFollowingFixpoint;//point following fixpoint is needed for rotation
+		}
+		else {
+			i = index;
+		}
+	}
+	if (i < (vectors.size())) {
+		std::vector<sp::element> v = std::vector<sp::element>(vectors.size() - i);
+		std::move(std::begin(vectors) + i, std::end(vectors), std::begin(v));
+		vectors_sliced.push_back(v);
+	}
+
+	std::vector<sp::element> out_vectors = std::vector<sp::element>{};
+	for (auto v : vectors_sliced) {
+		stopeight::blocks<sp::element> blocks_vector = stopeight::blocks<sp::element>(std::move(v), _samplesPerVector);
+
+		std::vector<sp::element> ov = std::vector<sp::element>(blocks_vector.size(), { double(0.0f), double(0.0f) });
+		std::fill<typename std::vector<sp::element>::iterator>(std::begin(ov), std::end(ov), sp::element{ 1.0f, 1.0f });
+
+		_sum_blocks()(task1, std::begin(blocks_vector), std::end(blocks_vector), std::begin(ov), Iterator::iterator_category{});
+		std::move(std::begin(ov), std::end(ov), std::back_inserter(out_vectors));
+	}
 
 	_append()(task1, std::begin(out_vectors), std::end(out_vectors), std::begin(out_vectors), Iterator::iterator_category{});
 

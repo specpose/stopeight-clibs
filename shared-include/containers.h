@@ -11,9 +11,9 @@ namespace stopeight {
 	class blocks : public std::vector<std::pair<typename std::vector<DataType>::iterator, typename std::vector<DataType>::iterator>> {
 	public:
 		explicit blocks(std::vector<DataType>&& vec, const int seg_size = 1)
-			: _seg_size(seg_size)
-			, std::vector<std::pair<typename std::vector<DataType>::iterator, typename std::vector<DataType>::iterator>>(calculateSize(vec.size(), seg_size))
+			: std::vector<std::pair<typename std::vector<DataType>::iterator, typename std::vector<DataType>::iterator>>(mySize(vec,seg_size))
 			, _vec{ vec }
+			, _seg_size(seg_size)
 		{
 			int n = 0;
 			int o = this->size()-1;
@@ -42,8 +42,19 @@ namespace stopeight {
 				return 1;
 			}
 		};
+		
 
 	private:
+		static int mySize(const std::vector<DataType>& vec, int seg_size) {
+			// a fixpoint in a block of 1 can not be separated
+			auto a = addedFixPoints(vec);
+			auto x = calculateSize(vec.size(), seg_size);
+			// we need at least one more than total number of fixpoints
+			if (x > a)
+				return x+a;
+			else
+				return x;
+		}
 		//needed in initializer
 		static int endFull(int vec_size, int seg_size) {
 			if ((vec_size % seg_size) == 0)
@@ -51,8 +62,18 @@ namespace stopeight {
 			else
 				return vec_size - (vec_size%seg_size);
 		}
+		static int addedFixPoints(const std::vector<DataType>& vec);
 		std::vector<DataType> _vec;
 		int _seg_size;
 	};
+
+	template<typename DataType> int blocks<DataType>::addedFixPoints(const std::vector<DataType>& vec) {
+		return 0;
+	}
+
+#include "shared_types.h"
+	template<> int blocks<sp::element>::addedFixPoints(const std::vector<sp::element>& vec){
+		return std::count_if(std::begin(vec), std::end(vec), [](sp::element t) {return t.category != sp::tctype::EMPTY; });
+	}
 }
 #endif

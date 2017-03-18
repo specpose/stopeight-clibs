@@ -31,11 +31,10 @@ namespace grapher {
 
 	int samples_To_VG_vectorSize(int inputSize, int samplesPerVector=1);
 	double samples_To_VG_vectorLength(int showSamples, double unitaryLength = 1);
-	//template <class Iterator> std::pair<std::pair<double,double>, std::pair<double, double>> samples_To_VG_lengthPos(Iterator begin, Iterator end, double vectorLength, double unitaryLength);
 
 	class samples_To_VG {
 	public:
-		samples_To_VG(int samplesPerVector,double vectorLength);
+		samples_To_VG(int samplesPerVector,double vectorLength,std::vector<int> fixPoints_indices=std::vector<int>(1,0));
 		~samples_To_VG();
 
 		//specialization: 1 iterator_category, 2 value_types
@@ -44,6 +43,7 @@ namespace grapher {
 	private:
 		int _samplesPerVector;
 		double _vectorLength;
+		std::vector<int> _fixPoint_indices;
 	};
 }
 #endif

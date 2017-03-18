@@ -9,17 +9,20 @@ namespace sp {
 		TURN,
 		CORNER
 	};
-	template<typename T> struct timecode : public std::pair<T,T> {
+	template<typename T> class timecode : public std::pair<T,T> {
 	public:
 		using std::pair<T, T>::pair;
 		using timecode_types = typename tctype;
 		timecode_types category{sp::tctype::EMPTY};
+
 		//virtual ~timecode() = 0;
 	};
-	template<typename T> struct turn : timecode<T> {
+	template<typename T> class turn : public timecode<T> {
 	public:
 		using timecode_types = typename timecode::timecode_types;
-		timecode_types category{ sp::tctype::TURN };
+		turn<T>(timecode<T>&& other) : timecode<T>{ other }{
+			category = sp::tctype::TURN;
+		};
 		
 		//fixpoint() {};
 		//fixpoint(timecode&& point) :*this{point}
@@ -29,11 +32,12 @@ namespace sp {
 	};
 	using element = timecode<double>;
 	//using element = std::pair<double, double>;
-	using result = std::pair<std::vector<element>, std::vector<element>>;
-	//using result = std::vector<element>;
+	//using result = std::pair<std::vector<element>, std::vector<element>>;
+	using result = std::vector<element>;
 	double static _angle(double diff) { return 300 * asin(diff); };
 }
-sp::element static operator+(const sp::element& a, const sp::element& b) { return sp::element{ a.first + b.first, a.second + b.second }; };
-sp::element static operator-(const sp::element& a, const sp::element& b) { return sp::element{ a.first - b.first, a.second - b.second }; };
+sp::element static operator+=(sp::element& a, const sp::element& b) { a.first = a.first + b.first; a.second = a.second + b.second; return a; };
+//sp::element static operator+(const sp::element& a, const sp::element& b) { return sp::element{ a.first + b.first, a.second + b.second }; };
+//sp::element static operator-(const sp::element& a, const sp::element& b) { return sp::element{ a.first - b.first, a.second - b.second }; };
 
 #endif
