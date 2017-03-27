@@ -34,7 +34,6 @@ namespace sp {
 	//using element = std::pair<double, double>;
 	//using result = std::pair<std::vector<element>, std::vector<element>>;
 	using result = std::vector<element>;
-	double static _angle(double diff) { return 300 * asin(diff); };
 }
 sp::element static operator+=(sp::element& a, const sp::element& b) { a.first = a.first + b.first; a.second = a.second + b.second; return a; };
 //sp::element static operator+(const sp::element& a, const sp::element& b) { return sp::element{ a.first + b.first, a.second + b.second }; };

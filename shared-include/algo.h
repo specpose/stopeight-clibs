@@ -5,10 +5,22 @@
 #define ALGO_H
 
 namespace grapher {
+	double static _angle(double ratio) { return atan(ratio); };
+
+	//specialization: 1 iterator_category, 2 value_types
+	class __average {
+	public:
+		template <class ExecutionPolicy, class Iterator>double operator()(ExecutionPolicy&, Iterator begin, Iterator end, std::forward_iterator_tag);
+	};
+
 	//specialization: 1 iterator_category, 2 value_types
 	class __calculate_rotations {
 	public:
+		__calculate_rotations(double average_df);
+		~__calculate_rotations();
 		template <class ExecutionPolicy, class Iterator, class OutputIterator>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2,std::random_access_iterator_tag);
+	private:
+		double average_df;
 	};
 
 	//specialization: 1 iterator_category, 2 value_types
@@ -34,7 +46,8 @@ namespace grapher {
 
 	class samples_To_VG {
 	public:
-		samples_To_VG(int samplesPerVector,double vectorLength,std::vector<int> fixPoints_indices=std::vector<int>(1,0));
+		//experimental value from notation2.wav => sin(1.0f/300.0f)
+		samples_To_VG(int samplesPerVector,double vectorLength,std::vector<int> fixPoints_indices=std::vector<int>(1,0), double contextAverage=0.0f);
 		~samples_To_VG();
 
 		//specialization: 1 iterator_category, 2 value_types
@@ -43,6 +56,7 @@ namespace grapher {
 	private:
 		int _samplesPerVector;
 		double _vectorLength;
+		double _contextAverage;
 		std::vector<int> _fixPoint_indices;
 	};
 }
