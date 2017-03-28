@@ -27,7 +27,11 @@ using fexec = dummy;
 
 template <class ExecutionPolicy, class Iterator> double grapher::__average::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, std::forward_iterator_tag)
 {
-	return std::accumulate(begin, end, 0.0f)/std::distance(begin,end);
+	auto sum = std::accumulate(begin, end, 0.0f, [](double first, double second) {
+		return first += abs(second);
+	
+	});
+	return sum/std::distance(begin,end);
 }
 template double grapher::__average::operator()(fexec& task1, vector_single begin, vector_single end, std::forward_iterator_tag);
 
@@ -43,11 +47,15 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 	//binary,not unary
 	auto av = this->average_df;
 	std::transform(begin, end-1, ++begin2, [av](double diff) {
+		double d = diff;
+		if (d == 0.0f || av==0.0f)
+			return double(0.0f);
 		//rotations are absolute:
-		return 300*asin(diff);
+		//return 300*asin(d);
+		return atan((d / av) / 1);
 
 		//rotations are relative:
-		//return atan(diff/av);
+		//return atan(d/av);
 	});
 }
 template void grapher::__calculate_rotations::operator()(fexec& task1, vector_single begin, vector_single end, vector_single begin2, std::random_access_iterator_tag);
@@ -127,8 +135,11 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 	std::adjacent_difference(begin, end, std::begin(differences));
 	*std::begin(differences) = 0.0f;
 
-	if (_contextAverage==0.0f)//HACK for avoiding duplicate function call in init
+	if (_contextAverage == 0.0f) {//HACK for avoiding duplicate function call in init
 		_contextAverage = __average()(task1, ++std::begin(differences), std::end(differences), Iterator::iterator_category{});
+		//if (_contextAverage == 0.0f)
+		//	_contextAverage == std::numeric_limits<double>::min();
+	}
 
 	std::vector<double> rotations = std::vector<double>(size, 0.0f);
 	__calculate_rotations(_contextAverage)(task1, std::begin(differences), std::end(differences), std::begin(rotations), Iterator::iterator_category{});
