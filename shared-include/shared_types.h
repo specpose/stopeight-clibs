@@ -1,3 +1,6 @@
+// Copyright (C) 2017 Fassio Blatter
+// GNU Lesser General Public License, version 2.1
+
 //#pragma once
 #ifndef SHARED_TYPES_H
 #define SHARED_TYPES_H

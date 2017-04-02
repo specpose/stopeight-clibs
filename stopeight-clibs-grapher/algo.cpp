@@ -50,12 +50,8 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 		double d = diff;
 		if (d == 0.0f || av==0.0f)
 			return double(0.0f);
-		//rotations are absolute:
 		//return 300*asin(d);
 		return atan((d / av) / 1);
-
-		//rotations are relative:
-		//return atan(d/av);
 	});
 }
 template void grapher::__calculate_rotations::operator()(fexec& task1, vector_single begin, vector_single end, vector_single begin2, std::random_access_iterator_tag);

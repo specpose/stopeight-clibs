@@ -149,7 +149,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>..\..\parallelstl\Build\ParallelSTLDesktop14\Debug\ParallelSTL.lib;</AdditionalDependencies>
+      <AdditionalDependencies>..\..\parallelstl\Build\ParallelSTLDesktop14\Release\ParallelSTL.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
