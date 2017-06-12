@@ -144,41 +144,73 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 	__apply_rotation_matrix()(task1, std::begin(rotations), std::end(rotations), std::begin(vectors), Iterator::iterator_category{});
 
 	std::vector<std::vector<sp::element>> vectors_sliced = std::vector<std::vector<sp::element>>{};
-	//after append, but before blocks
-	//fixpoints; needs container access
-	int i = 0;
+	
+	//begin: after append, but before blocks
+	
+	//remove all illegal fixpoint_indices
+	//Note: last can not be fixPoint
+	const auto vectors_size = vectors.size();
+	std::remove_if(std::begin(_fixPoint_indices), std::end(_fixPoint_indices), [vectors_size](int index) {
+		if ((index>=(vectors_size-1)) || (index==0))
+			return true;
+		return false;
+	});
+	//make it a fixPoint
 	for (auto index : _fixPoint_indices) {
-
-		//pre-fixpoint
-		if (index > 0) {
-			std::vector<sp::element> v = std::vector<sp::element>(index - i);
-			std::move(std::begin(vectors)+i, std::begin(vectors)+index, std::begin(v));
-			vectors_sliced.push_back(v);
-		}
-
-		//make it a fixPoint
 		vectors.at(index) = sp::turn<double>(std::move(vectors.at(index)));
+	}
+	std::vector<std::pair<int, int>> slices = std::vector<std::pair<int, int>>{};
+	class prev {
+	public:
+		prev() : _prev(0) {};
+		std::pair<int,int> operator()(int curr) {
+			auto result = std::pair<int, int>{ _prev,curr-1 };
+			_prev = curr;
+			return result;
+		};
+	private:
+		int _prev;
+	};
+	std::transform(std::begin(_fixPoint_indices), std::end(_fixPoint_indices), std::back_inserter<std::vector<std::pair<int, int>>>(slices), prev());
+	std::pair<int, int> last = std::pair<int, int>{0,vectors_size-1};
+	if (vectors_size > 0) {
+		last = std::pair<int, int>{ _fixPoint_indices.back(), vectors_size - 1 };
+	}
+	slices.push_back(last);
+	std::transform(std::begin(slices), std::end(slices), std::back_inserter<decltype(vectors_sliced)>(vectors_sliced), [vectors](std::pair<int,int> p) {
+		int size = p.second - p.first;
+		std::vector<sp::element> v = std::vector<sp::element>(size);
+		std::move(std::begin(vectors) + p.first, std::begin(vectors) + p.second+1, std::begin(v));
+		return v;
+	});
 
-		//Note: last can not be fixPoint
-		if (index < std::distance(std::begin(vectors), std::end(vectors))) {
+	/*int i = 0;
+	//hierarchy 1 to 2
+	for (auto index : _fixPoint_indices) {
+			//pre-fixpoint
+			std::vector<sp::element> v1 = std::vector<sp::element>(index - i);
+			std::move(std::begin(vectors)+i, std::begin(vectors)+index, std::begin(v1));
+			vectors_sliced.push_back(v1);
+
 			//append point following to mini segment
 			int pointFollowingFixpoint = index +1;
-			std::vector<sp::element> v = std::vector<sp::element>((pointFollowingFixpoint)-index);
-			std::move(std::begin(vectors) + index, std::begin(vectors) + (pointFollowingFixpoint), std::begin(v));
-			vectors_sliced.push_back(v);
+			std::vector<sp::element> v2 = std::vector<sp::element>((pointFollowingFixpoint)-index);
+			std::move(std::begin(vectors) + index, std::begin(vectors) + (pointFollowingFixpoint), std::begin(v2));
+			vectors_sliced.push_back(v2);
 			i = pointFollowingFixpoint;//point following fixpoint is needed for rotation
-		}
-		else {
-			i = index;
-		}
-	}
-	if (i < (vectors.size())) {
-		std::vector<sp::element> v = std::vector<sp::element>(vectors.size() - i);
-		std::move(std::begin(vectors) + i, std::end(vectors), std::begin(v));
-		vectors_sliced.push_back(v);
 	}
 
+	if (i < (vectors_size)) {
+		std::vector<sp::element> v = std::vector<sp::element>(vectors_size - i);
+		std::move(std::begin(vectors) + i, std::end(vectors), std::begin(v));
+		vectors_sliced.push_back(v);
+	}*/
+
+	//end: after append, but before blocks
+
 	std::vector<sp::element> out_vectors = std::vector<sp::element>{};
+	//hierarchy all to 1
+	//std::transform(std::begin(vectors_sliced), std::end(vectors_sliced), std::back_inserter(out_vectors), [_samplesPerVector](decltype(vectors_sliced) v) {
 	for (auto v : vectors_sliced) {
 		stopeight::blocks<sp::element> blocks_vector = stopeight::blocks<sp::element>(std::move(v), _samplesPerVector);
 
@@ -188,6 +220,7 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 		_sum_blocks()(task1, std::begin(blocks_vector), std::end(blocks_vector), std::begin(ov), Iterator::iterator_category{});
 		std::move(std::begin(ov), std::end(ov), std::back_inserter(out_vectors));
 	}
+	//});
 
 	_append()(task1, std::begin(out_vectors), std::end(out_vectors), std::begin(out_vectors), Iterator::iterator_category{});
 
