@@ -30,6 +30,16 @@ namespace grapher {
 	};
 
 	//specialization: 1 iterator_category, 2 value_types
+	class _fixpoints {
+	public:
+		_fixpoints(std::vector<int>& points);
+		~_fixpoints();
+		template <class ExecutionPolicy, class Iterator, class OutputIterator>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2, std::random_access_iterator_tag);
+	private:
+		std::vector<int>& _fixPoint_indices;
+	};
+
+	//specialization: 1 iterator_category, 2 value_types
 	class _sum_blocks {
 	public:
 		template <class ExecutionPolicy, class Iterator, class OutputIterator>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2, std::random_access_iterator_tag);
