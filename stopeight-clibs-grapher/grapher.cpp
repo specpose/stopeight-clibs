@@ -84,6 +84,7 @@ namespace grapher {
 	}
 	//specialization
 	template sp::result Buffer<float>::operator()();
+	template sp::result Buffer<double>::operator()();
 	//explicit instantiation
 	//template template void Buffer<float>::execute_stl(void(iteratorstart, iteratorend), iteratorstart, iteratorend);
 

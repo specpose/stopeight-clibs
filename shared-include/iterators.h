@@ -18,16 +18,20 @@ namespace stopeight {
 		//const, arg const
 		bool operator==( block_iterator<IteratorType>& b) {
 			std::pair<IteratorType, IteratorType> a* = construct();
+			bool result = false;
 			if ((a->first == b->first) && (a->second == b->second))
-				return true;
-			return false;
+				result = true;
+			delete a;
+			return result;
 		};
 		//const, arg const
 		bool operator!=( block_iterator<IteratorType>& b) {
 			std::pair<IteratorType, IteratorType>* a = construct();
+			bool result = false;
 			if ((a->first != b->first) || (a->second != b->second))
-				return true;
-			return false;
+				result = true;
+			delete a;
+			return result;
 		};
 		block_iterator<IteratorType>& operator++() {
 			block_iterator<IteratorType> tmp = *this;
