@@ -87,10 +87,7 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 	});
 	//make it a fixPoint
 	for (auto index : _fixPoint_indices) {
-		//sp::element n = std::move(*(begin + index));
-		//*(begin+index) = sp::turn<double>(std::move(n));
 		*(begin + index) = sp::turn<double>(std::move(*(begin + index)));
-		//vectors.at(index) = sp::turn<double>(std::move(vectors.at(index)));
 	}
 	std::vector<std::pair<int, int>> slices = std::vector<std::pair<int, int>>{};
 	class prev {
@@ -119,13 +116,6 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 		it_element e = it_element{ (begin + p.first),(begin + p.second) };
 		return e;
 	});
-	//std::transform(std::begin(slices), std::end(slices), begin2, [begin](std::pair<int, int> p) {
-		//int size = p.second - p.first;
-		//std::vector<sp::element> v = std::vector<sp::element>(size);
-		//std::vector<sp::element> v = std::vector<sp::element>{};
-		//std::move(begin + p.first, begin + p.second + 1, std::begin(v));
-		//return v;
-	//});
 }
 template void grapher::_fixpoints::operator()(fexec& task1, vector_pair begin, vector_pair end, vector_vectors begin2, std::random_access_iterator_tag);
 
@@ -203,26 +193,19 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 		std::vector<sp::element> vectors = std::vector<sp::element>(size, sp::element{ _vectorLength, 0.0f });
 		__apply_rotation_matrix()(task1, std::begin(rotations), std::end(rotations), std::begin(vectors), Iterator::iterator_category{});
 
-		//std::vector<std::vector<sp::element>> vectors_sliced = std::vector<std::vector<sp::element>>{};
-		std::vector<it_element> vectors_sliced;// = std::vector<it_element>(0);
+		std::vector<it_element> vectors_sliced;
 
-		//begin: after append, but before blocks
-
-		//auto test = _fixpoints(_fixPoint_indices);
 		_fixpoints(_fixPoint_indices)(task1, std::begin(vectors), std::end(vectors), std::back_inserter(vectors_sliced), Iterator::iterator_category{});
-
-		//end: after append, but before blocks
 
 		std::vector<sp::element> out_vectors = std::vector<sp::element>{};
 		//hierarchy all to 1
 		//std::transform(std::begin(vectors_sliced), std::end(vectors_sliced), std::back_inserter(out_vectors), [_samplesPerVector](decltype(vectors_sliced) v) {
 		for (auto v : vectors_sliced) {
-			auto slice = std::vector<sp::element>{};
-			std::move(v.first, v.second, std::back_inserter(slice));
-			stopeight::blocks<sp::element> blocks_vector = stopeight::blocks<sp::element>(std::move(slice), _samplesPerVector);
+			stopeight::blocks<sp::element> blocks_vector = stopeight::blocks<sp::element>(v, _samplesPerVector);
+																							//std::move(slice), _samplesPerVector);
 
 			std::vector<sp::element> ov = std::vector<sp::element>{};//(blocks_vector.size(), { double(0.0f), double(0.0f) });
-			std::fill<typename std::vector<sp::element>::iterator>(std::begin(ov), std::end(ov), sp::element{ 1.0f, 1.0f });
+			//std::fill<typename std::vector<sp::element>::iterator>(std::begin(ov), std::end(ov), sp::element{ 1.0f, 1.0f });
 
 			_sum_blocks()(task1, std::begin(blocks_vector), std::end(blocks_vector), std::back_inserter(ov), Iterator::iterator_category{});
 			std::move(std::begin(ov), std::end(ov), std::back_inserter(out_vectors));
