@@ -35,26 +35,28 @@ template <class ExecutionPolicy, class Iterator> double grapher::__average::oper
 }
 template double grapher::__average::operator()(fexec& task1, vector_single begin, vector_single end, std::forward_iterator_tag);
 
-
-grapher::__calculate_rotations::__calculate_rotations(double average_df) : average_df(average_df) {
-
-}
-grapher::__calculate_rotations::~__calculate_rotations() {
-
-}
-template <class ExecutionPolicy, class Iterator, class OutputIterator> void grapher::__calculate_rotations::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, std::random_access_iterator_tag)
+template <class ExecutionPolicy, class Iterator, class OutputIterator> void grapher::__calculate_rotations::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, grapher::angle& angleFunction, std::random_access_iterator_tag itag)
 {
-	//binary,not unary
-	auto av = this->average_df;
-	std::transform(begin, end - 1, ++begin2, [av](double diff) {
-		double d = diff;
-		if (d == 0.0f || av == 0.0f)
-			return double(0.0f);
-		//return 300*asin(d);
-		return atan((d / av) / 1);
+	std::transform(begin, end - 1, ++begin2, [&angleFunction](double diff) {
+		return angleFunction(diff);
 	});
 }
-template void grapher::__calculate_rotations::operator()(fexec& task1, vector_single begin, vector_single end, vector_single begin2, std::random_access_iterator_tag);
+template void grapher::__calculate_rotations::operator()(fexec& task1, vector_single begin, vector_single end, vector_single begin2, grapher::angle& angleFunction, std::random_access_iterator_tag itag);
+
+template <class ExecutionPolicy, class Iterator, class OutputIterator> void grapher::__calculate_rotations::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, grapher::averageScaled& angleFunction, std::random_access_iterator_tag itag)
+{
+	auto begin_c = begin;
+	auto end_c = end;
+	if (angleFunction.getAverage() == 0.0f) {//HACK for avoiding duplicate difference function call
+		angleFunction.setAverate(__average()(task1, ++begin_c, end_c, itag));
+		//if (_contextAverage == 0.0f)
+		//	_contextAverage == std::numeric_limits<double>::min();
+	}
+	std::transform(begin, end - 1, ++begin2, [&angleFunction](double diff) {
+		return angleFunction(diff);
+	});
+}
+template void grapher::__calculate_rotations::operator()(fexec& task1, vector_single begin, vector_single end, vector_single begin2, grapher::averageScaled& angleFunction, std::random_access_iterator_tag itag);
 
 template <class ExecutionPolicy, class Iterator, class OutputIterator> void grapher::__apply_rotation_matrix::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, std::forward_iterator_tag)
 {
@@ -163,15 +165,16 @@ double grapher::samples_To_VG_vectorLength(int showSamples, double unitaryLength
 	return unitaryLength / showSamples;
 }
 
-grapher::samples_To_VG::samples_To_VG(int samplesPerVector, double vectorLength, std::vector<int> fixPoints_indices, double contextAverage)
+grapher::samples_To_VG::samples_To_VG(int samplesPerVector, double vectorLength, std::vector<int> fixPoints_indices)
 	: _samplesPerVector(samplesPerVector)
 	, _vectorLength(vectorLength)
 	, _fixPoint_indices(fixPoints_indices)
-	, _contextAverage(contextAverage) {
+{
 }
 grapher::samples_To_VG::~samples_To_VG() {
 }
-template <class ExecutionPolicy, class Iterator, class OutputIterator> void grapher::samples_To_VG::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2)
+//partial specialization
+template <class ExecutionPolicy, class Iterator, class OutputIterator, class UnaryFunction> void grapher::samples_To_VG::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, UnaryFunction& angleFunction)
 {
 	//par
 	//std::experimental::parallel::transform(task1, begin, end, begin, [](float f) {return 3.3f; });
@@ -181,14 +184,8 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 		std::adjacent_difference(begin, end, std::begin(differences));
 		*std::begin(differences) = 0.0f;
 
-		if (_contextAverage == 0.0f) {//HACK for avoiding duplicate function call in init
-			_contextAverage = __average()(task1, ++std::begin(differences), std::end(differences), Iterator::iterator_category{});
-			//if (_contextAverage == 0.0f)
-			//	_contextAverage == std::numeric_limits<double>::min();
-		}
-
 		std::vector<double> rotations = std::vector<double>(size, 0.0f);
-		__calculate_rotations(_contextAverage)(task1, std::begin(differences), std::end(differences), std::begin(rotations), Iterator::iterator_category{});
+		__calculate_rotations()(task1, std::begin(differences), std::end(differences), std::begin(rotations), angleFunction, Iterator::iterator_category{});
 
 		std::vector<sp::element> vectors = std::vector<sp::element>(size, sp::element{ _vectorLength, 0.0f });
 		__apply_rotation_matrix()(task1, std::begin(rotations), std::end(rotations), std::begin(vectors), Iterator::iterator_category{});
@@ -217,4 +214,5 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 		std::copy<typename std::vector<sp::element>::iterator, OutputIterator>(std::begin(out_vectors), std::end(out_vectors), begin2);
 	}
 }
-template void grapher::samples_To_VG::operator()(fexec& task1, vector_single begin, vector_single end, vector_pair begin2);
+//template void grapher::samples_To_VG::operator()(fexec& task1, vector_single begin, vector_single end, vector_pair begin2, plainAngle& angleFunction);
+//template void grapher::samples_To_VG::operator()(fexec& task1, vector_single begin, vector_single end, vector_pair begin2, test2& angleFunction);

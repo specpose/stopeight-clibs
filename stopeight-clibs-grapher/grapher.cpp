@@ -22,20 +22,22 @@ namespace grapher {
 		, _showSamples(0)
 		, _samplesPerVector(1)
 		, _unitaryLength(1.0f)
+		, _relative(false)
 	{
 	}
 	template grapher::Buffer<float>::Buffer(std::vector<float>* s);
 	template grapher::Buffer<double>::Buffer(std::vector<double>* s);
 
-	template<typename T> grapher::Buffer<T>::Buffer(std::vector<T>* s, int showSamples, int samplesPerVector, double unitaryLength)
+	template<typename T> grapher::Buffer<T>::Buffer(std::vector<T>* s, int showSamples, int samplesPerVector, double unitaryLength, bool relative)
 		: grapher::Buffer<T>(s)
 	{
 		_showSamples = showSamples;
 		_samplesPerVector = samplesPerVector;
 		_unitaryLength = unitaryLength;
+		_relative = relative;
 	}
-	template grapher::Buffer<float>::Buffer(std::vector<float>* s, int showSamples, int samplesPerVector, double unitaryLength);
-	template grapher::Buffer<double>::Buffer(std::vector<double>* s, int showSamples, int samplesPerVector, double unitaryLength);
+	template grapher::Buffer<float>::Buffer(std::vector<float>* s, int showSamples, int samplesPerVector, double unitaryLength, bool relative);
+	template grapher::Buffer<double>::Buffer(std::vector<double>* s, int showSamples, int samplesPerVector, double unitaryLength, bool relative);
 
 /*	template<typename T> grapher::Buffer<T>::Buffer(std::unique_ptr<std::vector<T>> s)
 //		: PreloaderIF{ *this }
@@ -65,20 +67,28 @@ namespace grapher {
 
 		//par
 		//(grapher::samples_To_VG(samplesPerPixel))(std::experimental::parallel::par_vec, std::begin(*buf), std::end(*buf), std::begin(output));
+		grapher::averageScaled* afunc;
+		if (_relative) {
+			afunc = new relative(0.0f);
+		}
+		else {
+			afunc = new independent(0.0f);
+		}
 		if (vectorSize > 1) {
 			//+ hard-coded middle; only if samplesPervector !=1
 			if (_samplesPerVector != 1)
 				add++;
 			output = std::vector<sp::element>((vectorSize * 2) + add);
-			(grapher::samples_To_VG(_samplesPerVector, vectorLength,std::vector<int>(1,size/2)))(dummy_policy, std::begin(*buf), std::end(*buf), std::begin(output));
+			(grapher::samples_To_VG(_samplesPerVector, vectorLength,std::vector<int>(1,size/2)))(dummy_policy, std::begin(*buf), std::end(*buf), std::begin(output), *afunc);
 		
 		}
 		else if (vectorSize ==1) {
 			//case add=1 untested
 			add += 2;
 			output = std::vector<sp::element>((vectorSize * 2)+ add);
-			(grapher::samples_To_VG(_samplesPerVector, vectorLength, std::vector<int>(1, 1)))(dummy_policy, std::begin(*buf), std::end(*buf), std::begin(output));
+			(grapher::samples_To_VG(_samplesPerVector, vectorLength, std::vector<int>(1, 1)))(dummy_policy, std::begin(*buf), std::end(*buf), std::begin(output), *afunc);
 		}
+		delete afunc;
 
 		return sp::result{ output };
 	}

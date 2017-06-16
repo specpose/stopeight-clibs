@@ -16,7 +16,7 @@ namespace grapher {
 	public:
 		Buffer<T>();
 		Buffer<T>(std::vector<T>* s);
-		explicit Buffer<T>(std::vector<T>* s, int showSamples, int samplesPerVector=1, double unitaryLength = 1);
+		explicit Buffer<T>(std::vector<T>* s, int showSamples, int samplesPerVector=1, double unitaryLength = 1, bool relative=false);
 
 		~Buffer<T>();
 
@@ -33,6 +33,7 @@ namespace grapher {
 		std::vector<T>* buf;
 		int _samplesPerVector,_showSamples;
 		double _unitaryLength;
+		bool _relative;
 		//std::pair<std::pair<double, double>, std::pair<double, double>> _center;
 	};
 }
