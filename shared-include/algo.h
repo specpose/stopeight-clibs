@@ -116,6 +116,16 @@ namespace grapher {
 	};
 
 	//specialization: 1 iterator_category, 2 value_types
+	class _blocks {
+	public:
+		_blocks(int samplesPerVector);
+		~_blocks();
+		template <class ExecutionPolicy, class Iterator, class OutputIterator>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2, std::random_access_iterator_tag);
+	private:
+		int _samplesPerVector;
+	};
+
+	//specialization: 1 iterator_category, 2 value_types
 	class _sum_blocks {
 	public:
 		template <class ExecutionPolicy, class Iterator, class OutputIterator>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2, std::random_access_iterator_tag);

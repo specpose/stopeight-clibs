@@ -9,6 +9,7 @@
 
 #include "algo.h"
 #include "containers.h"
+//#include "iterators.h"
 
 //double define
 #include <experimental/execution_policy>
@@ -60,7 +61,6 @@ template void grapher::__calculate_rotations::operator()(fexec& task1, vector_si
 
 template <class ExecutionPolicy, class Iterator, class OutputIterator> void grapher::__apply_rotation_matrix::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, std::forward_iterator_tag)
 {
-	//rotations are absolute, not relative to previous vector(prerotate to previous, THEN apply rotation)?!
 	//binary,not unary
 	std::transform(begin, end, begin2, begin2, [](double rot, sp::element vec) {
 		double x = (cos(rot)*vec.first - sin(rot)*vec.second);
@@ -103,17 +103,17 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 	private:
 		int _prev;
 	};
-	//std::transform(std::begin(_fixPoint_indices), std::end(_fixPoint_indices), std::back_inserter<std::vector<std::pair<int, int>>>(slices), prev());//prefix, MISSING 2POINT
-	for (auto index : _fixPoint_indices) {
-		slices.push_back(prev()(index));
-		slices.push_back(std::pair<int, int>{index, index + 1});
-	}
+	auto it = std::back_inserter(slices);
+	std::for_each(std::begin(_fixPoint_indices),std::end(_fixPoint_indices),[&it](auto index){
+		*it++ = (prev()(index));//was index
+		*it++ = (std::pair<int, int>{index, index+1});//was index+1
+	});
 	//tail end
 	std::pair<int, int> last = std::pair<int, int>{ 0,vectors_size };
 	if (vectors_size > 0) {
 		last = std::pair<int, int>{ _fixPoint_indices.back() + 1, vectors_size };
 	}
-	slices.push_back(last);
+	*it++ = (last);
 	std::transform(std::begin(slices), std::end(slices), begin2, [begin](std::pair<int, int> p) {
 		it_element e = it_element{ (begin + p.first),(begin + p.second) };
 		return e;
@@ -121,9 +121,36 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 }
 template void grapher::_fixpoints::operator()(fexec& task1, vector_pair begin, vector_pair end, vector_vectors begin2, std::random_access_iterator_tag);
 
+grapher::_blocks::_blocks(int samplesPerVector) : _samplesPerVector(samplesPerVector) {
+
+}
+grapher::_blocks::~_blocks() {
+
+}
+template <class ExecutionPolicy, class Iterator, class OutputIterator> void grapher::_blocks::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, std::random_access_iterator_tag)
+{
+	auto spV = _samplesPerVector;
+	std::for_each(begin, end, [&begin2,spV](it_element slice) {
+		auto size = std::distance(slice.first, slice.second);
+		if (size > 0) {
+			auto sectionend = (spV > size) ? size : spV;
+			for (int i = 0; i < (size / sectionend); i++) {
+				*begin2++ = (it_element{ (slice.first + (i*sectionend)),(slice.first + (i*sectionend) + sectionend) });
+			}
+			auto remainder = size%sectionend;
+			if (remainder != 0)
+				*begin2++ = (it_element{ (slice.second - remainder),slice.second });
+		}
+		else {
+			*begin2++ = (it_element{ slice.first, slice.first });
+		}
+	});
+}
+template void grapher::_blocks::operator()(fexec& task1, vector_vectors begin, vector_vectors end, vector_vectors begin2, std::random_access_iterator_tag);
+
+
 template <class ExecutionPolicy, class Iterator, class OutputIterator> void grapher::_sum_blocks::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, std::random_access_iterator_tag)
 {
-
 	std::transform(begin, end, begin2, [](it_element block) {
 		//both can be nonempty; preserve type of last
 		if (block.first != block.second) {
@@ -158,7 +185,11 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 template void grapher::_append::operator()(fexec& task1, vector_pair begin, vector_pair end, vector_pair begin2, std::forward_iterator_tag);
 
 int grapher::samples_To_VG_vectorSize(int inputSize, int samplesPerVector) {
-	return stopeight::blocks<sp::element>::calculateSize(inputSize, samplesPerVector);
+	auto size = inputSize / samplesPerVector;
+	if (inputSize%samplesPerVector > 0)
+		size++;
+	return size;
+	//return stopeight::blocks<sp::element>::calculateSize(inputSize, samplesPerVector);
 }
 
 double grapher::samples_To_VG_vectorLength(int showSamples, double unitaryLength) {
@@ -191,10 +222,17 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator, class Una
 		__apply_rotation_matrix()(task1, std::begin(rotations), std::end(rotations), std::begin(vectors), Iterator::iterator_category{});
 
 		std::vector<it_element> vectors_sliced;
-
 		_fixpoints(_fixPoint_indices)(task1, std::begin(vectors), std::end(vectors), std::back_inserter(vectors_sliced), Iterator::iterator_category{});
 
-		std::vector<sp::element> out_vectors = std::vector<sp::element>{};
+		std::vector<sp::element> out_vectors;
+		/*std::vector<it_element> blocks;
+		_blocks(_samplesPerVector)(task1, std::begin(vectors_sliced), std::end(vectors_sliced), std::back_inserter(blocks), Iterator::iterator_category{});
+
+		std::vector<sp::element> sums;
+		_sum_blocks()(task1, std::begin(blocks), std::end(blocks), std::back_inserter(sums), Iterator::iterator_category{});
+
+		std::move(std::begin(sums), std::end(sums), std::back_inserter(out_vectors));*/
+
 		//hierarchy all to 1
 		//std::transform(std::begin(vectors_sliced), std::end(vectors_sliced), std::back_inserter(out_vectors), [_samplesPerVector](decltype(vectors_sliced) v) {
 		for (auto v : vectors_sliced) {

@@ -4,6 +4,10 @@
 #ifndef ITERATORS_H
 #define ITERATORS_H
 
+/*
+	Not used because last hast to be known, implemented in containers.h
+*/
+
 namespace stopeight {
 	//has to be random access; is forward
 	template<typename IteratorType> class block_iterator : public std::iterator<std::forward_iterator_tag,
