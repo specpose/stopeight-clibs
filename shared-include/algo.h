@@ -14,7 +14,6 @@ namespace grapher {
 
 	class plainAngle : public angle {
 	public:
-		//virtual result_type operator()(argument_type d) = 0;
 	};
 
 	class averageScaled : public angle {
@@ -23,9 +22,8 @@ namespace grapher {
 			//if (_contextAverage == 0.0f)
 			//	_contextAverage == std::numeric_limits<double>::min();
 		}
-		virtual void setAverate(argument_type average) final { av = average; };
-		virtual const argument_type getAverage() final { return av; };
-		//virtual result_type operator()(argument_type d) = 0;
+		//virtual void setAverate(argument_type average) final { av = average; };
+		//virtual const argument_type getAverage() final { return av; };
 	protected:
 		argument_type av;
 	};
@@ -104,7 +102,7 @@ namespace grapher {
 	class __calculate_rotations {
 	public:
 		template <class ExecutionPolicy, class Iterator, class OutputIterator> void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2,angle& angleFunction, std::forward_iterator_tag itag);
-		template <class ExecutionPolicy, class Iterator, class OutputIterator> void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2, averageScaled& angleFunction, std::forward_iterator_tag itag);
+		//template <class ExecutionPolicy, class Iterator, class OutputIterator> void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2, averageScaled& angleFunction, std::forward_iterator_tag itag);
 
 	};
 
