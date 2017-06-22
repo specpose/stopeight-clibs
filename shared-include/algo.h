@@ -19,7 +19,10 @@ namespace grapher {
 
 	class averageScaled : public angle {
 	public:
-		averageScaled(argument_type average) : av(average) {}
+		template<typename Iterator>averageScaled(Iterator begin, Iterator end) : av(__average()(begin, end, Iterator::iterator_category{})) {
+			//if (_contextAverage == 0.0f)
+			//	_contextAverage == std::numeric_limits<double>::min();
+		}
 		virtual void setAverate(argument_type average) final { av = average; };
 		virtual const argument_type getAverage() final { return av; };
 		//virtual result_type operator()(argument_type d) = 0;
@@ -29,7 +32,7 @@ namespace grapher {
 
 	class relative : public averageScaled {
 	public:
-		relative(argument_type average, double initialAngle = 0.0f) : averageScaled(average),_previous(initialAngle) {};
+		template<typename Iterator>relative(Iterator begin, Iterator end, double initialAngle = 0.0f) : averageScaled(begin,end),_previous(initialAngle) {};
 		double operator()(double d) {
 			if (d == 0.0f || av == 0.0f)
 				return double(0.0f);
@@ -42,7 +45,7 @@ namespace grapher {
 	
 	class independent : public averageScaled {
 	public:
-		independent(argument_type average) : averageScaled(average) {};
+		template<typename Iterator>independent(Iterator begin, Iterator end) : averageScaled(begin, end) {};
 		double operator()(double d) {
 			if (d == 0.0f || av == 0.0f)
 				return double(0.0f);
@@ -52,7 +55,7 @@ namespace grapher {
 
 	class test : public averageScaled {
 	public:
-		test(argument_type average) : averageScaled(average) {};
+		template<typename Iterator>test(Iterator begin, Iterator end) : averageScaled(begin, end) {};
 		double operator()(double d) {
 			if (d == 0.0f || av == 0.0f)
 				return double(0.0f);
@@ -62,7 +65,7 @@ namespace grapher {
 
 	class test2 : public averageScaled {
 	public:
-		test2(argument_type average, double initialAngle = 0.0f) : averageScaled(average),_previous(initialAngle) {};
+		template<typename Iterator>test2(Iterator begin, Iterator end, double initialAngle = 0.0f) : averageScaled(begin, end),_previous(initialAngle) {};
 		double operator()(double d) {
 			if (d == 0.0f || av == 0.0f)
 				return double(0.0f);
@@ -86,9 +89,15 @@ namespace grapher {
 	};
 
 	//specialization: 1 iterator_category, 2 value_types
+	class __differences {
+	public:
+		template <class ExecutionPolicy, class Iterator, class OutputIterator>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2);
+	};
+
+	//specialization: 1 iterator_category, 2 value_types
 	class __average {
 	public:
-		template <class ExecutionPolicy, class Iterator>double operator()(ExecutionPolicy&, Iterator begin, Iterator end, std::forward_iterator_tag);
+		template <class Iterator>double operator()(Iterator begin, Iterator end, std::forward_iterator_tag);
 	};
 
 	//specialization: 1 iterator_category, 2 value_types
@@ -102,7 +111,7 @@ namespace grapher {
 	//specialization: 1 iterator_category, 2 value_types
 	class __apply_rotation_matrix {
 	public:
-		template <class ExecutionPolicy, class Iterator, class OutputIterator>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2, std::forward_iterator_tag);
+		template <class ExecutionPolicy, class Iterator, class OutputIterator>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2);
 	};
 
 	//specialization: 1 iterator_category, 2 value_types
@@ -135,6 +144,20 @@ namespace grapher {
 	class _append {
 	public:
 		template <class ExecutionPolicy, class Iterator, class OutputIterator>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2, std::forward_iterator_tag);
+	};
+
+	class __differences_To_VG {
+	public:
+		__differences_To_VG(int samplesPerVector, double vectorLength, std::vector<int> fixPoints_indices = std::vector<int>(1, 0));
+		~__differences_To_VG();
+
+		//specialization: 1 iterator_category, 2 value_types
+		template <class ExecutionPolicy, class Iterator, class OutputIterator, class UnaryFunction>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2, UnaryFunction& angleFunction = test2(0.0f));
+
+	private:
+		int _samplesPerVector;
+		double _vectorLength;
+		std::vector<int> _fixPoint_indices;
 	};
 
 	int samples_To_VG_vectorSize(int inputSize, int samplesPerVector=1);

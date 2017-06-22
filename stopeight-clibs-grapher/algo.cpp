@@ -26,7 +26,14 @@ using vector_vectors = std::_Vector_iterator<std::_Vector_val<std::_Simple_types
 #include "dummy.h"
 using fexec = dummy;
 
-template <class ExecutionPolicy, class Iterator> double grapher::__average::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, std::forward_iterator_tag)
+template <class ExecutionPolicy, class Iterator, class OutputIterator> void grapher::__differences::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2)
+{
+	std::adjacent_difference(begin, end, begin2);
+	//*std::begin(differences) = 0.0f;
+}
+template void grapher::__differences::operator()(fexec& task1, vector_single begin, vector_single end, vector_single begin2);
+
+template <class Iterator> double grapher::__average::operator()(Iterator begin, Iterator end, std::forward_iterator_tag)
 {
 	auto sum = std::accumulate(begin, end, 0.0f, [](double first, double second) {
 		return first += abs(second);
@@ -34,7 +41,7 @@ template <class ExecutionPolicy, class Iterator> double grapher::__average::oper
 	});
 	return sum / std::distance(begin, end);
 }
-template double grapher::__average::operator()(fexec& task1, vector_single begin, vector_single end, std::forward_iterator_tag);
+template double grapher::__average::operator()(vector_single begin, vector_single end, std::forward_iterator_tag);
 
 template <class ExecutionPolicy, class Iterator, class OutputIterator> void grapher::__calculate_rotations::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, grapher::angle& angleFunction, std::forward_iterator_tag itag)
 {
@@ -46,30 +53,28 @@ template void grapher::__calculate_rotations::operator()(fexec& task1, vector_si
 
 template <class ExecutionPolicy, class Iterator, class OutputIterator> void grapher::__calculate_rotations::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, grapher::averageScaled& angleFunction, std::forward_iterator_tag itag)
 {
-	auto begin_c = begin;
-	auto end_c = end;
-	if (angleFunction.getAverage() == 0.0f) {//HACK for avoiding duplicate difference function call
-		angleFunction.setAverate(__average()(task1, ++begin_c, end_c, itag));
-		//if (_contextAverage == 0.0f)
-		//	_contextAverage == std::numeric_limits<double>::min();
-	}
 	std::transform(begin, end - 1, begin2, [&angleFunction](double diff) {
 		return angleFunction(diff);
 	});
 }
 template void grapher::__calculate_rotations::operator()(fexec& task1, vector_single begin, vector_single end, vector_single begin2, grapher::averageScaled& angleFunction, std::forward_iterator_tag itag);
 
-template <class ExecutionPolicy, class Iterator, class OutputIterator> void grapher::__apply_rotation_matrix::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, std::forward_iterator_tag)
+template <class ExecutionPolicy, class Iterator, class OutputIterator> void grapher::__apply_rotation_matrix::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2)
 {
+	OutputIterator begin2_c = begin2;
+	//std::for_each(begin, end,[&begin2](double rot, sp::element vec) {
 	//binary,not unary
 	std::transform(begin, end, begin2, begin2, [](double rot, sp::element vec) {
 		double x = (cos(rot)*vec.first - sin(rot)*vec.second);
 		double y = (sin(rot)*vec.first + cos(rot)*vec.second);
+		//double x = (cos(rot)*begin2->first - sin(rot)*begin2->second);
+		//double y = (sin(rot)*begin2->first + cos(rot)*begin2->second);
 		sp::element p{ x , y };
 		return p;
+		//*begin2++ = p;
 	});
 }
-template void grapher::__apply_rotation_matrix::operator()(fexec& task1, vector_single begin, vector_single end, vector_pair begin2, std::forward_iterator_tag);
+template void grapher::__apply_rotation_matrix::operator()(fexec& task1, vector_single begin, vector_single end, vector_pair begin2);
 
 grapher::_fixpoints::_fixpoints(std::vector<int>& points) : _fixPoint_indices(points) {
 
@@ -104,9 +109,9 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 		int _prev;
 	};
 	auto it = std::back_inserter(slices);
-	std::for_each(std::begin(_fixPoint_indices),std::end(_fixPoint_indices),[&it](auto index){
+	std::for_each(std::begin(_fixPoint_indices), std::end(_fixPoint_indices), [&it](auto index) {
 		*it++ = (prev()(index));//was index
-		*it++ = (std::pair<int, int>{index, index+1});//was index+1
+		*it++ = (std::pair<int, int>{index, index + 1});//was index+1
 	});
 	//tail end
 	std::pair<int, int> last = std::pair<int, int>{ 0,vectors_size };
@@ -130,7 +135,7 @@ grapher::_blocks::~_blocks() {
 template <class ExecutionPolicy, class Iterator, class OutputIterator> void grapher::_blocks::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, std::random_access_iterator_tag)
 {
 	auto spV = _samplesPerVector;
-	std::for_each(begin, end, [&begin2,spV](it_element slice) {
+	std::for_each(begin, end, [&begin2, spV](it_element slice) {
 		auto size = std::distance(slice.first, slice.second);
 		if (size > 0) {
 			auto sectionend = (spV > size) ? size : spV;
@@ -184,6 +189,67 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 }
 template void grapher::_append::operator()(fexec& task1, vector_pair begin, vector_pair end, vector_pair begin2, std::forward_iterator_tag);
 
+grapher::__differences_To_VG::__differences_To_VG(int samplesPerVector, double vectorLength, std::vector<int> fixPoints_indices)
+	: _samplesPerVector(samplesPerVector)
+	, _vectorLength(vectorLength)
+	, _fixPoint_indices(fixPoints_indices)
+{
+}
+grapher::__differences_To_VG::~__differences_To_VG() {
+}
+//partial specialization
+template <class ExecutionPolicy, class Iterator, class OutputIterator, class UnaryFunction> void grapher::__differences_To_VG::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, UnaryFunction& angleFunction)
+{
+	//par
+	//std::experimental::parallel::transform(task1, begin, end, begin, [](float f) {return 3.3f; });
+
+	std::vector<double> rotations;
+	//first one is invalid
+	__calculate_rotations()(task1, begin, end, std::back_inserter(rotations), angleFunction, Iterator::iterator_category{});
+
+	std::vector<sp::element> vectors;
+	std::fill_n(std::back_inserter(vectors), std::distance(std::begin(rotations), std::end(rotations)), sp::element{ _vectorLength, 0.0f });
+	__apply_rotation_matrix()(task1, std::begin(rotations), std::end(rotations), std::begin(vectors));
+
+	std::vector<it_element> vectors_sliced;
+	_fixpoints(_fixPoint_indices)(task1, std::begin(vectors), std::end(vectors), std::back_inserter(vectors_sliced), Iterator::iterator_category{});
+
+	std::vector<sp::element> out_vectors;
+	
+	/*
+	//HERESTART
+	std::vector<it_element> blocks;
+	_blocks(_samplesPerVector)(task1, std::begin(vectors_sliced), std::end(vectors_sliced), std::back_inserter(blocks), Iterator::iterator_category{});
+
+	std::vector<sp::element> sums;
+	_sum_blocks()(task1, std::begin(blocks), std::end(blocks), std::back_inserter(sums), Iterator::iterator_category{});
+
+	std::move(std::begin(sums), std::end(sums), std::back_inserter(out_vectors));
+	//HEREEND
+	*/
+
+	//hierarchy all to 1
+	//std::transform(std::begin(vectors_sliced), std::end(vectors_sliced), std::back_inserter(out_vectors), [_samplesPerVector](decltype(vectors_sliced) v) {
+	for (auto v : vectors_sliced) {
+		stopeight::blocks<sp::element> blocks_vector = stopeight::blocks<sp::element>(v, _samplesPerVector);
+		//std::move(slice), _samplesPerVector);
+
+		std::vector<sp::element> ov = std::vector<sp::element>{};//(blocks_vector.size(), { double(0.0f), double(0.0f) });
+																 //std::fill<typename std::vector<sp::element>::iterator>(std::begin(ov), std::end(ov), sp::element{ 1.0f, 1.0f });
+
+		_sum_blocks()(task1, std::begin(blocks_vector), std::end(blocks_vector), std::back_inserter(ov), Iterator::iterator_category{});
+		std::move(std::begin(ov), std::end(ov), std::back_inserter(out_vectors));
+	}
+	//});
+
+	_append()(task1, std::begin(out_vectors), std::end(out_vectors), std::begin(out_vectors), Iterator::iterator_category{});
+
+	std::copy<typename std::vector<sp::element>::iterator, OutputIterator>(std::begin(out_vectors), std::end(out_vectors), begin2);
+}
+//template void grapher::__differences_To_VG::operator()(fexec& task1, vector_single begin, vector_single end, vector_pair begin2, plainAngle& angleFunction);
+//template void grapher::__differences_To_VG::operator()(fexec& task1, vector_single begin, vector_single end, vector_pair begin2, test2& angleFunction);
+
+
 int grapher::samples_To_VG_vectorSize(int inputSize, int samplesPerVector) {
 	auto size = inputSize / samplesPerVector;
 	if (inputSize%samplesPerVector > 0)
@@ -212,45 +278,9 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator, class Una
 	size_t size = std::distance(begin, end);
 	if (size > 0) {
 		std::vector<double> differences = std::vector<double>(size, 0.0f);
-		std::adjacent_difference(begin, end, std::begin(differences));
-		//*std::begin(differences) = 0.0f;
+		__differences()(task1, begin, end, std::begin(differences));
 
-		std::vector<double> rotations = std::vector<double>(size-1, 0.0f);
-		//first one is invalid
-		__calculate_rotations()(task1, std::begin(differences)+1, std::end(differences), std::begin(rotations), angleFunction, Iterator::iterator_category{});
-
-		std::vector<sp::element> vectors = std::vector<sp::element>(size-1, sp::element{ _vectorLength, 0.0f });
-		__apply_rotation_matrix()(task1, std::begin(rotations), std::end(rotations), std::begin(vectors), Iterator::iterator_category{});
-
-		std::vector<it_element> vectors_sliced;
-		_fixpoints(_fixPoint_indices)(task1, std::begin(vectors), std::end(vectors), std::back_inserter(vectors_sliced), Iterator::iterator_category{});
-
-		std::vector<sp::element> out_vectors;
-		/*std::vector<it_element> blocks;
-		_blocks(_samplesPerVector)(task1, std::begin(vectors_sliced), std::end(vectors_sliced), std::back_inserter(blocks), Iterator::iterator_category{});
-
-		std::vector<sp::element> sums;
-		_sum_blocks()(task1, std::begin(blocks), std::end(blocks), std::back_inserter(sums), Iterator::iterator_category{});
-
-		std::move(std::begin(sums), std::end(sums), std::back_inserter(out_vectors));*/
-
-		//hierarchy all to 1
-		//std::transform(std::begin(vectors_sliced), std::end(vectors_sliced), std::back_inserter(out_vectors), [_samplesPerVector](decltype(vectors_sliced) v) {
-		for (auto v : vectors_sliced) {
-			stopeight::blocks<sp::element> blocks_vector = stopeight::blocks<sp::element>(v, _samplesPerVector);
-																							//std::move(slice), _samplesPerVector);
-
-			std::vector<sp::element> ov = std::vector<sp::element>{};//(blocks_vector.size(), { double(0.0f), double(0.0f) });
-			//std::fill<typename std::vector<sp::element>::iterator>(std::begin(ov), std::end(ov), sp::element{ 1.0f, 1.0f });
-
-			_sum_blocks()(task1, std::begin(blocks_vector), std::end(blocks_vector), std::back_inserter(ov), Iterator::iterator_category{});
-			std::move(std::begin(ov), std::end(ov), std::back_inserter(out_vectors));
-		}
-		//});
-
-		_append()(task1, std::begin(out_vectors), std::end(out_vectors), std::begin(out_vectors), Iterator::iterator_category{});
-
-		std::copy<typename std::vector<sp::element>::iterator, OutputIterator>(std::begin(out_vectors), std::end(out_vectors), begin2);
+		__differences_To_VG(_samplesPerVector, _vectorLength, _fixPoint_indices)(task1, std::begin(differences) + 1, std::end(differences), begin2, angleFunction);
 	}
 }
 //template void grapher::samples_To_VG::operator()(fexec& task1, vector_single begin, vector_single end, vector_pair begin2, plainAngle& angleFunction);

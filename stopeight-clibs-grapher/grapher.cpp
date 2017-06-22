@@ -67,27 +67,35 @@ namespace grapher {
 
 		//par
 		//(grapher::samples_To_VG(samplesPerPixel))(std::experimental::parallel::par_vec, std::begin(*buf), std::end(*buf), std::begin(output));
-		grapher::averageScaled* afunc;
-		if (_relative) {
-			afunc = new relative(0.0f);
-		}
-		else {
-			afunc = new independent(0.0f);
-		}
-		//if (vectorSize > 1) {
-			//+ hard-coded middle; only if samplesPervector !=1
-			//if (_samplesPerVector != 1)
-			//	add++;
+		grapher::averageScaled* afunc = nullptr;
+		if (size > 0) {
+			std::vector<double> differences = std::vector<double>(size, 0.0f);
+			__differences()(dummy_policy, std::begin(*buf), std::end(*buf), std::begin(differences));
+
+			if (_relative) {
+				afunc = new relative(std::begin(differences) + 1, std::end(differences));
+			}
+			else {
+				afunc = new independent(std::begin(differences) + 1, std::end(differences));
+			}
+			//if (vectorSize > 1) {
+				//+ hard-coded middle; only if samplesPervector !=1
+				//if (_samplesPerVector != 1)
+				//	add++;
 			output = std::vector<sp::element>{};//((vectorSize * 2) + add);
-			(grapher::samples_To_VG(_samplesPerVector, vectorLength,std::vector<int>(1,(size/2)-1)))(dummy_policy, std::begin(*buf), std::end(*buf), std::back_inserter(output), *afunc);
-		
-		/*}
-		else if (vectorSize ==1) {
-			//case add=1 untested
-			add += 2;
-			output = std::vector<sp::element>((vectorSize * 2)+ add);
-			(grapher::samples_To_VG(_samplesPerVector, vectorLength, std::vector<int>(1, 1)))(dummy_policy, std::begin(*buf), std::end(*buf), std::begin(output), *afunc);
-		}*/
+
+			(__differences_To_VG(_samplesPerVector, vectorLength, std::vector<int>(1, (size / 2) - 1)))(dummy_policy, std::begin(differences) + 1, std::end(differences), std::back_inserter(output), *afunc);
+			//(grapher::samples_To_VG(_samplesPerVector, vectorLength, std::vector<int>(1, (size / 2) - 1)))(dummy_policy, std::begin(*buf), std::end(*buf), std::back_inserter(output), *afunc);
+
+
+	/*}
+	else if (vectorSize ==1) {
+		//case add=1 untested
+		add += 2;
+		output = std::vector<sp::element>((vectorSize * 2)+ add);
+		(grapher::samples_To_VG(_samplesPerVector, vectorLength, std::vector<int>(1, 1)))(dummy_policy, std::begin(*buf), std::end(*buf), std::begin(output), *afunc);
+	}*/
+		}
 		delete afunc;
 
 		return sp::result{ output };
