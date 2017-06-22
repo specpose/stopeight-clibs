@@ -5,10 +5,6 @@
 
 #include "grapher_impl.h"
 
-//#include <experimental/algorithm>
-
-//#include "algo.h"
-
 #include "dummy.h"
 
 namespace grapher {
@@ -57,10 +53,6 @@ namespace grapher {
 	template<typename T> sp::result Buffer<T>::operator()()
 	{
 		const int size = buf->size();
-		/*int add = 0;
-		if ((size % 2) != 0)
-			add = 1;*/
-		//	throw std::exception("Uneven number of samples can not be split in two");
 		int vectorSize = grapher::samples_To_VG_vectorSize((size), _samplesPerVector);
 		double vectorLength = grapher::samples_To_VG_vectorLength(_showSamples, _unitaryLength);
 		std::vector<sp::element> output;
@@ -78,23 +70,11 @@ namespace grapher {
 			else {
 				afunc = new independent(std::begin(differences) + 1, std::end(differences));
 			}
-			//if (vectorSize > 1) {
-				//+ hard-coded middle; only if samplesPervector !=1
-				//if (_samplesPerVector != 1)
-				//	add++;
 			output = std::vector<sp::element>{};//((vectorSize * 2) + add);
 
 			(__differences_To_VG(_samplesPerVector, vectorLength, std::vector<int>(1, (size / 2) - 1)))(dummy_policy, std::begin(differences) + 1, std::end(differences), std::back_inserter(output), *afunc);
 			//(grapher::samples_To_VG(_samplesPerVector, vectorLength, std::vector<int>(1, (size / 2) - 1)))(dummy_policy, std::begin(*buf), std::end(*buf), std::back_inserter(output), *afunc);
 
-
-	/*}
-	else if (vectorSize ==1) {
-		//case add=1 untested
-		add += 2;
-		output = std::vector<sp::element>((vectorSize * 2)+ add);
-		(grapher::samples_To_VG(_samplesPerVector, vectorLength, std::vector<int>(1, 1)))(dummy_policy, std::begin(*buf), std::end(*buf), std::begin(output), *afunc);
-	}*/
 		}
 		delete afunc;
 
@@ -103,37 +83,6 @@ namespace grapher {
 	//specialization
 	template sp::result Buffer<float>::operator()();
 	template sp::result Buffer<double>::operator()();
-	//explicit instantiation
-	//template template void Buffer<float>::execute_stl(void(iteratorstart, iteratorend), iteratorstart, iteratorend);
-
-	/*template<typename T> size_t Buffer<T>::size()
-	{
-		return buf.size();
-	}
-	template size_t Buffer<float>::size();
-	template size_t Buffer<double>::size();
-
-	template<typename T> T& Buffer<T>::at(size_t _Pos)
-	{
-		return buf.at(_Pos);
-	}
-
-	template float& Buffer<float>::at(size_t _Pos);
-	//template double& Buffer<double>::at(size_t _Pos);
-
-	template<typename T>
-	std::_Vector_iterator<std::_Vector_val<std::_Simple_types<T>>> Buffer<T>::rmrbegin()
-	{
-		return buf.begin();
-	}
-	template std::_Vector_iterator<std::_Vector_val<std::_Simple_types<float>>> Buffer<float>::rmrbegin();
-
-	template<typename T>
-	std::_Vector_iterator<std::_Vector_val<std::_Simple_types<T>>> Buffer<T>::rmrend()
-	{
-		return buf.end();
-	}
-	template std::_Vector_iterator<std::_Vector_val<std::_Simple_types<float>>> Buffer<float>::rmrend();*/
 
 }
 
