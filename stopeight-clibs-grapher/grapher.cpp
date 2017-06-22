@@ -57,11 +57,11 @@ namespace grapher {
 	template<typename T> sp::result Buffer<T>::operator()()
 	{
 		const int size = buf->size();
-		int add = 0;
+		/*int add = 0;
 		if ((size % 2) != 0)
-			add = 1;
+			add = 1;*/
 		//	throw std::exception("Uneven number of samples can not be split in two");
-		int vectorSize = grapher::samples_To_VG_vectorSize((size/2), _samplesPerVector);
+		int vectorSize = grapher::samples_To_VG_vectorSize((size), _samplesPerVector);
 		double vectorLength = grapher::samples_To_VG_vectorLength(_showSamples, _unitaryLength);
 		std::vector<sp::element> output;
 
@@ -74,20 +74,20 @@ namespace grapher {
 		else {
 			afunc = new independent(0.0f);
 		}
-		if (vectorSize > 1) {
+		//if (vectorSize > 1) {
 			//+ hard-coded middle; only if samplesPervector !=1
-			if (_samplesPerVector != 1)
-				add++;
-			output = std::vector<sp::element>((vectorSize * 2) + add);
-			(grapher::samples_To_VG(_samplesPerVector, vectorLength,std::vector<int>(1,size/2)))(dummy_policy, std::begin(*buf), std::end(*buf), std::begin(output), *afunc);
+			//if (_samplesPerVector != 1)
+			//	add++;
+			output = std::vector<sp::element>{};//((vectorSize * 2) + add);
+			(grapher::samples_To_VG(_samplesPerVector, vectorLength,std::vector<int>(1,(size/2)-1)))(dummy_policy, std::begin(*buf), std::end(*buf), std::back_inserter(output), *afunc);
 		
-		}
+		/*}
 		else if (vectorSize ==1) {
 			//case add=1 untested
 			add += 2;
 			output = std::vector<sp::element>((vectorSize * 2)+ add);
 			(grapher::samples_To_VG(_samplesPerVector, vectorLength, std::vector<int>(1, 1)))(dummy_policy, std::begin(*buf), std::end(*buf), std::begin(output), *afunc);
-		}
+		}*/
 		delete afunc;
 
 		return sp::result{ output };

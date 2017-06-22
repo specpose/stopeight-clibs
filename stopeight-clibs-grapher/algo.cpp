@@ -36,15 +36,15 @@ template <class ExecutionPolicy, class Iterator> double grapher::__average::oper
 }
 template double grapher::__average::operator()(fexec& task1, vector_single begin, vector_single end, std::forward_iterator_tag);
 
-template <class ExecutionPolicy, class Iterator, class OutputIterator> void grapher::__calculate_rotations::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, grapher::angle& angleFunction, std::random_access_iterator_tag itag)
+template <class ExecutionPolicy, class Iterator, class OutputIterator> void grapher::__calculate_rotations::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, grapher::angle& angleFunction, std::forward_iterator_tag itag)
 {
-	std::transform(begin, end - 1, ++begin2, [&angleFunction](double diff) {
+	std::transform(begin, end - 1, begin2, [&angleFunction](double diff) {
 		return angleFunction(diff);
 	});
 }
-template void grapher::__calculate_rotations::operator()(fexec& task1, vector_single begin, vector_single end, vector_single begin2, grapher::angle& angleFunction, std::random_access_iterator_tag itag);
+template void grapher::__calculate_rotations::operator()(fexec& task1, vector_single begin, vector_single end, vector_single begin2, grapher::angle& angleFunction, std::forward_iterator_tag itag);
 
-template <class ExecutionPolicy, class Iterator, class OutputIterator> void grapher::__calculate_rotations::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, grapher::averageScaled& angleFunction, std::random_access_iterator_tag itag)
+template <class ExecutionPolicy, class Iterator, class OutputIterator> void grapher::__calculate_rotations::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, grapher::averageScaled& angleFunction, std::forward_iterator_tag itag)
 {
 	auto begin_c = begin;
 	auto end_c = end;
@@ -53,11 +53,11 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 		//if (_contextAverage == 0.0f)
 		//	_contextAverage == std::numeric_limits<double>::min();
 	}
-	std::transform(begin, end - 1, ++begin2, [&angleFunction](double diff) {
+	std::transform(begin, end - 1, begin2, [&angleFunction](double diff) {
 		return angleFunction(diff);
 	});
 }
-template void grapher::__calculate_rotations::operator()(fexec& task1, vector_single begin, vector_single end, vector_single begin2, grapher::averageScaled& angleFunction, std::random_access_iterator_tag itag);
+template void grapher::__calculate_rotations::operator()(fexec& task1, vector_single begin, vector_single end, vector_single begin2, grapher::averageScaled& angleFunction, std::forward_iterator_tag itag);
 
 template <class ExecutionPolicy, class Iterator, class OutputIterator> void grapher::__apply_rotation_matrix::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, std::forward_iterator_tag)
 {
@@ -111,7 +111,7 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 	//tail end
 	std::pair<int, int> last = std::pair<int, int>{ 0,vectors_size };
 	if (vectors_size > 0) {
-		last = std::pair<int, int>{ _fixPoint_indices.back() + 1, vectors_size };
+		last = std::pair<int, int>{ _fixPoint_indices.back() + 1, vectors_size };// was _fixPoint_indices.back() + 1
 	}
 	*it++ = (last);
 	std::transform(std::begin(slices), std::end(slices), begin2, [begin](std::pair<int, int> p) {
@@ -213,12 +213,13 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator, class Una
 	if (size > 0) {
 		std::vector<double> differences = std::vector<double>(size, 0.0f);
 		std::adjacent_difference(begin, end, std::begin(differences));
-		*std::begin(differences) = 0.0f;
+		//*std::begin(differences) = 0.0f;
 
-		std::vector<double> rotations = std::vector<double>(size, 0.0f);
-		__calculate_rotations()(task1, std::begin(differences), std::end(differences), std::begin(rotations), angleFunction, Iterator::iterator_category{});
+		std::vector<double> rotations = std::vector<double>(size-1, 0.0f);
+		//first one is invalid
+		__calculate_rotations()(task1, std::begin(differences)+1, std::end(differences), std::begin(rotations), angleFunction, Iterator::iterator_category{});
 
-		std::vector<sp::element> vectors = std::vector<sp::element>(size, sp::element{ _vectorLength, 0.0f });
+		std::vector<sp::element> vectors = std::vector<sp::element>(size-1, sp::element{ _vectorLength, 0.0f });
 		__apply_rotation_matrix()(task1, std::begin(rotations), std::end(rotations), std::begin(vectors), Iterator::iterator_category{});
 
 		std::vector<it_element> vectors_sliced;

@@ -33,7 +33,7 @@ namespace stopeight {
 		};
 
 		static int calculateSize(int vec_size, int seg_size) {
-			if (vec_size >= seg_size) {
+			if (vec_size > seg_size) {
 				if ((vec_size%seg_size) == 0) {
 					return vec_size / seg_size;
 				}
@@ -50,13 +50,13 @@ namespace stopeight {
 	private:
 		static int mySize(const bounds<DataType> vec, int seg_size) {
 			// a fixpoint in a block of 1 can not be separated
-			auto a = addedFixPoints(vec);
+			//auto a = addedFixPoints(vec);
 			auto x = calculateSize(std::distance(vec.first,vec.second), seg_size);
 			// we need at least one more than total number of fixpoints
-			if (x > a)
-				return x+a;
-			else
-				return x;
+			//if (x > a)
+			//	return x+a;
+			//else
+			return x;
 		}
 		//needed in initializer
 		static int endFull(int vec_size, int seg_size) {
