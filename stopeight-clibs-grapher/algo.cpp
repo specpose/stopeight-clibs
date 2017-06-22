@@ -45,7 +45,7 @@ template double grapher::__average::operator()(vector_single begin, vector_singl
 
 template <class ExecutionPolicy, class Iterator, class OutputIterator> void grapher::__calculate_rotations::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, grapher::angle& angleFunction, std::forward_iterator_tag itag)
 {
-	std::transform(begin, end - 1, begin2, [&angleFunction](double diff) {
+	std::transform(begin, end, begin2, [&angleFunction](double diff) {
 		return angleFunction(diff);
 	});
 }
@@ -53,7 +53,7 @@ template void grapher::__calculate_rotations::operator()(fexec& task1, vector_si
 
 template <class ExecutionPolicy, class Iterator, class OutputIterator> void grapher::__calculate_rotations::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, grapher::averageScaled& angleFunction, std::forward_iterator_tag itag)
 {
-	std::transform(begin, end - 1, begin2, [&angleFunction](double diff) {
+	std::transform(begin, end, begin2, [&angleFunction](double diff) {
 		return angleFunction(diff);
 	});
 }
