@@ -17,7 +17,7 @@ namespace grapher {
 	//specialization: 1 iterator_category, 2 value_types
 	class __average {
 	public:
-		template <class Iterator>double operator()(Iterator begin, Iterator end, std::forward_iterator_tag);
+		template <class Iterator>double operator()(Iterator begin, Iterator end);
 	};
 
 	//specialization: 1 iterator_category, 2 value_types

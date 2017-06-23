@@ -21,7 +21,7 @@ namespace grapher {
 	class averageScaled : public angle {
 	public:
 		template<typename Iterator>averageScaled(Iterator begin, Iterator end, double angleScale) 
-			: av(__average()(begin, end, Iterator::iterator_category{}))
+			: av(__average()(begin, end))
 			, _angleScale((angleScale==0.0f)?std::numeric_limits<double>::min():angleScale) {
 			//if (_contextAverage == 0.0f)
 			//	_contextAverage == std::numeric_limits<double>::min();

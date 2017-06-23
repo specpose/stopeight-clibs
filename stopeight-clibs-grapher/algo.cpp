@@ -33,7 +33,7 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 }
 template void grapher::__differences::operator()(fexec& task1, vector_single begin, vector_single end, vector_single begin2);
 
-template <class Iterator> double grapher::__average::operator()(Iterator begin, Iterator end, std::forward_iterator_tag)
+template <class Iterator> double grapher::__average::operator()(Iterator begin, Iterator end)
 {
 	auto sum = std::accumulate(begin, end, 0.0f, [](double first, double second) {
 		return first += abs(second);
@@ -41,7 +41,7 @@ template <class Iterator> double grapher::__average::operator()(Iterator begin, 
 	});
 	return sum / std::distance(begin, end);
 }
-template double grapher::__average::operator()(vector_single begin, vector_single end, std::forward_iterator_tag);
+template double grapher::__average::operator()(vector_single begin, vector_single end);
 
 template <class ExecutionPolicy, class Iterator, class OutputIterator> void grapher::__calculate_rotations::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, grapher::angle& angleFunction, std::forward_iterator_tag itag)
 {
