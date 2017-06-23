@@ -4,6 +4,8 @@
 #ifndef ANGLE_FUNCTIONS
 #define ANGLE_FUNCTIONS
 
+#include <numeric>
+
 namespace grapher {
 
 	class angle : public std::unary_function<double, double> {
@@ -18,7 +20,9 @@ namespace grapher {
 
 	class averageScaled : public angle {
 	public:
-		template<typename Iterator>averageScaled(Iterator begin, Iterator end) : av(__average()(begin, end, Iterator::iterator_category{})) {
+		template<typename Iterator>averageScaled(Iterator begin, Iterator end, double angleScale) 
+			: av(__average()(begin, end, Iterator::iterator_category{}))
+			, _angleScale((angleScale==0.0f)?std::numeric_limits<double>::min():angleScale) {
 			//if (_contextAverage == 0.0f)
 			//	_contextAverage == std::numeric_limits<double>::min();
 		}
@@ -26,15 +30,16 @@ namespace grapher {
 		//virtual const argument_type getAverage() final { return av; };
 	protected:
 		argument_type av;
+		double _angleScale;
 	};
 
 	class relative : public averageScaled {
 	public:
-		template<typename Iterator>relative(Iterator begin, Iterator end, double initialAngle = 0.0f) : averageScaled(begin, end), _previous(initialAngle) {};
+		template<typename Iterator>relative(Iterator begin, Iterator end, double angleScale=1.0f,double initialAngle = 0.0f) : averageScaled(begin, end, angleScale), _previous(initialAngle) {};
 		double operator()(double d) {
 			if (d == 0.0f || av == 0.0f)
 				return double(0.0f);
-			_previous += atan((d / av) / 1);
+			_previous += atan(((d / av) * _angleScale)/ 1);
 			return (_previous);
 		};
 	private:
@@ -43,15 +48,15 @@ namespace grapher {
 
 	class independent : public averageScaled {
 	public:
-		template<typename Iterator>independent(Iterator begin, Iterator end) : averageScaled(begin, end) {};
+		template<typename Iterator>independent(Iterator begin, Iterator end, double angleScale=1.0f) : averageScaled(begin, end, angleScale) {};
 		double operator()(double d) {
 			if (d == 0.0f || av == 0.0f)
 				return double(0.0f);
-			return atan((d / av) / 1);
+			return atan(((d / av) * _angleScale)/ 1);
 		};
 	};
 
-	class test : public averageScaled {
+	/*class test : public averageScaled {
 	public:
 		template<typename Iterator>test(Iterator begin, Iterator end) : averageScaled(begin, end) {};
 		double operator()(double d) {
@@ -84,6 +89,6 @@ namespace grapher {
 			return atan(d);
 		};
 	private:
-	};
+	};*/
 }
 #endif

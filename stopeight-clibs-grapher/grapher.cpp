@@ -24,16 +24,17 @@ namespace grapher {
 	template grapher::Buffer<float>::Buffer(std::vector<float>* s);
 	template grapher::Buffer<double>::Buffer(std::vector<double>* s);
 
-	template<typename T> grapher::Buffer<T>::Buffer(std::vector<T>* s, int showSamples, int samplesPerVector, double unitaryLength, bool relative)
+	template<typename T> grapher::Buffer<T>::Buffer(std::vector<T>* s, int showSamples, int samplesPerVector, double unitaryLength, bool relative, double angleScale)
 		: grapher::Buffer<T>(s)
 	{
 		_showSamples = showSamples;
 		_samplesPerVector = samplesPerVector;
 		_unitaryLength = unitaryLength;
 		_relative = relative;
+		_angleScale = angleScale;
 	}
-	template grapher::Buffer<float>::Buffer(std::vector<float>* s, int showSamples, int samplesPerVector, double unitaryLength, bool relative);
-	template grapher::Buffer<double>::Buffer(std::vector<double>* s, int showSamples, int samplesPerVector, double unitaryLength, bool relative);
+	template grapher::Buffer<float>::Buffer(std::vector<float>* s, int showSamples, int samplesPerVector, double unitaryLength, bool relative, double angleScale);
+	template grapher::Buffer<double>::Buffer(std::vector<double>* s, int showSamples, int samplesPerVector, double unitaryLength, bool relative, double angleScale);
 
 /*	template<typename T> grapher::Buffer<T>::Buffer(std::unique_ptr<std::vector<T>> s)
 //		: PreloaderIF{ *this }
@@ -65,10 +66,10 @@ namespace grapher {
 			__differences()(dummy_policy, std::begin(*buf), std::end(*buf), std::begin(differences));
 
 			if (_relative) {
-				afunc = new relative(std::begin(differences) + 1, std::end(differences));
+				afunc = new relative(std::begin(differences) + 1, std::end(differences),_angleScale);
 			}
 			else {
-				afunc = new independent(std::begin(differences) + 1, std::end(differences));
+				afunc = new independent(std::begin(differences) + 1, std::end(differences),_angleScale);
 			}
 			output = std::vector<sp::element>{};//((vectorSize * 2) + add);
 
