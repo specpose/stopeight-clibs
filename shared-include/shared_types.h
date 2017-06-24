@@ -9,9 +9,20 @@ namespace sp {
 	enum class tctype
 	{
 		EMPTY,
-		TURN,
-		CORNER
+		FIXPOINT,
+		STRAIT,
+		SWING,
+		CLIFF,
+		CREST,
+		SPIRAL,
+		SPIKE
 	};
+	const sp::tctype turns[3] = { tctype::SWING,tctype::CREST,tctype::SPIRAL };
+	const sp::tctype corners[3] = {tctype::STRAIT, tctype::CLIFF, tctype::SPIKE};
+	const sp::tctype symetric[3] = {tctype::CLIFF, tctype::SWING, tctype::STRAIT};
+	const sp::tctype notsymetric[3] = {tctype::CREST, tctype::SPIRAL, tctype::SPIKE};
+
+
 	/*template<typename T> class pair : private std::pair<T, T> {//private std::vector<T> {
 	public:
 		typedef first_type value_type;
@@ -42,11 +53,11 @@ namespace sp {
 			category = tctype::EMPTY;
 		};
 	};
-	template<typename T> class turn : public timecode<T> {
+	template<typename T> class fixpoint : public timecode<T> {
 	public:
 		using timecode_types = typename timecode::timecode_types;
-		turn<T>(timecode<T>&& other) : timecode<T>{ other } {
-			category = tctype::TURN;
+		fixpoint<T>(timecode<T>&& other) : timecode<T>{ other } {
+			category = tctype::FIXPOINT;
 		};
 		
 		//fixpoint() {};

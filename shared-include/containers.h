@@ -78,7 +78,7 @@ namespace stopeight {
 //	template<> int blocks<sp::element>::addedFixPoints(const bounds<sp::element> vec){
 //		return std::count_if(vec.first, vec.second, [](sp::element& t) {
 //			//return !sp::is<sp::empty<sp::element::value_type>>(dynamic_cast<sp::element*>(t));
-//			return t->category != sp::tctype::EMPTY; 
+//			return t->category == sp::tctype::FIXPOINT; 
 //		});
 //	}
 }

@@ -101,7 +101,7 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 	//make it a fixPoint
 	for (auto index : _fixPoint_indices) {
 		//**(begin + index) = sp::turn<double>(std::move(**(begin + index)));
-		*(begin + index) = sp::turn<double>(std::move(*(begin + index)));
+		*(begin + index) = sp::fixpoint<double>(std::move(*(begin + index)));
 	}
 	std::vector<std::pair<int, int>> slices = std::vector<std::pair<int, int>>{};
 	class prev {
