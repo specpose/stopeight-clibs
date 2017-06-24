@@ -12,6 +12,20 @@ namespace sp {
 		TURN,
 		CORNER
 	};
+	/*template<typename T> class pair : private std::pair<T, T> {//private std::vector<T> {
+	public:
+		typedef first_type value_type;
+		using timecode_types = typename tctype;
+		timecode_types category{ sp::tctype::EMPTY };
+
+		pair() : std::pair<T, T>{}, first(first), second(second) {}//std::vector<T>(2),first(&this[0]),second(&this[1]){}
+		using std::pair<T, T>::pair{};
+
+		T& first, second;
+
+	};
+	template<typename T> class timecode : public sp::pair<T> {
+	public:*/
 	template<typename T> class timecode : public std::pair<T,T> {
 	public:
 		using std::pair<T, T>::pair;
@@ -20,6 +34,13 @@ namespace sp {
 
 		//virtual ~timecode() = 0;
 	};
+	/*template<typename T> class empty : public timecode<T> {
+	public:
+		using timecode_types = typename timecode::timecode_types;
+		empty<T>(timecode<T>&& other) : timecode<T>{ other } {
+			category = sp::tctype::EMPTY;
+		};
+	};*/
 	template<typename T> class turn : public timecode<T> {
 	public:
 		using timecode_types = typename timecode::timecode_types;
