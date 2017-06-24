@@ -65,18 +65,21 @@ namespace stopeight {
 			else
 				return vec_size - (vec_size%seg_size);
 		}
-		static int addedFixPoints(const bounds<DataType> vec);
+		//static int addedFixPoints(const bounds<DataType> vec);
 		bounds<DataType> _vec;
 		int _seg_size;
 	};
 
-	template<typename DataType> int blocks<DataType>::addedFixPoints(const bounds<DataType> vec) {
-		return 0;
-	}
+//	template<typename DataType> int blocks<DataType>::addedFixPoints(const bounds<DataType> vec) {
+//		return 0;
+//	}
 
 #include "shared_types.h"
-	template<> int blocks<sp::element>::addedFixPoints(const bounds<sp::element> vec){
-		return std::count_if(vec.first, vec.second, [](sp::element t) {return t.category != sp::tctype::EMPTY; });
-	}
+//	template<> int blocks<sp::element>::addedFixPoints(const bounds<sp::element> vec){
+//		return std::count_if(vec.first, vec.second, [](sp::element& t) {
+//			//return !sp::is<sp::empty<sp::element::value_type>>(dynamic_cast<sp::element*>(t));
+//			return t->category != sp::tctype::EMPTY; 
+//		});
+//	}
 }
 #endif

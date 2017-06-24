@@ -26,6 +26,12 @@ using vector_vectors = std::_Vector_iterator<std::_Vector_val<std::_Simple_types
 #include "dummy.h"
 using fexec = dummy;
 
+namespace sp {
+	sp::element construct_element(sp::element::value_type a, sp::element::value_type b) {
+		return sp::element{ a,b };
+	}
+}
+
 template <class ExecutionPolicy, class Iterator, class OutputIterator> void grapher::__differences::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2)
 {
 	std::adjacent_difference(begin, end, begin2);
@@ -69,7 +75,7 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 		double y = (sin(rot)*vec.first + cos(rot)*vec.second);
 		//double x = (cos(rot)*begin2->first - sin(rot)*begin2->second);
 		//double y = (sin(rot)*begin2->first + cos(rot)*begin2->second);
-		sp::element p{ x , y };
+		sp::element p = sp::construct_element( x , y );
 		return p;
 		//*begin2++ = p;
 	});
@@ -94,6 +100,7 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 	});
 	//make it a fixPoint
 	for (auto index : _fixPoint_indices) {
+		//**(begin + index) = sp::turn<double>(std::move(**(begin + index)));
 		*(begin + index) = sp::turn<double>(std::move(*(begin + index)));
 	}
 	std::vector<std::pair<int, int>> slices = std::vector<std::pair<int, int>>{};
@@ -159,13 +166,15 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 	std::transform(begin, end, begin2, [](it_element block) {
 		//both can be nonempty; preserve type of last
 		if (block.first != block.second) {
-			return std::accumulate(block.first, block.second, sp::element{ 0.0f,0.0f }, [](sp::element v1, sp::element v2) {
+			return std::accumulate(block.first, block.second, sp::construct_element(0.0f,0.0f), [](sp::element v1, sp::element v2) {
 				v2 += v1;
 				return v2;
 			});
 		}
 		else {
-			return *block.first;//second could be last+1
+			//auto v = sp::construct_element((*block.first)->first, (*block.first)->second);
+			auto v = *block.first;
+			return v;//second could be last+1
 		}
 	});
 }
@@ -175,7 +184,7 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 {
 	class my_add {
 	public:
-		my_add() : cache(sp::element{ 0.0f,0.0f }) {};
+		my_add() : cache(sp::construct_element(0.0f,0.0f )) {};
 		sp::element operator()(sp::element e) {
 			auto newvalue = e;//type preserved
 			newvalue += cache;//type preserved
@@ -208,7 +217,7 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator, class Una
 	__calculate_rotations()(task1, begin, end, std::back_inserter(rotations), angleFunction, Iterator::iterator_category{});
 
 	std::vector<sp::element> vectors;
-	std::fill_n(std::back_inserter(vectors), std::distance(std::begin(rotations), std::end(rotations)), sp::element{ _vectorLength, 0.0f });
+	std::fill_n(std::back_inserter(vectors), std::distance(std::begin(rotations), std::end(rotations)), sp::construct_element(_vectorLength, 0.0f));
 	__apply_rotation_matrix()(task1, std::begin(rotations), std::end(rotations), std::begin(vectors));
 
 	std::vector<it_element> vectors_sliced;
@@ -285,3 +294,7 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator, class Una
 }
 //template void grapher::samples_To_VG::operator()(fexec& task1, vector_single begin, vector_single end, vector_pair begin2, plainAngle& angleFunction);
 //template void grapher::samples_To_VG::operator()(fexec& task1, vector_single begin, vector_single end, vector_pair begin2, test2& angleFunction);
+
+//weird double defined symbol error for sycl::device from msvc
+//msvc compile
+//#include "shared_types.cpp"

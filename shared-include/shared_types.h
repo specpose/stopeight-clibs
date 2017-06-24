@@ -1,9 +1,9 @@
 // Copyright (C) 2017 Fassio Blatter
 // GNU Lesser General Public License, version 2.1
 
-//#pragma once
 #ifndef SHARED_TYPES_H
 #define SHARED_TYPES_H
+
 namespace sp {
 
 	enum class tctype
@@ -29,23 +29,24 @@ namespace sp {
 	template<typename T> class timecode : public std::pair<T,T> {
 	public:
 		using std::pair<T, T>::pair;
+		typedef first_type value_type;
 		using timecode_types = typename tctype;
-		timecode_types category{sp::tctype::EMPTY};
+		timecode_types category{tctype::EMPTY};
 
-		//virtual ~timecode() = 0;
+		virtual ~timecode() {};
 	};
-	/*template<typename T> class empty : public timecode<T> {
+	template<typename T> class empty : public timecode<T> {
 	public:
 		using timecode_types = typename timecode::timecode_types;
 		empty<T>(timecode<T>&& other) : timecode<T>{ other } {
-			category = sp::tctype::EMPTY;
+			category = tctype::EMPTY;
 		};
-	};*/
+	};
 	template<typename T> class turn : public timecode<T> {
 	public:
 		using timecode_types = typename timecode::timecode_types;
-		turn<T>(timecode<T>&& other) : timecode<T>{ other }{
-			category = sp::tctype::TURN;
+		turn<T>(timecode<T>&& other) : timecode<T>{ other } {
+			category = tctype::TURN;
 		};
 		
 		//fixpoint() {};
@@ -54,12 +55,28 @@ namespace sp {
 		//	throw std::exception("fixpoints refer to timecode data and can not be deleted.");
 		//};
 	};
-	using element = timecode<double>;
-	//using element = std::pair<double, double>;
-	//using result = std::pair<std::vector<element>, std::vector<element>>;
+	using element_ = timecode<double>;
+	using element = element_;//element_*;
 	using result = std::vector<element>;
+
+	template<class What> bool is(element* t) {
+		element* u = t;//dynamic_cast<sp::element*>(&t);
+		What* v = nullptr;
+		v = dynamic_cast<What*>(u);
+		if (v)
+			return true;
+		else
+			return false;
+	}
+	/*element construct_element(double a, double b) {
+		element r = new element_{ a,b };
+		return r;
+	}*/
+	/*element construct_element(element::value_type a, element::value_type b) {
+		return element{ a,b };
+	}*/
 }
-sp::element static operator+=(sp::element& a, const sp::element& b) { a.first = a.first + b.first; a.second = a.second + b.second; return a; };
+sp::timecode<double> static operator+=(sp::timecode<double>& a, const sp::timecode<double>& b) { a.first = a.first + b.first; a.second = a.second + b.second; return a; };
 //sp::element static operator+(const sp::element& a, const sp::element& b) { return sp::element{ a.first + b.first, a.second + b.second }; };
 //sp::element static operator-(const sp::element& a, const sp::element& b) { return sp::element{ a.first - b.first, a.second - b.second }; };
 
