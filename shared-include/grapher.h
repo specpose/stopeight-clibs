@@ -20,7 +20,7 @@ namespace grapher {
 	{
 	public:
 		Buffer<T>(std::vector<T>* s);
-		Buffer<T>(std::vector<T>* s, int showSamples, int samplesPerVector=1, double unitaryLength = 1, bool relative=false, double angleScale=1.0f);
+		Buffer<T>(std::vector<T>* s, int showSamples, int samplesPerVector=1, double unitaryLength = 1, bool relative=false, double average = 1.0f, double angleScale=1.0f);
 		~Buffer<T>();
 
 		sp::result operator()();
@@ -33,6 +33,7 @@ namespace grapher {
 		char _samplesPerVectorp[sizeof(int)], _showSamples[sizeof(int)];
 		char _unitaryLength[sizeof(double)];
 		bool _relative;
+		char _average[sizeof(double)];
 		char _angleScale[sizeof(double)];
 		//char _center[sizeof(std::pair<std::pair<double, double>, std::pair<double, double>>)];
 	};

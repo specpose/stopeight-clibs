@@ -20,8 +20,8 @@ namespace grapher {
 
 	class averageScaled : public angle {
 	public:
-		template<typename Iterator>averageScaled(Iterator begin, Iterator end, double angleScale) 
-			: av(__average()(begin, end))
+		template<typename Iterator>averageScaled(Iterator begin, Iterator end, double average, double angleScale) 
+			: av((average==0.0f)?__average()(begin, end):average)
 			, _angleScale((angleScale==0.0f)?std::numeric_limits<double>::min():angleScale) {
 			//if (_contextAverage == 0.0f)
 			//	_contextAverage == std::numeric_limits<double>::min();
@@ -35,7 +35,7 @@ namespace grapher {
 
 	class relative : public averageScaled {
 	public:
-		template<typename Iterator>relative(Iterator begin, Iterator end, double angleScale=1.0f,double initialAngle = 0.0f) : averageScaled(begin, end, angleScale), _previous(initialAngle) {};
+		template<typename Iterator>relative(Iterator begin, Iterator end, double average=0.0f, double angleScale=1.0f,double initialAngle = 0.0f) : averageScaled(begin, end, average, angleScale), _previous(initialAngle) {};
 		double operator()(double d) {
 			if (d == 0.0f || av == 0.0f)
 				return double(0.0f);
@@ -48,7 +48,7 @@ namespace grapher {
 
 	class independent : public averageScaled {
 	public:
-		template<typename Iterator>independent(Iterator begin, Iterator end, double angleScale=1.0f) : averageScaled(begin, end, angleScale) {};
+		template<typename Iterator>independent(Iterator begin, Iterator end, double average=0.0f, double angleScale=1.0f) : averageScaled(begin, end, average, angleScale) {};
 		double operator()(double d) {
 			if (d == 0.0f || av == 0.0f)
 				return double(0.0f);

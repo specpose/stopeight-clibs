@@ -19,12 +19,14 @@ namespace grapher {
 		, _samplesPerVector(1)
 		, _unitaryLength(1.0f)
 		, _relative(false)
+		, _average(0.0f)
+		, _angleScale(1.0f)
 	{
 	}
 	template grapher::Buffer<float>::Buffer(std::vector<float>* s);
 	template grapher::Buffer<double>::Buffer(std::vector<double>* s);
 
-	template<typename T> grapher::Buffer<T>::Buffer(std::vector<T>* s, int showSamples, int samplesPerVector, double unitaryLength, bool relative, double angleScale)
+	template<typename T> grapher::Buffer<T>::Buffer(std::vector<T>* s, int showSamples, int samplesPerVector, double unitaryLength, bool relative, double average, double angleScale)
 		: grapher::Buffer<T>(s)
 	{
 		_showSamples = showSamples;
@@ -32,9 +34,10 @@ namespace grapher {
 		_unitaryLength = unitaryLength;
 		_relative = relative;
 		_angleScale = angleScale;
+		_average = average;
 	}
-	template grapher::Buffer<float>::Buffer(std::vector<float>* s, int showSamples, int samplesPerVector, double unitaryLength, bool relative, double angleScale);
-	template grapher::Buffer<double>::Buffer(std::vector<double>* s, int showSamples, int samplesPerVector, double unitaryLength, bool relative, double angleScale);
+	template grapher::Buffer<float>::Buffer(std::vector<float>* s, int showSamples, int samplesPerVector, double unitaryLength, bool relative, double average, double angleScale);
+	template grapher::Buffer<double>::Buffer(std::vector<double>* s, int showSamples, int samplesPerVector, double unitaryLength, bool relative, double average, double angleScale);
 
 /*	template<typename T> grapher::Buffer<T>::Buffer(std::unique_ptr<std::vector<T>> s)
 //		: PreloaderIF{ *this }
@@ -66,10 +69,10 @@ namespace grapher {
 			__differences()(dummy_policy, std::begin(*buf), std::end(*buf), std::begin(differences));
 
 			if (_relative) {
-				afunc = new relative(std::begin(differences) + 1, std::end(differences),_angleScale);
+				afunc = new relative(std::begin(differences) + 1, std::end(differences),_average,_angleScale);
 			}
 			else {
-				afunc = new independent(std::begin(differences) + 1, std::end(differences),_angleScale);
+				afunc = new independent(std::begin(differences) + 1, std::end(differences),_average,_angleScale);
 			}
 			output = std::vector<sp::element>{};//((vectorSize * 2) + add);
 
