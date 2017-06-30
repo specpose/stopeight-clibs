@@ -158,7 +158,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="angle_functions.h" />
     <ClInclude Include="dummy.h" />
     <ClInclude Include="grapher_impl.h" />
     <ClInclude Include="mean_impl.h" />

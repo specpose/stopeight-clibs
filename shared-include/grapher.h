@@ -13,6 +13,7 @@
 // AND NO IMPLEMENTATIONS IN HERE
 
 #include "preloaderif.h"
+#include "shared_types.h"
 
 namespace grapher {
 

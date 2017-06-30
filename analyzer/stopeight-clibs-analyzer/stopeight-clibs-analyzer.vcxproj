@@ -21,7 +21,6 @@
   <ItemGroup>
     <ClInclude Include="..\include\analyzer_global.h" />
     <ClInclude Include="..\include\error.h" />
-    <ClInclude Include="..\include\vector_graph.hpp" />
     <ClInclude Include="..\include\Matrix.h" />
     <ClInclude Include="..\include\single_task.h" />
     <ClInclude Include="..\include\test.h" />
