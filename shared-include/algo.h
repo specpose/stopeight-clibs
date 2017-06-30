@@ -24,8 +24,7 @@ namespace grapher {
 	class __calculate_rotations {
 	public:
 		template <class ExecutionPolicy, class Iterator, class OutputIterator> void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2,angle& angleFunction, std::forward_iterator_tag itag);
-		//template <class ExecutionPolicy, class Iterator, class OutputIterator> void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2, averageScaled& angleFunction, std::forward_iterator_tag itag);
-
+		//for different implementation: overload, not specialisation
 	};
 
 	//specialization: 1 iterator_category, 2 value_types

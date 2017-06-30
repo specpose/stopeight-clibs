@@ -36,7 +36,6 @@ namespace grapher {
 		bool _relative;
 		char _average[sizeof(double)];
 		char _angleScale[sizeof(double)];
-		//char _center[sizeof(std::pair<std::pair<double, double>, std::pair<double, double>>)];
 	};
 }
 #endif

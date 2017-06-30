@@ -57,14 +57,6 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 }
 template void grapher::__calculate_rotations::operator()(fexec& task1, vector_single begin, vector_single end, vector_single begin2, grapher::angle& angleFunction, std::forward_iterator_tag itag);
 
-/*template <class ExecutionPolicy, class Iterator, class OutputIterator> void grapher::__calculate_rotations::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, grapher::averageScaled& angleFunction, std::forward_iterator_tag itag)
-{
-	std::transform(begin, end, begin2, [&angleFunction](double diff) {
-		return angleFunction(diff);
-	});
-}
-template void grapher::__calculate_rotations::operator()(fexec& task1, vector_single begin, vector_single end, vector_single begin2, grapher::averageScaled& angleFunction, std::forward_iterator_tag itag);*/
-
 template <class ExecutionPolicy, class Iterator, class OutputIterator> void grapher::__apply_rotation_matrix::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2)
 {
 	OutputIterator begin2_c = begin2;

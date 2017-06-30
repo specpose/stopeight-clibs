@@ -20,14 +20,7 @@ namespace grapher {
 
 		~Buffer<T>();
 
-		/*size_t size();
-		T& at(size_t _Pos);
-
-		std::_Vector_iterator<std::_Vector_val<std::_Simple_types<T>>> rmrbegin();
-		std::_Vector_iterator<std::_Vector_val<std::_Simple_types<T>>> rmrend();*/
-
 		sp::result operator()();
-
 
 	private:
 		std::vector<T>* buf;
@@ -36,6 +29,5 @@ namespace grapher {
 		bool _relative;
 		double _average;
 		double _angleScale;
-		//std::pair<std::pair<double, double>, std::pair<double, double>> _center;
 	};
 }
