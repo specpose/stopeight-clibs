@@ -13,7 +13,7 @@ namespace grapher {
 	}
 
 	template<typename T> grapher::Buffer<T>::Buffer(std::vector<T>* s)
-		: PreloaderIF{ *this }
+		: PreloaderIF( *this )
 		, buf(s)
 		, _showSamples(0)
 		, _samplesPerVector(1)

@@ -3,16 +3,18 @@
 
 #include "stdafx.h"
 
-#include <experimental/algorithm>//CYCLIC DEPENDENCY
+//#include <experimental/algorithm>//CYCLIC DEPENDENCY
 #include "shared_types.h"//CYCLIC DEPENDENCY
-#include <experimental/impl/algorithm_impl.h>
+//#include <experimental/impl/algorithm_impl.h>
 
 #include "algo.h"
 #include "containers.h"
 //#include "iterators.h"
 
 //double define
-#include <experimental/execution_policy>
+//#include <experimental/execution_policy>
+
+#include <algorithm>
 
 #include <vector>
 

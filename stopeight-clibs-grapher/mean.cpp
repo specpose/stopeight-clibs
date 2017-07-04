@@ -13,7 +13,7 @@ namespace grapher {
 	}
 
 	template<typename T> grapher::Mean<T>::Mean(std::vector<T>* s)
-		: PreloaderIF{ *this }
+		: PreloaderIF( *this )
 		, buf(s)
 	{
 	}

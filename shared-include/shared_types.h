@@ -4,6 +4,8 @@
 #ifndef SHARED_TYPES_H
 #define SHARED_TYPES_H
 
+#include <vector>
+
 namespace sp {
 
 	enum class tctype
