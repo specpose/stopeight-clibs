@@ -213,7 +213,8 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator, class Una
 	__apply_rotation_matrix()(task1, std::begin(rotations), std::end(rotations), std::begin(vectors));
 
 	std::vector<it_element> vectors_sliced;
-	_fixpoints(_fixPoint_indices)(task1, std::begin(vectors), std::end(vectors), std::back_inserter(vectors_sliced), Iterator::iterator_category{});
+	auto func = _fixpoints(_fixPoint_indices);
+	func(task1, std::begin(vectors), std::end(vectors), std::back_inserter(vectors_sliced), Iterator::iterator_category{});
 
 	std::vector<sp::element> out_vectors;
 	
