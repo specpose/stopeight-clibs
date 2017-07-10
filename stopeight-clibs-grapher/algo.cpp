@@ -7,7 +7,7 @@
 #include "shared_types.h"//CYCLIC DEPENDENCY
 //#include <experimental/impl/algorithm_impl.h>
 
-#include "algo.h"
+#include "algo_impl.h"
 #include "containers.h"
 //#include "iterators.h"
 

@@ -5,7 +5,16 @@
 #define ALGO_H
 
 #include "angle_functions.h"
+using it_element = std::pair<typename std::vector<sp::element>::iterator, typename std::vector<sp::element>::iterator>;
 
+using vector_singled = std::_Vector_iterator<std::_Vector_val<std::_Simple_types<double>>>;
+using vector_singlef = std::_Vector_iterator<std::_Vector_val<std::_Simple_types<float>>>;
+using vector_pair = std::_Vector_iterator<std::_Vector_val<std::_Simple_types<sp::element>>>;
+
+using vector_vectors = std::_Vector_iterator<std::_Vector_val<std::_Simple_types<it_element>>>;
+//using fexec = std::experimental::parallel::parallel_vector_execution_policy;
+#include "dummy.h"
+using fexec = dummy;
 namespace grapher {
 
 	//specialization: 1 iterator_category, 2 value_types
@@ -13,6 +22,8 @@ namespace grapher {
 	public:
 		template <class ExecutionPolicy, class Iterator, class OutputIterator>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2);
 	};
+	template void __differences::operator() < fexec&, vector_singled, vector_singled > (fexec& task1, vector_singled begin, vector_singled end, vector_singled begin2);
+	template void __differences::operator() < fexec&, vector_singlef, vector_singlef > (fexec& task1, vector_singlef begin, vector_singlef end, vector_singlef begin2);
 
 	//specialization: 1 iterator_category, 2 value_types
 	class __average {
@@ -40,7 +51,7 @@ namespace grapher {
 		~_fixpoints();
 		template <class ExecutionPolicy, class Iterator, class OutputIterator>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2, std::random_access_iterator_tag);
 	private:
-		char _fixPoint_indices[sizeof(std::vector<int>&)];
+		std::vector<int>& _fixPoint_indices;
 	};
 
 	//specialization: 1 iterator_category, 2 value_types
@@ -50,7 +61,7 @@ namespace grapher {
 		~_blocks();
 		template <class ExecutionPolicy, class Iterator, class OutputIterator>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2, std::random_access_iterator_tag);
 	private:
-		char _samplesPerVector[sizeof(int)];
+		int _samplesPerVector;
 	};
 
 	//specialization: 1 iterator_category, 2 value_types
@@ -74,9 +85,9 @@ namespace grapher {
 		template <class ExecutionPolicy, class Iterator, class OutputIterator, class UnaryFunction>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2, UnaryFunction& angleFunction = test2(0.0f));
 
 	private:
-		char _samplesPerVector[sizeof(int)];
-		char _vectorLength[sizeof(double)];
-		char _fixPoint_indices[sizeof(std::vector<int>)];
+		int _samplesPerVector;
+		double _vectorLength;
+		std::vector<int> _fixPoint_indices;
 	};
 
 	int samples_To_VG_vectorSize(int inputSize, int samplesPerVector=1);
@@ -92,9 +103,9 @@ namespace grapher {
 		template <class ExecutionPolicy, class Iterator, class OutputIterator, class UnaryFunction>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2, UnaryFunction& angleFunction=test2(0.0f));
 
 	private:
-		char _samplesPerVector[sizeof(int)];
-		char _vectorLength[sizeof(double)];
-		char _fixPoint_indices[sizeof(std::vector<int>)];
+		int _samplesPerVector;
+		double _vectorLength;
+		std::vector<int> _fixPoint_indices;
 	};
 }
 #endif

@@ -4,7 +4,7 @@
 #include "stdafx.h"
 
 #include "mean_impl.h"
-#include "algo.h"
+#include "algo_impl.h"
 #include "dummy.h"
 
 namespace grapher {
