@@ -1,8 +1,6 @@
 // Copyright (C) 2017 Fassio Blatter
 // GNU Lesser General Public License, version 2.1
 
-#include "stdafx.h"
-
 //#include <experimental/algorithm>//CYCLIC DEPENDENCY
 #include "shared_types.h"//CYCLIC DEPENDENCY
 //#include <experimental/impl/algorithm_impl.h>
@@ -21,6 +19,8 @@
 using it_element = std::pair<typename std::vector<sp::element>::iterator, typename std::vector<sp::element>::iterator>;
 
 using vector_single = std::_Vector_iterator<std::_Vector_val<std::_Simple_types<double>>>;
+using vector_singlef = std::_Vector_iterator<std::_Vector_val<std::_Simple_types<float>>>;
+
 using vector_pair = std::_Vector_iterator<std::_Vector_val<std::_Simple_types<sp::element>>>;
 
 using vector_vectors = std::_Vector_iterator<std::_Vector_val<std::_Simple_types<it_element>>>;
@@ -39,7 +39,8 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 	std::adjacent_difference(begin, end, begin2);
 	//*std::begin(differences) = 0.0f;
 }
-template void grapher::__differences::operator()(fexec& task1, vector_single begin, vector_single end, vector_single begin2);
+template void grapher::__differences::operator()<fexec&, vector_single, vector_single>(fexec& task1, vector_single begin, vector_single end, vector_single begin2);
+template void grapher::__differences::operator()<fexec&, vector_singlef, vector_singlef>(fexec& task1, vector_singlef begin, vector_singlef end, vector_singlef begin2);
 
 template <class Iterator> double grapher::__average::operator()(Iterator begin, Iterator end)
 {

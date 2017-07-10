@@ -1,8 +1,6 @@
 // Copyright (C) 2009-2016 Specific Purpose Software GmbH
 // GNU Lesser General Public License, version 2.1
 
-#include "stdafx.h"
-
 #include "mean_impl.h"
 #include "algo_impl.h"
 #include "dummy.h"

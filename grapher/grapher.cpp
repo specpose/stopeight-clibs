@@ -1,10 +1,8 @@
 // Copyright (C) 2009-2016 Specific Purpose Software GmbH
 // GNU Lesser General Public License, version 2.1
 
-#include "stdafx.h"
-
 #include "grapher_impl.h"
-
+#include "algo_impl.h"
 #include "dummy.h"
 
 namespace grapher {
@@ -66,7 +64,7 @@ namespace grapher {
 		grapher::averageScaled* afunc = nullptr;
 		if (size > 0) {
 			std::vector<double> differences = std::vector<double>(size, 0.0f);
-			__differences()(dummy_policy, std::begin(*buf), std::end(*buf), std::begin(differences));
+			grapher::__differences()(dummy_policy, std::begin(*buf), std::end(*buf), std::begin(differences));
 
 			if (_relative) {
 				afunc = new relative(std::begin(differences) + 1, std::end(differences),_average,_angleScale);
@@ -76,7 +74,7 @@ namespace grapher {
 			}
 			output = std::vector<sp::element>{};//((vectorSize * 2) + add);
 
-			(__differences_To_VG(_samplesPerVector, vectorLength, std::vector<int>(1, (size / 2) - 1)))(dummy_policy, std::begin(differences) + 1, std::end(differences), std::back_inserter(output), *afunc);
+			(grapher::__differences_To_VG(_samplesPerVector, vectorLength, std::vector<int>(1, (size / 2) - 1)))(dummy_policy, std::begin(differences) + 1, std::end(differences), std::back_inserter(output), *afunc);
 			//(grapher::samples_To_VG(_samplesPerVector, vectorLength, std::vector<int>(1, (size / 2) - 1)))(dummy_policy, std::begin(*buf), std::end(*buf), std::back_inserter(output), *afunc);
 
 		}
