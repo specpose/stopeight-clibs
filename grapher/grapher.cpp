@@ -62,7 +62,7 @@ namespace grapher {
 		//par
 		//(grapher::samples_To_VG(samplesPerPixel))(std::experimental::parallel::par_vec, std::begin(*buf), std::end(*buf), std::begin(output));
 		grapher::averageScaled* afunc = nullptr;
-		if (size > 0) {
+		if (size > 2) {
 			std::vector<double> differences = std::vector<double>(size, 0.0f);
 			grapher::__differences()(dummy_policy, std::begin(*buf), std::end(*buf), std::begin(differences));
 
@@ -73,8 +73,10 @@ namespace grapher {
 				afunc = new independent(std::begin(differences) + 1, std::end(differences),_average,_angleScale);
 			}
 			output = std::vector<sp::element>{};//((vectorSize * 2) + add);
-
-			(grapher::__differences_To_VG(_samplesPerVector, vectorLength, std::vector<int>(1, (size / 2) - 1)))(dummy_policy, std::begin(differences) + 1, std::end(differences), std::back_inserter(output), *afunc);
+			
+			//in general if uneven, middle is on left side
+			//-1 differences, -1 size
+			(grapher::__differences_To_VG(_samplesPerVector, vectorLength, std::vector<int>(1, (((size - 1)/ 2) - 1) )))(dummy_policy, std::begin(differences) + 1, std::end(differences), std::back_inserter(output), *afunc);
 			//(grapher::samples_To_VG(_samplesPerVector, vectorLength, std::vector<int>(1, (size / 2) - 1)))(dummy_policy, std::begin(*buf), std::end(*buf), std::back_inserter(output), *afunc);
 
 		}
