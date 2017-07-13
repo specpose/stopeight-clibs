@@ -16,18 +16,6 @@
 
 #include <vector>
 
-using it_element = std::pair<typename std::vector<sp::element>::iterator, typename std::vector<sp::element>::iterator>;
-
-using vector_single = std::_Vector_iterator<std::_Vector_val<std::_Simple_types<double>>>;
-using vector_singlef = std::_Vector_iterator<std::_Vector_val<std::_Simple_types<float>>>;
-
-using vector_pair = std::_Vector_iterator<std::_Vector_val<std::_Simple_types<sp::element>>>;
-
-using vector_vectors = std::_Vector_iterator<std::_Vector_val<std::_Simple_types<it_element>>>;
-//using fexec = std::experimental::parallel::parallel_vector_execution_policy;
-#include "dummy.h"
-using fexec = dummy;
-
 namespace sp {
 	sp::element construct_element(sp::element::value_type a, sp::element::value_type b) {
 		return sp::element{ a,b };
@@ -41,16 +29,6 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 }
 template void grapher::__differences::operator()<fexec&, vector_single, vector_single>(fexec& task1, vector_single begin, vector_single end, vector_single begin2);
 template void grapher::__differences::operator()<fexec&, vector_singlef, vector_singlef>(fexec& task1, vector_singlef begin, vector_singlef end, vector_singlef begin2);
-
-template <class Iterator> double grapher::__average::operator()(Iterator begin, Iterator end)
-{
-	auto sum = std::accumulate(begin, end, 0.0f, [](double first, double second) {
-		return first += abs(second);
-
-	});
-	return sum / std::distance(begin, end);
-}
-template double grapher::__average::operator()(vector_single begin, vector_single end);
 
 template <class ExecutionPolicy, class Iterator, class OutputIterator> void grapher::__calculate_rotations::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, grapher::angle& angleFunction, std::forward_iterator_tag itag)
 {
@@ -111,7 +89,7 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator> void grap
 		int _prev;
 	};
 	auto it = std::back_inserter(slices);
-	std::for_each(std::begin(_fixPoint_indices), std::end(_fixPoint_indices), [&it](auto index) {
+	std::for_each(std::begin(_fixPoint_indices), std::end(_fixPoint_indices), [&it](int index) {
 		*it++ = (prev()(index));//was index
 		*it++ = (std::pair<int, int>{index, index + 1});//was index+1
 	});
@@ -209,15 +187,17 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator, class Una
 
 	std::vector<double> rotations;
 	//first one is invalid
-	__calculate_rotations()(task1, begin, end, std::back_inserter(rotations), angleFunction, Iterator::iterator_category{});
-
+	//Windows __calculate_rotations()(task1, begin, end, std::back_inserter(rotations), angleFunction, Iterator::iterator_category{});
+    __calculate_rotations()(task1, begin, end, std::back_inserter(rotations), angleFunction, typename Iterator::iterator_category{});
+    
 	std::vector<sp::element> vectors;
 	std::fill_n(std::back_inserter(vectors), std::distance(std::begin(rotations), std::end(rotations)), sp::construct_element(_vectorLength, 0.0f));
 	__apply_rotation_matrix()(task1, std::begin(rotations), std::end(rotations), std::begin(vectors));
 
 	std::vector<it_element> vectors_sliced;
 	auto func = _fixpoints(_fixPoint_indices);
-	func(task1, std::begin(vectors), std::end(vectors), std::back_inserter(vectors_sliced), Iterator::iterator_category{});
+	//Windows func(task1, std::begin(vectors), std::end(vectors), std::back_inserter(vectors_sliced), Iterator::iterator_category{});
+    func(task1, std::begin(vectors), std::end(vectors), std::back_inserter(vectors_sliced), typename Iterator::iterator_category{});
 
 	std::vector<sp::element> out_vectors;
 	
@@ -242,12 +222,14 @@ template <class ExecutionPolicy, class Iterator, class OutputIterator, class Una
 		std::vector<sp::element> ov = std::vector<sp::element>{};//(blocks_vector.size(), { double(0.0f), double(0.0f) });
 																 //std::fill<typename std::vector<sp::element>::iterator>(std::begin(ov), std::end(ov), sp::element{ 1.0f, 1.0f });
 
-		_sum_blocks()(task1, std::begin(blocks_vector), std::end(blocks_vector), std::back_inserter(ov), Iterator::iterator_category{});
+		//Windows _sum_blocks()(task1, std::begin(blocks_vector), std::end(blocks_vector), std::back_inserter(ov), Iterator::iterator_category{});
+        _sum_blocks()(task1, std::begin(blocks_vector), std::end(blocks_vector), std::back_inserter(ov), typename Iterator::iterator_category{});
 		std::move(std::begin(ov), std::end(ov), std::back_inserter(out_vectors));
 	}
 	//});
 
-	_append()(task1, std::begin(out_vectors), std::end(out_vectors), std::begin(out_vectors), Iterator::iterator_category{});
+	//Windows _append()(task1, std::begin(out_vectors), std::end(out_vectors), std::begin(out_vectors), Iterator::iterator_category{});
+    _append()(task1, std::begin(out_vectors), std::end(out_vectors), std::begin(out_vectors), typename Iterator::iterator_category{});
 
 	std::copy<typename std::vector<sp::element>::iterator, OutputIterator>(std::begin(out_vectors), std::end(out_vectors), begin2);
 }

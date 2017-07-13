@@ -94,4 +94,21 @@ sp::timecode<double> static operator+=(sp::timecode<double>& a, const sp::timeco
 //sp::element static operator+(const sp::element& a, const sp::element& b) { return sp::element{ a.first + b.first, a.second + b.second }; };
 //sp::element static operator-(const sp::element& a, const sp::element& b) { return sp::element{ a.first - b.first, a.second - b.second }; };
 
+using it_element = std::pair<typename std::vector<sp::element>::iterator, typename std::vector<sp::element>::iterator>;
+
+//Windows using vector_single = std::_Vector_iterator<std::_Vector_val<std::_Simple_types<double>>>;
+using vector_single = std::vector<double>::iterator;
+//Windows using vector_singlef = std::_Vector_iterator<std::_Vector_val<std::_Simple_types<float>>>;
+using vector_singlef = std::vector<float>::iterator;
+
+//Windowsusing vector_pair = std::_Vector_iterator<std::_Vector_val<std::_Simple_types<sp::element>>>;
+using vector_pair = std::vector<sp::element>::iterator;
+//Windows using vector_vectors = std::_Vector_iterator<std::_Vector_val<std::_Simple_types<it_element>>>;
+using vector_vectors = std::vector<it_element>::iterator;
+
+//using fexec = std::experimental::parallel::parallel_vector_execution_policy;
+#include "dummy.h"
+using fexec = dummy;
+
+
 #endif

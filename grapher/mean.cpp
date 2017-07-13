@@ -11,7 +11,7 @@ namespace grapher {
 	}
 
 	template<typename T> grapher::Mean<T>::Mean(std::vector<T>* s)
-		: PreloaderIF( *this )
+    : grapher::PreloaderIF<T,double>( *this )
 		, buf(s)
 	{
 	}

@@ -22,12 +22,14 @@ namespace stopeight {
 			int o = this->size()-1;
 			int _endFull = endFull(origin_size, _seg_size);
 			for (int i = seg_size; i <= _endFull; i += seg_size) {
-				auto v = std::pair<std::vector<DataType>::iterator, std::vector<DataType>::iterator>(_vec.first + i - seg_size, _vec.first + i - 1);
+                //Windows auto v = std::pair<std::vector<DataType>::iterator, std::vector<DataType>::iterator>(_vec.first + i - seg_size, _vec.first + i - 1);
+				auto v = std::pair<typename std::vector<DataType>::iterator, typename std::vector<DataType>::iterator>(_vec.first + i - seg_size, _vec.first + i - 1);
 				this->at(n++) = v;
 			}
 			if (_endFull != origin_size) {
 				auto l = origin_size - _endFull;
-				auto v = std::pair<std::vector<DataType>::iterator, std::vector<DataType>::iterator>(_vec.second - l, _vec.second - 1);
+                //Windows auto v = std::pair<std::vector<DataType>::iterator, std::vector<DataType>::iterator>(_vec.second - l, _vec.second - 1);
+				auto v = std::pair<typename std::vector<DataType>::iterator, typename std::vector<DataType>::iterator>(_vec.second - l, _vec.second - 1);
 				this->at(o) = v;
 			}
 		};
