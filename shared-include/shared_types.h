@@ -42,24 +42,25 @@ namespace sp {
 	template<typename T> class timecode : public std::pair<T,T> {
 	public:
 		using std::pair<T, T>::pair;
-		typedef first_type value_type;
-		using timecode_types = typename tctype;
-		timecode_types category{tctype::EMPTY};
-
+        //Windows: typedef std::pair<T,T>::first_type value_type;
+        typedef typename std::pair<T,T>::first_type value_type;
+        using timecode_types = typename sp::tctype;
+        
+        timecode_types category{tctype::EMPTY};
 		virtual ~timecode() {};
 	};
-	template<typename T> class empty : public timecode<T> {
+    template<typename T> class empty : public sp::timecode<T> {
 	public:
-		using timecode_types = typename timecode::timecode_types;
+        using timecode_types = typename sp::timecode<T>::timecode_types;
 		empty<T>(timecode<T>&& other) : timecode<T>{ other } {
-			category = tctype::EMPTY;
+            sp::timecode<T>::category = sp::tctype::EMPTY;
 		};
 	};
-	template<typename T> class fixpoint : public timecode<T> {
+    template<typename T> class fixpoint : public sp::timecode<T> {
 	public:
-		using timecode_types = typename timecode::timecode_types;
+        using timecode_types = typename sp::timecode<T>::timecode_types;
 		fixpoint<T>(timecode<T>&& other) : timecode<T>{ other } {
-			category = tctype::FIXPOINT;
+            sp::timecode<T>::category = sp::tctype::FIXPOINT;
 		};
 		
 		//fixpoint() {};
