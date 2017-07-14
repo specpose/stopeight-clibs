@@ -95,12 +95,15 @@ public:
 
 //Windows using vector_single = std::_Vector_iterator<std::_Vector_val<std::_Simple_types<double>>>;
 template<typename T> using vector_single = typename std::vector<T>::iterator;
+template<typename T> using vector_single_T = typename std::iterator_traits<T>::value_type;
 //Windows using vector_singlef = std::_Vector_iterator<std::_Vector_val<std::_Simple_types<float>>>;
 
 //Windowsusing vector_pair = std::_Vector_iterator<std::_Vector_val<std::_Simple_types<sp::element>>>;
 template<typename T> using vector_pair = typename std::vector<sp::element<T>>::iterator;
+template<typename T> using vector_pair_T = typename std::iterator_traits<T>::value_type::value_type;
 //Windows using vector_vectors = std::_Vector_iterator<std::_Vector_val<std::_Simple_types<it_element>>>;
 template<typename T> using vector_vectors = typename std::vector<it_element<T>>::iterator;
+template<typename T> using vector_vectors_T = typename std::iterator_traits<typename std::iterator_traits<T>::value_type::first_type>::value_type::value_type;
 
 //using fexec = std::experimental::parallel::parallel_vector_execution_policy;
 #include "dummy.h"

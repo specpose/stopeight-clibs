@@ -67,7 +67,7 @@ namespace grapher {
 		~__differences_To_VG();
 
 		//specialization: 1 iterator_category, 2 value_types
-		template <class ExecutionPolicy, class Iterator, class OutputIterator, class UnaryFunction>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2, UnaryFunction& angleFunction);
+		template <class ExecutionPolicy, class Iterator, class OutputIterator, class UnaryFunction>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2, UnaryFunction& angleFunction=relative(0.0f));
 
 	private:
 		int _samplesPerVector;
@@ -85,7 +85,7 @@ namespace grapher {
 		~samples_To_VG();
 
 		//specialization: 1 iterator_category, 2 value_types
-		template <class ExecutionPolicy, class Iterator, class OutputIterator, class UnaryFunction>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2, UnaryFunction& angleFunction);
+		template <class ExecutionPolicy, class Iterator, class OutputIterator, class UnaryFunction>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2, UnaryFunction& angleFunction = relative(0.0f));
 
 	private:
 		int _samplesPerVector;

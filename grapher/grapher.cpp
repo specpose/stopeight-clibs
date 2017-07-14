@@ -18,7 +18,7 @@ namespace speczilla {
 		, _angleScale(1.0f)
 	{
 	}
-	//template Buffer<float>::Buffer(std::vector<float>* s);
+	template Buffer<float>::Buffer(std::vector<float>* s);
 	template Buffer<double>::Buffer(std::vector<double>* s);
 
 	template<typename T> Buffer<T>::Buffer(std::vector<T>* s, int showSamples, int samplesPerVector, double unitaryLength, bool relative, double average, double angleScale)
@@ -31,7 +31,7 @@ namespace speczilla {
 		_angleScale = angleScale;
 		_average = average;
 	}
-	//template Buffer<float>::Buffer(std::vector<float>* s, int showSamples, int samplesPerVector, double unitaryLength, bool relative, double average, double angleScale);
+	template Buffer<float>::Buffer(std::vector<float>* s, int showSamples, int samplesPerVector, double unitaryLength, bool relative, double average, double angleScale);
 	template Buffer<double>::Buffer(std::vector<double>* s, int showSamples, int samplesPerVector, double unitaryLength, bool relative, double average, double angleScale);
 
 /*	template<typename T> Buffer<T>::Buffer(std::unique_ptr<std::vector<T>> s)
@@ -46,7 +46,7 @@ namespace speczilla {
 
 	template<typename T> Buffer<T>::~Buffer() {
 	}
-	//template Buffer<float>::~Buffer();
+	template Buffer<float>::~Buffer();
 	template Buffer<double>::~Buffer();
 
 	template<typename T> sp::result<T> Buffer<T>::operator()()
@@ -58,7 +58,7 @@ namespace speczilla {
 
 		//par
 		//(samples_To_VG(samplesPerPixel))(std::experimental::parallel::par_vec, std::begin(*buf), std::end(*buf), std::begin(output));
-		angle::averageScaled* afunc = nullptr;
+		angle::angle* afunc = nullptr;
 		if (size > 2) {
 			std::vector<T> differences = std::vector<T>(size, 0.0f);
             auto d = grapher::__differences();
@@ -75,8 +75,8 @@ namespace speczilla {
 			//in general if uneven, middle is on left side
 			//-1 differences, -1 size
             auto dvg = (grapher::__differences_To_VG(_samplesPerVector, vectorLength, std::vector<int>(1, (((size - 1)/ 2) - 1) )));
-            dvg(dummy_policy, std::begin(differences) + 1, std::end(differences), std::begin(output), *afunc);
-                                                            //std::back_inserter(output), *afunc);
+            dvg(dummy_policy, std::begin(differences) + 1, std::end(differences), std::back_inserter(output), *afunc);
+                                                            
 			//(samples_To_VG(_samplesPerVector, vectorLength, std::vector<int>(1, (size / 2) - 1)))(dummy_policy, std::begin(*buf), std::end(*buf), std::back_inserter(output), *afunc);
 
 		}
@@ -85,7 +85,7 @@ namespace speczilla {
 		return sp::result<T>{ output };
 	}
 	//specialization
-	//template sp::result<float> Buffer<float>::operator()();
+	template sp::result<float> Buffer<float>::operator()();
 	template sp::result<double> Buffer<double>::operator()();
 
 }

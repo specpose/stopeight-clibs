@@ -23,18 +23,18 @@ namespace grapher {
         std::adjacent_difference(begin, end, begin2);
         //*std::begin(differences) = 0.0f;
     }
-    //template void grapher::__differences::operator()<dummy const, std::__1::__wrap_iter<double*>, std::__1::__wrap_iter<double*> >
-    //(dummy const&, std::__1::__wrap_iter<double*>, std::__1::__wrap_iter<double*>, std::__1::__wrap_iter<double*>);
     template void __differences::operator()(fexec& task1, vector_single<double> begin, vector_single<double> end, vector_single<double> begin2) ;
     template void __differences::operator()(fexec& task1, vector_single<float> begin, vector_single<float> end, vector_single<float> begin2);
    
     template <class ExecutionPolicy, class Iterator, class OutputIterator> void __calculate_rotations::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, angle::angle& angleFunction, std::forward_iterator_tag itag)
     {
-        std::transform(begin, end, begin2, [&angleFunction](double diff) {
+		using T = vector_single_T<Iterator>;
+        std::transform(begin, end, begin2, [&angleFunction](T diff) {
             return angleFunction(diff);
         });
     }
     template void __calculate_rotations::operator()(fexec& task1, vector_single<double> begin, vector_single<double> end, vector_single<double> begin2, angle::angle& angleFunction, std::forward_iterator_tag itag);
+	template void __calculate_rotations::operator()(fexec& task1, vector_single<float> begin, vector_single<float> end, vector_single<float> begin2, angle::angle& angleFunction, std::forward_iterator_tag itag);
     
     template <class ExecutionPolicy, class Iterator, class OutputIterator> void __apply_rotation_matrix::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2)
     {
@@ -47,12 +47,11 @@ namespace grapher {
         });
     }
     template void __apply_rotation_matrix::operator()(fexec& task1, vector_single<double> begin, vector_single<double> end, vector_pair<double> begin2);
+	template void __apply_rotation_matrix::operator()(fexec& task1, vector_single<float> begin, vector_single<float> end, vector_pair<float> begin2);
     
     template<typename T> _fixpoints<T>::_fixpoints(std::vector<int>& points) : _fixPoint_indices(points) {
-        
     }
     template<typename T> _fixpoints<T>::~_fixpoints() {
-        
     }
     template<typename T> template <class ExecutionPolicy, class Iterator, class OutputIterator> void _fixpoints<T>::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, std::random_access_iterator_tag)
     {
@@ -110,29 +109,31 @@ namespace grapher {
     }
     template <class ExecutionPolicy, class Iterator, class OutputIterator> void _blocks::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, std::random_access_iterator_tag)
     {
+		using T = vector_vectors_T<Iterator>;
         auto spV = _samplesPerVector;
-        std::for_each(begin, end, [&begin2, spV](it_element<double> slice) {
+        std::for_each(begin, end, [&begin2, spV](it_element<T> slice) {
             auto size = std::distance(slice.first, slice.second);
             if (size > 0) {
                 auto sectionend = (spV > size) ? size : spV;
                 for (int i = 0; i < (size / sectionend); i++) {
-                    *begin2++ = (it_element<double>{ (slice.first + (i*sectionend)),(slice.first + (i*sectionend) + sectionend) });
+                    *begin2++ = (it_element<T>{ (slice.first + (i*sectionend)),(slice.first + (i*sectionend) + sectionend) });
                 }
                 auto remainder = size%sectionend;
                 if (remainder != 0)
-                    *begin2++ = (it_element<double>{ (slice.second - remainder),slice.second });
+                    *begin2++ = (it_element<T>{ (slice.second - remainder),slice.second });
             }
             else {
-                *begin2++ = (it_element<double>{ slice.first, slice.first });
+                *begin2++ = (it_element<T>{ slice.first, slice.first });
             }
         });
     }
     template void _blocks::operator()(fexec& task1, vector_vectors<double> begin, vector_vectors<double> end, vector_vectors<double> begin2, std::random_access_iterator_tag);
-    
+	template void _blocks::operator()(fexec& task1, vector_vectors<float> begin, vector_vectors<float> end, vector_vectors<float> begin2, std::random_access_iterator_tag);
+  
     
     template <class ExecutionPolicy, class Iterator, class OutputIterator> void _sum_blocks::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, std::random_access_iterator_tag)
     {
-        using T = typename std::iterator_traits<typename std::iterator_traits<Iterator>::value_type::first_type>::value_type::value_type;
+		using T = vector_vectors_T<Iterator>;
         //transforming intput it_element to sp:element
         std::transform(begin, end, begin2, [](it_element<T> block) {
             //both can be nonempty; preserve type of last
@@ -156,21 +157,23 @@ namespace grapher {
     
     template <class ExecutionPolicy, class Iterator, class OutputIterator> void _append::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, std::forward_iterator_tag)
     {
+		using T = vector_pair_T<Iterator>;
         class my_add {
         public:
-            my_add() : cache(sp::construct_element_<double>(0.0f,0.0f )) {};
-            sp::element<double> operator()(sp::element<double> e) {
+            my_add() : cache(sp::construct_element_<T>(0.0f,0.0f )) {};
+            sp::element<T> operator()(sp::element<T> e) {
                 auto newvalue = e;//type preserved
                 newvalue += cache;//type preserved
                 cache += e;//type mutating
                 return newvalue;
             };
         private:
-            sp::element<double> cache;
+            sp::element<T> cache;
         };
         std::transform(begin, end, begin2, my_add());
     }
     template void _append::operator()(fexec& task1, vector_pair<double> begin, vector_pair<double> end, vector_pair<double> begin2, std::forward_iterator_tag);
+	template void _append::operator()(fexec& task1, vector_pair<float> begin, vector_pair<float> end, vector_pair<float> begin2, std::forward_iterator_tag);
     
     __differences_To_VG::__differences_To_VG(int samplesPerVector, double vectorLength, std::vector<int> fixPoints_indices)
     : _samplesPerVector(samplesPerVector)
@@ -183,12 +186,11 @@ namespace grapher {
     //partial specialization
     template <class ExecutionPolicy, class Iterator, class OutputIterator, class UnaryFunction> void __differences_To_VG::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, UnaryFunction& angleFunction)
     {
-        using T = typename std::iterator_traits<Iterator>::value_type;
-        
+		using T = vector_single_T<Iterator>;
         //par
         //std::experimental::parallel::transform(task1, begin, end, begin, [](float f) {return 3.3f; });
         
-        std::vector<double> rotations;
+        std::vector<T> rotations;
         //first one is invalid
         //Windows __calculate_rotations()(task1, begin, end, std::back_inserter(rotations), angleFunction, Iterator::iterator_category{});
         __calculate_rotations()(task1, begin, end, std::back_inserter(rotations), angleFunction, typename Iterator::iterator_category{});
@@ -237,8 +239,10 @@ namespace grapher {
         std::copy<typename std::vector<sp::element<T>>::iterator, OutputIterator>(std::begin(out_vectors), std::end(out_vectors), begin2);
     }
     //void grapher::__differences_To_VG::operator()<dummy const, std::__1::__wrap_iter<double*>, std::__1::__wrap_iter<sp::timecode<double>*>, angle::averageScaled>(dummy const&, std::__1::__wrap_iter<double*>, std::__1::__wrap_iter<double*>, std::__1::__wrap_iter<sp::timecode<double>*>, angle::averageScaled&);
-    template void __differences_To_VG::operator()(fexec& task1, vector_single<double> begin, vector_single<double> end, vector_pair<double> begin2, angle::averageScaled& angleFunction);
-    template void __differences_To_VG::operator()(fexec& task1, vector_single<float> begin, vector_single<float> end, vector_pair<float> begin2, angle::averageScaled& angleFunction);
+    template void __differences_To_VG::operator()(fexec& task1, vector_single<double> begin, vector_single<double> end, vector_pair<double> begin2, angle::angle& angleFunction);
+    template void __differences_To_VG::operator()(fexec& task1, vector_single<float> begin, vector_single<float> end, vector_pair<float> begin2, angle::angle& angleFunction);
+	template void __differences_To_VG::operator()(fexec& task1, vector_single<double> begin, vector_single<double> end, std::back_insert_iterator<std::vector<sp::element<double>>> begin2, angle::angle& angleFunction);
+	template void __differences_To_VG::operator()(fexec& task1, vector_single<float> begin, vector_single<float> end, std::back_insert_iterator<std::vector<sp::element<float>>> begin2, angle::angle& angleFunction);
     
     int samples_To_VG_vectorSize(int inputSize, int samplesPerVector) {
         auto size = inputSize / samplesPerVector;
@@ -263,11 +267,12 @@ namespace grapher {
     //partial specialization
     template <class ExecutionPolicy, class Iterator, class OutputIterator, class UnaryFunction> void samples_To_VG::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, UnaryFunction& angleFunction)
     {
+		using T = vector_single_T<Iterator>;
         //par
         //std::experimental::parallel::transform(task1, begin, end, begin, [](float f) {return 3.3f; });
         size_t size = std::distance(begin, end);
         if (size > 0) {
-            std::vector<double> differences = std::vector<double>(size, 0.0f);
+            std::vector<T> differences = std::vector<T>(size, 0.0f);
             __differences()(task1, begin, end, std::begin(differences));
             
             __differences_To_VG(_samplesPerVector, _vectorLength, _fixPoint_indices)(task1, std::begin(differences) + 1, std::end(differences), begin2, angleFunction);

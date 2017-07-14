@@ -12,18 +12,18 @@ namespace speczilla {
 		, buf(s)
 	{
 	}
-	//template Mean<float>::Mean(std::vector<float>* s);
+	template Mean<float>::Mean(std::vector<float>* s);
 	template Mean<double>::Mean(std::vector<double>* s);
 
 	template<typename T> Mean<T>::~Mean() {
 	}
-	//template Mean<float>::~Mean();
+	template Mean<float>::~Mean();
 	template Mean<double>::~Mean();
 
 	template<typename T> double Mean<T>::operator()()
 	{
 		const int size = buf->size();
-        angle::averageScaled* afunc = nullptr;
+        //angle::averageScaled* afunc = nullptr;
 		if (size > 0) {
 			std::vector<T> differences = std::vector<T>(size, 0.0f);
             auto d = grapher::__differences();
@@ -36,7 +36,7 @@ namespace speczilla {
 		}
 	}
 	//specialization
-	//template double Mean<float>::operator()();
+	template double Mean<float>::operator()();
 	template double Mean<double>::operator()();
 
 }
