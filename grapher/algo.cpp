@@ -25,6 +25,7 @@ namespace grapher {
     }
     template void __differences::operator()(fexec& task1, vector_single<double> begin, vector_single<double> end, vector_single<double> begin2) ;
     template void __differences::operator()(fexec& task1, vector_single<float> begin, vector_single<float> end, vector_single<float> begin2);
+	template void __differences::operator()(fexec& task1, vector_single<float> begin, vector_single<float> end, vector_single<double> begin2);
    
     template <class ExecutionPolicy, class Iterator, class OutputIterator> void __calculate_rotations::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, angle::angle& angleFunction, std::forward_iterator_tag itag)
     {

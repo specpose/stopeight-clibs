@@ -11,7 +11,7 @@
 
 namespace speczilla {
 
-	template<typename T>class Buffer : public PreloaderIF<T, sp::result<T>>
+	template<typename T>class Buffer : public PreloaderIF<T, sp::result<double>>
 	{
 	public:
 		Buffer<T>(std::vector<T>* s);
@@ -19,7 +19,7 @@ namespace speczilla {
 
 		~Buffer<T>();
 
-		sp::result<T> operator()();
+		sp::result<double> operator()();
 
 	private:
 		std::vector<T>* buf;
