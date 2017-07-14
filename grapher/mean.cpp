@@ -5,39 +5,38 @@
 #include "algo_impl.h"
 #include "dummy.h"
 
-namespace grapher {
-
-	template<typename T> grapher::Mean<T>::Mean() {
-	}
-
-	template<typename T> grapher::Mean<T>::Mean(std::vector<T>* s)
-    : grapher::PreloaderIF<T,double>( *this )
+namespace speczilla {
+    
+	template<typename T> Mean<T>::Mean(std::vector<T>* s)
+    : PreloaderIF<T,double>( *this )
 		, buf(s)
 	{
 	}
-	template grapher::Mean<float>::Mean(std::vector<float>* s);
-	template grapher::Mean<double>::Mean(std::vector<double>* s);
+	//template Mean<float>::Mean(std::vector<float>* s);
+	template Mean<double>::Mean(std::vector<double>* s);
 
-	template<typename T> grapher::Mean<T>::~Mean() {
+	template<typename T> Mean<T>::~Mean() {
 	}
-	template grapher::Mean<float>::~Mean();
-	template grapher::Mean<double>::~Mean();
+	//template Mean<float>::~Mean();
+	template Mean<double>::~Mean();
 
 	template<typename T> double Mean<T>::operator()()
 	{
 		const int size = buf->size();
-		grapher::averageScaled* afunc = nullptr;
+        angle::averageScaled* afunc = nullptr;
 		if (size > 0) {
-			std::vector<double> differences = std::vector<double>(size, 0.0f);
-			grapher::__differences()(dummy_policy, std::begin(*buf), std::end(*buf), std::begin(differences));
-			return grapher::__average()(std::begin(differences)+1, std::end(differences));
+			std::vector<T> differences = std::vector<T>(size, 0.0f);
+            auto d = grapher::__differences();
+            d(dummy_policy, std::begin(*buf), std::end(*buf), std::begin(differences));
+            auto a = angle::__average();
+            return a(std::begin(differences)+1, std::end(differences));
 		}
 		else {
 			return 0.0f;
 		}
 	}
 	//specialization
-	template double Mean<float>::operator()();
+	//template double Mean<float>::operator()();
 	template double Mean<double>::operator()();
 
 }

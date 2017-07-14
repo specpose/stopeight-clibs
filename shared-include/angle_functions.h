@@ -7,13 +7,20 @@
 #include <numeric>
 #include <math.h>
 
-namespace grapher {
+namespace angle {
 
     //specialization: 1 iterator_category, 2 value_types
     class __average {
     public:
-        template <class Iterator>double operator()(Iterator begin, Iterator end);
+        template <class Iterator>double operator()(Iterator begin, Iterator end){
+        auto sum = std::accumulate(begin, end, 0.0f, [](double first, double second) {
+            return first += fabs(second);
+            
+        });
+        return sum / std::distance(begin, end);
+        }
     };
+    template double __average::operator()(vector_single<double> begin, vector_single<double> end);
     
 	class angle : public std::unary_function<double, double> {
 	public:
@@ -28,7 +35,7 @@ namespace grapher {
 	class averageScaled : public angle {
 	public:
 		template<typename Iterator>averageScaled(Iterator begin, Iterator end, double average, double angleScale) 
-        : av((average==0.0f)?grapher::__average()(begin, end):average)
+        : av((average==0.0f)?__average()(begin, end):average)
 			, _angleScale((angleScale==0.0f)?std::numeric_limits<double>::min():angleScale) {
 			//if (_contextAverage == 0.0f)
 			//	_contextAverage == std::numeric_limits<double>::min();
@@ -122,15 +129,5 @@ namespace grapher {
 	private:
 	};*/
 }
-
-template <class Iterator> double grapher::__average::operator()(Iterator begin, Iterator end)
-{
-    auto sum = std::accumulate(begin, end, 0.0f, [](double first, double second) {
-        return first += fabs(second);
-        
-    });
-    return sum / std::distance(begin, end);
-}
-template double grapher::__average::operator()(vector_single begin, vector_single end);
 
 #endif

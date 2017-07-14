@@ -7,20 +7,26 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D8553EFB1F17E83E00CD0332 /* grapher.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8553EFA1F17E83E00CD0332 /* grapher.hpp */; };
+		D83D72FE1F19049700FC1CED /* grapher_impl.h in Headers */ = {isa = PBXBuildFile; fileRef = D83D72FB1F19049700FC1CED /* grapher_impl.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D83D72FF1F19049700FC1CED /* mean_impl.h in Headers */ = {isa = PBXBuildFile; fileRef = D83D72FC1F19049700FC1CED /* mean_impl.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D83D73341F1930CC00FC1CED /* algo_impl.h in Headers */ = {isa = PBXBuildFile; fileRef = D83D73321F1930CC00FC1CED /* algo_impl.h */; };
+		D83D73351F1930CC00FC1CED /* algo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D83D73331F1930CC00FC1CED /* algo.cpp */; };
+		D8553EFB1F17E83E00CD0332 /* grapher.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8553EFA1F17E83E00CD0332 /* grapher.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8553EFD1F17E83E00CD0332 /* grapherPriv.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8553EFC1F17E83E00CD0332 /* grapherPriv.hpp */; };
 		D8553EFF1F17E83E00CD0332 /* grapher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8553EFE1F17E83E00CD0332 /* grapher.cpp */; };
-		D8553F0E1F17EA5500CD0332 /* algo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8553F0B1F17EA5500CD0332 /* algo.cpp */; };
 		D8553F0F1F17EA5500CD0332 /* grapher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8553F0C1F17EA5500CD0332 /* grapher.cpp */; };
 		D8553F101F17EA5500CD0332 /* mean.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8553F0D1F17EA5500CD0332 /* mean.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D83D72FB1F19049700FC1CED /* grapher_impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = grapher_impl.h; sourceTree = "<group>"; };
+		D83D72FC1F19049700FC1CED /* mean_impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mean_impl.h; sourceTree = "<group>"; };
+		D83D73321F1930CC00FC1CED /* algo_impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = algo_impl.h; sourceTree = "<group>"; };
+		D83D73331F1930CC00FC1CED /* algo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = algo.cpp; sourceTree = "<group>"; };
 		D8553EF71F17E83E00CD0332 /* libgrapher.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgrapher.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8553EFA1F17E83E00CD0332 /* grapher.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = grapher.hpp; sourceTree = "<group>"; };
 		D8553EFC1F17E83E00CD0332 /* grapherPriv.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = grapherPriv.hpp; sourceTree = "<group>"; };
 		D8553EFE1F17E83E00CD0332 /* grapher.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = grapher.cpp; sourceTree = "<group>"; };
-		D8553F0B1F17EA5500CD0332 /* algo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = algo.cpp; sourceTree = "<group>"; };
 		D8553F0C1F17EA5500CD0332 /* grapher.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = grapher.cpp; sourceTree = "<group>"; };
 		D8553F0D1F17EA5500CD0332 /* mean.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mean.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -39,7 +45,10 @@
 		D8553EEE1F17E83E00CD0332 = {
 			isa = PBXGroup;
 			children = (
-				D8553F0B1F17EA5500CD0332 /* algo.cpp */,
+				D83D73321F1930CC00FC1CED /* algo_impl.h */,
+				D83D73331F1930CC00FC1CED /* algo.cpp */,
+				D83D72FB1F19049700FC1CED /* grapher_impl.h */,
+				D83D72FC1F19049700FC1CED /* mean_impl.h */,
 				D8553F0C1F17EA5500CD0332 /* grapher.cpp */,
 				D8553F0D1F17EA5500CD0332 /* mean.cpp */,
 				D8553EF91F17E83E00CD0332 /* mac */,
@@ -72,7 +81,10 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D83D72FF1F19049700FC1CED /* mean_impl.h in Headers */,
 				D8553EFB1F17E83E00CD0332 /* grapher.hpp in Headers */,
+				D83D72FE1F19049700FC1CED /* grapher_impl.h in Headers */,
+				D83D73341F1930CC00FC1CED /* algo_impl.h in Headers */,
 				D8553EFD1F17E83E00CD0332 /* grapherPriv.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -134,7 +146,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D8553F0E1F17EA5500CD0332 /* algo.cpp in Sources */,
+				D83D73351F1930CC00FC1CED /* algo.cpp in Sources */,
 				D8553F0F1F17EA5500CD0332 /* grapher.cpp in Sources */,
 				D8553F101F17EA5500CD0332 /* mean.cpp in Sources */,
 				D8553EFF1F17E83E00CD0332 /* grapher.cpp in Sources */,
@@ -240,7 +252,13 @@
 				GCC_ENABLE_CPP_EXCEPTIONS = YES;
 				GCC_ENABLE_CPP_RTTI = YES;
 				HEADER_SEARCH_PATHS = "../shared-include";
+				KEEP_PRIVATE_EXTERNS = NO;
+				LINKER_DISPLAYS_MANGLED_NAMES = NO;
+				OTHER_LDFLAGS = "";
+				PRESERVE_DEAD_CODE_INITS_AND_TERMS = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				REEXPORTED_LIBRARY_NAMES = "";
+				STRIP_INSTALLED_PRODUCT = YES;
 			};
 			name = Debug;
 		};
@@ -251,7 +269,13 @@
 				GCC_ENABLE_CPP_EXCEPTIONS = YES;
 				GCC_ENABLE_CPP_RTTI = YES;
 				HEADER_SEARCH_PATHS = "../shared-include";
+				KEEP_PRIVATE_EXTERNS = NO;
+				LINKER_DISPLAYS_MANGLED_NAMES = NO;
+				OTHER_LDFLAGS = "";
+				PRESERVE_DEAD_CODE_INITS_AND_TERMS = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				REEXPORTED_LIBRARY_NAMES = "";
+				STRIP_INSTALLED_PRODUCT = YES;
 			};
 			name = Release;
 		};

@@ -9,12 +9,11 @@
 
 #include "preloaderif.h"
 
-namespace grapher {
+namespace speczilla {
 
 	template<typename T>class Mean : public PreloaderIF<T, double>
 	{
 	public:
-		Mean<T>();
 		Mean<T>(std::vector<T>* s);
 
 		~Mean<T>();

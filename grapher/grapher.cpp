@@ -5,13 +5,10 @@
 #include "algo_impl.h"
 #include "dummy.h"
 
-namespace grapher {
+namespace speczilla {
 
-	template<typename T> grapher::Buffer<T>::Buffer() {
-	}
-
-	template<typename T> grapher::Buffer<T>::Buffer(std::vector<T>* s)
-    : PreloaderIF<T,sp::result>( *this )
+	template<typename T> Buffer<T>::Buffer(std::vector<T>* s)
+    : PreloaderIF<T,sp::result<T>>( *this )
 		, buf(s)
 		, _showSamples(0)
 		, _samplesPerVector(1)
@@ -21,11 +18,11 @@ namespace grapher {
 		, _angleScale(1.0f)
 	{
 	}
-	template grapher::Buffer<float>::Buffer(std::vector<float>* s);
-	template grapher::Buffer<double>::Buffer(std::vector<double>* s);
+	//template Buffer<float>::Buffer(std::vector<float>* s);
+	template Buffer<double>::Buffer(std::vector<double>* s);
 
-	template<typename T> grapher::Buffer<T>::Buffer(std::vector<T>* s, int showSamples, int samplesPerVector, double unitaryLength, bool relative, double average, double angleScale)
-		: grapher::Buffer<T>(s)
+	template<typename T> Buffer<T>::Buffer(std::vector<T>* s, int showSamples, int samplesPerVector, double unitaryLength, bool relative, double average, double angleScale)
+		: Buffer<T>(s)
 	{
 		_showSamples = showSamples;
 		_samplesPerVector = samplesPerVector;
@@ -34,61 +31,64 @@ namespace grapher {
 		_angleScale = angleScale;
 		_average = average;
 	}
-	template grapher::Buffer<float>::Buffer(std::vector<float>* s, int showSamples, int samplesPerVector, double unitaryLength, bool relative, double average, double angleScale);
-	template grapher::Buffer<double>::Buffer(std::vector<double>* s, int showSamples, int samplesPerVector, double unitaryLength, bool relative, double average, double angleScale);
+	//template Buffer<float>::Buffer(std::vector<float>* s, int showSamples, int samplesPerVector, double unitaryLength, bool relative, double average, double angleScale);
+	template Buffer<double>::Buffer(std::vector<double>* s, int showSamples, int samplesPerVector, double unitaryLength, bool relative, double average, double angleScale);
 
-/*	template<typename T> grapher::Buffer<T>::Buffer(std::unique_ptr<std::vector<T>> s)
+/*	template<typename T> Buffer<T>::Buffer(std::unique_ptr<std::vector<T>> s)
 //		: PreloaderIF{ *this }
 		: PreloaderIF()
 //		, buf(s)
 		, buf{s}
 	{
 	}
-	template grapher::Buffer<float>::Buffer(std::unique_ptr<std::vector<float>> s);
-	template grapher::Buffer<double>::Buffer(std::unique_ptr<std::vector<double>> s);*/
+	template Buffer<float>::Buffer(std::unique_ptr<std::vector<float>> s);
+	template Buffer<double>::Buffer(std::unique_ptr<std::vector<double>> s);*/
 
-	template<typename T> grapher::Buffer<T>::~Buffer() {
+	template<typename T> Buffer<T>::~Buffer() {
 	}
-	template grapher::Buffer<float>::~Buffer();
-	template grapher::Buffer<double>::~Buffer();
+	//template Buffer<float>::~Buffer();
+	template Buffer<double>::~Buffer();
 
-	template<typename T> sp::result Buffer<T>::operator()()
+	template<typename T> sp::result<T> Buffer<T>::operator()()
 	{
 		const int size = buf->size();
-		int vectorSize = grapher::samples_To_VG_vectorSize((size), _samplesPerVector);
-		double vectorLength = grapher::samples_To_VG_vectorLength(_showSamples, _unitaryLength);
-		std::vector<sp::element> output;
+        int vectorSize = grapher::samples_To_VG_vectorSize((size), _samplesPerVector);
+        T vectorLength = grapher::samples_To_VG_vectorLength(_showSamples, _unitaryLength);
+		std::vector<sp::element<T>> output;
 
 		//par
-		//(grapher::samples_To_VG(samplesPerPixel))(std::experimental::parallel::par_vec, std::begin(*buf), std::end(*buf), std::begin(output));
-		grapher::averageScaled* afunc = nullptr;
+		//(samples_To_VG(samplesPerPixel))(std::experimental::parallel::par_vec, std::begin(*buf), std::end(*buf), std::begin(output));
+		angle::averageScaled* afunc = nullptr;
 		if (size > 2) {
-			std::vector<double> differences = std::vector<double>(size, 0.0f);
-			grapher::__differences()(dummy_policy, std::begin(*buf), std::end(*buf), std::begin(differences));
+			std::vector<T> differences = std::vector<T>(size, 0.0f);
+            auto d = grapher::__differences();
+            d(dummy_policy, std::begin(*buf), std::end(*buf), std::begin(differences));
 
 			if (_relative) {
-				afunc = new relative(std::begin(differences) + 1, std::end(differences),_average,_angleScale);
+				afunc = new angle::relative(std::begin(differences) + 1, std::end(differences),_average,_angleScale);
 			}
 			else {
-				afunc = new independent(std::begin(differences) + 1, std::end(differences),_average,_angleScale);
+				afunc = new angle::independent(std::begin(differences) + 1, std::end(differences),_average,_angleScale);
 			}
-			output = std::vector<sp::element>{};//((vectorSize * 2) + add);
+			output = std::vector<sp::element<T>>{};//((vectorSize * 2) + add);
 			
 			//in general if uneven, middle is on left side
 			//-1 differences, -1 size
-			(grapher::__differences_To_VG(_samplesPerVector, vectorLength, std::vector<int>(1, (((size - 1)/ 2) - 1) )))(dummy_policy, std::begin(differences) + 1, std::end(differences), std::back_inserter(output), *afunc);
-			//(grapher::samples_To_VG(_samplesPerVector, vectorLength, std::vector<int>(1, (size / 2) - 1)))(dummy_policy, std::begin(*buf), std::end(*buf), std::back_inserter(output), *afunc);
+            auto dvg = (grapher::__differences_To_VG(_samplesPerVector, vectorLength, std::vector<int>(1, (((size - 1)/ 2) - 1) )));
+            dvg(dummy_policy, std::begin(differences) + 1, std::end(differences), std::begin(output), *afunc);
+                                                            //std::back_inserter(output), *afunc);
+			//(samples_To_VG(_samplesPerVector, vectorLength, std::vector<int>(1, (size / 2) - 1)))(dummy_policy, std::begin(*buf), std::end(*buf), std::back_inserter(output), *afunc);
 
 		}
 		delete afunc;
 
-		return sp::result{ output };
+		return sp::result<T>{ output };
 	}
 	//specialization
-	template sp::result Buffer<float>::operator()();
-	template sp::result Buffer<double>::operator()();
+	//template sp::result<float> Buffer<float>::operator()();
+	template sp::result<double> Buffer<double>::operator()();
 
 }
 
 //weird double defined symbol error for sycl::device from msvc
-#include "algo.cpp"
+//Windows #include "algo.cpp"

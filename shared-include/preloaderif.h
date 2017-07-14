@@ -7,7 +7,7 @@
 #include <memory>
 #include <vector>
 
-namespace grapher {
+namespace speczilla {
 
 	template<typename T,typename ReturnType>class PreloaderIF
 	{

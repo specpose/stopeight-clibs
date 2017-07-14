@@ -24,22 +24,7 @@ namespace sp {
 	const sp::tctype symetric[3] = {tctype::CLIFF, tctype::SWING, tctype::STRAIT};
 	const sp::tctype notsymetric[3] = {tctype::CREST, tctype::SPIRAL, tctype::SPIKE};
 
-
-	/*template<typename T> class pair : private std::pair<T, T> {//private std::vector<T> {
-	public:
-		typedef first_type value_type;
-		using timecode_types = typename tctype;
-		timecode_types category{ sp::tctype::EMPTY };
-
-		pair() : std::pair<T, T>{}, first(first), second(second) {}//std::vector<T>(2),first(&this[0]),second(&this[1]){}
-		using std::pair<T, T>::pair{};
-
-		T& first, second;
-
-	};
-	template<typename T> class timecode : public sp::pair<T> {
-	public:*/
-	template<typename T> class timecode : public std::pair<T,T> {
+    template<typename T> class timecode : public std::pair<T,T> {
 	public:
 		using std::pair<T, T>::pair;
         //Windows: typedef std::pair<T,T>::first_type value_type;
@@ -63,17 +48,12 @@ namespace sp {
             sp::timecode<T>::category = sp::tctype::FIXPOINT;
 		};
 		
-		//fixpoint() {};
-		//fixpoint(timecode&& point) :*this{point}
-		//~fixpoint() override {
-		//	throw std::exception("fixpoints refer to timecode data and can not be deleted.");
-		//};
 	};
-	using element_ = timecode<double>;
-	using element = element_;//element_*;
-	using result = std::vector<element>;
+	template<typename T> using element_ = timecode<T>;
+    template<typename T> using element = element_<T>;//element_*;
+	template<typename T> using result = std::vector<element<T>>;
 
-	template<class What> bool is(element* t) {
+	/*template<class What> bool is(element* t) {
 		element* u = t;//dynamic_cast<sp::element*>(&t);
 		What* v = nullptr;
 		v = dynamic_cast<What*>(u);
@@ -81,34 +61,50 @@ namespace sp {
 			return true;
 		else
 			return false;
-	}
+	}*/
 	/*element construct_element(double a, double b) {
 		element r = new element_{ a,b };
 		return r;
 	}*/
-	/*element construct_element(element::value_type a, element::value_type b) {
-		return element{ a,b };
-	}*/
+	template<typename T> element<T> construct_element_(T a, T b) {
+        element<T> e = element<T>();
+        e.first = a;
+        e.second = b;
+		return e;
+	}
 }
-sp::timecode<double> static operator+=(sp::timecode<double>& a, const sp::timecode<double>& b) { a.first = a.first + b.first; a.second = a.second + b.second; return a; };
+//sp::timecode<double> static operator+=(sp::timecode<double>& a, const sp::timecode<double>& b) { a.first = a.first + b.first; a.second = a.second + b.second; return a; };
+template<typename T> sp::timecode<T> static operator+=(sp::timecode<T>& a, const sp::timecode<T>& b) {
+    T af,as;
+    af = a.first;
+    as = a.second;
+    af += b.first;
+    as += b.second;
+    a.first = af;
+    a.second = as;
+    return a; };//function template
 //sp::element static operator+(const sp::element& a, const sp::element& b) { return sp::element{ a.first + b.first, a.second + b.second }; };
 //sp::element static operator-(const sp::element& a, const sp::element& b) { return sp::element{ a.first - b.first, a.second - b.second }; };
 
-using it_element = std::pair<typename std::vector<sp::element>::iterator, typename std::vector<sp::element>::iterator>;
+template<typename T> using it_element = std::pair< typename std::vector<sp::element<T>>::iterator, typename std::vector<sp::element<T>>::iterator >;
+/*template<typename T> class it_element : public std::pair<typename std::vector<sp::element<T>>::iterator, typename std::vector<sp::element<T>>::iterator >{
+public:
+    using std::pair< typename std::vector<sp::element<T>>::iterator, typename std::vector<sp::element<T>>::iterator >::pair;
+};*/
+
 
 //Windows using vector_single = std::_Vector_iterator<std::_Vector_val<std::_Simple_types<double>>>;
-using vector_single = std::vector<double>::iterator;
+template<typename T> using vector_single = typename std::vector<T>::iterator;
 //Windows using vector_singlef = std::_Vector_iterator<std::_Vector_val<std::_Simple_types<float>>>;
-using vector_singlef = std::vector<float>::iterator;
 
 //Windowsusing vector_pair = std::_Vector_iterator<std::_Vector_val<std::_Simple_types<sp::element>>>;
-using vector_pair = std::vector<sp::element>::iterator;
+template<typename T> using vector_pair = typename std::vector<sp::element<T>>::iterator;
 //Windows using vector_vectors = std::_Vector_iterator<std::_Vector_val<std::_Simple_types<it_element>>>;
-using vector_vectors = std::vector<it_element>::iterator;
+template<typename T> using vector_vectors = typename std::vector<it_element<T>>::iterator;
 
 //using fexec = std::experimental::parallel::parallel_vector_execution_policy;
 #include "dummy.h"
-using fexec = dummy;
+using fexec = const dummy;
 
 
 #endif

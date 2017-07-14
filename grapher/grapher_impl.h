@@ -9,18 +9,17 @@
 
 #include "preloaderif.h"
 
-namespace grapher {
+namespace speczilla {
 
-	template<typename T>class Buffer : public PreloaderIF<T, sp::result>
+	template<typename T>class Buffer : public PreloaderIF<T, sp::result<T>>
 	{
 	public:
-		Buffer<T>();
 		Buffer<T>(std::vector<T>* s);
 		explicit Buffer<T>(std::vector<T>* s, int showSamples, int samplesPerVector=1, double unitaryLength = 1, bool relative = false, double average = 0.0f, double angleScale = 1.0f);
 
 		~Buffer<T>();
 
-		sp::result operator()();
+		sp::result<T> operator()();
 
 	private:
 		std::vector<T>* buf;
