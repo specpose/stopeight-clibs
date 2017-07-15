@@ -19,40 +19,38 @@ namespace sp {
 		SPIRAL,
 		SPIKE
 	};
-	const sp::tctype turns[3] = { tctype::SWING,tctype::CREST,tctype::SPIRAL };
-	const sp::tctype corners[3] = {tctype::STRAIT, tctype::CLIFF, tctype::SPIKE};
-	const sp::tctype symetric[3] = {tctype::CLIFF, tctype::SWING, tctype::STRAIT};
-	const sp::tctype notsymetric[3] = {tctype::CREST, tctype::SPIRAL, tctype::SPIKE};
 
-    template<typename T> class timecode : public std::pair<T,T> {
+	template<typename T> class timecode : public std::pair<T, T> {
 	public:
 		using std::pair<T, T>::pair;
-        //Windows: typedef std::pair<T,T>::first_type value_type;
-        typedef typename std::pair<T,T>::first_type value_type;
-        using timecode_types = typename sp::tctype;
-        
-        timecode_types category{tctype::EMPTY};
-		virtual ~timecode() {};
+		typedef typename std::pair<T, T>::first_type value_type;
+		using timecode_types = typename sp::tctype;
+
+		timecode_types category{ tctype::EMPTY };
+		virtual ~timecode();
+
+		//sp::timecode<T> static operator+=(sp::timecode<T>& a, const sp::timecode<T>& b);//function template
 	};
-    template<typename T> class empty : public sp::timecode<T> {
+	template<typename T> class empty : public sp::timecode<T> {
 	public:
-        using timecode_types = typename sp::timecode<T>::timecode_types;
-		empty<T>(timecode<T>&& other) : timecode<T>{ other } {
-            sp::timecode<T>::category = sp::tctype::EMPTY;
-		};
+		using timecode_types = typename sp::timecode<T>::timecode_types;
+		empty<T>(timecode<T>&& other);
 	};
-    template<typename T> class fixpoint : public sp::timecode<T> {
+	template<typename T> class fixpoint : public sp::timecode<T> {
 	public:
-        using timecode_types = typename sp::timecode<T>::timecode_types;
-		fixpoint<T>(timecode<T>&& other) : timecode<T>{ other } {
-            sp::timecode<T>::category = sp::tctype::FIXPOINT;
-		};
-		
+		using timecode_types = typename sp::timecode<T>::timecode_types;
+		fixpoint<T>(timecode<T>&& other);
 	};
 	template<typename T> using element_ = timecode<T>;
-    template<typename T> using element = element_<T>;//element_*;
+	template<typename T> using element = element_<T>;//element_*;
 	template<typename T> using result = std::vector<element<T>>;
-
+	template<typename T> element<T> static construct_element_(T a, T b) {
+		element<T> e = element<T>();
+		e.first = a;
+		e.second = b;
+		return e;
+	};
+	//template<typename T> element<T> static construct_element_<T>(T a, T b);
 	/*template<class What> bool is(element* t) {
 		element* u = t;//dynamic_cast<sp::element*>(&t);
 		What* v = nullptr;
@@ -62,52 +60,38 @@ namespace sp {
 		else
 			return false;
 	}*/
-	/*element construct_element(double a, double b) {
-		element r = new element_{ a,b };
-		return r;
-	}*/
-	template<typename T> element<T> construct_element_(T a, T b) {
-        element<T> e = element<T>();
-        e.first = a;
-        e.second = b;
-		return e;
-	}
+
+	template<typename T> sp::timecode<T> static operator+=(sp::timecode<T>& a, const sp::timecode<T>& b) {
+		T af, as;
+		af = a.first;
+		as = a.second;
+		af += b.first;
+		as += b.second;
+		a.first = af;
+		a.second = as;
+		return a;
+	};//function template
+	//template<typename T> sp::timecode<T> static operator+=(sp::timecode<T>& a, const sp::timecode<T>& b);//function template
+
+	//sp::element static operator+(const sp::element& a, const sp::element& b) { return sp::element{ a.first + b.first, a.second + b.second }; };
+	//sp::element static operator-(const sp::element& a, const sp::element& b) { return sp::element{ a.first - b.first, a.second - b.second }; };
 }
-//sp::timecode<double> static operator+=(sp::timecode<double>& a, const sp::timecode<double>& b) { a.first = a.first + b.first; a.second = a.second + b.second; return a; };
-template<typename T> sp::timecode<T> static operator+=(sp::timecode<T>& a, const sp::timecode<T>& b) {
-    T af,as;
-    af = a.first;
-    as = a.second;
-    af += b.first;
-    as += b.second;
-    a.first = af;
-    a.second = as;
-    return a; };//function template
-//sp::element static operator+(const sp::element& a, const sp::element& b) { return sp::element{ a.first + b.first, a.second + b.second }; };
-//sp::element static operator-(const sp::element& a, const sp::element& b) { return sp::element{ a.first - b.first, a.second - b.second }; };
+
+
 
 template<typename T> using it_element = std::pair< typename std::vector<sp::element<T>>::iterator, typename std::vector<sp::element<T>>::iterator >;
-/*template<typename T> class it_element : public std::pair<typename std::vector<sp::element<T>>::iterator, typename std::vector<sp::element<T>>::iterator >{
-public:
-    using std::pair< typename std::vector<sp::element<T>>::iterator, typename std::vector<sp::element<T>>::iterator >::pair;
-};*/
 
-
-//Windows using vector_single = std::_Vector_iterator<std::_Vector_val<std::_Simple_types<double>>>;
 template<typename T> using vector_single = typename std::vector<T>::iterator;
 template<typename T> using vector_single_T = typename std::iterator_traits<T>::value_type;
-//Windows using vector_singlef = std::_Vector_iterator<std::_Vector_val<std::_Simple_types<float>>>;
 
-//Windowsusing vector_pair = std::_Vector_iterator<std::_Vector_val<std::_Simple_types<sp::element>>>;
 template<typename T> using vector_pair = typename std::vector<sp::element<T>>::iterator;
 template<typename T> using vector_pair_T = typename std::iterator_traits<T>::value_type::value_type;
-//Windows using vector_vectors = std::_Vector_iterator<std::_Vector_val<std::_Simple_types<it_element>>>;
+
 template<typename T> using vector_vectors = typename std::vector<it_element<T>>::iterator;
 template<typename T> using vector_vectors_T = typename std::iterator_traits<typename std::iterator_traits<T>::value_type::first_type>::value_type::value_type;
 
 //using fexec = std::experimental::parallel::parallel_vector_execution_policy;
 #include "dummy.h"
 using fexec = const dummy;
-
 
 #endif

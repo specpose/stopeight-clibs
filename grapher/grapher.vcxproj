@@ -152,6 +152,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\shared-include\shared_types.cpp" />
     <ClCompile Include="algo.cpp" />
     <ClCompile Include="grapher.cpp" />
     <ClCompile Include="mean.cpp" />
