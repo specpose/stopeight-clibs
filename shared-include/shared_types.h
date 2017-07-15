@@ -50,7 +50,7 @@ namespace sp {
 		e.second = b;
 		return e;
 	};
-	//template<typename T> element<T> static construct_element_<T>(T a, T b);
+	//template<typename T> element<T> static construct_element_(T a, T b);
 	/*template<class What> bool is(element* t) {
 		element* u = t;//dynamic_cast<sp::element*>(&t);
 		What* v = nullptr;

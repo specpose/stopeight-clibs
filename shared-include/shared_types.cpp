@@ -30,14 +30,14 @@ namespace sp {
 	template<typename T> using element_ = timecode<T>;
 	template<typename T> using element = element_<T>;//element_*;
 	template<typename T> using result = std::vector<element<T>>;
-	/*template<typename T> element<T> construct_element_<T>(T a, T b) {
+	/*template<typename T> element<T> construct_element_(T a, T b) {
 		element<T> e = element<T>();
 		e.first = a;
 		e.second = b;
 		return e;
-	};*/
-	//template element<double> construct_element_(double a, double b);
-	//template element<float> construct_element_(float a, float b);
+	};
+	template element<double> construct_element_(double a, double b);
+	template element<float> construct_element_(float a, float b);*/
 
 	/*template<typename T> sp::timecode<T> operator+=(sp::timecode<T>& a, const sp::timecode<T>& b) {
 		T af, as;
