@@ -4,7 +4,7 @@
 #ifndef PRELOADERIF_H
 #define PRELOADERIF_H
 
-#include <memory>
+//#include <memory>
 #include <vector>
 
 namespace speczilla {
@@ -14,8 +14,8 @@ namespace speczilla {
 	public:
 		//makes implementation!!
 		//PreloaderIF<T>();
-		PreloaderIF<T,ReturnType>(std::vector<T>* s);
-		virtual ~PreloaderIF<T,ReturnType>(){};
+		//PreloaderIF<T, ReturnType>(std::vector<T>* s);
+		virtual ~PreloaderIF<T, ReturnType>() {};
 
 		virtual ReturnType operator()() =0;
 	};
