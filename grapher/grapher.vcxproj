@@ -153,6 +153,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\shared-include\angle_functions.cpp" />
+    <ClCompile Include="..\shared-include\containers.cpp" />
     <ClCompile Include="..\shared-include\shared_types.cpp" />
     <ClCompile Include="algo.cpp" />
     <ClCompile Include="grapher.cpp" />
