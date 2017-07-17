@@ -30,7 +30,7 @@ namespace stopeight {
 	template blocks<sp::timecode<double>>::blocks(stopeight::bounds<sp::timecode<double>> vec, const int seg_size);
 	template blocks<sp::timecode<float>>::blocks(stopeight::bounds<sp::timecode<float>> vec, const int seg_size);
 
-	template<typename DataType> static int blocks<DataType>::calculateSize(int vec_size, int seg_size) {
+	template<typename DataType> int blocks<DataType>::calculateSize(int vec_size, int seg_size) {
 			if (vec_size > seg_size) {
 				if ((vec_size%seg_size) == 0) {
 					return vec_size / seg_size;
@@ -45,7 +45,7 @@ namespace stopeight {
 		};
 		
 
-		template<typename DataType> static int blocks<DataType>::mySize(const bounds<DataType> vec, int seg_size) {
+		template<typename DataType> int blocks<DataType>::mySize(const bounds<DataType> vec, int seg_size) {
 			// a fixpoint in a block of 1 can not be separated
 			//auto a = addedFixPoints(vec);
 			auto x = calculateSize(std::distance(vec.first,vec.second), seg_size);
@@ -56,7 +56,7 @@ namespace stopeight {
 			return x;
 		}
 		//needed in initializer
-		template<typename DataType> static int blocks<DataType>::endFull(int vec_size, int seg_size) {
+		template<typename DataType> int blocks<DataType>::endFull(int vec_size, int seg_size) {
 			if ((vec_size % seg_size) == 0)
 				return vec_size;
 			else
