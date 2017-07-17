@@ -7,9 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D83D72FE1F19049700FC1CED /* grapher_impl.h in Headers */ = {isa = PBXBuildFile; fileRef = D83D72FB1F19049700FC1CED /* grapher_impl.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D83D72FF1F19049700FC1CED /* mean_impl.h in Headers */ = {isa = PBXBuildFile; fileRef = D83D72FC1F19049700FC1CED /* mean_impl.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D83D73341F1930CC00FC1CED /* algo_impl.h in Headers */ = {isa = PBXBuildFile; fileRef = D83D73321F1930CC00FC1CED /* algo_impl.h */; };
+		D8071DA81F19A70500526939 /* angle_functions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8071DA41F19A70500526939 /* angle_functions.cpp */; };
+		D8071DA91F19A70500526939 /* containers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8071DA51F19A70500526939 /* containers.cpp */; };
+		D8071DAA1F19A70500526939 /* preloaderif.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8071DA61F19A70500526939 /* preloaderif.cpp */; };
+		D8071DAB1F19A70500526939 /* shared_types.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8071DA71F19A70500526939 /* shared_types.cpp */; };
 		D83D73351F1930CC00FC1CED /* algo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D83D73331F1930CC00FC1CED /* algo.cpp */; };
 		D8553EFB1F17E83E00CD0332 /* grapher.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8553EFA1F17E83E00CD0332 /* grapher.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8553EFD1F17E83E00CD0332 /* grapherPriv.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8553EFC1F17E83E00CD0332 /* grapherPriv.hpp */; };
@@ -19,9 +20,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		D83D72FB1F19049700FC1CED /* grapher_impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = grapher_impl.h; sourceTree = "<group>"; };
-		D83D72FC1F19049700FC1CED /* mean_impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mean_impl.h; sourceTree = "<group>"; };
-		D83D73321F1930CC00FC1CED /* algo_impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = algo_impl.h; sourceTree = "<group>"; };
+		D8071DA41F19A70500526939 /* angle_functions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = angle_functions.cpp; path = "../shared-include/angle_functions.cpp"; sourceTree = "<group>"; };
+		D8071DA51F19A70500526939 /* containers.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = containers.cpp; path = "../shared-include/containers.cpp"; sourceTree = "<group>"; };
+		D8071DA61F19A70500526939 /* preloaderif.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = preloaderif.cpp; path = "../shared-include/preloaderif.cpp"; sourceTree = "<group>"; };
+		D8071DA71F19A70500526939 /* shared_types.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = shared_types.cpp; path = "../shared-include/shared_types.cpp"; sourceTree = "<group>"; };
 		D83D73331F1930CC00FC1CED /* algo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = algo.cpp; sourceTree = "<group>"; };
 		D8553EF71F17E83E00CD0332 /* libgrapher.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgrapher.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8553EFA1F17E83E00CD0332 /* grapher.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = grapher.hpp; sourceTree = "<group>"; };
@@ -45,10 +47,11 @@
 		D8553EEE1F17E83E00CD0332 = {
 			isa = PBXGroup;
 			children = (
-				D83D73321F1930CC00FC1CED /* algo_impl.h */,
+				D8071DA41F19A70500526939 /* angle_functions.cpp */,
+				D8071DA51F19A70500526939 /* containers.cpp */,
+				D8071DA61F19A70500526939 /* preloaderif.cpp */,
+				D8071DA71F19A70500526939 /* shared_types.cpp */,
 				D83D73331F1930CC00FC1CED /* algo.cpp */,
-				D83D72FB1F19049700FC1CED /* grapher_impl.h */,
-				D83D72FC1F19049700FC1CED /* mean_impl.h */,
 				D8553F0C1F17EA5500CD0332 /* grapher.cpp */,
 				D8553F0D1F17EA5500CD0332 /* mean.cpp */,
 				D8553EF91F17E83E00CD0332 /* mac */,
@@ -81,10 +84,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D83D72FF1F19049700FC1CED /* mean_impl.h in Headers */,
 				D8553EFB1F17E83E00CD0332 /* grapher.hpp in Headers */,
-				D83D72FE1F19049700FC1CED /* grapher_impl.h in Headers */,
-				D83D73341F1930CC00FC1CED /* algo_impl.h in Headers */,
 				D8553EFD1F17E83E00CD0332 /* grapherPriv.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -147,8 +147,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				D83D73351F1930CC00FC1CED /* algo.cpp in Sources */,
+				D8071DA91F19A70500526939 /* containers.cpp in Sources */,
 				D8553F0F1F17EA5500CD0332 /* grapher.cpp in Sources */,
 				D8553F101F17EA5500CD0332 /* mean.cpp in Sources */,
+				D8071DAB1F19A70500526939 /* shared_types.cpp in Sources */,
+				D8071DAA1F19A70500526939 /* preloaderif.cpp in Sources */,
+				D8071DA81F19A70500526939 /* angle_functions.cpp in Sources */,
 				D8553EFF1F17E83E00CD0332 /* grapher.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

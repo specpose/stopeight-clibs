@@ -85,7 +85,7 @@ namespace speczilla {
 		return sp::result<T>{ output };
 	}
 	//specialization
-	template sp::result<double> Buffer<float>::operator()();
+	template sp::result<float> Buffer<float>::operator()();
 	template sp::result<double> Buffer<double>::operator()();
 
 }
