@@ -42,7 +42,7 @@ namespace angle {
 			if (d == 0.0f || av == 0.0f)
 				return double(0.0f);
 			auto absdiff = 0;
-			_previous += atan(((d/av)/ av)*_angleScale);
+			_previous += atan((d/av)*_angleScale/ av);
 			return (_previous);
 	};
 
@@ -54,7 +54,7 @@ namespace angle {
 	double independent2::operator()(double d) {
 			if (d == 0.0f || av == 0.0f)
 				return double(0.0f);
-			return atan(((d/av)/ av)*_angleScale);
+			return atan((d/av)*_angleScale/ av);
 	};
 	
 	template<typename Iterator>relative::relative(Iterator begin, Iterator end, double average, double angleScale, double initialAngle) : averageScaled(begin, end, average, angleScale), _previous(initialAngle) {};
@@ -64,7 +64,7 @@ namespace angle {
 	double relative::operator()(double d) {
 			if (d == 0.0f || av == 0.0f)
 				return double(0.0f);
-			_previous += atan((d / av)*_angleScale);
+			_previous += atan(d*_angleScale / av);
 			return (_previous);
 	};
 
@@ -75,7 +75,7 @@ namespace angle {
 	double independent::operator()(double d) {
 			if (d == 0.0f || av == 0.0f)
 				return double(0.0f);
-			return atan((d / av)*_angleScale);
+			return atan(d*_angleScale / av);
 	};
 
 	/*class test : public averageScaled {
