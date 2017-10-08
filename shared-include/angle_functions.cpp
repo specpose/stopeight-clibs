@@ -2,7 +2,7 @@
 // GNU Lesser General Public License, version 2.1
 
 #include "angle_functions.h"
-#include <numeric>
+#include <limits>
 #include <math.h>
 #include <vector>
 

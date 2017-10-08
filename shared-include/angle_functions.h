@@ -5,6 +5,7 @@
 #define ANGLE_FUNCTIONS
 
 #include <numeric>
+#include <functional>
 
 namespace angle {
 
@@ -14,7 +15,7 @@ namespace angle {
 		template <class Iterator>double operator()(Iterator begin, Iterator end);
     };
     
-	class angle : public std::unary_function<double, double> {
+    class angle : public std::unary_function<double, double> {
 	public:
 		virtual ~angle();
 		virtual result_type operator()(argument_type d) = 0;
