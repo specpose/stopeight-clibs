@@ -6,6 +6,7 @@
 
 #include <numeric>
 #include <vector>
+#include <functional>
 
 namespace angle {
 
@@ -23,7 +24,7 @@ namespace angle {
 		}
     };
     
-	class angle : public std::unary_function<double, double> {
+    class angle : public std::unary_function<double, double> {
 	public:
 		virtual ~angle() {};
 		virtual result_type operator()(argument_type d) = 0;
