@@ -152,8 +152,8 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\shared-include\containers.cpp" />
     <ClCompile Include="algo.cpp" />
+    <ClCompile Include="containers.cpp" />
     <ClCompile Include="grapher.cpp" />
     <ClCompile Include="mean.cpp" />
   </ItemGroup>
