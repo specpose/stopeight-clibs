@@ -5,10 +5,7 @@ project(stopeight-clibs-grapher)
 aux_source_directory(. SRC_LIST)
 #file(GLOB SOURCES "*.cpp")
 set(${PROJECT_NAME}_sources
-    shared-include/angle_functions.cpp
-    shared-include/containers.cpp
-    shared-include/preloaderif.cpp
-    shared-include/shared_types.cpp
+    containers.cpp
     algo.cpp
     grapher.cpp
     mean.cpp

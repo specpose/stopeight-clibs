@@ -2,7 +2,7 @@
 // GNU Lesser General Public License, version 2.1
 
 #include "containers.h"
-#include "shared_types.h"
+#include <stopeight-clibs/shared_types.h>
 
 namespace stopeight {
 

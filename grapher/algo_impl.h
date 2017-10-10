@@ -4,7 +4,7 @@
 #ifndef ALGO_H
 #define ALGO_H
 
-#include "angle_functions.h"
+#include <stopeight-clibs/angle_functions.h>
 
 namespace grapher {
 

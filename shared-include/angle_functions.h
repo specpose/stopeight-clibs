@@ -7,6 +7,8 @@
 #include <numeric>
 #include <vector>
 #include <functional>
+#include <math.h>
+#include <limits>
 
 namespace angle {
 

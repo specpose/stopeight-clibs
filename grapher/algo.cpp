@@ -2,7 +2,7 @@
 // GNU Lesser General Public License, version 2.1
 
 //#include <experimental/algorithm>//CYCLIC DEPENDENCY
-#include "shared_types.h"//CYCLIC DEPENDENCY
+#include <stopeight-clibs/shared_types.h>//CYCLIC DEPENDENCY
 //#include <experimental/impl/algorithm_impl.h>
 //using fexec = std::experimental::parallel::parallel_vector_execution_policy;
 #include "dummy.h"

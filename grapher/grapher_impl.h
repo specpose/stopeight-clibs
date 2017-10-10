@@ -6,9 +6,9 @@
 
 #include <vector>
 
-#include "shared_types.h"
+#include <stopeight-clibs/shared_types.h>
 
-#include "preloaderif.h"
+#include <stopeight-clibs/preloaderif.h>
 
 namespace speczilla {
 
