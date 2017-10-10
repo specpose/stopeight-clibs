@@ -44,13 +44,13 @@ namespace sp {
 	template<typename T> using element_ = timecode<T>;
 	template<typename T> using element = element_<T>;//element_*;
 	template<typename T> using result = std::vector<element<T>>;
-	template<typename T> element<T> static construct_element_(T a, T b) {
+	/*template<typename T> element<T> static construct_element_(T a, T b) {
 		element<T> e = element<T>();
 		e.first = a;
 		e.second = b;
 		return e;
-	};
-	//template<typename T> element<T> static construct_element_(T a, T b);
+	};*/
+	template<typename T> element<T> construct_element(T a, T b);
 	/*template<class What> bool is(element* t) {
 		element* u = t;//dynamic_cast<sp::element*>(&t);
 		What* v = nullptr;
@@ -61,7 +61,7 @@ namespace sp {
 			return false;
 	}*/
 
-	template<typename T> sp::timecode<T> static operator+=(sp::timecode<T>& a, const sp::timecode<T>& b) {
+	/*template<typename T> sp::timecode<T> static operator+=(sp::timecode<T>& a, const sp::timecode<T>& b) {
 		T af, as;
 		af = a.first;
 		as = a.second;
@@ -70,8 +70,8 @@ namespace sp {
 		a.first = af;
 		a.second = as;
 		return a;
-	};//function template
-	//template<typename T> sp::timecode<T> static operator+=(sp::timecode<T>& a, const sp::timecode<T>& b);//function template
+	};//function template*/
+	template<typename T> sp::timecode<T> operator+=(sp::timecode<T>& a, const sp::timecode<T>& b);//function template
 
 	//sp::element static operator+(const sp::element& a, const sp::element& b) { return sp::element{ a.first + b.first, a.second + b.second }; };
 	//sp::element static operator-(const sp::element& a, const sp::element& b) { return sp::element{ a.first - b.first, a.second - b.second }; };

@@ -44,7 +44,7 @@ namespace grapher {
         std::transform(begin, end, begin2, begin2, [](double rot, sp::element<double> vec) {
             double x = (cos(rot)*vec.first - sin(rot)*vec.second);
             double y = (sin(rot)*vec.first + cos(rot)*vec.second);
-            sp::element<double> p = sp::construct_element_<double>( x , y );
+            sp::element<double> p = sp::construct_element<double>( x , y );
             return p;
         });
     }
@@ -141,7 +141,7 @@ namespace grapher {
             //both can be nonempty; preserve type of last
             if (block.first != block.second) {
                 const T z0{0.0f},z1{0.0f};//Should be 0.0f!!
-                const sp::element<T> e = sp::construct_element_(z0,z1);
+                const sp::element<T> e = sp::construct_element(z0,z1);
                 return std::accumulate(block.first, block.second, e, [](sp::element<T> v1, sp::element<T> v2) {
                     v2 += v1;
                     return v2;
@@ -162,7 +162,7 @@ namespace grapher {
 		using T = vector_pair_T<Iterator>;
         class my_add {
         public:
-            my_add() : cache(sp::construct_element_<T>(0.0f,0.0f )) {};
+            my_add() : cache(sp::construct_element<T>(0.0f,0.0f )) {};
             sp::element<T> operator()(sp::element<T> e) {
                 auto newvalue = e;//type preserved
                 newvalue += cache;//type preserved
@@ -198,7 +198,7 @@ namespace grapher {
         __calculate_rotations()(task1, begin, end, std::back_inserter(rotations), angleFunction, typename Iterator::iterator_category{});
         
         std::vector<sp::element<T>> vectors;
-        std::fill_n(std::back_inserter(vectors), std::distance(std::begin(rotations), std::end(rotations)), sp::construct_element_<T>(_vectorLength, 0.0f));
+        std::fill_n(std::back_inserter(vectors), std::distance(std::begin(rotations), std::end(rotations)), sp::construct_element<T>(_vectorLength, 0.0f));
         __apply_rotation_matrix()(task1, std::begin(rotations), std::end(rotations), std::begin(vectors));
         
         std::vector<it_element<T>> vectors_sliced;
