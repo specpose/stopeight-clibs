@@ -152,7 +152,6 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\shared-include\angle_functions.cpp" />
     <ClCompile Include="..\shared-include\containers.cpp" />
     <ClCompile Include="..\shared-include\preloaderif.cpp" />
     <ClCompile Include="algo.cpp" />
