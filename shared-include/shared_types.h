@@ -20,6 +20,11 @@ namespace sp {
 		SPIKE
 	};
 
+	const sp::tctype turns[3] = { tctype::SWING,tctype::CREST,tctype::SPIRAL };
+	const sp::tctype corners[3] = { tctype::STRAIT, tctype::CLIFF, tctype::SPIKE };
+	const sp::tctype symetric[3] = { tctype::CLIFF, tctype::SWING, tctype::STRAIT };
+	const sp::tctype notsymetric[3] = { tctype::CREST, tctype::SPIRAL, tctype::SPIKE };
+
 	template<typename T> class timecode : public std::pair<T, T> {
 	public:
 		using std::pair<T, T>::pair;
@@ -27,30 +32,35 @@ namespace sp {
 		using timecode_types = typename sp::tctype;
 
 		timecode_types category{ tctype::EMPTY };
-		virtual ~timecode();
+		virtual ~timecode() {};
 
 		//sp::timecode<T> static operator+=(sp::timecode<T>& a, const sp::timecode<T>& b);//function template
 	};
 	template<typename T> class empty : public sp::timecode<T> {
 	public:
 		using timecode_types = typename sp::timecode<T>::timecode_types;
-		empty<T>(timecode<T>&& other);
+		empty<T>(timecode<T>&& other) {
+			sp::timecode<T>::category = sp::tctype::EMPTY;
+		};
 	};
 	template<typename T> class fixpoint : public sp::timecode<T> {
 	public:
 		using timecode_types = typename sp::timecode<T>::timecode_types;
-		fixpoint<T>(timecode<T>&& other);
+		fixpoint<T>(timecode<T>&& other) {
+			sp::timecode<T>::category = sp::tctype::FIXPOINT;
+		};
 	};
 	template<typename T> using element_ = timecode<T>;
 	template<typename T> using element = element_<T>;//element_*;
 	template<typename T> using result = std::vector<element<T>>;
-	/*template<typename T> element<T> static construct_element_(T a, T b) {
+	template<typename T> element<T> construct_element(T a, T b) {
 		element<T> e = element<T>();
 		e.first = a;
 		e.second = b;
 		return e;
-	};*/
-	template<typename T> element<T> construct_element(T a, T b);
+	};
+
+	//template<typename T> element<T> construct_element(T a, T b);
 	/*template<class What> bool is(element* t) {
 		element* u = t;//dynamic_cast<sp::element*>(&t);
 		What* v = nullptr;
@@ -61,7 +71,7 @@ namespace sp {
 			return false;
 	}*/
 
-	/*template<typename T> sp::timecode<T> static operator+=(sp::timecode<T>& a, const sp::timecode<T>& b) {
+	template<typename T> sp::timecode<T> operator+=(sp::timecode<T>& a, const sp::timecode<T>& b) {
 		T af, as;
 		af = a.first;
 		as = a.second;
@@ -70,8 +80,8 @@ namespace sp {
 		a.first = af;
 		a.second = as;
 		return a;
-	};//function template*/
-	template<typename T> sp::timecode<T> operator+=(sp::timecode<T>& a, const sp::timecode<T>& b);//function template
+	};//function template
+	//template<typename T> sp::timecode<T> operator+=(sp::timecode<T>& a, const sp::timecode<T>& b);//function template
 
 	//sp::element static operator+(const sp::element& a, const sp::element& b) { return sp::element{ a.first + b.first, a.second + b.second }; };
 	//sp::element static operator-(const sp::element& a, const sp::element& b) { return sp::element{ a.first - b.first, a.second - b.second }; };
