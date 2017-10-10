@@ -5,8 +5,6 @@
 #define ALGO_H
 
 #include "angle_functions.h"
-#include <vector>
-#include "shared_types.h"
 
 namespace grapher {
 
@@ -94,6 +92,3 @@ namespace grapher {
 	};
 }
 #endif
-
-//weird double defined symbol error for sycl::device from msvc
-//#include "algo.cpp"

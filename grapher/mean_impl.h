@@ -1,7 +1,8 @@
 // Copyright (C) 2017 Fassio Blatter
 // GNU Lesser General Public License, version 2.1
 
-#pragma once
+#ifndef MEAN_H
+#define MEAN_H
 
 #include <vector>
 
@@ -25,3 +26,4 @@ namespace speczilla {
 		std::vector<T>* buf;
 	};
 }
+#endif

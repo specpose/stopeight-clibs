@@ -4,7 +4,6 @@
 #ifndef MEAN_H
 #define MEAN_H
 
-#include <memory>
 #include <vector>
 
 // mean.h is compiled by msvc, mean_impl.h is compiled by llvm4
@@ -12,17 +11,21 @@
 // For hiding and dual implementation, NAME MUST BE THE SAME
 // AND NO IMPLEMENTATIONS IN HERE
 
+#include "shared_types.h"
+
 #include "preloaderif.h"
 
-namespace grapher {
+namespace speczilla {
 
 	template<typename T>class Mean : public PreloaderIF<T, double>
 	{
 	public:
 		Mean<T>(std::vector<T>* s);
+
 		~Mean<T>();
 
 		double operator()();
+
 
 	private:
 		//needs to be there to avoid crt error

@@ -1,7 +1,8 @@
 // Copyright (C) 2017 Fassio Blatter
 // GNU Lesser General Public License, version 2.1
 
-#pragma once
+#ifndef GRAPHER_H
+#define GRAPHER_H
 
 #include <vector>
 
@@ -30,3 +31,4 @@ namespace speczilla {
 		double _angleScale;
 	};
 }
+#endif
