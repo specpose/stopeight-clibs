@@ -100,8 +100,4 @@ template<typename T> using vector_pair_T = typename std::iterator_traits<T>::val
 template<typename T> using vector_vectors = typename std::vector<it_element<T>>::iterator;
 template<typename T> using vector_vectors_T = typename std::iterator_traits<typename std::iterator_traits<T>::value_type::first_type>::value_type::value_type;
 
-//using fexec = std::experimental::parallel::parallel_vector_execution_policy;
-#include "dummy.h"
-using fexec = const dummy;
-
 #endif

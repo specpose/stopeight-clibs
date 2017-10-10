@@ -4,6 +4,9 @@
 //#include <experimental/algorithm>//CYCLIC DEPENDENCY
 #include "shared_types.h"//CYCLIC DEPENDENCY
 //#include <experimental/impl/algorithm_impl.h>
+//using fexec = std::experimental::parallel::parallel_vector_execution_policy;
+#include "dummy.h"
+using fexec = const dummy;
 
 #include "algo_impl.h"
 #include "containers.h"
