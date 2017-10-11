@@ -11,6 +11,7 @@ add_library(${PROJECT_NAME} ${${PROJECT_NAME}_sources})
 target_include_directories(${PROJECT_NAME}
     PRIVATE
     "../include"
+    "../grapher"
 )
 
 install(TARGETS ${PROJECT_NAME} DESTINATION lib)
