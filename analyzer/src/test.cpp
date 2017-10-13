@@ -1,9 +1,9 @@
 // Copyright (C) 2009-2016 Specific Purpose Software GmbH
 // GNU Lesser General Public License, version 2.1
 
-#include "include/test.h"
-#include "include/single_task.h"
-#include "include/Matrix.h"
+#include "test.h"
+#include "single_task.h"
+#include "Matrix.h"
 #include <iostream>
 
 //using namespace analyzer;
