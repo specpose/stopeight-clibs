@@ -1,8 +1,7 @@
 cmake_minimum_required (VERSION 3.1.3)
 
-#set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
-#set(CMAKE_DISABLE_SOURCE_CHANGES  ON)
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+#if building shared lib:
+#set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 project(stopeight-clibs)
 add_library(${PROJECT_NAME} INTERFACE)
