@@ -29,6 +29,12 @@ static PyMethodDef analyzerMethods[] = {
     {NULL, NULL, 0, NULL}        /* Sentinel */
 };
 
+#if __GNUC__ >= 4
+    #define VIS __attribute__((visibility("default")))
+#else
+    #define VIS
+#endif
+
 #ifdef PY_MAJOR_VERSION
 #if PY_MAJOR_VERSION >= 3
 
@@ -41,11 +47,11 @@ static struct PyModuleDef analyzermodule = {
         analyzerMethods
 };
 
-PyMODINIT_FUNC PyInit_analyzer(void);
+PyMODINIT_FUNC PyInit_analyzer(void) VIS;
 
 #else // PY_MAJOR_VERSION >= 3
 
-PyMODINIT_FUNC initanalyzer(void);
+PyMODINIT_FUNC initanalyzer(void) VIS;
 
 #endif // PY_MAJOR_VERSION >= 3
 #endif // PY_MAJOR_VERSION
