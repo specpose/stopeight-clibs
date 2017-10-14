@@ -13,7 +13,7 @@ public:
 	~Test();
 
     // method for access from python
-	static void hello(const char* fileName);
+        static void hello(const char* fileName) VIS;
 
 };
 

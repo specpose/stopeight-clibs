@@ -12,8 +12,6 @@ set(${PROJECT_NAME}_sources
     main.cpp
 )
 
-message(${stopeight-clibs_INCLUDE_DIRS})
-
 #add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_sources})
 add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_sources})
 

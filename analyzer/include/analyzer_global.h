@@ -11,6 +11,11 @@
 //  do nothing and hope for the best?
 #define ANALYZERSHARED_EXPORT
 #pragma WARNING: Unknown dynamic link import/export semantics.
+#if __GNUC__ >= 4
+    #define VIS __attribute__((visibility("default")))
+#else
+    #define VIS
+#endif
 #endif // COMPILER
 
 #endif // ANALYZER_GLOBAL_H
