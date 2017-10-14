@@ -30,7 +30,7 @@ static PyObject* stroke_parallel(PyObject* self, PyObject* args);
 static PyObject* stroke_sequential(PyObject* self, PyObject* args);
 }
 
-static PyMethodDef stopeight_clibs_legacyMethods[] = {
+static PyMethodDef legacyMethods[] = {
     {"parse_file",  legacy_wrappers::parse_file, METH_VARARGS,
      "parse proprietary legacy qt file format for input points of recorded pen-stroke."},
 	 { "TCT_to_bezier",  legacy_wrappers::TCT_to_bezier, METH_VARARGS,
@@ -42,23 +42,29 @@ static PyMethodDef stopeight_clibs_legacyMethods[] = {
     {NULL, NULL, 0, NULL}        /* Sentinel */
 };
 
+#if __GNUC__ >= 4
+    #define VIS __attribute__((visibility("default")))
+#else
+    #define VIS
+#endif
+
 #ifdef PY_MAJOR_VERSION
 #if PY_MAJOR_VERSION >= 3
 
 static struct PyModuleDef legacymodule = {
 	PyModuleDef_HEAD_INIT,
-	"stopeight_clibs_legacy",   /* name of module */
+    "legacy",   /* name of module */
 	NULL, /* module documentation, may be NULL */
 	-1,       /* size of per-interpreter state of the module,
 			  or -1 if the module keeps state in global variables. */
-	stopeight_clibs_legacyMethods
+    legacyMethods
 };
 
-PyMODINIT_FUNC PyInit_stopeight_clibs_legacy(void);
+PyMODINIT_FUNC PyInit_legacy(void) VIS;
 
 #else // PY_MAJOR_VERSION >= 3
 
-PyMODINIT_FUNC initstopeight_clibs_legacy(void);
+PyMODINIT_FUNC initlegacy(void) VIS;
 
 #endif // PY_MAJOR_VERSION >= 3
 #endif // PY_MAJOR_VERSION

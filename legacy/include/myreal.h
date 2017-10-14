@@ -4,7 +4,9 @@
 #ifndef MYREAL_H
 #define MYREAL_H
 
-#include <QtCore/QString>
+//#include <QtCore/QString>
+#include <QtCore/qglobal.h>
+#include <string>
 #include <limits>
 #include <cmath>
 
@@ -12,20 +14,20 @@ class MyReal
 {
 public:
     MyReal(qreal number);
-    QString strValue(){
+    std::string strValue(){
         if (value != value){
-            return QString("NaN");
+            return std::string("NaN");
         } else if (value > std::numeric_limits<qreal>::max()){
-            return QString("+Inf");
+            return std::string("+Inf");
         } else if (value < -std::numeric_limits<qreal>::max()){
-            return QString("-Inf");
+            return std::string("-Inf");
         } else {
-            return QString("");
+            return std::string("");
         }
     }
     bool checkIfValid(){
-        QString val = strValue();
-        if ( val==QString("NaN") || val==QString("+Inf") || val==QString("-Inf") ){
+        std::string val = strValue();
+        if ( val==std::string("NaN") || val==std::string("+Inf") || val==std::string("-Inf") ){
             return false;
         } else {
             return true;
