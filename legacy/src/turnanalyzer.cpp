@@ -5,7 +5,7 @@
 
 #define SUMLENGTH_FACTOR_SUBDIVISION 1
 
-#define debug() QNoDebug()
+//#define debug() QNoDebug()
 
 template<> TurnAnalyzer<dpoint>::TurnAnalyzer() : TurnNormalizer<dpoint>() {}
 
@@ -93,7 +93,7 @@ template <> ListCopyable<dpoint> TurnAnalyzer<dpoint>::getFirstTurnByTriplets(){
     TurnAnalyzer<dpoint> calculator = TurnAnalyzer<dpoint>(copy2);
 
 
-    debug()<<"Size after: "<<calculator.size();
+    //debug()<<"Size after: "<<calculator.size();
     if (calculator.size()>4){
         calculator.tripletFilters();
         ListCopyable<dpoint> firstTriplet = calculator.getFirstTriplet();

@@ -3,7 +3,7 @@
 
 #include "spirals.h"
 
-#define debug() QNoDebug()
+//#define debug() QNoDebug()
 
 #define MAX_POINTS 5
 //#define LIMIT_TEST M_El
@@ -67,7 +67,7 @@ template<> qreal Spirals<dpoint>::findLimit(ListCopyable<dpoint> toBeProcessed){
     cliffs=findAreas(toBeProcessed,MyLimit);
     cliffs.size();
     if (cliffs.size()>0){
-            debug()<<"Found "<<cliffs.size()<<"cliffs, adjusting limit to current minimum";
+            //debug()<<"Found "<<cliffs.size()<<"cliffs, adjusting limit to current minimum";
             int selector=cliffs.size();
             QList<dpoint> backup;
             qreal backupLimit;
@@ -93,7 +93,7 @@ template<> QList<dpoint> Spirals<dpoint>::findSpiralCliffs(ListCopyable<dpoint> 
     //qreal frontSpiral= toBeProcessed.measureSpiral();
     //debug()<<"Forward Spiral Size is: "<<frontSpiral;
     qreal limit = findLimit(toBeProcessed);
-    debug()<<"Limit from forward analysis is: "<<limit;
+    //debug()<<"Limit from forward analysis is: "<<limit;
 
     // TODO
     //this should be a copy!
@@ -104,7 +104,7 @@ template<> QList<dpoint> Spirals<dpoint>::findSpiralCliffs(ListCopyable<dpoint> 
     //debug()<<"Backward Spiral Size is: "<<backSpiral;
     ListCopyable<dpoint> backward = ListCopyable<dpoint>(reversed);
     qreal backLimit = findLimit(backward);
-    debug()<<"Limit from backward analysis is: "<<backLimit;
+    //debug()<<"Limit from backward analysis is: "<<backLimit;
     //if (static_cast<int>(frontSpiral)!=static_cast<int>(backSpiral)){
         //throw "ShapeMatcher::process: spiral-size front/back not equal";
     //}
@@ -112,7 +112,7 @@ template<> QList<dpoint> Spirals<dpoint>::findSpiralCliffs(ListCopyable<dpoint> 
     // change: use reference?
     QList<dpoint>* cliffs = new QList<dpoint>;
     if (limit!=backLimit){
-        debug()<< "ShapeMatcher::process: different limits found, using larger";
+        //debug()<< "ShapeMatcher::process: different limits found, using larger";
         if (backLimit>limit){
             *cliffs = findAreas(backward,backLimit);
             //if (cliffs->size()>0){
@@ -124,7 +124,7 @@ template<> QList<dpoint> Spirals<dpoint>::findSpiralCliffs(ListCopyable<dpoint> 
             *cliffs = findAreas(forward,limit);
         }
     } else {
-        debug()<<"******************* findAreas::Main **********************";
+        //debug()<<"******************* findAreas::Main **********************";
         *cliffs = findAreas(forward,limit);
     }
     return *cliffs;

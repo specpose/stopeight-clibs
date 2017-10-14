@@ -4,7 +4,7 @@
 #include "listswitchable.h"
 
 //#define debug() QDebug::QDebug(QtDebugMsg)
-#define debug() QNoDebug()
+//#define debug() QNoDebug()
 
 template<> ListSwitchable<dpoint>::ListSwitchable() : ListRotator<dpoint>(){
 }
@@ -80,15 +80,15 @@ template void ListSwitchable<dpoint>::operator=(const Corners<dpoint>& list);
 
 template <> void ListSwitchable<dpoint>::removeAt(int i) {
     if (i<0) {
-        debug()<<"Illegal position for point removal: "<<i;
+        //debug()<<"Illegal position for point removal: "<<i;
         return;
     }
     if (i>this->size()-1) {
-        debug()<<"Illegal position for point removal: "<<i;
+        //debug()<<"Illegal position for point removal: "<<i;
         return;
     }
     if ( (i==0 )|| (i==this->size()-1) ){
-        debug() << "WARNING: deleting first or last point in subsegment, pos: "<< this->at(i).position;
+        //debug() << "WARNING: deleting first or last point in subsegment, pos: "<< this->at(i).position;
     }
     QList<dpoint>::removeAt(i);
     // watch out, this happens AFTER remove

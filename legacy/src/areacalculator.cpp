@@ -3,7 +3,7 @@
 
 #include "areacalculator.h"
 
-#define debug() QNoDebug()
+//#define debug() QNoDebug()
 
 
 template<> AreaCalculator<dpoint>::AreaCalculator() : ListSwitchable<dpoint>() {}
@@ -42,7 +42,7 @@ template <> qreal AreaCalculator<dpoint>::sumOfDxAreasRotY(){
                 (sum<0 && piece>0) )
             {
                 //this is jitter! perform turn detection before spiral subsectioning
-                debug()<<"sum: "<<sum<<" piece: "<<piece<<" at position "<<this->at(i).position;
+                //debug()<<"sum: "<<sum<<" piece: "<<piece<<" at position "<<this->at(i).position;
                 throw "AreaCalculator::sumOfDxAreasRotY: jitter detected. detect turns first and then make ascending/descending";
             } else {
             sum += piece;

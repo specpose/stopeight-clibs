@@ -3,7 +3,7 @@
 
 #include "turns.h"
 
-#define debug() QDebug(QtDebugMsg)//::QDebug(QtDebugMsg)
+//#define debug() QDebug(QtDebugMsg)//::QDebug(QtDebugMsg)
 //#define debug() QNoDebug()
 
 template<> Turns<dpoint>::Turns() : ListSwitchable<dpoint>() {}
@@ -18,7 +18,7 @@ template Turns<dpoint>::Turns(ListBase<dpoint>& list);
 
 //ShapeMatcher::findTurns
 template<> QList<dpoint> Turns<dpoint>::findTurns(ListCopyable<dpoint> toBeProcessed){
-    debug()<<"Turns::findTurns started with "<<toBeProcessed.size()<<" input points";
+    //debug()<<"Turns::findTurns started with "<<toBeProcessed.size()<<" input points";
     QList<dpoint> result = QList<dpoint>();
     TurnAnalyzer<dpoint> crest = TurnAnalyzer<dpoint>(toBeProcessed);
     // TODO bool foundOne = false;

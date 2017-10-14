@@ -4,12 +4,12 @@
 #include "editorbase.h"
 
 //#define debug() QDebug(QtDebugMsg)//::QDebug(QtDebugMsg)
-#define debug() QNoDebug()
+//#define debug() QNoDebug()
 
 template<typename T> EditorBase<T>::EditorBase() : EditorInterface<T>(), data(ListStorage<T>())
 {
     //Note: data has to be allocated in subclass!
-    debug()<<"EditorBase<T>::EditorBase() constructor called and data initialized";
+    //debug()<<"EditorBase<T>::EditorBase() constructor called and data initialized";
 }
 
 template EditorBase<ListBase<dpoint> >::EditorBase();
@@ -64,7 +64,7 @@ template<> void EditorBase<ListBase<dpoint> >::flushOutput(){
 
 template<> void EditorBase<ListBase<dpoint> >::automatic(){
     this->flushOutput();
-    debug()<<"Computation started with data size "<<this->getOutput().size();
+    //debug()<<"Computation started with data size "<<this->getOutput().size();
     this->process(this->getOutput());
 }
 

@@ -3,7 +3,7 @@
 
 #include "listrotator.h"
 
-#define debug() QNoDebug()
+//#define debug() QNoDebug()
 
 template<> ListRotator<dpoint>::ListRotator() : ListBase<dpoint>() {}
 
@@ -85,7 +85,7 @@ template <> void ListRotator<dpoint>::rotateSegmentToXAxis(){
         rad = atan2( d.y(),d.x());
         deg = (rad * (180.0 / M_PIl));
 
-        debug()<<"rotateSegmentToXAxis: Rotating "<<-deg<<" degrees clockwise.";
+//        debug()<<"rotateSegmentToXAxis: Rotating "<<-deg<<" degrees clockwise.";
 
         rotate(deg);
     }

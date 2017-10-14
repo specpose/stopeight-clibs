@@ -6,7 +6,7 @@
 
 #include "legacy_global.h"
 
-#include <QtCore/QDebug>
+//#include <QtCore/QDebug>
 #include <QtCore/QPointF>
 #include <QtCore/QDataStream>
 #include <cmath>

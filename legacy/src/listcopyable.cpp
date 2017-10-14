@@ -3,7 +3,7 @@
 
 #include "listcopyable.h"
 
-#define debug() QNoDebug()
+//#define debug() QNoDebug()
 
 template<> ListCopyable<dpoint>::ListCopyable() : ListBase<dpoint>() {}
 
@@ -15,7 +15,7 @@ template<>template<typename F> ListCopyable<dpoint>::ListCopyable(F& list): List
 
 // Note: We only make a copy if it's been casted
 template<>template<> ListCopyable<dpoint>::ListCopyable(ListCopyable<dpoint>& list) :ListBase<dpoint>(list){
-    debug()<<"ListCopyable::ListCopyable assignment"<<list.size();
+//    debug()<<"ListCopyable::ListCopyable assignment"<<list.size();
 
     *this = list;
 }
@@ -63,7 +63,7 @@ template <> void ListCopyable<dpoint>::reverse(){
 }
 
 template <> void ListCopyable<dpoint>::removeIllegalPoints(){
-    debug() << "Before removeIllegalPoints: " <<this->size();
+//    debug() << "Before removeIllegalPoints: " <<this->size();
     CliffsAnalyzer<dpoint> cliff = CliffsAnalyzer<dpoint>(*this);
     while (cliff.hasIllegalSegment()!=-1){
         for (int i=0;i<cliff.size();i++){
@@ -74,5 +74,5 @@ template <> void ListCopyable<dpoint>::removeIllegalPoints(){
             }
         }
     }
-    debug() << "After removeIllegalPoints: " <<this->size();
+//    debug() << "After removeIllegalPoints: " <<this->size();
 }

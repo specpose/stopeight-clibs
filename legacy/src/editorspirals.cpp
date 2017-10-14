@@ -3,7 +3,7 @@
 
 #include "editorspirals.h"
 
-#define debug() QDebug(QtDebugMsg)//::QDebug(QtDebugMsg)
+//#define debug() QDebug(QtDebugMsg)//::QDebug(QtDebugMsg)
 //#define debug() QNoDebug()
 
 EditorSpirals::EditorSpirals() : EditorCliffs()

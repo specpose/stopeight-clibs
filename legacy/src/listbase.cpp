@@ -3,7 +3,7 @@
 
 #include "listbase.h"
 
-#define debug() QNoDebug()
+//#define debug() QNoDebug()
 
 //using namespace legacy;
 
@@ -68,7 +68,7 @@ template ListBase<dpoint>::ListBase(const Corners<dpoint>& list);
 
 template<> QList<QPointF> ListBase<QPointF>::loadSPFile(const QString& fileName)
 {
-    debug()<<"legacy::ListBase<dpoint>::loadSPFile "+fileName.toLatin1();
+//    debug()<<"legacy::ListBase<dpoint>::loadSPFile "+fileName.toLatin1();
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly)) {
 		//C++11
@@ -83,7 +83,7 @@ template<> QList<QPointF> ListBase<QPointF>::loadSPFile(const QString& fileName)
     unsigned int magic;
     in >> magic;
     if (magic != MagicNumber) {
-        debug()<<"File is invalid."<<file.fileName()<<endl<<file.errorString();
+//        debug()<<"File is invalid."<<file.fileName()<<endl<<file.errorString();
         throw "MainWindow::loadSPFile: Wrong magic number: "+magic;
         //return false;
     }
