@@ -15,7 +15,7 @@ set(${PROJECT_NAME}_sources
 message(${stopeight-clibs_INCLUDE_DIRS})
 
 #add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_sources})
-add_library(${PROJECT_NAME} ${${PROJECT_NAME}_sources})
+add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_sources})
 
 #include_directories(${stopeight-clibs_INCLUDE_DIRS})
 target_include_directories(${PROJECT_NAME}

@@ -6,7 +6,7 @@ set(${PROJECT_NAME}_sources
     src/test.cpp
     src/Matrix.cpp
 )
-add_library(${PROJECT_NAME} ${${PROJECT_NAME}_sources})
+add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_sources})
 
 target_include_directories(${PROJECT_NAME}
     PRIVATE
