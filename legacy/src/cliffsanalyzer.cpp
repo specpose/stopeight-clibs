@@ -1,7 +1,7 @@
 // Copyright (C) 2009-2015 Specific Purpose Software GmbH
 // GNU Lesser General Public License, version 2.1
 
-#include "include/cliffsanalyzer.h"
+#include "cliffsanalyzer.h"
 
 template<> CliffsAnalyzer<dpoint>::CliffsAnalyzer() : CliffsNormalizer<dpoint>() {}
 
@@ -12,7 +12,7 @@ template<>template<typename F> CliffsAnalyzer<dpoint>::CliffsAnalyzer(F& list) :
     *this= static_cast<CliffsAnalyzer<dpoint>& >(c);
 }
 
-#include "include/areaanalyzer.h"
+#include "areaanalyzer.h"
 //area to cliff ok
 template CliffsAnalyzer<dpoint>::CliffsAnalyzer(AreaAnalyzer<dpoint>& list);
 template CliffsAnalyzer<dpoint>::CliffsAnalyzer(ListCopyable<dpoint>& list);

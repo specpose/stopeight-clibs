@@ -22,3 +22,4 @@ set(${PROJECT_NAME}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include
 
 add_subdirectory(grapher)
 add_subdirectory(analyzer)
+add_subdirectory(legacy)

@@ -1,7 +1,7 @@
 // Copyright (C) 2009-2015 Specific Purpose Software GmbH
 // GNU Lesser General Public License, version 2.1
 
-#include "include/straightscalculator.h"
+#include "straightscalculator.h"
 
 template<> StraightsCalculator<dpoint>::StraightsCalculator() : ListSwitchable<dpoint>() {}
 
@@ -11,11 +11,11 @@ template<>template<typename F> StraightsCalculator<dpoint>::StraightsCalculator(
     *this= static_cast<StraightsCalculator<dpoint>& >(c);
 }
 
-#include "include/cornernormalizer.h"
+#include "cornernormalizer.h"
 template StraightsCalculator<dpoint>::StraightsCalculator(CornerNormalizer<dpoint>& list);
-#include "include/listcopyable.h"
+#include "listcopyable.h"
 template StraightsCalculator<dpoint>::StraightsCalculator(ListCopyable<dpoint>& list);
-#include "include/areanormalizer.h"
+#include "areanormalizer.h"
 template StraightsCalculator<dpoint>::StraightsCalculator(AreaNormalizer<dpoint>& list);
 
 template <> qreal StraightsCalculator<dpoint>::sumLength(){

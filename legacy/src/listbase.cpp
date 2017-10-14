@@ -1,7 +1,7 @@
 // Copyright (C) 2009-2015 Specific Purpose Software GmbH
 // GNU Lesser General Public License, version 2.1
 
-#include "include/listbase.h"
+#include "listbase.h"
 
 #define debug() QNoDebug()
 
@@ -30,7 +30,7 @@ template<>template<typename F> ListBase<dpoint>::ListBase(const F& list) : QList
 //template QList<dpoint>::QList(ListBase<dpoint>& list);
 
 template ListBase<dpoint>::ListBase(ListBase<dpoint>& list);
-#include "include/spirals.h"
+#include "spirals.h"
 template ListBase<dpoint>::ListBase(Spirals<dpoint>& list);
 template ListBase<dpoint>::ListBase(Analyzer<dpoint>& list);
 template ListBase<dpoint>::ListBase(AreaAnalyzer<dpoint>& list);
@@ -44,12 +44,12 @@ template ListBase<dpoint>::ListBase(ListSwitchable<dpoint>& list);
 template ListBase<dpoint>::ListBase(QList<dpoint>& list);
 template ListBase<dpoint>::ListBase(AreaNormalizer<dpoint>& list);
 template ListBase<dpoint>::ListBase(CornerNormalizer<dpoint>& list);
-#include "include/cliffs.h"
+#include "cliffs.h"
 template ListBase<dpoint>::ListBase(Cliffs<dpoint>& list);
 template ListBase<dpoint>::ListBase(CliffsNormalizer<dpoint>& list);
-#include "include/turnanalyzer.h"
+#include "turnanalyzer.h"
 template ListBase<dpoint>::ListBase(TurnAnalyzer<dpoint>& list);
-#include "include/straightsanalyzer.h"
+#include "straightsanalyzer.h"
 template ListBase<dpoint>::ListBase(StraightsAnalyzer<dpoint>& list);
 template ListBase<dpoint>::ListBase(CornerAnalyzer<dpoint>& list);
 template ListBase<dpoint>::ListBase(const CliffsCalculator<dpoint>& list);
@@ -60,9 +60,9 @@ template ListBase<dpoint>::ListBase(const Calculator<dpoint>& list);
 template ListBase<dpoint>::ListBase(const Spirals<dpoint>& list);
 template ListBase<dpoint>::ListBase(const StraightsCalculator<dpoint>& list);
 template ListBase<dpoint>::ListBase(const Cliffs<dpoint>& list);
-#include "include/turns.h"
+#include "turns.h"
 template ListBase<dpoint>::ListBase(const Turns<dpoint>& list);
-#include "include/corners.h"
+#include "corners.h"
 template ListBase<dpoint>::ListBase(const Corners<dpoint>& list);
 
 

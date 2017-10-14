@@ -1,7 +1,7 @@
 // Copyright (C) 2009-2015 Specific Purpose Software GmbH
 // GNU Lesser General Public License, version 2.1
 
-#include "include/cornercalculator.h"
+#include "cornercalculator.h"
 
 template<> CornerCalculator<dpoint>::CornerCalculator() : ListSwitchable<dpoint>() {}
 
@@ -11,15 +11,15 @@ template<>template<typename F> CornerCalculator<dpoint>::CornerCalculator(F& lis
     *this= static_cast<CornerCalculator<dpoint>& >(c);
 }
 
-#include "include/turnnormalizer.h"
+#include "turnnormalizer.h"
 template CornerCalculator<dpoint>::CornerCalculator(TurnNormalizer<dpoint>& list);
-#include "include/calculator.h"
+#include "calculator.h"
 template CornerCalculator<dpoint>::CornerCalculator(Calculator<dpoint>& list);
 template CornerCalculator<dpoint>::CornerCalculator(ListBase<dpoint>& list);
-#include "include/cliffsnormalizer.h"
+#include "cliffsnormalizer.h"
 template CornerCalculator<dpoint>::CornerCalculator(CliffsNormalizer<dpoint>& list);
-#include "include/listcopyable.h"
+#include "listcopyable.h"
 template CornerCalculator<dpoint>::CornerCalculator(ListCopyable<dpoint>& list);
-#include "include/areanormalizer.h"
+#include "areanormalizer.h"
 template CornerCalculator<dpoint>::CornerCalculator(AreaNormalizer<dpoint>& list);
 template CornerCalculator<dpoint>::CornerCalculator(CornerNormalizer<dpoint>& list);

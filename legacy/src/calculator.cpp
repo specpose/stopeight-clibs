@@ -1,7 +1,7 @@
 // Copyright (C) 2009-2015 Specific Purpose Software GmbH
 // GNU Lesser General Public License, version 2.1
 
-#include "include/calculator.h"
+#include "calculator.h"
 
 template<> Calculator<dpoint>::Calculator() : ListSwitchable<dpoint>() {}
 
@@ -12,14 +12,14 @@ template<>template<typename F> Calculator<dpoint>::Calculator(F& list) : ListSwi
 }
 
 template Calculator<dpoint>::Calculator(Calculator<dpoint>& list);
-#include "include/straightscalculator.h"
+#include "straightscalculator.h"
 template Calculator<dpoint>::Calculator(StraightsCalculator<dpoint>& list);
-#include "include/cornernormalizer.h"
+#include "cornernormalizer.h"
 template Calculator<dpoint>::Calculator(CornerNormalizer<dpoint>& list);
 template Calculator<dpoint>::Calculator(ListBase<dpoint>& list);
-#include "include/analyzer.h"
+#include "analyzer.h"
 template Calculator<dpoint>::Calculator(Analyzer<dpoint>& list);
-#include "include/listcopyable.h"
+#include "listcopyable.h"
 template Calculator<dpoint>::Calculator(ListCopyable<dpoint>& list);
 template Calculator<dpoint>::Calculator(QList<dpoint>& list);
 

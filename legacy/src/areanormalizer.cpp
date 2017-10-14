@@ -1,7 +1,7 @@
 // Copyright (C) 2009-2015 Specific Purpose Software GmbH
 // GNU Lesser General Public License, version 2.1
 
-#include "include/areanormalizer.h"
+#include "areanormalizer.h"
 
 template<> AreaNormalizer<dpoint>::AreaNormalizer() : AreaCalculator<dpoint>() {}
 
@@ -11,10 +11,10 @@ template<>template<typename F> AreaNormalizer<dpoint>::AreaNormalizer(F& list): 
     *this= static_cast<AreaNormalizer<dpoint>& >(c);
 }
 
-#include "include/listcopyable.h"
+#include "listcopyable.h"
 template AreaNormalizer<dpoint>::AreaNormalizer(ListCopyable<dpoint>& list);
 template AreaNormalizer<dpoint>::AreaNormalizer(ListBase<dpoint>& list);
-#include "include/areaanalyzer.h"
+#include "areaanalyzer.h"
 template AreaNormalizer<dpoint>::AreaNormalizer(AreaAnalyzer<dpoint>& list);
 
 //hdojo version

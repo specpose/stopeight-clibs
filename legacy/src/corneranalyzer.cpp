@@ -1,7 +1,7 @@
 // Copyright (C) 2009-2015 Specific Purpose Software GmbH
 // GNU Lesser General Public License, version 2.1
 
-#include "include/corneranalyzer.h"
+#include "corneranalyzer.h"
 
 #define debug() QNoDebug()
 
@@ -13,7 +13,7 @@ template<>template<typename F> CornerAnalyzer<dpoint>::CornerAnalyzer(F& list) :
     *this= static_cast<CornerAnalyzer<dpoint>& >(c);
 }
 
-#include "include/areanormalizer.h"
+#include "areanormalizer.h"
 template CornerAnalyzer<dpoint>::CornerAnalyzer(AreaNormalizer<dpoint>& list);
 template CornerAnalyzer<dpoint>::CornerAnalyzer(CornerNormalizer<dpoint>& list);
 template CornerAnalyzer<dpoint>::CornerAnalyzer(ListCopyable<dpoint>& list);

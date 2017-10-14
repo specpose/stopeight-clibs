@@ -1,7 +1,7 @@
 // Copyright (C) 2009-2015 Specific Purpose Software GmbH
 // GNU Lesser General Public License, version 2.1
 
-#include "include/listcopyable.h"
+#include "listcopyable.h"
 
 #define debug() QNoDebug()
 
@@ -22,19 +22,19 @@ template<>template<> ListCopyable<dpoint>::ListCopyable(ListCopyable<dpoint>& li
 
 //template ListCopyable<dpoint>::ListCopyable(ListCopyable<dpoint>& list);
 template ListCopyable<dpoint>::ListCopyable(ListBase<dpoint>& list);
-#include "include/areaanalyzer.h"
+#include "areaanalyzer.h"
 template ListCopyable<dpoint>::ListCopyable(AreaAnalyzer<dpoint>& list);
-#include "include/spirals.h"
+#include "spirals.h"
 template ListCopyable<dpoint>::ListCopyable(Spirals<dpoint>& list);
-#include "include/analyzer.h"
+#include "analyzer.h"
 template ListCopyable<dpoint>::ListCopyable(Analyzer<dpoint>& list);
 template ListCopyable<dpoint>::ListCopyable(AreaCalculator<dpoint>& list);
 template ListCopyable<dpoint>::ListCopyable(CliffsAnalyzer<dpoint>& list);
-#include "include/cliffs.h"
+#include "cliffs.h"
 template ListCopyable<dpoint>::ListCopyable(Cliffs<dpoint>& list);
-#include "include/straightsanalyzer.h"
+#include "straightsanalyzer.h"
 template ListCopyable<dpoint>::ListCopyable(StraightsAnalyzer<dpoint>& list);
-#include "include/turnanalyzer.h"
+#include "turnanalyzer.h"
 template ListCopyable<dpoint>::ListCopyable(TurnAnalyzer<dpoint>& list);
 template ListCopyable<dpoint>::ListCopyable(QList<dpoint>& list);
 

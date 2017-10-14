@@ -1,7 +1,7 @@
 // Copyright (C) 2009-2015 Specific Purpose Software GmbH
 // GNU Lesser General Public License, version 2.1
 
-#include "include/turnnormalizer.h"
+#include "turnnormalizer.h"
 
 template<> TurnNormalizer<dpoint>::TurnNormalizer() : TurnCalculator<dpoint>() {}
 
@@ -11,10 +11,10 @@ template<>template<typename F> TurnNormalizer<dpoint>::TurnNormalizer(F& list) :
     *this= static_cast<TurnNormalizer<dpoint>& >(c);
 }
 
-#include "include/areanormalizer.h"
+#include "areanormalizer.h"
 template TurnNormalizer<dpoint>::TurnNormalizer(AreaNormalizer<dpoint>& list);
 template TurnNormalizer<dpoint>::TurnNormalizer(CornerNormalizer<dpoint>& list);
-#include "include/listcopyable.h"
+#include "listcopyable.h"
 template TurnNormalizer<dpoint>::TurnNormalizer(ListCopyable<dpoint>& list);
 
 template <> void TurnNormalizer<dpoint>::smoothingJitter(int pos){

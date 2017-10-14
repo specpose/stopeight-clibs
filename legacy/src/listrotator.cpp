@@ -1,7 +1,7 @@
 // Copyright (C) 2009-2015 Specific Purpose Software GmbH
 // GNU Lesser General Public License, version 2.1
 
-#include "include/listrotator.h"
+#include "listrotator.h"
 
 #define debug() QNoDebug()
 
@@ -14,9 +14,9 @@ template<>template<typename F> ListRotator<dpoint>::ListRotator(F& list) : ListB
 }
 
 template ListRotator<dpoint>::ListRotator(QList<dpoint>& list);
-#include "include/cliffsanalyzer.h"
+#include "cliffsanalyzer.h"
 template ListRotator<dpoint>::ListRotator(CliffsAnalyzer<dpoint>& list);
-#include "include/areaanalyzer.h"
+#include "areaanalyzer.h"
 template ListRotator<dpoint>::ListRotator(AreaAnalyzer<dpoint>& list);
 template ListRotator<dpoint>::ListRotator(ListBase<dpoint>& list);
 template ListRotator<dpoint>::ListRotator(ListCopyable<dpoint>& list);
@@ -27,7 +27,7 @@ template ListRotator<dpoint>::ListRotator(Calculator<dpoint>& list);
 template ListRotator<dpoint>::ListRotator(ListSwitchable<dpoint>& list);
 template ListRotator<dpoint>::ListRotator(AreaNormalizer<dpoint>& list);
 template ListRotator<dpoint>::ListRotator(CliffsNormalizer<dpoint>& list);
-#include "include/corneranalyzer.h"
+#include "corneranalyzer.h"
 template ListRotator<dpoint>::ListRotator(CornerAnalyzer<dpoint>& list);
 
 // Note: ALL datamembers of target class destroyed

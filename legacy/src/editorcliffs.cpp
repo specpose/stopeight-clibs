@@ -1,7 +1,7 @@
 // Copyright (C) 2009-2015 Specific Purpose Software GmbH
 // GNU Lesser General Public License, version 2.1
 
-#include "include/editorcliffs.h"
+#include "editorcliffs.h"
 
 #define debug() QNoDebug()
 

@@ -1,7 +1,7 @@
 // Copyright (C) 2009-2015 Specific Purpose Software GmbH
 // GNU Lesser General Public License, version 2.1
 
-#include "include/cliffscalculator.h"
+#include "cliffscalculator.h"
 
 #define ZERO_INCLIN1 0
 #define ZERO_INCLIN2 0
@@ -15,10 +15,10 @@ template<>template<typename F> CliffsCalculator<dpoint>::CliffsCalculator(F& lis
     *this= static_cast<CliffsCalculator<dpoint>& >(c);
 }
 
-#include "include/areaanalyzer.h"
+#include "areaanalyzer.h"
 template CliffsCalculator<dpoint>::CliffsCalculator(AreaAnalyzer<dpoint>& list);
 template CliffsCalculator<dpoint>::CliffsCalculator(ListCopyable<dpoint>& list);
-#include "include/corneranalyzer.h"
+#include "corneranalyzer.h"
 template CliffsCalculator<dpoint>::CliffsCalculator(CornerAnalyzer<dpoint>& list);
 
 // inline specialisation

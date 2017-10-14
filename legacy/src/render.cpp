@@ -1,6 +1,6 @@
 // Copyright (C) 2009-2015 Specific Purpose Software GmbH
 
-#include "include/render.h"
+#include "render.h"
 
 //#define debug() QDebug::QDebug(QtDebugMsg)
 #define debug() QNoDebug()

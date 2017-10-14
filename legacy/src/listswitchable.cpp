@@ -1,7 +1,7 @@
 // Copyright (C) 2009-2015 Specific Purpose Software GmbH
 // GNU Lesser General Public License, version 2.1
 
-#include "include/listswitchable.h"
+#include "listswitchable.h"
 
 //#define debug() QDebug::QDebug(QtDebugMsg)
 #define debug() QNoDebug()
@@ -16,23 +16,23 @@ template<>template<typename F> ListSwitchable<dpoint>::ListSwitchable(F& list) :
     *this= static_cast<ListSwitchable<dpoint>& >(c);
 }
 
-#include "include/listswitchable.h"
+#include "listswitchable.h"
 template ListSwitchable<dpoint>::ListSwitchable(ListSwitchable<dpoint>& list);
-#include "include/cliffsanalyzer.h"
+#include "cliffsanalyzer.h"
 template ListSwitchable<dpoint>::ListSwitchable(CliffsAnalyzer<dpoint>& list);
-#include "include/areacalculator.h"
+#include "areacalculator.h"
 template ListSwitchable<dpoint>::ListSwitchable(AreaCalculator<dpoint>& list);
 template ListSwitchable<dpoint>::ListSwitchable(ListBase<dpoint>& list);
-#include "include/cornernormalizer.h"
+#include "cornernormalizer.h"
 template ListSwitchable<dpoint>::ListSwitchable(CornerNormalizer<dpoint>& list);
 template ListSwitchable<dpoint>::ListSwitchable(Calculator<dpoint>& list);
 template ListSwitchable<dpoint>::ListSwitchable(ListCopyable<dpoint>& list);
-#include "include/areaanalyzer.h"
+#include "areaanalyzer.h"
 template ListSwitchable<dpoint>::ListSwitchable(AreaAnalyzer<dpoint>& list);
 template ListSwitchable<dpoint>::ListSwitchable(TurnNormalizer<dpoint>& list);
 template ListSwitchable<dpoint>::ListSwitchable(AreaNormalizer<dpoint>& list);
 template ListSwitchable<dpoint>::ListSwitchable(CliffsNormalizer<dpoint>& list);
-#include "include/corneranalyzer.h"
+#include "corneranalyzer.h"
 template ListSwitchable<dpoint>::ListSwitchable(CornerAnalyzer<dpoint>& list);
 
 // Note: ALL datamembers of target class destroyed
@@ -48,33 +48,33 @@ template<>template<typename F> void ListSwitchable<dpoint>::operator=(const F& l
     //throw std::runtime_error("ListSwitchable assigned with const");
 }
 
-#include "include/cliffscalculator.h"
+#include "cliffscalculator.h"
 template void ListSwitchable<dpoint>::operator=(CliffsCalculator<dpoint>& list);
 template void ListSwitchable<dpoint>::operator=(const CliffsCalculator<dpoint>& list);
-#include "include/areacalculator.h"
+#include "areacalculator.h"
 template void ListSwitchable<dpoint>::operator=(AreaCalculator<dpoint>& list);
 template void ListSwitchable<dpoint>::operator=(const AreaCalculator<dpoint>& list);
-#include "include/turncalculator.h"
+#include "turncalculator.h"
 template void ListSwitchable<dpoint>::operator=(TurnCalculator<dpoint>& list);
 template void ListSwitchable<dpoint>::operator=(const TurnCalculator<dpoint>& list);
-#include "include/cornercalculator.h"
+#include "cornercalculator.h"
 template void ListSwitchable<dpoint>::operator=(CornerCalculator<dpoint>& list);
 template void ListSwitchable<dpoint>::operator=(const CornerCalculator<dpoint>& list);
-#include "include/calculator.h"
+#include "calculator.h"
 template void ListSwitchable<dpoint>::operator=(Calculator<dpoint>& list);
 template void ListSwitchable<dpoint>::operator=(const Calculator<dpoint>& list);
-#include "include/spirals.h"
+#include "spirals.h"
 template void ListSwitchable<dpoint>::operator=(Spirals<dpoint>& list);
 template void ListSwitchable<dpoint>::operator=(const Spirals<dpoint>& list);
 template void ListSwitchable<dpoint>::operator=(StraightsCalculator<dpoint>& list);
 template void ListSwitchable<dpoint>::operator=(const StraightsCalculator<dpoint>& list);
-#include "include/cliffs.h"
+#include "cliffs.h"
 template void ListSwitchable<dpoint>::operator=(Cliffs<dpoint>& list);
 template void ListSwitchable<dpoint>::operator=(const Cliffs<dpoint>& list);
-#include "include/turns.h"
+#include "turns.h"
 template void ListSwitchable<dpoint>::operator=(Turns<dpoint>& list);
 template void ListSwitchable<dpoint>::operator=(const Turns<dpoint>& list);
-#include "include/corners.h"
+#include "corners.h"
 template void ListSwitchable<dpoint>::operator=(Corners<dpoint>& list);
 template void ListSwitchable<dpoint>::operator=(const Corners<dpoint>& list);
 

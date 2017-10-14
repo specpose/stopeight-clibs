@@ -1,7 +1,7 @@
 // Copyright (C) 2009-2015 Specific Purpose Software GmbH
 // GNU Lesser General Public License, version 2.1
 
-#include "include/turncalculator.h"
+#include "turncalculator.h"
 
 template<> TurnCalculator<dpoint>::TurnCalculator() : ListSwitchable<dpoint>() {}
 
@@ -11,11 +11,11 @@ template<>template<typename F> TurnCalculator<dpoint>::TurnCalculator(F& list) :
     *this= static_cast<TurnCalculator<dpoint>& >(c);
 }
 
-#include "include/areanormalizer.h"
+#include "areanormalizer.h"
 template TurnCalculator<dpoint>::TurnCalculator(AreaNormalizer<dpoint>& list);
 template TurnCalculator<dpoint>::TurnCalculator(CornerNormalizer<dpoint>& list);
 template TurnCalculator<dpoint>::TurnCalculator(TurnNormalizer<dpoint>& list);
-#include "include/listcopyable.h"
+#include "listcopyable.h"
 template TurnCalculator<dpoint>::TurnCalculator(ListCopyable<dpoint>& list);
 
 // this has performance penalty!

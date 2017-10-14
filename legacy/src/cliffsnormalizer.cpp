@@ -1,7 +1,7 @@
 // Copyright (C) 2009-2015 Specific Purpose Software GmbH
 // GNU Lesser General Public License, version 2.1
 
-#include "include/cliffsnormalizer.h"
+#include "cliffsnormalizer.h"
 
 template<> CliffsNormalizer<dpoint>::CliffsNormalizer() : AreaCalculator<dpoint>() {}
 
@@ -11,9 +11,9 @@ template<>template<typename F> CliffsNormalizer<dpoint>::CliffsNormalizer(F& lis
 	*this = static_cast<CliffsNormalizer<dpoint>&>(c);
 }
 
-#include "include/listcopyable.h"
+#include "listcopyable.h"
 template CliffsNormalizer<dpoint>::CliffsNormalizer(ListCopyable<dpoint>& list);
-#include "include/areaanalyzer.h"
+#include "areaanalyzer.h"
 template CliffsNormalizer<dpoint>::CliffsNormalizer(AreaAnalyzer<dpoint>& list);
 
 template <> void CliffsNormalizer<dpoint>::cliffFilters() {

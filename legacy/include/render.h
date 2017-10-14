@@ -3,11 +3,11 @@
 #ifndef RENDER_H
 #define RENDER_H
 
-#include <QDebug>
+//#include <QDebug>
 
 //used for vector math
-#include <QVector2D>
-#include <QLineF>
+#include <QtGui/QVector2D>
+#include <QtCore/QLineF>
 
 #include "dpoint.h"
 

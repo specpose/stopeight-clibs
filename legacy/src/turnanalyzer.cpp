@@ -1,7 +1,7 @@
 // Copyright (C) 2009-2015 Specific Purpose Software GmbH
 // GNU Lesser General Public License, version 2.1
 
-#include "include/turnanalyzer.h"
+#include "turnanalyzer.h"
 
 #define SUMLENGTH_FACTOR_SUBDIVISION 1
 
@@ -15,7 +15,7 @@ template<>template<typename F> TurnAnalyzer<dpoint>::TurnAnalyzer(F& list) : Tur
     *this= static_cast<TurnAnalyzer<dpoint>& >(c);
 }
 
-#include "include/areanormalizer.h"
+#include "areanormalizer.h"
 template TurnAnalyzer<dpoint>::TurnAnalyzer(AreaNormalizer<dpoint>& list);
 template TurnAnalyzer<dpoint>::TurnAnalyzer(CornerNormalizer<dpoint>& list);
 

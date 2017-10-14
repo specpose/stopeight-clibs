@@ -1,7 +1,7 @@
 // Copyright (C) 2009-2015 Specific Purpose Software GmbH
 // GNU Lesser General Public License, version 2.1
 
-#include "include/straightsanalyzer.h"
+#include "straightsanalyzer.h"
 
 #define debug() QNoDebug()
 
@@ -13,7 +13,7 @@ template<>template<typename F> StraightsAnalyzer<dpoint>::StraightsAnalyzer(F& l
     *this= static_cast<StraightsAnalyzer<dpoint>& >(c);
 }
 
-#include "include/areanormalizer.h"
+#include "areanormalizer.h"
 template StraightsAnalyzer<dpoint>::StraightsAnalyzer(AreaNormalizer<dpoint>& list);
 template StraightsAnalyzer<dpoint>::StraightsAnalyzer(CornerNormalizer<dpoint>& list);
 

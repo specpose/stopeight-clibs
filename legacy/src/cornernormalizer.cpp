@@ -1,7 +1,7 @@
 // Copyright (C) 2009-2015 Specific Purpose Software GmbH
 // GNU Lesser General Public License, version 2.1
 
-#include "include/cornernormalizer.h"
+#include "cornernormalizer.h"
 
 template<> CornerNormalizer<dpoint>::CornerNormalizer() : CornerCalculator<dpoint>() {}
 
@@ -12,11 +12,11 @@ template<>template<typename F> CornerNormalizer<dpoint>::CornerNormalizer(F& lis
 }
 
 template CornerNormalizer<dpoint>::CornerNormalizer(ListBase<dpoint>& list);
-#include "include/areanormalizer.h"
+#include "areanormalizer.h"
 template CornerNormalizer<dpoint>::CornerNormalizer(TurnNormalizer<dpoint>& list);
-#include "include/cliffsnormalizer.h"
+#include "cliffsnormalizer.h"
 template CornerNormalizer<dpoint>::CornerNormalizer(CliffsNormalizer<dpoint>& list);
-#include "include/listcopyable.h"
+#include "listcopyable.h"
 template CornerNormalizer<dpoint>::CornerNormalizer(ListCopyable<dpoint>& list);
 template CornerNormalizer<dpoint>::CornerNormalizer(AreaNormalizer<dpoint>& list);
 template CornerNormalizer<dpoint>::CornerNormalizer(CornerNormalizer<dpoint>& list);
