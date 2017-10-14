@@ -23,7 +23,7 @@ namespace analyzer_wrappers{
 	static PyObject* hello(PyObject* self, PyObject* args);
 }
 
-static PyMethodDef stopeight_clibs_analyzerMethods[] = {
+static PyMethodDef analyzerMethods[] = {
 	{ "hello",  analyzer_wrappers::hello, METH_VARARGS,
 	"Print hello world." },
     {NULL, NULL, 0, NULL}        /* Sentinel */
@@ -34,18 +34,18 @@ static PyMethodDef stopeight_clibs_analyzerMethods[] = {
 
 static struct PyModuleDef analyzermodule = {
 	PyModuleDef_HEAD_INIT,
-	"stopeight_clibs_analyzer",   /* name of module */
+        "analyzer",   /* name of module */
 	NULL, /* module documentation, may be NULL */
 	-1,       /* size of per-interpreter state of the module,
 			  or -1 if the module keeps state in global variables. */
-	stopeight_clibs_analyzerMethods
+        analyzerMethods
 };
 
-PyMODINIT_FUNC PyInit_stopeight_clibs_analyzer(void);
+PyMODINIT_FUNC PyInit_analyzer(void);
 
 #else // PY_MAJOR_VERSION >= 3
 
-PyMODINIT_FUNC initstopeight_clibs_analyzer(void);
+PyMODINIT_FUNC initanalyzer(void);
 
 #endif // PY_MAJOR_VERSION >= 3
 #endif // PY_MAJOR_VERSION
