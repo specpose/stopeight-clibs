@@ -2,8 +2,8 @@
 #define INTERFACEPYTHON_H
 
 
-#include <QList>
-#include <QPointF>
+#include <QtCore/QList>
+#include <QtCore/QPointF>
 
 #ifdef _WINDOWS
 #ifdef _DEBUG

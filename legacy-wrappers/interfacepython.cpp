@@ -56,14 +56,14 @@ QList<QPointF> legacy_wrappers::parse_list(PyObject *self, PyObject *args) {
 	PyObject* obj;
 	QList<QPointF> list = QList<QPointF>();
 	if (!PyArg_ParseTuple(args, "O", &obj)) {
-		throw std::exception("Argument is supposed to be a list of a pair of numbers");
+        throw std::runtime_error("Argument is supposed to be a list of a pair of numbers");
 	}
 	PyObject* pyList = PySequence_Fast(obj, "Not a list");
 	int length = PySequence_Size(obj);
 	for (int i = 0; i < length; i++) {
 		PyObject* item = PySequence_Fast_GET_ITEM(pyList, i);
 		if (PySequence_Size(item) != 2) {
-			throw std::exception("Malformed point format");
+            throw std::runtime_error("Malformed point format");
 		}
 		float xValue;
 		float yValue;
@@ -71,7 +71,7 @@ QList<QPointF> legacy_wrappers::parse_list(PyObject *self, PyObject *args) {
 			list << QPointF(xValue, yValue);
 		}
 		else {
-			throw std::exception("Malformed number format");
+            throw std::runtime_error("Malformed number format");
 		}
 	}
 	return list;
