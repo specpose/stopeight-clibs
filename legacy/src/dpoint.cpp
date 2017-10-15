@@ -22,7 +22,7 @@ dpoint::dpoint(const float x, const float y) {//:QPointF(x,y){
 	//rot = QPointF();
 }
 
-QDebug operator<<(QDebug dbg, const dpoint &dp){
+/*QDebug operator<<(QDebug dbg, const dpoint &dp){
     dbg.nospace()
             << "#: " << dp.position <<"; "
             << "x: "<< dp.x() << "; "
@@ -31,7 +31,7 @@ QDebug operator<<(QDebug dbg, const dpoint &dp){
             << "Roty: " << dp.rot.y() << "; ";
 
     return dbg.space();
-}
+}*/
 
 QDataStream &operator<<(QDataStream &out, const dpoint &dp){
     QPointF p = dp;

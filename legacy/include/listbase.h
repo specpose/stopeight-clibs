@@ -8,6 +8,7 @@
 
 #include <QtCore/QString>
 #include <QtCore/QFile>
+#include <QtCore/QDataStream>
 
 #include "dpoint.h"
 #include "myreal.h"

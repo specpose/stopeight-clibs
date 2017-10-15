@@ -7,12 +7,14 @@ QT       += gui
 
 TARGET = stopeight-clibs-legacy
 TEMPLATE = lib
-win32:CONFIG+= staticlib
+#win32:CONFIG+= staticlib
 
 CONFIG -= lib_bundle
 CONFIG += qt
 
 DEFINES += LEGACY_LIBRARY
+
+INCLUDEPATH += ./include/
 
 SOURCES += \
     src/listcopyable.cpp \
@@ -86,3 +88,6 @@ HEADERS +=\
     include/corners.h \
     include/render.h \
     include/legacy_export.h
+
+target.path = /usr/local/lib
+INSTALLS += target

@@ -73,7 +73,7 @@ template<> QList<QPointF> ListBase<QPointF>::loadSPFile(const QString& fileName)
     if (!file.open(QIODevice::ReadOnly)) {
 		//C++11
 		//throw legacy::alg_logic_error((file.errorString().toStdString()+file.fileName().toStdString()).c_str(),__FILE__,__func__);
-		throw legacy::alg_logic_error((file.errorString().toStdString()+file.fileName().toStdString()).c_str(),__FILE__,"");
+        throw legacy::alg_logic_error("Unknown filename",__FILE__,"");//(file.errorString().toStdString()+file.fileName().toStdString()).c_str(),__FILE__,"");
 		//throw std::string(file.errorString().toStdString() + " reading file " + file.fileName().toStdString());
         //return false;
     }
@@ -84,7 +84,7 @@ template<> QList<QPointF> ListBase<QPointF>::loadSPFile(const QString& fileName)
     in >> magic;
     if (magic != MagicNumber) {
 //        debug()<<"File is invalid."<<file.fileName()<<endl<<file.errorString();
-        throw "MainWindow::loadSPFile: Wrong magic number: "+magic;
+        throw std::runtime_error("MainWindow::loadSPFile: Wrong magic number: "+magic);
         //return false;
     }
 
