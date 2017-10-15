@@ -11,11 +11,12 @@ build:
     - CXX
 
 source:
-  git_url: ../
+  git_url: https://github.com/specpose/stopeight-clibs.git
 
 requirements:
   build:
     - cmake
+    - qt >=5.6.0
 
 about:
   summary: Comparing sequences of points in 2 dimensions.
