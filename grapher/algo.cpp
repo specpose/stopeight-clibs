@@ -283,8 +283,8 @@ namespace grapher {
             __differences_To_VG(_samplesPerVector, _vectorLength, _fixPoint_indices)(task1, std::begin(differences) + 1, std::end(differences), begin2, angleFunction);
         }
     }
-    //template void samples_To_VG::operator()(fexec& task1, vector_single begin, vector_single end, vector_pair begin2, plainAngle& angleFunction);
-    //template void samples_To_VG::operator()(fexec& task1, vector_single begin, vector_single end, vector_pair begin2, test2& angleFunction);
+    template void samples_To_VG::operator()(fexec& task1, vector_single<float> begin, vector_single<float> end, vector_pair<float> begin2, angle::angle& angleFunction);
+    template void samples_To_VG::operator()(fexec& task1, vector_single<double> begin, vector_single<double> end, vector_pair<double> begin2, angle::angle& angleFunction);
     
 }
 
