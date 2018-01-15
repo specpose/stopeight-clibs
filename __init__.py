@@ -1,5 +1,6 @@
 # stopeight: Comparing sequences of points in 2 dimensions.
-# Copyright (C) 2009 - 2015 Specific Purpose Software GmbH
+# Copyright (C) 2009 - 2016 Specific Purpose Software GmbH
+# Copyright (C) 2017 - 2018 Fassio Blatter
 #
 # 
 # This library is free software; you can redistribute it and/or
