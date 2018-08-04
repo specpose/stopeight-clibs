@@ -10,7 +10,12 @@ using fexec = const dummy;
 using namespace pybind11;
 using namespace grapher;
 
-PYBIND11_MODULE(grapher, m){
+//new >2.2
+//PYBIND11_MODULE(grapher, m){
+//old
+PYBIND11_PLUGIN(grapher){
+    pybind11::module m("grapher","");
+//old
     class_<samples_To_VG>(m,"VectorGraph")
             .def(init<int,double,std::vector<int>>())
 //            .def("exec",overload_cast<fexec&, vector_single<double>,vector_single<double>,vector_pair<double>,angle::angle&>(&samples_To_VG::operator()<fexec,vector_single<double>,vector_pair<double>,angle::angle>))
