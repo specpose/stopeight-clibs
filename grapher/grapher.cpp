@@ -20,6 +20,7 @@ namespace speczilla {
 	}
 	template Buffer<float>::Buffer(std::vector<float>* s);
 	template Buffer<double>::Buffer(std::vector<double>* s);
+	template Buffer<int16_t>::Buffer(std::vector<int16_t>* s);
 
 	template<typename T> Buffer<T>::Buffer(std::vector<T>* s, int showSamples, int samplesPerVector, double unitaryLength, bool relative, double average, double angleScale)
 		: Buffer<T>(s)
@@ -33,6 +34,7 @@ namespace speczilla {
 	}
 	template Buffer<float>::Buffer(std::vector<float>* s, int showSamples, int samplesPerVector, double unitaryLength, bool relative, double average, double angleScale);
 	template Buffer<double>::Buffer(std::vector<double>* s, int showSamples, int samplesPerVector, double unitaryLength, bool relative, double average, double angleScale);
+	template Buffer<int16_t>::Buffer(std::vector<int16_t>* s, int showSamples, int samplesPerVector, double unitaryLength, bool relative, double average, double angleScale);
 
 /*	template<typename T> Buffer<T>::Buffer(std::unique_ptr<std::vector<T>> s)
 //		: PreloaderIF{ *this }
@@ -48,6 +50,7 @@ namespace speczilla {
 	}
 	template Buffer<float>::~Buffer();
 	template Buffer<double>::~Buffer();
+	template Buffer<int16_t>::~Buffer();
 
 	template<typename T> sp::result<T> Buffer<T>::operator()()
 	{
@@ -87,6 +90,7 @@ namespace speczilla {
 	//specialization
 	template sp::result<float> Buffer<float>::operator()();
 	template sp::result<double> Buffer<double>::operator()();
+	template sp::result<int16_t> Buffer<int16_t>::operator()();
 
 }
 

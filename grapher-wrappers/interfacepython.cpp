@@ -27,8 +27,13 @@ PYBIND11_MODULE(grapher, m){
 //    pybind11::module m("grapher","");
 //old
 
-//    m.def("cast_VectorInt16",[](){return std::vector<int16_t>{1};});
     bind_vector<std::vector<int16_t>>(m,"VectorInt16",buffer_protocol());
+    m.def("create_vector_graph", [](buffer vec)->buffer{
+	buffer_info info = vec.request();
+	auto data = speczilla::Buffer<int16_t>(static_cast<std::vector<int16_t>*>(info.ptr));
+	return vec;
+    });
+
 /*    class_<speczilla::Buffer<int16_t>>(m,"Buffer",buffer_protocol())
             .def_buffer([](speczilla::Buffer<int16_t> &b) -> buffer_info{
                 return buffer_info{

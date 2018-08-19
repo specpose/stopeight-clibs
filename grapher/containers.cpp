@@ -4,6 +4,8 @@
 #include "containers.h"
 #include <stopeight-clibs/shared_types.h>
 
+#include <stdint.h>
+
 namespace stopeight {
 
 	template<typename DataType> blocks<DataType>::blocks(stopeight::bounds<DataType> vec, const int seg_size)
@@ -16,20 +18,23 @@ namespace stopeight {
 			int o = this->size()-1;
 			int _endFull = endFull(origin_size, _seg_size);
 			for (int i = seg_size; i <= _endFull; i += seg_size) {
-                //Windows auto v = std::pair<std::vector<DataType>::iterator, std::vector<DataType>::iterator>(_vec.first + i - seg_size, _vec.first + i - 1);
+                //Windows
+				//auto v = std::pair<std::vector<DataType>::iterator, std::vector<DataType>::iterator>(_vec.first + i - seg_size, _vec.first + i - 1);
 				auto v = std::pair<typename std::vector<DataType>::iterator, typename std::vector<DataType>::iterator>(_vec.first + i - seg_size, _vec.first + i - 1);
 				this->at(n++) = v;
 			}
 			if (_endFull != origin_size) {
 				auto l = origin_size - _endFull;
-                //Windows auto v = std::pair<std::vector<DataType>::iterator, std::vector<DataType>::iterator>(_vec.second - l, _vec.second - 1);
+                //Windows
+				//auto v = std::pair<std::vector<DataType>::iterator, std::vector<DataType>::iterator>(_vec.second - l, _vec.second - 1);
 				auto v = std::pair<typename std::vector<DataType>::iterator, typename std::vector<DataType>::iterator>(_vec.second - l, _vec.second - 1);
 				this->at(o) = v;
 			}
 		};
 	template blocks<sp::timecode<double>>::blocks(stopeight::bounds<sp::timecode<double>> vec, const int seg_size);
 	template blocks<sp::timecode<float>>::blocks(stopeight::bounds<sp::timecode<float>> vec, const int seg_size);
-
+	template blocks<sp::timecode<int16_t>>::blocks(stopeight::bounds<sp::timecode<int16_t>> vec, const int seg_size);
+	
 	template<typename DataType> int blocks<DataType>::calculateSize(int vec_size, int seg_size) {
 			if (vec_size > seg_size) {
 				if ((vec_size%seg_size) == 0) {
