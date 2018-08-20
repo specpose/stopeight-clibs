@@ -7,13 +7,14 @@
 #include <stopeight-clibs/angle_functions.h>
 
 //grapher
-#include <pybind11/stl_bind.h>
-//#include <pybind11/numpy.h>
-PYBIND11_MAKE_OPAQUE(std::vector<int16_t>);
+//#include <pybind11/stl_bind.h>
+#include <pybind11/numpy.h>
+//PYBIND11_MAKE_OPAQUE(std::vector<int16_t>);
+//PYBIND11_MAKE_OPAQUE(std::vector<sp::timecode<int16_t>>);
 #include <stopeight-clibs/grapher.h>
 
 //algo
-//#include <pybind11/stl.h>
+#include <pybind11/stl.h>
 
 using fexec = const dummy;
 
@@ -27,12 +28,25 @@ PYBIND11_MODULE(grapher, m){
 //    pybind11::module m("grapher","");
 //old
 
-    bind_vector<std::vector<int16_t>>(m,"VectorInt16",buffer_protocol());
-    m.def("create_vector_graph", [](buffer vec)->buffer{
-	buffer_info info = vec.request();
+    class_<sp::timecode<int16_t>>(m,"TimeCode")
+	.def(init<int16_t,int16_t>())
+	.def_readwrite("first",&sp::timecode<int16_t>::first)
+	.def_readwrite("second",&sp::timecode<int16_t>::second);
+    //stl_bind //bind_vector<std::vector<int16_t>>(m,"VectorInt16",buffer_protocol());
+    //bind_vector<std::vector<sp::timecode<int16_t>>>(m,"VectorTCInt16",buffer_protocol());
+    //stl //m.def("create_vector_graph", [](std::vector<int16_t> vec)->std::vector<sp::timecode<int16_t>>{
+    m.def("create_vector_graph", [](buffer in)->std::vector<sp::timecode<int16_t>>{
+	buffer_info info = in.request();
 	auto data = speczilla::Buffer<int16_t>(static_cast<std::vector<int16_t>*>(info.ptr));
-	return vec;
-    });
+	//auto data = speczilla::Buffer<int16_t>(&vec);
+	auto out = data();
+	/*auto out = std::vector<sp::timecode<int16_t>>();
+	auto one = sp::timecode<int16_t>(12,15);
+	auto two = sp::timecode<int16_t>(30,41);
+	out.push_back(one);
+	out.push_back(two);*/
+	return out;
+    },return_value_policy::move);
 
 /*    class_<speczilla::Buffer<int16_t>>(m,"Buffer",buffer_protocol())
             .def_buffer([](speczilla::Buffer<int16_t> &b) -> buffer_info{
