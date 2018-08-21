@@ -31,7 +31,7 @@ PYBIND11_MODULE(grapher, m){
     class_<sp::timecode<int16_t>>(m,"TimeCodeInt")
 	.def(init<int16_t,int16_t>())
 	.def_readwrite("first",&sp::timecode<int16_t>::first)
-	.def_readwrite("second",&sp::timecode<int16_t>::second);
+        .def_readwrite("second",&sp::timecode<int16_t>::second);
     class_<sp::timecode<double>>(m,"TimeCodeDouble")
 	.def(init<double,double>())
 	.def_readwrite("first",&sp::timecode<double>::first)
@@ -43,10 +43,10 @@ PYBIND11_MODULE(grapher, m){
     //stl_bind //bind_vector<std::vector<int16_t>>(m,"VectorInt16",buffer_protocol());
     //bind_vector<std::vector<sp::timecode<int16_t>>>(m,"VectorTCInt16",buffer_protocol());
     //stl //m.def("create_vector_graph", [](std::vector<int16_t> vec)->std::vector<sp::timecode<int16_t>>{
-    m.def("create_vector_graph", [](buffer in)->std::vector<sp::timecode<int16_t>>{
-	buffer_info info = in.request();
-	auto data = speczilla::Buffer<int16_t>(static_cast<std::vector<int16_t>*>(info.ptr));
-	//auto data = speczilla::Buffer<int16_t>(&vec);
+    m.def("create_vector_graph", [](std::vector<double> in)->std::vector<sp::timecode<double>>{
+        //buffer_info info = in.request();
+        //auto data = speczilla::Buffer<double>(static_cast<std::vector<double>*>(info.ptr));
+        auto data = speczilla::Buffer<double>(&in,in.size(),1,1.0f,true,1.0f,1.0f);
 	auto out = data();
 	/*auto out = std::vector<sp::timecode<int16_t>>();
 	auto one = sp::timecode<int16_t>(12,15);
