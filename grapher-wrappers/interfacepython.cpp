@@ -7,14 +7,12 @@
 #include <stopeight-clibs/angle_functions.h>
 
 //grapher
-//#include <pybind11/stl_bind.h>
-#include <pybind11/numpy.h>
-//PYBIND11_MAKE_OPAQUE(std::vector<int16_t>);
-//PYBIND11_MAKE_OPAQUE(std::vector<sp::timecode<int16_t>>);
-#include <stopeight-clibs/grapher.h>
-
-//algo
 #include <pybind11/stl.h>
+//#include <pybind11/stl_bind.h>
+//PYBIND11_MAKE_OPAQUE(std::vector<double>);
+//PYBIND11_MAKE_OPAQUE(std::vector<sp::timecode<double>>);
+//#include <pybind11/numpy.h>
+#include <stopeight-clibs/grapher.h>
 
 using fexec = const dummy;
 
@@ -36,28 +34,17 @@ PYBIND11_MODULE(grapher, m){
 	.def(init<double,double>())
 	.def_readwrite("first",&sp::timecode<double>::first)
 	.def_readwrite("second",&sp::timecode<double>::second);
+    /*stl
     m.def("VectorInt16",[](std::vector<int16_t> b){return std::vector<int16_t>{b};});
     m.def("VectorTCInt16",[](std::vector<sp::timecode<int16_t>> b){return std::vector<sp::timecode<int16_t>>{b};});
     m.def("VectorDouble",[](std::vector<int16_t> b){return std::vector<double>(b.begin(),b.end());});
-    m.def("VectorTCDouble",[](std::vector<sp::timecode<int16_t>> b){return std::vector<sp::timecode<double>>(b.begin(),b.end());});
-    //stl_bind //bind_vector<std::vector<int16_t>>(m,"VectorInt16",buffer_protocol());
-    //bind_vector<std::vector<sp::timecode<int16_t>>>(m,"VectorTCInt16",buffer_protocol());
-    //stl //m.def("create_vector_graph", [](std::vector<int16_t> vec)->std::vector<sp::timecode<int16_t>>{
-    m.def("create_vector_graph", [](std::vector<double> in)->std::vector<sp::timecode<double>>{
-        //buffer_info info = in.request();
-        //auto data = speczilla::Buffer<double>(static_cast<std::vector<double>*>(info.ptr));
-        auto data = speczilla::Buffer<double>(&in,in.size(),1,1.0f,true,1.0f,1.0f);
-	auto out = data();
-	/*auto out = std::vector<sp::timecode<int16_t>>();
-	auto one = sp::timecode<int16_t>(12,15);
-	auto two = sp::timecode<int16_t>(30,41);
-	out.push_back(one);
-	out.push_back(two);*/
-	return out;
-    },return_value_policy::move);
-
-/*    class_<speczilla::Buffer<int16_t>>(m,"Buffer",buffer_protocol())
-            .def_buffer([](speczilla::Buffer<int16_t> &b) -> buffer_info{
+    m.def("VectorTCDouble",[](std::vector<sp::timecode<int16_t>> b){return std::vector<sp::timecode<double>>(b.begin(),b.end());});*/
+    /*stl_bind
+    bind_vector<std::vector<double>>(m,"VectorDouble",buffer_protocol());
+    bind_vector<std::vector<sp::timecode<double>>>(m,"VectorTCDouble",buffer_protocol());*/
+    /*speczilla::Buffer has private buf member
+    class_<speczilla::Buffer<int16_t>>(m,"Buffer",buffer_protocol())
+        .def_buffer([](speczilla::Buffer<int16_t> &b) -> buffer_info{
                 return buffer_info{
                     b.buf,
                     sizeof(int16_t),
@@ -67,7 +54,13 @@ PYBIND11_MODULE(grapher, m){
                     { sizeof(int16_t) }
                 };
 
-});*/
+    });*/
+
+    m.def("create_vector_graph", [](std::vector<double> in)->std::vector<sp::timecode<double>>{
+	auto data = speczilla::Buffer<double>(&in);	
+	auto out = data();
+	return out;
+    },return_value_policy::move);
 
     class_<samples_To_VG>(m,"Samples_To_VG")
             .def(init<int,double,std::vector<int>>())
