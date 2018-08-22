@@ -56,11 +56,11 @@ PYBIND11_MODULE(grapher, m){
 
     });*/
 
-    m.def("create_vector_graph", [](std::vector<double> in)->std::vector<sp::timecode<double>>{
-	auto data = speczilla::Buffer<double>(&in);	
+    m.def("create_vector_graph", [](std::vector<double> in, int samplesPerVector, double unitaryLength, bool relative , double average, double averageScale)->std::vector<sp::timecode<double>>{
+	auto data = speczilla::Buffer<double>(&in,in.size(),samplesPerVector,unitaryLength,relative,average,averageScale);	
 	auto out = data();
 	return out;
-    },return_value_policy::move);
+    },arg("vector"),arg("samplesPerVector")=1,arg("unitaryLength")=1.0,arg("relative")=false,arg("average")=0.0,arg("averageScale")=1.0, return_value_policy::move);
 
     class_<samples_To_VG>(m,"Samples_To_VG")
             .def(init<int,double,std::vector<int>>())
