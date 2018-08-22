@@ -10,12 +10,12 @@ namespace speczilla {
 	template<typename T> Buffer<T>::Buffer(std::vector<T>* s)
     : PreloaderIF<T,sp::result<T>>( *this )
 		, buf(s)
-		, _showSamples(0)
+                , _showSamples(s->size())
 		, _samplesPerVector(1)
-		, _unitaryLength(1.0f)
-		, _relative(false)
-		, _average(0.0f)
-		, _angleScale(1.0f)
+                , _unitaryLength(1.0)
+                , _relative(false)
+                , _average(0.0)
+                , _angleScale(1.0)
 	{
 	}
 	template Buffer<float>::Buffer(std::vector<float>* s);
