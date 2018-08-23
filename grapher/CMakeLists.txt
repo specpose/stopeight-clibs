@@ -10,6 +10,7 @@ set(${PROJECT_NAME}_sources
     grapher.cpp
     mean.cpp
     main.cpp
+    Matrix.cpp
 )
 
 #add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_sources})

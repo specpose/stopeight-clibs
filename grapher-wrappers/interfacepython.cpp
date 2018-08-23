@@ -6,13 +6,14 @@
 #include "dummy.h"
 #include <stopeight-clibs/angle_functions.h>
 
-//grapher
+#include <stopeight-clibs/grapher.h>
+#include <stopeight-clibs/Matrix.h>
+
 #include <pybind11/stl.h>
 //#include <pybind11/stl_bind.h>
 //PYBIND11_MAKE_OPAQUE(std::vector<double>);
 //PYBIND11_MAKE_OPAQUE(std::vector<sp::timecode<double>>);
-//#include <pybind11/numpy.h>
-#include <stopeight-clibs/grapher.h>
+#include <pybind11/numpy.h>
 
 using fexec = const dummy;
 
@@ -70,4 +71,35 @@ PYBIND11_MODULE(grapher, m){
 //            .def("exec",(void (samples_To_VG::*)(fexec&, vector_single<double>,vector_single<double>,vector_pair<double>,angle::angle&)) &samples_To_VG::operator() )
             .def("exec", &samples_To_VG::operator()<fexec,vector_single<double>,vector_pair<double>,angle::angle> )
             ;
+
+    class_<Matrix<double>>(m,"Matrix",buffer_protocol())
+	.def(init<double,double,double,double,double,double,double,double,double>())
+	.def_buffer([](Matrix<double>& matrix) -> buffer_info{
+	return buffer_info(
+		nullptr,
+		sizeof(double),
+		format_descriptor<double>::format(),
+		2,
+		{3,3},//rows, cols
+		{ sizeof(double) * 3,//rows
+		sizeof(double) }
+	);
+    	})
+	/*.def("__init__",[](Matrix<double>& matrix, buffer buffer){
+		buffer_info info = buffer.request();
+		new (&matrix) Matrix();
+	})*/
+	;
+    /*class_<Stack<double>>(m,"Stack",buffer_protocol())
+	.def_buffer([](Stack<double>& stack) -> buffer_info {
+	return buffer_info(
+		stack.data(),
+		sizeof(std::array<double,9>),
+		format_descriptor<std::array<double,9>>::format(),
+		1,
+		{1},
+		{sizeof(std::array<double,9>}
+		);
+	})
+	;*/
 }
