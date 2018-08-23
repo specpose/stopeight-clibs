@@ -85,21 +85,56 @@ PYBIND11_MODULE(grapher, m){
 		sizeof(double) }
 	);
     	})
+	.def("format",[](){return "";})
 	/*.def("__init__",[](Matrix<double>& matrix, buffer buffer){
 		buffer_info info = buffer.request();
 		new (&matrix) Matrix();
 	})*/
 	;
-    /*class_<Stack<double>>(m,"Stack",buffer_protocol())
-	.def_buffer([](Stack<double>& stack) -> buffer_info {
+    class_<Vector<double>>(m,"Vector",buffer_protocol())
+	.def(init<double,double,double>())
+	.def_buffer([](Vector<double>& vector) -> buffer_info{
 	return buffer_info(
-		stack.data(),
-		sizeof(std::array<double,9>),
-		format_descriptor<std::array<double,9>>::format(),
+		vector.data(),
+		sizeof(double),
+		format_descriptor<double>::format(),
 		1,
 		{1},
-		{sizeof(std::array<double,9>}
-		);
+		{sizeof(double)}
+	);
 	})
-	;*/
+	;
+    class_<Vectors<double>>(m,"Vectors",buffer_protocol())
+	.def(init<>())
+	.def_buffer([](Vectors<double>& vectors) -> buffer_info{
+	return buffer_info(
+		vectors.data(),
+		sizeof(Vector<double>),
+		format_descriptor<Vector<double>>::format(),
+		1,
+		{1},
+		{sizeof(Vector<double>)}
+	);
+	})
+	.def("apply",&Vectors<double>::apply)
+	;
+    m.def("matrixsize",[]()->size_t{return sizeof(Matrix<double>);});
+    m.def("arraysize",[]()->size_t{return sizeof(std::array<double,9>);});
+    class_<Stack<double>>(m,"Stack",buffer_protocol())
+	.def(init<>())
+	.def_buffer([](Stack<double>& stack) -> buffer_info{
+	return buffer_info(
+		stack.data(),
+		sizeof(Matrix<double>),
+		"",//format_descriptor<Matrix<double>>::format(),
+		1,
+		{1},
+		{sizeof(Matrix<double>)}
+	);
+	})
+	.def("identity",&Stack<double>::identity)
+	.def("scale",&Stack<double>::scale<double>)
+	.def("rotate",&Stack<double>::rotate)
+	.def("translate",&Stack<double>::translate<double>)
+	;
 }
