@@ -96,11 +96,11 @@ PYBIND11_MODULE(grapher, m){
 	.def_buffer([](Vector<double>& vector) -> buffer_info{
 	return buffer_info(
 		vector.data(),
-		sizeof(double),
-		format_descriptor<double>::format(),
+		sizeof(Vector<double>::value_type),
+		format_descriptor<Vector<double>::value_type>::format(),
 		1,
-		{1},
-		{sizeof(double)}
+		{3},
+		{sizeof(Vector<double>::value_type)}
 	);
 	})
 	;
@@ -109,15 +109,17 @@ PYBIND11_MODULE(grapher, m){
 	.def_buffer([](Vectors<double>& vectors) -> buffer_info{
 	return buffer_info(
 		vectors.data(),
-		sizeof(Vector<double>),
-		format_descriptor<Vector<double>>::format(),
+		sizeof(double),
+		format_descriptor<Vector<double>::value_type>::format(),
 		1,
-		{1},
-		{sizeof(Vector<double>)}
+		{vectors.size()*3},
+		{sizeof(double)}
 	);
 	})
+	.def("push_back",&Vectors<double>::push_back)
 	.def("apply",&Vectors<double>::apply)
 	;
+    m.def("doublesize",[]()->size_t{return sizeof(std::array<double,9>);});
     m.def("matrixsize",[]()->size_t{return sizeof(Matrix<double>);});
     m.def("arraysize",[]()->size_t{return sizeof(std::array<double,9>);});
     class_<Stack<double>>(m,"Stack",buffer_protocol())
@@ -125,11 +127,11 @@ PYBIND11_MODULE(grapher, m){
 	.def_buffer([](Stack<double>& stack) -> buffer_info{
 	return buffer_info(
 		stack.data(),
-		sizeof(Matrix<double>),
-		"",//format_descriptor<Matrix<double>>::format(),
+		sizeof(Stack<double>::value_type),
+		"",//format_descriptor<Stack<double>::value_type>::format(),
 		1,
-		{1},
-		{sizeof(Matrix<double>)}
+		{stack.size()},
+		{sizeof(Stack<double>::value_type)}
 	);
 	})
 	.def("identity",&Stack<double>::identity)

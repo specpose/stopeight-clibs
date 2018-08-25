@@ -70,6 +70,10 @@ public:
 template<typename T> class Vectors : public std::vector<Vector<T>> {
 public:
 	Vectors();
+	//using value_type = typename std::vector<Vector<T>>::value_type;
+	void push_back(const typename std::vector<Vector<T>>::value_type val){
+		return std::vector<Vector<T>>::push_back(val);
+	}
 	
 	void apply(Stack<T>& stack);
 
