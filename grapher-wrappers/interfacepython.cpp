@@ -76,16 +76,15 @@ PYBIND11_MODULE(grapher, m){
 	.def(init<double,double,double,double,double,double,double,double,double>())
 	.def_buffer([](Matrix<double>& matrix) -> buffer_info{
 	return buffer_info(
-		nullptr,
+		matrix.data(),
 		sizeof(double),
 		format_descriptor<double>::format(),
-		2,
-		{3,3},//rows, cols
-		{ sizeof(double) * 3,//rows
+		1,
+		{9},//rows, cols
+		{ //sizeof(double) * 3,//rows
 		sizeof(double) }
 	);
     	})
-	.def("format",[](){return "";})
 	/*.def("__init__",[](Matrix<double>& matrix, buffer buffer){
 		buffer_info info = buffer.request();
 		new (&matrix) Matrix();

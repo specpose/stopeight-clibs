@@ -32,7 +32,7 @@ public:
 	Matrix& operator=(const Matrix& other) = default;
 	bool operator!=(const Matrix& other);
 	bool operator==(const Matrix& other);
-	std::shared_ptr<std::array<T,9>> data();
+	std::array<T,9>* data();
 	
 	static Matrix identity();
 
@@ -53,7 +53,7 @@ private:
 	static Matrix mul(const Matrix a, const Matrix b);
 	void apply(Vectors<T>& transform);
 private:
-	std::shared_ptr<std::array<T,9>> elems;
+	std::array<T,9> elems;
 };
 
 template<typename T> class Stack : public std::vector<Matrix<T>> {
@@ -70,8 +70,8 @@ public:
 template<typename T> class Vectors : public std::vector<Vector<T>> {
 public:
 	Vectors();
-	//using value_type = typename std::vector<Vector<T>>::value_type;
-	void push_back(const typename std::vector<Vector<T>>::value_type val){
+	//using std::vector<Vector<T>>::push_back;
+	void push_back(const typename std::vector<Vector<T>>::value_type& val){
 		return std::vector<Vector<T>>::push_back(val);
 	}
 	

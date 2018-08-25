@@ -62,8 +62,10 @@ template const float* Vectors<float>::_to_C_array();
 template const double* Vectors<double>::_to_C_array();
 
 /* Row Major 2D*/
-template<typename T>template<typename U> Matrix<T>::Matrix(U x1, U x2, U x3, U y1, U y2, U y3, U z1, U z2, U z3) : elems(std::make_shared<std::array<T,9>>()){
-	auto e = *elems.get();
+template<typename T>template<typename U> Matrix<T>::Matrix(U x1, U x2, U x3, U y1, U y2, U y3, U z1, U z2, U z3) 
+//: elems(std::make_shared<std::array<T,9>>())
+{
+	auto& e = elems;
 	e[0] = x1;
 	e[1] = x2;
 	e[2] = x3;
@@ -80,22 +82,22 @@ template Matrix<double>::Matrix(double x1, double x2, double x3, double y1,
 							   double y2, double y3, double z1, double z2, double z3);
 
 template<typename T> bool Matrix<T>::operator!=(const Matrix& other){
-	return (elems != other.elems);
+	return (elems != (other.elems));
 }
 template bool Matrix<float>::operator!=(const Matrix& other);
 template bool Matrix<double>::operator!=(const Matrix& other);
 
 template<typename T> bool Matrix<T>::operator==(const Matrix& other){
-	return (elems == other.elems);
+	return (elems == (other.elems));
 }
 template bool Matrix<float>::operator==(const Matrix& other);
 template bool Matrix<double>::operator==(const Matrix& other);
 
-template<typename T> std::shared_ptr<std::array<T,9>> Matrix<T>::data() {
-	return elems;
+template<typename T> std::array<T,9>* Matrix<T>::data() {
+	return &elems;
 };
-template std::shared_ptr<std::array<float,9>> Matrix<float>::data();
-template std::shared_ptr<std::array<double,9>> Matrix<double>::data();
+template std::array<float,9>* Matrix<float>::data();
+template std::array<double,9>* Matrix<double>::data();
 
 template<typename T> Matrix<T> Matrix<T>::identity() {
 	auto m = Matrix{	T(1),T(0),T(0),
@@ -108,7 +110,7 @@ template Matrix<float> Matrix<float>::identity();
 template Matrix<double> Matrix<double>::identity();
 
 template<typename T> T Matrix<T>::det() {
-	auto e = *elems.get();
+	auto& e = elems;
 	auto det = e[0]*e[4]*e[8]+e[1]*e[5]*e[6]+e[2]*e[3]*e[7]-e[0]*e[5]*e[6]-e[1]*e[3]*e[8]-e[2]*e[4]*e[6];
 	return det;
 }
@@ -161,8 +163,8 @@ template double Matrix<double>::_radToDeg(double rad);
 template<typename T>double Matrix<T>::_degToRad(double deg) { return deg / (180.0 / M_PI); }
 
 template<typename T> Matrix<T> Matrix<T>::mul(const Matrix a, const Matrix b) {
-	auto ae = *a.elems.get();
-	auto be = *b.elems.get();
+	auto& ae = a.elems;
+	auto& be = b.elems;
 	auto m = Matrix{	ae[0] * be[0]+ae[1] * be[3]+ae[2] * be[6],	//c00
 						ae[0] * be[1]+ae[1] * be[4]+ae[2] * be[7],	//c01
 						ae[0] * be[2]+ae[1] * be[5]+ae[2] * be[8],	//c02
@@ -177,8 +179,8 @@ template<typename T> Matrix<T> Matrix<T>::mul(const Matrix a, const Matrix b) {
 }
 
 template<typename T> void Matrix<T>::apply(Vectors<T>& transform) {
-	auto e = *elems.get();
-	std::transform(std::begin(transform), std::end(transform), std::begin(transform), [&e](Vector<T> a) {
+	auto& e = elems;
+	std::transform(std::begin(transform), std::end(transform), std::begin(transform), [e](Vector<T> a) {
 		auto v = a;
 		return Vector<T>{	(e[0]*v[0]+e[1]*v[1]+e[2]*v[2]),
 			(e[3]*v[0]+e[4]*v[1]+e[5]*v[2]),
