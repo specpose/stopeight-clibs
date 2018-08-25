@@ -79,9 +79,9 @@ PYBIND11_MODULE(grapher, m){
 		matrix.data(),
 		sizeof(double),
 		format_descriptor<double>::format(),
-		1,
-		{9},//rows, cols
-		{ //sizeof(double) * 3,//rows
+		2,
+		{3,3},//rows, cols
+		{ sizeof(double) * 3,//rows
 		sizeof(double) }
 	);
     	})
@@ -108,11 +108,11 @@ PYBIND11_MODULE(grapher, m){
 	.def_buffer([](Vectors<double>& vectors) -> buffer_info{
 	return buffer_info(
 		vectors.data(),
-		sizeof(double),
-		format_descriptor<Vector<double>::value_type>::format(),
+		sizeof(Vectors<double>::value_type),
+		format_descriptor<std::array<double,3>>::format(),
 		1,
-		{vectors.size()*3},
-		{sizeof(double)}
+		{size_t(vectors.size())},
+		{sizeof(double)*3}
 	);
 	})
 	.def("push_back",&Vectors<double>::push_back)
