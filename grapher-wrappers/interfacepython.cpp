@@ -94,7 +94,7 @@ PYBIND11_MODULE(grapher, m){
 	})*/
 	;
     class_<Vector<double>>(m,"Vector",buffer_protocol())
-	.def(init<double,double,double>())
+	.def(init<double,double>())
 	.def_buffer([](Vector<double>& vector) -> buffer_info{
 	return buffer_info(
 		vector.data(),
@@ -121,6 +121,7 @@ PYBIND11_MODULE(grapher, m){
 	})
 	.def("push_back",&Vectors<double>::push_back)
 	.def("apply",&Vectors<double>::apply)
+	.def("np",[](Vectors<double> &vec)->array{return cast(vec);})
 	;
     m.def("doublesize",[]()->size_t{return sizeof(std::array<double,9>);});
     m.def("matrixsize",[]()->size_t{return sizeof(Matrix<double>);});
