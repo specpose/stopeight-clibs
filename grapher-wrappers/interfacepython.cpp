@@ -10,6 +10,7 @@
 #include <stopeight-clibs/Matrix.h>
 
 #include <pybind11/stl.h>
+#include <pybind11/operators.h>
 //#include <pybind11/stl_bind.h>
 //PYBIND11_MAKE_OPAQUE(std::vector<double>);
 //PYBIND11_MAKE_OPAQUE(std::vector<sp::timecode<double>>);
@@ -30,11 +31,13 @@ PYBIND11_MODULE(grapher, m){
     class_<sp::timecode<int16_t>>(m,"TimeCodeInt")
 	.def(init<int16_t,int16_t>())
 	.def_readwrite("first",&sp::timecode<int16_t>::first)
-        .def_readwrite("second",&sp::timecode<int16_t>::second);
+        .def_readwrite("second",&sp::timecode<int16_t>::second)
+	.def(self += self);
     class_<sp::timecode<double>>(m,"TimeCodeDouble")
 	.def(init<double,double>())
 	.def_readwrite("first",&sp::timecode<double>::first)
-	.def_readwrite("second",&sp::timecode<double>::second);
+	.def_readwrite("second",&sp::timecode<double>::second)
+	.def(self += self);
     /*stl
     m.def("VectorInt16",[](std::vector<int16_t> b){return std::vector<int16_t>{b};});
     m.def("VectorTCInt16",[](std::vector<sp::timecode<int16_t>> b){return std::vector<sp::timecode<int16_t>>{b};});
@@ -103,6 +106,7 @@ PYBIND11_MODULE(grapher, m){
 	);
 	})
 	;
+    //PYBIND11_NUMPY_DTYPE(Vector);
     class_<Vectors<double>>(m,"Vectors",buffer_protocol())
 	.def(init<>())
 	.def_buffer([](Vectors<double>& vectors) -> buffer_info{
