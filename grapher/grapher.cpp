@@ -57,7 +57,7 @@ namespace speczilla {
 		const int size = buf->size();
         int vectorSize = grapher::samples_To_VG_vectorSize((size), _samplesPerVector);
         T vectorLength = grapher::samples_To_VG_vectorLength(_showSamples, _unitaryLength);
-		std::vector<sp::element<T>> output;
+		std::vector<sp::timecode<T>> output;
 
 		//par
 		//(samples_To_VG(samplesPerPixel))(std::experimental::parallel::par_vec, std::begin(*buf), std::end(*buf), std::begin(output));
@@ -73,7 +73,7 @@ namespace speczilla {
 			else {
 				afunc = new angle::independent(std::begin(differences) + 1, std::end(differences),_average,_angleScale);
 			}
-			output = std::vector<sp::element<T>>{};//((vectorSize * 2) + add);
+			output = std::vector<sp::timecode<T>>{};//((vectorSize * 2) + add);
 			
 			//in general if uneven, middle is on left side
 			//-1 differences, -1 size

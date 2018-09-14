@@ -29,12 +29,23 @@ namespace sp {
 	public:
 		using std::pair<T, T>::pair;
 		typedef typename std::pair<T, T>::first_type value_type;
+		typedef typename value_type& reference;
 		using timecode_types = typename sp::tctype;
 
 		timecode_types category{ tctype::EMPTY };
 		virtual ~timecode() {};
 
-		//sp::timecode<T> static operator+=(sp::timecode<T>& a, const sp::timecode<T>& b);//function template
+		value_type get_x() { return first; };
+		value_type get_y() { return second; };
+		void set_x(value_type other) { this->first = other; };
+		void set_y(value_type other) { this->second = other; };
+
+		sp::timecode<T>& operator+=(sp::timecode<T>& b) {
+			this->set_x(this->get_x()+b.get_x());
+			this->set_y(this->get_y()+b.get_y());
+			return *this;
+			
+		};//function template
 	};
 	template<typename T> class empty : public sp::timecode<T> {
 	public:
@@ -50,15 +61,15 @@ namespace sp {
 			sp::timecode<T>::category = sp::tctype::FIXPOINT;
 		};
 	};
-	template<typename T> using element_ = timecode<T>;
-	template<typename T> using element = element_<T>;//element_*;
-	template<typename T> using result = std::vector<element<T>>;
-	template<typename T> element<T> construct_element(T a, T b) {
+	//template<typename T> using element_ = timecode<T>;
+	//template<typename T> using element = element_<T>;//element_*;
+	template<typename T> using result = std::vector<timecode<T>>;
+	/*template<typename T> element<T> construct_element(T a, T b) {
 		element<T> e = element<T>();
-		e.first = a;
-		e.second = b;
+		e.set_x(a);
+		e.set_y(b);
 		return e;
-	};
+	};*/
 
 	//template<typename T> element<T> construct_element(T a, T b);
 	/*template<class What> bool is(element* t) {
@@ -71,16 +82,17 @@ namespace sp {
 			return false;
 	}*/
 
-	template<typename T> sp::timecode<T> operator+=(sp::timecode<T>& a, const sp::timecode<T>& b) {
+	/*template<typename T> sp::timecode<T> operator+=(sp::timecode<T>& a, const sp::timecode<T>& b) {
 		T af, as;
-		af = a.first;
-		as = a.second;
-		af += b.first;
-		as += b.second;
-		a.first = af;
-		a.second = as;
+		af = a.get_x();
+		as = a.get_y();
+		af += b.get_x();
+		as += b.get_y();
+		a.set_x(af);
+		a.set_y(as);
 		return a;
-	};//function template
+	};*/
+	//function template
 	//template<typename T> sp::timecode<T> operator+=(sp::timecode<T>& a, const sp::timecode<T>& b);//function template
 
 	//sp::element static operator+(const sp::element& a, const sp::element& b) { return sp::element{ a.first + b.first, a.second + b.second }; };
@@ -89,12 +101,12 @@ namespace sp {
 
 
 
-template<typename T> using it_element = std::pair< typename std::vector<sp::element<T>>::iterator, typename std::vector<sp::element<T>>::iterator >;
+template<typename T> using it_element = std::pair< typename std::vector<sp::timecode<T>>::iterator, typename std::vector<sp::timecode<T>>::iterator >;
 
 template<typename T> using vector_single = typename std::vector<T>::iterator;
 template<typename T> using vector_single_T = typename std::iterator_traits<T>::value_type;
 
-template<typename T> using vector_pair = typename std::vector<sp::element<T>>::iterator;
+template<typename T> using vector_pair = typename std::vector<sp::timecode<T>>::iterator;
 template<typename T> using vector_pair_T = typename std::iterator_traits<T>::value_type::value_type;
 
 template<typename T> using vector_vectors = typename std::vector<it_element<T>>::iterator;

@@ -45,10 +45,10 @@ namespace grapher {
     template <class ExecutionPolicy, class Iterator, class OutputIterator> void __apply_rotation_matrix::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2)
     {
         OutputIterator begin2_c = begin2;
-        std::transform(begin, end, begin2, begin2, [](double rot, sp::element<double> vec) {
-            double x = (cos(rot)*vec.first - sin(rot)*vec.second);
-            double y = (sin(rot)*vec.first + cos(rot)*vec.second);
-            sp::element<double> p = sp::construct_element<double>( x , y );
+        std::transform(begin, end, begin2, begin2, [](double rot, sp::timecode<double> vec) {
+            double x = (cos(rot)*vec.get_x() - sin(rot)*vec.get_y());
+            double y = (sin(rot)*vec.get_x() + cos(rot)*vec.get_y());
+			sp::timecode<double> p = sp::timecode<double>{ x , y };
             return p;
         });
     }
@@ -144,16 +144,15 @@ namespace grapher {
         std::transform(begin, end, begin2, [](it_element<T> block) {
             //both can be nonempty; preserve type of last
             if (block.first != block.second) {
-                const T z0{0},z1{0};//Should be 0!!
-                const sp::element<T> e = sp::construct_element(z0,z1);
-                return std::accumulate(block.first, block.second, e, [](sp::element<T> v1, sp::element<T> v2) {
+				const sp::timecode<T> e = sp::timecode<T>{ 0,0 };
+                return std::accumulate(block.first, block.second, e, [](sp::timecode<T> v1, sp::timecode<T> v2) {
                     v2 += v1;
                     return v2;
                 });
             }
             else {
                 //auto v = sp::construct_element((*block.first)->first, (*block.first)->second);
-                sp::element<T> v = *block.first;
+                sp::timecode<T> v = *block.first;
                 return v;//second could be last+1
             }
         });
@@ -166,15 +165,15 @@ namespace grapher {
 		using T = vector_pair_T<Iterator>;
         class my_add {
         public:
-            my_add() : cache(sp::construct_element<T>(0,0 )) {};
-            sp::element<T> operator()(sp::element<T> e) {
+			my_add() : cache(sp::timecode<T>{0, 0}) {};
+            sp::timecode<T> operator()(sp::timecode<T> e) {
                 auto newvalue = e;//type preserved
                 newvalue += cache;//type preserved
                 cache += e;//type mutating
                 return newvalue;
             };
         private:
-            sp::element<T> cache;
+            sp::timecode<T> cache;
         };
         std::transform(begin, end, begin2, my_add());
     }
@@ -201,8 +200,8 @@ namespace grapher {
         //Windows __calculate_rotations()(task1, begin, end, std::back_inserter(rotations), angleFunction, Iterator::iterator_category{});
         __calculate_rotations()(task1, begin, end, std::back_inserter(rotations), angleFunction, typename Iterator::iterator_category{});
         
-        std::vector<sp::element<T>> vectors;
-        std::fill_n(std::back_inserter(vectors), std::distance(std::begin(rotations), std::end(rotations)), sp::construct_element<T>(_vectorLength, 0));
+        sp::result<T> vectors;
+		std::fill_n(std::back_inserter(vectors), std::distance(std::begin(rotations), std::end(rotations)), sp::timecode<T>{_vectorLength, 0});
         __apply_rotation_matrix()(task1, std::begin(rotations), std::end(rotations), std::begin(vectors));
         
         std::vector<it_element<T>> vectors_sliced;
@@ -210,7 +209,7 @@ namespace grapher {
         //Windows func(task1, std::begin(vectors), std::end(vectors), std::back_inserter(vectors_sliced), Iterator::iterator_category{});
         func(task1, std::begin(vectors), std::end(vectors), std::back_inserter(vectors_sliced), typename Iterator::iterator_category{});
         
-        std::vector<sp::element<T>> out_vectors;
+        sp::result<T> out_vectors;
         
         /*
          //HERESTART
@@ -227,10 +226,10 @@ namespace grapher {
         //hierarchy all to 1
         //std::transform(std::begin(vectors_sliced), std::end(vectors_sliced), std::back_inserter(out_vectors), [_samplesPerVector](decltype(vectors_sliced) v) {
         for (auto v : vectors_sliced) {
-            stopeight::blocks<sp::element<T>> blocks_vector = stopeight::blocks<sp::element<T>>(v, _samplesPerVector);
+            stopeight::blocks<sp::timecode<T>> blocks_vector = stopeight::blocks<sp::timecode<T>>(v, _samplesPerVector);
             //std::move(slice), _samplesPerVector);
             
-            std::vector<sp::element<T>> ov = std::vector<sp::element<T>>{};//(blocks_vector.size(), { double(0), double(0) });
+            sp::result<T> ov = sp::result<T>{};//(blocks_vector.size(), { double(0), double(0) });
             //std::fill<typename std::vector<sp::element>::iterator>(std::begin(ov), std::end(ov), sp::element{ 1.0f, 1.0f });
             
             //Windows _sum_blocks()(task1, std::begin(blocks_vector), std::end(blocks_vector), std::back_inserter(ov), Iterator::iterator_category{});
@@ -242,14 +241,14 @@ namespace grapher {
         //Windows _append()(task1, std::begin(out_vectors), std::end(out_vectors), std::begin(out_vectors), Iterator::iterator_category{});
         _append()(task1, std::begin(out_vectors), std::end(out_vectors), std::begin(out_vectors), typename Iterator::iterator_category{});
         
-        std::copy<typename std::vector<sp::element<T>>::iterator, OutputIterator>(std::begin(out_vectors), std::end(out_vectors), begin2);
+        std::copy<typename sp::result<T>::iterator, OutputIterator>(std::begin(out_vectors), std::end(out_vectors), begin2);
     }
     //void grapher::__differences_To_VG::operator()<dummy const, std::__1::__wrap_iter<double*>, std::__1::__wrap_iter<sp::timecode<double>*>, angle::averageScaled>(dummy const&, std::__1::__wrap_iter<double*>, std::__1::__wrap_iter<double*>, std::__1::__wrap_iter<sp::timecode<double>*>, angle::averageScaled&);
     template void __differences_To_VG::operator()(fexec& task1, vector_single<double> begin, vector_single<double> end, vector_pair<double> begin2, angle::angle& angleFunction);
     template void __differences_To_VG::operator()(fexec& task1, vector_single<float> begin, vector_single<float> end, vector_pair<float> begin2, angle::angle& angleFunction);
-	template void __differences_To_VG::operator()(fexec& task1, vector_single<double> begin, vector_single<double> end, std::back_insert_iterator<std::vector<sp::element<double>>> begin2, angle::angle& angleFunction);
-	template void __differences_To_VG::operator()(fexec& task1, vector_single<float> begin, vector_single<float> end, std::back_insert_iterator<std::vector<sp::element<float>>> begin2, angle::angle& angleFunction);
-	template void __differences_To_VG::operator()(fexec& task1, vector_single<int16_t> begin, vector_single<int16_t> end, std::back_insert_iterator<std::vector<sp::element<int16_t>>> begin2, angle::angle& angleFunction);
+	template void __differences_To_VG::operator()(fexec& task1, vector_single<double> begin, vector_single<double> end, std::back_insert_iterator<sp::result<double>> begin2, angle::angle& angleFunction);
+	template void __differences_To_VG::operator()(fexec& task1, vector_single<float> begin, vector_single<float> end, std::back_insert_iterator<sp::result<float>> begin2, angle::angle& angleFunction);
+	template void __differences_To_VG::operator()(fexec& task1, vector_single<int16_t> begin, vector_single<int16_t> end, std::back_insert_iterator<sp::result<int16_t>> begin2, angle::angle& angleFunction);
     
     int samples_To_VG_vectorSize(int inputSize, int samplesPerVector) {
         auto size = inputSize / samplesPerVector;
