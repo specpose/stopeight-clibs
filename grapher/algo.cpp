@@ -44,8 +44,9 @@ namespace grapher {
     
     template <class ExecutionPolicy, class Iterator, class OutputIterator> void __apply_rotation_matrix::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2)
     {
-        OutputIterator begin2_c = begin2;
-        std::transform(begin, end, begin2, begin2, [](double rot, sp::timecode<double> vec) {
+		using T = vector_single_T<Iterator>;
+		OutputIterator begin2_c = begin2;
+        std::transform(begin, end, begin2, begin2, [](double rot, sp::timecode<T> vec) {
             double x = (cos(rot)*vec.get_x() - sin(rot)*vec.get_y());
             double y = (sin(rot)*vec.get_x() + cos(rot)*vec.get_y());
 			sp::timecode<double> p = sp::timecode<double>{ x , y };
@@ -201,7 +202,7 @@ namespace grapher {
         __calculate_rotations()(task1, begin, end, std::back_inserter(rotations), angleFunction, typename Iterator::iterator_category{});
         
         sp::result<T> vectors;
-		std::fill_n(std::back_inserter(vectors), std::distance(std::begin(rotations), std::end(rotations)), sp::timecode<T>{_vectorLength, 0});
+		std::fill_n(std::back_inserter(vectors), std::distance(std::begin(rotations), std::end(rotations)), sp::timecode<T>{T(_vectorLength), 0});
         __apply_rotation_matrix()(task1, std::begin(rotations), std::end(rotations), std::begin(vectors));
         
         std::vector<it_element<T>> vectors_sliced;
