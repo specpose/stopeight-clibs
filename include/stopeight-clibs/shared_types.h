@@ -5,6 +5,7 @@
 #define SHARED_TYPES_H
 
 #include <vector>
+#include <array>
 
 namespace sp {
 
@@ -25,22 +26,40 @@ namespace sp {
 	const sp::tctype symetric[3] = { tctype::CLIFF, tctype::SWING, tctype::STRAIT };
 	const sp::tctype notsymetric[3] = { tctype::CREST, tctype::SPIRAL, tctype::SPIKE };
 
-	template<typename T> class timecode : public std::pair<T, T> {
+	template<typename T> class timecode : public std::array<T, 2> {
 	public:
-		using std::pair<T, T>::pair;
-		typedef typename std::pair<T, T>::first_type value_type;
+		//using std::array<T, 2>::array;
+		timecode() : std::array<T, 2>() {
+		}
+		timecode(const timecode<T>& other) : std::array<T, 2>(other) {
+			this->category = other.category;
+		}
+		timecode(timecode<T>&& other) : std::array<T, 2>(other) {
+			this->category = other.category;
+		}
+		timecode(T x, T y) : std::array<T, 2>{ {x, y}} {
+		}
+		typedef typename std::array<T, 2>::value_type value_type;
 		typedef typename value_type& reference;
 		using timecode_types = typename sp::tctype;
 
 		timecode_types category{ tctype::EMPTY };
 		virtual ~timecode() {};
 
-		value_type get_x() { return first; };
-		value_type get_y() { return second; };
-		void set_x(value_type other) { this->first = other; };
-		void set_y(value_type other) { this->second = other; };
+		value_type get_x() { return (*this)[0]; };
+		value_type get_y() { return (*this)[1]; };
+		void set_x(value_type other) { (*this)[0] = other; };
+		void set_y(value_type other) { (*this)[1] = other; };
 
-		sp::timecode<T>& operator+=(sp::timecode<T>& b) {
+		//template<typename U>
+		timecode& operator=(sp::timecode<T> other) {
+			this->set_x(other.get_x());
+			this->set_y(other.get_y());
+			this->category = other.category;
+			return *this;
+		}
+		//template<typename U>
+		timecode& operator+=(sp::timecode<T> b) {
 			this->set_x(this->get_x()+b.get_x());
 			this->set_y(this->get_y()+b.get_y());
 			return *this;
@@ -49,6 +68,7 @@ namespace sp {
 	};
 	template<typename T> class empty : public sp::timecode<T> {
 	public:
+		using sp::timecode<T>::timecode;
 		using timecode_types = typename sp::timecode<T>::timecode_types;
 		empty<T>(timecode<T>&& other) {
 			sp::timecode<T>::category = sp::tctype::EMPTY;
@@ -56,6 +76,7 @@ namespace sp {
 	};
 	template<typename T> class fixpoint : public sp::timecode<T> {
 	public:
+		using sp::timecode<T>::timecode;
 		using timecode_types = typename sp::timecode<T>::timecode_types;
 		fixpoint<T>(timecode<T>&& other) {
 			sp::timecode<T>::category = sp::tctype::FIXPOINT;
