@@ -49,7 +49,7 @@ namespace grapher {
         std::transform(begin, end, begin2, begin2, [](double rot, sp::timecode<T> vec) {
             double x = (cos(rot)*vec.get_x() - sin(rot)*vec.get_y());
             double y = (sin(rot)*vec.get_x() + cos(rot)*vec.get_y());
-			sp::timecode<double> p = sp::timecode<double>{ x , y };
+			auto p = sp::timecode<T>{ T(x) , T(y) };
             return p;
         });
     }
