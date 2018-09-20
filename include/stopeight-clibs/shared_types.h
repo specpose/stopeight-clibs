@@ -40,7 +40,6 @@ namespace sp {
 		timecode(T x, T y) : std::array<T, 2>{ {x, y}} {
 		}
 		typedef typename std::array<T, 2>::value_type value_type;
-		typedef typename value_type& reference;
 		using timecode_types = typename sp::tctype;
 
 		timecode_types category{ tctype::EMPTY };

@@ -30,13 +30,13 @@ PYBIND11_MODULE(grapher, m){
 
     class_<sp::timecode<int16_t>>(m,"TimeCodeInt")
 	.def(init<int16_t,int16_t>())
-	.def_readwrite("first",&sp::timecode<int16_t>::first)
-        .def_readwrite("second",&sp::timecode<int16_t>::second)
+	.def("get_x",&sp::timecode<int16_t>::get_x)
+        .def("get_y",&sp::timecode<int16_t>::get_y)
 	.def(self += self);
     class_<sp::timecode<double>>(m,"TimeCodeDouble")
 	.def(init<double,double>())
-	.def_readwrite("first",&sp::timecode<double>::first)
-	.def_readwrite("second",&sp::timecode<double>::second)
+	.def("get_x",&sp::timecode<double>::get_x)
+	.def("get_y",&sp::timecode<double>::get_y)
 	.def(self += self);
     /*stl
     m.def("VectorInt16",[](std::vector<int16_t> b){return std::vector<int16_t>{b};});
