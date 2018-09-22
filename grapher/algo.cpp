@@ -49,7 +49,7 @@ namespace grapher {
         std::transform(begin, end, begin2, begin2, [](double rot, sp::timecode<T> vec) {
             double x = (cos(rot)*vec.get_x() - sin(rot)*vec.get_y());
             double y = (sin(rot)*vec.get_x() + cos(rot)*vec.get_y());
-			auto p = sp::timecode<T>{ T(x) , T(y) };
+			auto p = sp::timecode<T>( T(x) , T(y) );
             return p;
         });
     }
@@ -145,7 +145,7 @@ namespace grapher {
         std::transform(begin, end, begin2, [](it_element<T> block) {
             //both can be nonempty; preserve type of last
             if (block.first != block.second) {
-				const sp::timecode<T> e = sp::timecode<T>{ 0,0 };
+				const sp::timecode<T> e = sp::timecode<T>( 0,0 );
                 return std::accumulate(block.first, block.second, e, [](sp::timecode<T> v1, sp::timecode<T> v2) {
                     v2 += v1;
                     return v2;

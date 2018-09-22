@@ -9,10 +9,13 @@
 
 namespace sp {
 
+	enum class FixpointType {
+		EMPTY,
+		FIXPOINT
+	};
+
 	enum class tctype
 	{
-		EMPTY,
-		FIXPOINT,
 		STRAIT,
 		SWING,
 		CLIFF,
@@ -29,50 +32,56 @@ namespace sp {
 	template<typename T> class timecode;
 
 	template<std::size_t I, typename T> decltype(auto) get(timecode<T>&& v) {
-		return std::get<I>(static_cast<std::tuple<std::array<T, 2>>&&>(v));
+		return std::get<I>(static_cast<std::tuple<std::array<T, 2>,sp::FixpointType>&&>(v));
 	}
 	template<std::size_t I, typename T> decltype(auto) get(timecode<T>& v) {
-		return std::get<I>(static_cast<std::tuple<std::array<T, 2>>&>(v));
+		return std::get<I>(static_cast<std::tuple<std::array<T, 2>, sp::FixpointType>&>(v));
 	}
 	template<std::size_t I, typename T> decltype(auto) get(const timecode<T>& v) {
-		return std::get<I>(static_cast<std::tuple<std::array<T, 2>> const&>(v));
+		return std::get<I>(static_cast<std::tuple<std::array<T, 2>, sp::FixpointType> const&>(v));
 	}
-	template<typename T> class timecode : public std::tuple<std::array<T, 2>> {
+	template<typename T> class timecode : public std::tuple<std::array<T, 2>,sp::FixpointType> {
 	public:
 		//using std::array<T, 2>::array;
-		timecode() : std::tuple<std::array<T, 2>>() {
+		timecode() : std::tuple<std::array<T, 2>,sp::FixpointType>() {
+			sp::get<1, T>(*this) = sp::FixpointType::EMPTY;
 		}
-		timecode(const timecode<T>& other) : std::tuple<std::array<T, 2>>(other) {
-			this->category = other.category;
-		}
-		timecode(timecode<T>&& other) : std::tuple<std::array<T, 2>>(other) {
-			this->category = other.category;
-		}
-		timecode(T x, T y) : std::tuple<std::array<T, 2>>{ {x, y}} {
+		timecode(T x, T y) : std::tuple<std::array<T, 2>, sp::FixpointType>(){
+			sp::get<0, T>(*this) = { { x, y } };
+			sp::get<1, T>(*this) = sp::FixpointType::EMPTY;
 		}
 		typedef typename T value_type;
 		typedef typename value_type& reference;
-		using timecode_types = typename sp::tctype;
 
-		timecode_types category{ tctype::EMPTY };
+		sp::FixpointType category() {
+			return sp::get<1, T>(*this);
+		}
 		virtual ~timecode() {};
 
-		value_type get_x() { return (sp::get<0,T>(*this))[0]; };
-		value_type get_y() { return (sp::get<0,T>(*this))[1]; };
-		void set_x(value_type other) { (sp::get<0,T>(*this))[0] = other; };
-		void set_y(value_type other) { (sp::get<0,T>(*this))[1] = other; };
+		auto get_x() { return (sp::get<0,T>(*this))[0]; };
+		auto get_y() { return (sp::get<0,T>(*this))[1]; };
+		void set_x(const reference other) { (sp::get<0,T>(*this))[0] = other; };
+		void set_y(const reference other) { (sp::get<0,T>(*this))[1] = other; };
 
 		//template<typename U>
-		timecode& operator=(sp::timecode<T> other) {
-			this->set_x(other.get_x());
-			this->set_y(other.get_y());
-			this->category = other.category;
+		timecode& operator=(sp::timecode<T>& other) {
+			T one = other.get_x();
+			this->set_x(one);
+			T two = other.get_y();
+			this->set_y(two);
+			sp::get<1, T>(*this) = other.category();
 			return *this;
 		}
 		//template<typename U>
-		timecode& operator+=(sp::timecode<T> b) {
-			this->set_x(this->get_x()+b.get_x());
-			this->set_y(this->get_y()+b.get_y());
+		timecode& operator+=(sp::timecode<T>& b) {
+			const T one1 = this->get_x();
+			const T one2{ b.get_x() };
+			T one3{ one1 + one2 };
+			this->set_x(one3);
+			const T two1 = this->get_y();
+			const T two2{ b.get_y() };
+			T two3 = two1 + two2;
+			this->set_y(two3);
 			return *this;
 			
 		};//function template
@@ -80,53 +89,19 @@ namespace sp {
 	template<typename T> class empty : public sp::timecode<T> {
 	public:
 		using sp::timecode<T>::timecode;
-		using timecode_types = typename sp::timecode<T>::timecode_types;
 		empty<T>(timecode<T>&& other) {
-			sp::timecode<T>::category = sp::tctype::EMPTY;
+			sp::get<1, T>(*this) = sp::FixpointType::EMPTY;
 		};
 	};
 	template<typename T> class fixpoint : public sp::timecode<T> {
 	public:
 		using sp::timecode<T>::timecode;
-		using timecode_types = typename sp::timecode<T>::timecode_types;
 		fixpoint<T>(timecode<T>&& other) {
-			sp::timecode<T>::category = sp::tctype::FIXPOINT;
+			sp::get<1, T>(*this) = sp::FixpointType::FIXPOINT;
 		};
 	};
-	//template<typename T> using element_ = timecode<T>;
-	//template<typename T> using element = element_<T>;//element_*;
 	template<typename T> using result = std::vector<timecode<T>>;
-	/*template<typename T> element<T> construct_element(T a, T b) {
-		element<T> e = element<T>();
-		e.set_x(a);
-		e.set_y(b);
-		return e;
-	};*/
-
-	//template<typename T> element<T> construct_element(T a, T b);
-	/*template<class What> bool is(element* t) {
-		element* u = t;//dynamic_cast<sp::element*>(&t);
-		What* v = nullptr;
-		v = dynamic_cast<What*>(u);
-		if (v)
-			return true;
-		else
-			return false;
-	}*/
-
-	/*template<typename T> sp::timecode<T> operator+=(sp::timecode<T>& a, const sp::timecode<T>& b) {
-		T af, as;
-		af = a.get_x();
-		as = a.get_y();
-		af += b.get_x();
-		as += b.get_y();
-		a.set_x(af);
-		a.set_y(as);
-		return a;
-	};*/
-	//function template
-	//template<typename T> sp::timecode<T> operator+=(sp::timecode<T>& a, const sp::timecode<T>& b);//function template
-
+	
 	//sp::element static operator+(const sp::element& a, const sp::element& b) { return sp::element{ a.first + b.first, a.second + b.second }; };
 	//sp::element static operator-(const sp::element& a, const sp::element& b) { return sp::element{ a.first - b.first, a.second - b.second }; };
 }
