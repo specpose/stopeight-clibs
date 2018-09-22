@@ -26,30 +26,41 @@ namespace sp {
 	const sp::tctype symetric[3] = { tctype::CLIFF, tctype::SWING, tctype::STRAIT };
 	const sp::tctype notsymetric[3] = { tctype::CREST, tctype::SPIRAL, tctype::SPIKE };
 
-	template<typename T> class timecode : public std::array<T, 2> {
+	template<typename T> class timecode;
+
+	template<std::size_t I, typename T> decltype(auto) get(timecode<T>&& v) {
+		return std::get<I>(static_cast<std::tuple<std::array<T, 2>>&&>(v));
+	}
+	template<std::size_t I, typename T> decltype(auto) get(timecode<T>& v) {
+		return std::get<I>(static_cast<std::tuple<std::array<T, 2>>&>(v));
+	}
+	template<std::size_t I, typename T> decltype(auto) get(const timecode<T>& v) {
+		return std::get<I>(static_cast<std::tuple<std::array<T, 2>> const&>(v));
+	}
+	template<typename T> class timecode : public std::tuple<std::array<T, 2>> {
 	public:
 		//using std::array<T, 2>::array;
-		timecode() : std::array<T, 2>() {
+		timecode() : std::tuple<std::array<T, 2>>() {
 		}
-		timecode(const timecode<T>& other) : std::array<T, 2>(other) {
+		timecode(const timecode<T>& other) : std::tuple<std::array<T, 2>>(other) {
 			this->category = other.category;
 		}
-		timecode(timecode<T>&& other) : std::array<T, 2>(other) {
+		timecode(timecode<T>&& other) : std::tuple<std::array<T, 2>>(other) {
 			this->category = other.category;
 		}
-		timecode(T x, T y) : std::array<T, 2>{ {x, y}} {
+		timecode(T x, T y) : std::tuple<std::array<T, 2>>{ {x, y}} {
 		}
-		typedef typename std::array<T, 2>::value_type value_type;
+		typedef typename T value_type;
 		typedef typename value_type& reference;
 		using timecode_types = typename sp::tctype;
 
 		timecode_types category{ tctype::EMPTY };
 		virtual ~timecode() {};
 
-		value_type get_x() { return (*this)[0]; };
-		value_type get_y() { return (*this)[1]; };
-		void set_x(value_type other) { (*this)[0] = other; };
-		void set_y(value_type other) { (*this)[1] = other; };
+		value_type get_x() { return (sp::get<0,T>(*this))[0]; };
+		value_type get_y() { return (sp::get<0,T>(*this))[1]; };
+		void set_x(value_type other) { (sp::get<0,T>(*this))[0] = other; };
+		void set_y(value_type other) { (sp::get<0,T>(*this))[1] = other; };
 
 		//template<typename U>
 		timecode& operator=(sp::timecode<T> other) {
