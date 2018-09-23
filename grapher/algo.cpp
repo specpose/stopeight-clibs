@@ -73,7 +73,8 @@ namespace grapher {
         //make it a fixPoint
         for (auto index : _fixPoint_indices) {
             //**(begin + index) = sp::turn<T>(std::move(**(begin + index)));
-            *(begin + index) = sp::fixpoint<T>(std::move(*(begin + index)));
+            //*(begin + index) = sp::fixpoint<T>(std::move(*(begin + index)));
+	    (begin + index)->set_category(sp::FixpointType::FIXPOINT);
         }
         std::vector<std::pair<int, int>> slices = std::vector<std::pair<int, int>>{};
         class prev {

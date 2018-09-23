@@ -6,6 +6,7 @@
 
 #include <vector>
 #include <array>
+#include <tuple>
 
 namespace sp {
 
@@ -31,13 +32,13 @@ namespace sp {
 
 	template<typename T> class timecode;
 
-	template<std::size_t I, typename T> decltype(auto) get(timecode<T>&& v) {
+	template<std::size_t I, typename T> typename std::tuple_element<I,std::tuple<std::array<T, 2>,sp::FixpointType>>::type&& get(timecode<T>&& v) {
 		return std::get<I>(static_cast<std::tuple<std::array<T, 2>,sp::FixpointType>&&>(v));
 	}
-	template<std::size_t I, typename T> decltype(auto) get(timecode<T>& v) {
+	template<std::size_t I, typename T> typename std::tuple_element<I,std::tuple<std::array<T, 2>,sp::FixpointType>>::type& get(timecode<T>& v) {
 		return std::get<I>(static_cast<std::tuple<std::array<T, 2>, sp::FixpointType>&>(v));
 	}
-	template<std::size_t I, typename T> decltype(auto) get(const timecode<T>& v) {
+	template<std::size_t I, typename T> typename std::tuple_element<I,std::tuple<std::array<T, 2>,sp::FixpointType>>::type const& get(const timecode<T>& v) {
 		return std::get<I>(static_cast<std::tuple<std::array<T, 2>, sp::FixpointType> const&>(v));
 	}
 	template<typename T> class timecode : public std::tuple<std::array<T, 2>,sp::FixpointType> {
@@ -50,21 +51,24 @@ namespace sp {
 			sp::get<0, T>(*this) = { { x, y } };
 			sp::get<1, T>(*this) = sp::FixpointType::EMPTY;
 		}
-		typedef typename T value_type;
-		typedef typename value_type& reference;
-
+		typedef typename std::array<T, 2>::value_type value_type;
+		typedef typename std::array<T, 2>::reference reference;
 		sp::FixpointType category() {
-			return sp::get<1, T>(*this);
+			return sp::get<1,T>(*this);
+		}
+		void set_category(sp::FixpointType type) {
+			sp::get<1,T>(*this) = type;
 		}
 		virtual ~timecode() {};
 
-		auto get_x() { return (sp::get<0,T>(*this))[0]; };
-		auto get_y() { return (sp::get<0,T>(*this))[1]; };
+		value_type get_x() { return (sp::get<0,T>(*this))[0]; };
+		value_type get_y() { return (sp::get<0,T>(*this))[1]; };
 		void set_x(const reference other) { (sp::get<0,T>(*this))[0] = other; };
 		void set_y(const reference other) { (sp::get<0,T>(*this))[1] = other; };
+		typename std::array<T, 2>::pointer data() { return (sp::get<0,T>(*this)).data();}
 
 		//template<typename U>
-		timecode& operator=(sp::timecode<T>& other) {
+		timecode& operator=(sp::timecode<T> other) {
 			T one = other.get_x();
 			this->set_x(one);
 			T two = other.get_y();
@@ -73,13 +77,13 @@ namespace sp {
 			return *this;
 		}
 		//template<typename U>
-		timecode& operator+=(sp::timecode<T>& b) {
+		timecode& operator+=(const sp::timecode<T>& b) {
 			const T one1 = this->get_x();
-			const T one2{ b.get_x() };
+			const T one2{ (sp::get<0,T>(b))[0] };
 			T one3{ one1 + one2 };
 			this->set_x(one3);
 			const T two1 = this->get_y();
-			const T two2{ b.get_y() };
+			const T two2{ (sp::get<0,T>(b))[1] };
 			T two3 = two1 + two2;
 			this->set_y(two3);
 			return *this;
