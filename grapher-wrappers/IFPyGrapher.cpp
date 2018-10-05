@@ -1,5 +1,7 @@
 // Copyright (C) 2017 Fassio Blatter
 // GNU Lesser General Public License, version 2.1
+#undef NDEBUG
+
 #include <pybind11/pybind11.h>
 #include <stopeight-clibs/algo.h>
 #include <stopeight-clibs/shared_types.h>
@@ -11,8 +13,9 @@
 //#include <pybind11/stl.h>
 #include <pybind11/operators.h>
 #include <pybind11/stl_bind.h>
+//cant make this opaque; have to use stl or manual move: cast py::array to std::vector
 //PYBIND11_MAKE_OPAQUE(std::vector<double>);
-//PYBIND11_MAKE_OPAQUE(std::vector<sp::timecode<double>>);
+PYBIND11_MAKE_OPAQUE(std::vector<sp::timecode<double>>);
 #include <pybind11/numpy.h>
 
 using fexec = const dummy;
@@ -102,12 +105,17 @@ PYBIND11_MODULE(grapher, m){
                 };
 
     });*/
-
+//    bind_vector<std::vector<double>>(m,"VectorDouble", buffer_protocol());
 //    PYBIND11_NUMPY_DTYPE(tc<double>, coords, type);
 //    bind_vector<std::vector<tc<double>>>(m,"VectorTimeCodeDouble", buffer_protocol());
     PYBIND11_NUMPY_DTYPE(sp::timecode<double>, coords, type);
     bind_vector<std::vector<sp::timecode<double>>>(m,"VectorTimeCodeDouble", buffer_protocol());
     //bind_vector<std::vector<double>>(m,"VectorDouble", buffer_protocol());
+
+    m.def("np_to_VectorDouble",[](buffer np)->std::vector<double>{
+	    auto vec = np.cast<std::vector<double>>();
+	    return vec;
+	});
 
     m.def("create_vector_graph", [](array_t<double,array::c_style> in, int samplesPerVector, double unitaryLength, bool relative , double average, double averageScale)->array_t<sp::timecode<double>,array::c_style>{
 	buffer_info info = in.request();
@@ -118,19 +126,13 @@ PYBIND11_MODULE(grapher, m){
 	if (info.ndim!= 1)
 		throw std::runtime_error("Incompatible buffer dimensions");
 	size_t size = info.shape[0];
-	//std::cout<<size;
 	if (info.strides[0]!=sizeof(double))
 		throw std::runtime_error("Incompatible format: Incompatible step size");
 	auto doubles=static_cast<double*>(info.ptr);
-	std::vector<double> vec;
-	//stack to heap; speed?
+	std::vector<double> vec = std::vector<double>(size);
 	vec.assign(doubles,doubles+size);
-	//for(auto n : vec){
-	//	std::cout<<n;
-	//}
-	//auto it = static_cast<std::vector<double>::iterator>(info.ptr);
-	//vec.assign(it,size);
-	auto data = speczilla::Buffer<double>(&vec,size,samplesPerVector,unitaryLength,relative,average,averageScale);
+	//vec = in.cast<std::vector<double>>();
+	auto data = speczilla::Buffer<double>(&vec,vec.size(),samplesPerVector,unitaryLength,relative,average,averageScale);
 	//auto data = speczilla::Buffer<double>(&in,in.size(),samplesPerVector,unitaryLength,relative,average,averageScale);	
 	auto out = data();
 	//std::cout<<out.size();
