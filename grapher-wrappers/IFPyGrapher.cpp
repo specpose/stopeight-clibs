@@ -144,9 +144,9 @@ PYBIND11_MODULE(grapher, m){
 	if (info.strides[0]!=sizeof(sp::timecode<double>))
 		throw std::runtime_error("Incompatible format: Incompatible step size");
 	std::vector<sp::timecode<double>> vec = std::vector<sp::timecode<double>>(size);
-	//auto timecodes=static_cast<sp::timecode<double>*>(info.ptr);
-	//vec.assign(timecodes,timecodes+size);
-	vec = in.cast<std::vector<sp::timecode<double>>>();
+	auto timecodes=static_cast<sp::timecode<double>*>(info.ptr);
+	vec.assign(timecodes,timecodes+size);
+	//vec = in.cast<std::vector<sp::timecode<double>>>();
 	return vec;
 	});
 
