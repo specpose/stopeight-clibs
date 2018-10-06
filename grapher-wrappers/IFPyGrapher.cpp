@@ -10,9 +10,9 @@
 
 #include <stopeight-clibs/grapher.h>
 
-//#include <pybind11/stl.h>
+#include <pybind11/stl.h>
 //#include <pybind11/operators.h>
-#include <pybind11/stl_bind.h>
+//#include <pybind11/stl_bind.h>
 //cant make this opaque; have to use stl or manual move: cast py::array to std::vector
 //PYBIND11_MAKE_OPAQUE(std::vector<double>);
 PYBIND11_MAKE_OPAQUE(std::vector<sp::timecode<double>>);
@@ -76,9 +76,9 @@ PYBIND11_MODULE(grapher, m){
 	})
 	.def(self += self)
 	;*/
-    bind_vector<std::vector<sp::timecode<double>>>(m,"VectorTimeCodeDouble", buffer_protocol())
-    //class_<std::vector<sp::timecode<double>>>(m,"VectorTimeCodeDouble",buffer_protocol())
-	/*.def(init<>())
+    //bind_vector<std::vector<sp::timecode<double>>>(m,"VectorTimeCodeDouble", buffer_protocol())
+    class_<std::vector<sp::timecode<double>>>(m,"VectorTimeCodeDouble",buffer_protocol())
+	.def(init<>())
 	.def_buffer([](std::vector<sp::timecode<double>>& vector) -> buffer_info{
 		return buffer_info(
 			vector.data(),
@@ -89,7 +89,7 @@ PYBIND11_MODULE(grapher, m){
 			{size_t(vector.size())},
 			{sizeof(sp::timecode<double>)}
 		);
-		})*/
+		})
 	.def("np",[](std::vector<sp::timecode<double>> &vec)->array{return cast(vec);})
 	;
     /*stl
@@ -163,9 +163,9 @@ PYBIND11_MODULE(grapher, m){
 	if (info.strides[0]!=sizeof(double))
 		throw std::runtime_error("Incompatible format: Incompatible step size");
 	auto doubles=static_cast<double*>(info.ptr);
-	auto vec = std::vector<double>(doubles,doubles+size);
+	//auto vec = std::vector<double>(doubles,doubles+size);
 	//needs stl.h (copy?)
-	//vec = in.cast<std::vector<double>>();
+	auto vec = in.cast<std::vector<double>>();
 	auto data = speczilla::Buffer<double>(&vec,vec.size(),samplesPerVector,unitaryLength,relative,average,averageScale);
 	//auto data = speczilla::Buffer<double>(&in,in.size(),samplesPerVector,unitaryLength,relative,average,averageScale);	
 	auto out = data();
