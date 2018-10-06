@@ -11,11 +11,11 @@
 #include <stopeight-clibs/grapher.h>
 
 //#include <pybind11/stl.h>
-#include <pybind11/operators.h>
-//#include <pybind11/stl_bind.h>
+//#include <pybind11/operators.h>
+#include <pybind11/stl_bind.h>
 //cant make this opaque; have to use stl or manual move: cast py::array to std::vector
 //PYBIND11_MAKE_OPAQUE(std::vector<double>);
-//PYBIND11_MAKE_OPAQUE(std::vector<sp::timecode<double>>);
+PYBIND11_MAKE_OPAQUE(std::vector<sp::timecode<double>>);
 #include <pybind11/numpy.h>
 
 using fexec = const dummy;
@@ -76,8 +76,9 @@ PYBIND11_MODULE(grapher, m){
 	})
 	.def(self += self)
 	;*/
-    class_<std::vector<sp::timecode<double>>>(m,"VectorTimeCodeDouble",buffer_protocol())
-	.def(init<>())
+    bind_vector<std::vector<sp::timecode<double>>>(m,"VectorTimeCodeDouble", buffer_protocol())
+    //class_<std::vector<sp::timecode<double>>>(m,"VectorTimeCodeDouble",buffer_protocol())
+	/*.def(init<>())
 	.def_buffer([](std::vector<sp::timecode<double>>& vector) -> buffer_info{
 		return buffer_info(
 			vector.data(),
@@ -88,7 +89,7 @@ PYBIND11_MODULE(grapher, m){
 			{size_t(vector.size())},
 			{sizeof(sp::timecode<double>)}
 		);
-		})
+		})*/
 	.def("np",[](std::vector<sp::timecode<double>> &vec)->array{return cast(vec);})
 	;
     /*stl
@@ -143,9 +144,9 @@ PYBIND11_MODULE(grapher, m){
 	size_t size = info.shape[0];
 	if (info.strides[0]!=sizeof(sp::timecode<double>))
 		throw std::runtime_error("Incompatible format: Incompatible step size");
-	std::vector<sp::timecode<double>> vec = std::vector<sp::timecode<double>>(size);
 	auto timecodes=static_cast<sp::timecode<double>*>(info.ptr);
-	vec.assign(timecodes,timecodes+size);
+	auto vec = std::vector<sp::timecode<double>>(timecodes,timecodes+size);
+	//needs stl.h (copy?)
 	//vec = in.cast<std::vector<sp::timecode<double>>>();
 	return vec;
 	});
@@ -162,8 +163,7 @@ PYBIND11_MODULE(grapher, m){
 	if (info.strides[0]!=sizeof(double))
 		throw std::runtime_error("Incompatible format: Incompatible step size");
 	auto doubles=static_cast<double*>(info.ptr);
-	std::vector<double> vec = std::vector<double>(size);
-	vec.assign(doubles,doubles+size);
+	auto vec = std::vector<double>(doubles,doubles+size);
 	//needs stl.h (copy?)
 	//vec = in.cast<std::vector<double>>();
 	auto data = speczilla::Buffer<double>(&vec,vec.size(),samplesPerVector,unitaryLength,relative,average,averageScale);
