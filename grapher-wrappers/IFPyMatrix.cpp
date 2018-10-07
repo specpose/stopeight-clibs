@@ -1,7 +1,8 @@
 // Copyright (C) 2017 Fassio Blatter
 // GNU Lesser General Public License, version 2.1
-#include <pybind11/pybind11.h>
 #include <stopeight-clibs/Matrix.h>
+
+#include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
 
 using namespace pybind11;
@@ -26,10 +27,7 @@ PYBIND11_MODULE(matrix, m){
 		sizeof(double) }
 	);
     	})
-	/*.def("__init__",[](Matrix<double>& matrix, buffer buffer){
-		buffer_info info = buffer.request();
-		new (&matrix) Matrix();
-	})*/
+	.def("__array__",[](Matrix<double> &mat)->array{return cast(mat);})
 	;
     class_<Vector<double>>(m,"Vector",buffer_protocol())
 	.def(init<double,double>())
@@ -43,8 +41,8 @@ PYBIND11_MODULE(matrix, m){
 		{sizeof(Vector<double>::value_type)}
 	);
 	})
+	.def("__array__",[](Vector<double> &vec)->array{return cast(vec);})
 	;
-    //PYBIND11_NUMPY_DTYPE(Vector);
     class_<Vectors<double>>(m,"Vectors",buffer_protocol())
 	.def(init<>())
 	.def_buffer([](Vectors<double>& vectors) -> buffer_info{
@@ -59,18 +57,17 @@ PYBIND11_MODULE(matrix, m){
 	})
 	.def("push_back",&Vectors<double>::push_back)
 	.def("apply",&Vectors<double>::apply)
-	.def("np",[](Vectors<double> &vec)->array{return cast(vec);})
+	.def("__array__",[](Vectors<double> &vecs)->array{return cast(vecs);})
 	;
-    m.def("doublesize",[]()->size_t{return sizeof(std::array<double,9>);});
-    m.def("matrixsize",[]()->size_t{return sizeof(Matrix<double>);});
-    m.def("arraysize",[]()->size_t{return sizeof(std::array<double,9>);});
+    m.def("matrixsize",[](){return sizeof(Matrix<double>);});
+    m.def("array",[](){return sizeof(std::array<double,9>);});
     class_<Stack<double>>(m,"Stack",buffer_protocol())
 	.def(init<>())
 	.def_buffer([](Stack<double>& stack) -> buffer_info{
 	return buffer_info(
 		stack.data(),
 		sizeof(Stack<double>::value_type),
-		"",//format_descriptor<Stack<double>::value_type>::format(),
+		format_descriptor<std::array<double,9>>::format(),
 		1,
 		{stack.size()},
 		{sizeof(Stack<double>::value_type)}
@@ -80,5 +77,6 @@ PYBIND11_MODULE(matrix, m){
 	.def("scale",&Stack<double>::scale<double>)
 	.def("rotate",&Stack<double>::rotate)
 	.def("translate",&Stack<double>::translate<double>)
+	.def("__array__",[](Stack<double> &stk)->array{return cast(stk);})
 	;
 }

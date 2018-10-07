@@ -96,7 +96,7 @@ PYBIND11_MODULE(grapher, m){
 	size_t size = info.shape[0];
 	if (info.strides[0]!=sizeof(double))
 		throw std::runtime_error("Incompatible format: Incompatible step size");
-	auto doubles=static_cast<double*>(info.ptr);
+	//auto doubles=static_cast<double*>(info.ptr);
 	//auto vec = std::vector<double>(doubles,doubles+size);
 	//needs stl.h (copy?)
 	auto vec = in.cast<std::vector<double>>();
