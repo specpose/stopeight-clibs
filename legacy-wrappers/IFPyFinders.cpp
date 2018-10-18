@@ -1,5 +1,5 @@
 #include <Python.h>
-//#include "turns.h"
+#include "turns.h"
 #include <stopeight-clibs/shared_types.h>
 
 #undef NDEBUG
