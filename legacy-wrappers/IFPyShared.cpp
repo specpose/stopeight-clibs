@@ -10,5 +10,13 @@ QListWrapper::QListWrapper(py::array_t<sp::timecode<double>, py::array::c_style>
         });
     }
 
+py::array_t<sp::timecode<double>, py::array::c_style> QListWrapper::toPyArray(){
+    //Hack Copy
+    auto result = std::vector<sp::timecode<double>>(this->size());
+    std::transform(std::begin(*this),std::end(*this),std::begin(result),[](dpoint& point){
+        return sp::timecode<double>(double(point.x()),double(point.y()));
+    });
+    return py::cast(result);
+}
 //template TurnAnalyzer<dpoint>::TurnAnalyzer(QListWrapper& list);
 TurnAnalyzerWrapper::TurnAnalyzerWrapper(QListWrapper &other) : TurnAnalyzer<dpoint>(dynamic_cast<ListCopyable<dpoint> &>(other)) {}
