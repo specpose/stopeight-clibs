@@ -1,6 +1,6 @@
 #include <IFPyShared.h>
 
-QListWrapper::QListWrapper(py::array_t<sp::timecode<double>, py::array::c_style> other) : ListCopyable<dpoint>()
+QListWrapper::QListWrapper(py::array_t<sp::timecode<double>, py::array::c_style> other) : ListSwitchable<dpoint>()
     {
         auto mod = py::module::import("stopeight.grapher");
         auto data = (mod.attr("np_to_tc")(other)).cast<std::vector<sp::timecode<double>>>();

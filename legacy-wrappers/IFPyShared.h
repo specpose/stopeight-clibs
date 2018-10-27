@@ -6,11 +6,11 @@ namespace py = pybind11;
 #include "turnanalyzer.h"
 #include <stopeight-clibs/shared_types.h>
 
-class QListWrapper : public ListCopyable<dpoint>
+class QListWrapper : public ListSwitchable<dpoint>
 {
   public:
     QListWrapper(py::array_t<sp::timecode<double>, py::array::c_style> other);
-    using ListCopyable<dpoint>::ListCopyable;
+    using ListSwitchable<dpoint>::ListSwitchable;
 
     py::array_t<sp::timecode<double>, py::array::c_style> toPyArray();
 };

@@ -8,7 +8,7 @@ PYBIND11_MODULE(getters, g){
     py::class_<QListWrapper>(g,"QListDpoint", py::buffer_protocol())
 	.def(py::init<py::array_t<sp::timecode<double>,py::array::c_style>>())
 	;
-    py::class_<TurnAnalyzerWrapper>(g,"TurnAnalyzerDpoint", py::buffer_protocol())
+    py::class_<TurnAnalyzerWrapper>(g,"Turn", py::buffer_protocol())
 	.def(py::init<QListWrapper&>())
     .def("next",[](TurnAnalyzerWrapper& in){
         ListCopyable<dpoint> result_qt = in.getFirstTurnByTriplets();
