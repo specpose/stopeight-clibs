@@ -10,6 +10,8 @@ class QListWrapper : public ListCopyable<dpoint>
 {
   public:
     QListWrapper(py::array_t<sp::timecode<double>, py::array::c_style> other);
+    using ListCopyable<dpoint>::ListCopyable;
+
     py::array_t<sp::timecode<double>, py::array::c_style> toPyArray();
 };
 
@@ -17,5 +19,5 @@ class QListWrapper : public ListCopyable<dpoint>
 class TurnAnalyzerWrapper : public TurnAnalyzer<dpoint>
 {
   public:
-    TurnAnalyzerWrapper(QListWrapper &other);
+    template<class inType> TurnAnalyzerWrapper(inType &other);
 };
