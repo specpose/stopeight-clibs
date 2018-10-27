@@ -19,5 +19,8 @@ py::array_t<sp::timecode<double>, py::array::c_style> QListWrapper::toPyArray(){
     return py::cast(result);
 }
 
-template<class inType> TurnAnalyzerWrapper::TurnAnalyzerWrapper(inType &other) : TurnAnalyzer<dpoint>(other) {}
+template<class inType> TurnAnalyzerWrapper::TurnAnalyzerWrapper(inType &other) : TurnAnalyzer<dpoint>(static_cast<ListSwitchable<dpoint> &>(other)) {}
 template TurnAnalyzerWrapper::TurnAnalyzerWrapper(QListWrapper& list);
+
+template<class inType> QListWrapper::QListWrapper(inType& other) : ListSwitchable<dpoint>(static_cast<TurnAnalyzer<dpoint> &>(other)){};
+template QListWrapper::QListWrapper(TurnAnalyzerWrapper& list);

@@ -5,6 +5,8 @@
 PYBIND11_MAKE_OPAQUE(std::vector<sp::timecode<double>>);
 
 #include "turns.h"
+#include "spirals.h"
+#include "cliffs.h"
 
 std::vector<size_t> transform_indices(QList<dpoint> result_qt){
     auto result = std::vector<size_t>();
@@ -20,5 +22,10 @@ PYBIND11_MODULE(finders, f){
         f.def("Turns",[](QList<dpoint>& in)->std::vector<size_t>{
             return transform_indices(Turns<dpoint>::findTurns(in));
         });
-
+        f.def("Spirals",[](QList<dpoint>& in)->std::vector<size_t>{
+            return transform_indices(Spirals<dpoint>::findSpiralCliffs(in));
+        });
+        f.def("Cliffs",[](QList<dpoint>& in)->std::vector<size_t>{
+            return transform_indices(Cliffs<dpoint>::findCliffs(in));
+        });
 }

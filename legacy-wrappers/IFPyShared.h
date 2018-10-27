@@ -10,6 +10,7 @@ class QListWrapper : public ListSwitchable<dpoint>
 {
   public:
     QListWrapper(py::array_t<sp::timecode<double>, py::array::c_style> other);
+    template<class inType> QListWrapper(inType& other);
     using ListSwitchable<dpoint>::ListSwitchable;
 
     py::array_t<sp::timecode<double>, py::array::c_style> toPyArray();
