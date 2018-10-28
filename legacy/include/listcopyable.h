@@ -18,7 +18,7 @@ public:
     //ListCopyable<dpoint> chopCopy(int startPosition, int endPosition);
     std::array<QList<dpoint>::iterator,2> position_to_iterator(int startPosition,int endPosition);
 
-    void reverse();
+    //void reverse();
 
     void removeIllegalPoints();
 

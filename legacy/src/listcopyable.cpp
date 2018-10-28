@@ -69,14 +69,14 @@ template <> std::array<QList<dpoint>::iterator,2> ListCopyable<dpoint>::position
 }
 
 
-template <> void ListCopyable<dpoint>::reverse(){
+/*template <> void ListCopyable<dpoint>::reverse(){
     ListCopyable<dpoint> reversed= ListCopyable<dpoint>();
     for (int i=this->size()-1;i>=0;i--){
         reversed << this->at(i);
     }
     this->clear();
     this->append(reversed);
-}
+}*/
 
 template <> void ListCopyable<dpoint>::removeIllegalPoints(){
 //    debug() << "Before removeIllegalPoints: " <<this->size();

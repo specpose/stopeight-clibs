@@ -106,20 +106,20 @@ template <> ListCopyable<dpoint> TurnAnalyzer<dpoint>::getFirstTurnByTriplets(){
             if (secondTriplet.size()>2) {
                 auto it = origin.position_to_iterator(firstCorner.last().position,secondTriplet.last().position);
                 auto reverse = ListCopyable<dpoint>();
-                std::copy(it[0],it[1],std::back_inserter(reverse));
+                std::copy(it[0],it[1],std::front_inserter(reverse));
                 // this has to be in triplet detection!
                 //if (reverse.checkIfSectionIsStraightLine()){
                 // start over!
                 //} else {
-                reverse.reverse();
+                //reverse.reverse();
                 // get First Corner
                 CornerAnalyzer<dpoint> twoTriplets = CornerAnalyzer<dpoint>(reverse);
                 twoTriplets.cornerFilters();
                 ListCopyable<dpoint> secondCorner = twoTriplets.getFirstCorner();
                 it = origin.position_to_iterator(firstCorner.last().position,secondCorner.last().position);
                 auto cornerToCorner = ListCopyable<dpoint>();
-                std::copy(it[0],it[1],std::back_inserter(cornerToCorner));
-                cornerToCorner.reverse();
+                std::copy(it[0],it[1],std::front_inserter(cornerToCorner));
+                //cornerToCorner.reverse();
                 // this check is asymetric, improve!
                 if (cornerToCorner.size()>0 && firstTriplet.size()>0){
                     TurnAnalyzer<dpoint> normalized = TurnAnalyzer<dpoint>(cornerToCorner);
