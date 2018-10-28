@@ -17,6 +17,8 @@ template TurnCalculator<dpoint>::TurnCalculator(CornerNormalizer<dpoint>& list);
 template TurnCalculator<dpoint>::TurnCalculator(TurnNormalizer<dpoint>& list);
 #include "listcopyable.h"
 template TurnCalculator<dpoint>::TurnCalculator(ListCopyable<dpoint>& list);
+#include "listswitchable.h"
+template TurnCalculator<dpoint>::TurnCalculator(ListSwitchable<dpoint>& list);
 
 // this has performance penalty!
 template <> qreal TurnCalculator<dpoint>::getRegressionValueFor2Points(int pos, bool value){

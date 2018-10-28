@@ -16,6 +16,8 @@ template TurnNormalizer<dpoint>::TurnNormalizer(AreaNormalizer<dpoint>& list);
 template TurnNormalizer<dpoint>::TurnNormalizer(CornerNormalizer<dpoint>& list);
 #include "listcopyable.h"
 template TurnNormalizer<dpoint>::TurnNormalizer(ListCopyable<dpoint>& list);
+#include "listswitchable.h"
+template TurnNormalizer<dpoint>::TurnNormalizer(ListSwitchable<dpoint>& list);
 
 template <> void TurnNormalizer<dpoint>::smoothingJitter(int pos){
     bool foundOne = false;

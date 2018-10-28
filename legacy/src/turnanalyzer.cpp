@@ -19,6 +19,8 @@ template<>template<typename F> TurnAnalyzer<dpoint>::TurnAnalyzer(F& list) : Tur
 template TurnAnalyzer<dpoint>::TurnAnalyzer(AreaNormalizer<dpoint>& list);
 template TurnAnalyzer<dpoint>::TurnAnalyzer(CornerNormalizer<dpoint>& list);
 template TurnAnalyzer<dpoint>::TurnAnalyzer(ListCopyable<dpoint>& list);
+#include "listswitchable.h"
+template TurnAnalyzer<dpoint>::TurnAnalyzer(ListSwitchable<dpoint>& list);
 
 template <> ListCopyable<dpoint> TurnAnalyzer<dpoint>::getFirstTriplet(){
     StraightsAnalyzer<dpoint> result = StraightsAnalyzer<dpoint>();

@@ -21,6 +21,8 @@ template ListRotator<dpoint>::ListRotator(AreaAnalyzer<dpoint>& list);
 template ListRotator<dpoint>::ListRotator(ListBase<dpoint>& list);
 template ListRotator<dpoint>::ListRotator(ListCopyable<dpoint>& list);
 template ListRotator<dpoint>::ListRotator(TurnNormalizer<dpoint>& list);
+#include "turnanalyzer.h"
+template ListRotator<dpoint>::ListRotator(TurnAnalyzer<dpoint>& list);
 template ListRotator<dpoint>::ListRotator(AreaCalculator<dpoint>& list);
 template ListRotator<dpoint>::ListRotator(CornerNormalizer<dpoint>& list);
 template ListRotator<dpoint>::ListRotator(Calculator<dpoint>& list);

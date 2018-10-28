@@ -30,6 +30,8 @@ template ListSwitchable<dpoint>::ListSwitchable(ListCopyable<dpoint>& list);
 #include "areaanalyzer.h"
 template ListSwitchable<dpoint>::ListSwitchable(AreaAnalyzer<dpoint>& list);
 template ListSwitchable<dpoint>::ListSwitchable(TurnNormalizer<dpoint>& list);
+#include "turnanalyzer.h"
+template ListSwitchable<dpoint>::ListSwitchable(TurnAnalyzer<dpoint>& list);
 template ListSwitchable<dpoint>::ListSwitchable(AreaNormalizer<dpoint>& list);
 template ListSwitchable<dpoint>::ListSwitchable(CliffsNormalizer<dpoint>& list);
 #include "corneranalyzer.h"
