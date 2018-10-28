@@ -50,6 +50,6 @@ void EditorSpirals::process(ListBase<dpoint> &toBeProcessed){
     }
 }
 
-QList<dpoint> EditorSpirals::processSegment(QList<dpoint> list){
-    return EditorCliffs::processSegment(list);
+QList<dpoint> EditorSpirals::processSegment(QList<dpoint>::iterator start, QList<dpoint>::iterator end){
+    return EditorCliffs::processSegment(start,end);
 }

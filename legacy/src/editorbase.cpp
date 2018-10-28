@@ -84,28 +84,32 @@ template<> void EditorBase<ListBase<dpoint> >::mainIterator(const QList<dpoint>&
     ListCopyable<dpoint> out = ListCopyable<dpoint>(this->getOutput());
     int currentSegment = 0;
     //maemo works: check cliff size
+    std::array<QList<dpoint>::iterator,2> it;
     if (constCliffs.size()==0){
         currentSegment += 1;
-        slicesRef << this->processSegment(out);
+        it = out.position_to_iterator(out.first().position,out.last().position);
+        slicesRef << this->processSegment(it[0],it[1]);
     } else {
         for (int i=0;i<constCliffs.size();i++){
             currentSegment += 1;
             if (i==0){
-                slicesRef << processSegment(out.chopCopy(out.first().position,constCliffs[i].position-1));
+                it = out.position_to_iterator(out.first().position,constCliffs[i].position-1);
                 // the last one does not have an illegal point in the end:
                 // but has to be omitted to be consistent with rest. see bug below
             } else if (i==constCliffs.size()-1) {
                 //slicesRef << processSegment(out.chopCopy(constCliffs[i-1].position,constCliffs[i].position));
-                slicesRef << processSegment(out.chopCopy(constCliffs[i-1].position,constCliffs[i].position-1));
+                it = out.position_to_iterator(constCliffs[i-1].position,constCliffs[i].position-1);
             } else {
-                slicesRef << processSegment(out.chopCopy(constCliffs[i-1].position,constCliffs[i].position-1));
+                it = out.position_to_iterator(constCliffs[i-1].position,constCliffs[i].position-1);
             }
+            slicesRef << this->processSegment(it[0],it[1]);
         }
         currentSegment += 1;
         // it might have to hop over last point of second last segment? - bug.
         // dangerous: +1
         //slicesRef << processSegment(out.chopCopy(constCliffs[constCliffs.size()-1].position+1,out.last().position));
-        slicesRef << processSegment(out.chopCopy(constCliffs[constCliffs.size()-1].position,out.last().position));
+        it = out.position_to_iterator(constCliffs[constCliffs.size()-1].position,out.last().position);
+        slicesRef << processSegment(it[0],it[1]);
     }
 }
 

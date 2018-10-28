@@ -21,7 +21,7 @@ protected:
     void process(ListBase<dpoint>& toBeProcessed);
 
 private:
-    QList<dpoint> processSegment(QList<dpoint> list);
+    QList<dpoint> processSegment(QList<dpoint>::iterator start,QList<dpoint>::iterator end);
 
 };
 

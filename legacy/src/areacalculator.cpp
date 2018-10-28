@@ -2,7 +2,7 @@
 // GNU Lesser General Public License, version 2.1
 
 #include "areacalculator.h"
-
+#include "error.h"
 //#define debug() QNoDebug()
 
 
@@ -43,12 +43,12 @@ template <> qreal AreaCalculator<dpoint>::sumOfDxAreasRotY(){
             {
                 //this is jitter! perform turn detection before spiral subsectioning
                 //debug()<<"sum: "<<sum<<" piece: "<<piece<<" at position "<<this->at(i).position;
-                throw "AreaCalculator::sumOfDxAreasRotY: jitter detected. detect turns first and then make ascending/descending";
+                throw legacy::alg_logic_error("AreaCalculator::sumOfDxAreasRotY: jitter detected. detect turns first and then make ascending/descending",__FILE__,"");
             } else {
             sum += piece;
             }
         } else {
-            throw "AreaCalculator::sumOfDXArea: bug in getFirstLegalSegment";
+            throw legacy::alg_logic_error("AreaCalculator::sumOfDXArea: bug in getFirstLegalSegment",__FILE__,"");
         }
         }
     }

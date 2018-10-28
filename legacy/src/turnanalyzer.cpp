@@ -104,7 +104,9 @@ template <> ListCopyable<dpoint> TurnAnalyzer<dpoint>::getFirstTurnByTriplets(){
         if (calculator.size()>2){
             ListCopyable<dpoint> secondTriplet = calculator.getFirstTriplet();
             if (secondTriplet.size()>2) {
-                ListCopyable<dpoint> reverse= (origin.chopCopy(firstCorner.last().position,secondTriplet.last().position));
+                auto it = origin.position_to_iterator(firstCorner.last().position,secondTriplet.last().position);
+                auto reverse = ListCopyable<dpoint>();
+                std::copy(it[0],it[1],std::back_inserter(reverse));
                 // this has to be in triplet detection!
                 //if (reverse.checkIfSectionIsStraightLine()){
                 // start over!
@@ -114,7 +116,9 @@ template <> ListCopyable<dpoint> TurnAnalyzer<dpoint>::getFirstTurnByTriplets(){
                 CornerAnalyzer<dpoint> twoTriplets = CornerAnalyzer<dpoint>(reverse);
                 twoTriplets.cornerFilters();
                 ListCopyable<dpoint> secondCorner = twoTriplets.getFirstCorner();
-                ListCopyable<dpoint> cornerToCorner=origin.chopCopy(firstCorner.last().position,secondCorner.last().position);
+                it = origin.position_to_iterator(firstCorner.last().position,secondCorner.last().position);
+                auto cornerToCorner = ListCopyable<dpoint>();
+                std::copy(it[0],it[1],std::back_inserter(cornerToCorner));
                 cornerToCorner.reverse();
                 // this check is asymetric, improve!
                 if (cornerToCorner.size()>0 && firstTriplet.size()>0){
@@ -132,7 +136,9 @@ template <> ListCopyable<dpoint> TurnAnalyzer<dpoint>::getFirstTurnByTriplets(){
                     //} else if (turnTwo.position<turnOne.position) {
                     //    container = origin.chopCopy(turnTwo.position,turnOne.position);
                     //} else {
-                    container = origin.chopCopy(turnOne.position,turnTwo.position);
+                    it = origin.position_to_iterator(turnOne.position,turnTwo.position);
+                    container.clear();
+                    std::copy(it[0],it[1],std::begin(container));
                     //}
                     CornerNormalizer<dpoint> turnLine = CornerNormalizer<dpoint>(container);
                     for (int i=0;this->at(i).position<=turnLine.getPointInTheMiddle().position;i++){

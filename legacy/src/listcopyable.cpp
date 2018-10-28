@@ -38,7 +38,7 @@ template ListCopyable<dpoint>::ListCopyable(StraightsAnalyzer<dpoint>& list);
 template ListCopyable<dpoint>::ListCopyable(TurnAnalyzer<dpoint>& list);
 template ListCopyable<dpoint>::ListCopyable(QList<dpoint>& list);
 
-template<> ListCopyable<dpoint> ListCopyable<dpoint>::chopCopy(int startPosition, int endPosition){
+/*template<> ListCopyable<dpoint> ListCopyable<dpoint>::chopCopy(int startPosition, int endPosition){
     ListCopyable<dpoint> filet = ListCopyable<dpoint>();
     for (int i=0;i<this->size();i++){
         if ((this->at(i).position >= startPosition &&
@@ -51,7 +51,23 @@ template<> ListCopyable<dpoint> ListCopyable<dpoint>::chopCopy(int startPosition
         }
     }
     return filet;
+}*/
+
+template <> std::array<QList<dpoint>::iterator,2> ListCopyable<dpoint>::position_to_iterator(int startPosition,int endPosition){
+    auto start = size_t(startPosition);
+    auto end = size_t(endPosition);
+    if (start > end)
+        throw std::out_of_range("Trying to chop from reverse.");
+    auto first = std::begin(*this)+(start-size_t(std::begin(*this)->position));
+    auto last = std::begin(*this)+(end-size_t(std::begin(*this)->position));
+    auto chop_length = std::distance(first,last);
+    if ((end-start)!= chop_length){
+        throw std::length_error("ListCopyable is missing elements. Use full copy instead.");
+    } else {
+        return std::array<ListCopyable<dpoint>::iterator,2>{first,last};
+    }
 }
+
 
 template <> void ListCopyable<dpoint>::reverse(){
     ListCopyable<dpoint> reversed= ListCopyable<dpoint>();

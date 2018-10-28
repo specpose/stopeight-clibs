@@ -42,7 +42,10 @@ template<> Calculator<dpoint> Analyzer<dpoint>::populateTurns(ListBase<dpoint> &
             result << slices[k][l];
             // this is for debugging turn detection
             ListCopyable<dpoint> iter = ListCopyable<dpoint>(originalData);
-            ListBase<dpoint> lst = iter.chopCopy(slices[k][l].position,slices[k][l+1].position);
+            //ListBase<dpoint> lst = iter.chopCopy(slices[k][l].position,slices[k][l+1].position);
+            auto it = iter.position_to_iterator(slices[k][l].position,slices[k][l+1].position);
+            auto lst = ListBase<dpoint>();
+            std::copy(it[0],it[1],std::back_inserter(lst));
             CornerNormalizer<dpoint> mid = CornerNormalizer<dpoint>(lst);
             result << mid.getPointInTheMiddle();
         }

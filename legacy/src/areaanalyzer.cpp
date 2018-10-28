@@ -151,7 +151,10 @@ template<> ListBase<dpoint> AreaAnalyzer<dpoint>::getFirstArea(qreal limit){
     ListCopyable<dpoint> area = ListCopyable<dpoint>();
     if (foundOne){
         ListCopyable<dpoint> util = ListCopyable<dpoint>(*this);
-        area = util.chopCopy(util.first().position,result.position);
+        //area = util.chopCopy(util.first().position,result.position);
+        area.clear();
+        auto it = util.position_to_iterator(util.first().position,result.position);
+        std::copy(it[0],it[1],std::back_inserter(area));
         //debug()<<"Area has "<<illegalSegmentCounter<<" legal segments.";
     } else {
         area = *this;

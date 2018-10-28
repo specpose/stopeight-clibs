@@ -123,7 +123,10 @@ template<> ListCopyable<dpoint> CliffsAnalyzer<dpoint>::getFirstCliff(qreal limi
     ListCopyable<dpoint> area = ListCopyable<dpoint>();
     if (foundOne){
         ListCopyable<dpoint> util = ListCopyable<dpoint>(*this);
-        area = util.chopCopy(util.first().position,result.position);
+        //area = util.chopCopy(util.first().position,result.position);
+        area.clear();
+        auto it = util.position_to_iterator(util.first().position,result.position);
+        std::copy(it[0],it[1],std::back_inserter(area));
         //area = ListBase<dpoint>(util.chopCopy(util.first().position,result.position));
         //debug()<<"Area has "<<illegalSegmentCounter<<" legal segments.";
     } else {
