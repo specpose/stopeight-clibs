@@ -47,7 +47,7 @@ template<> Calculator<dpoint> Analyzer<dpoint>::populateTurns(ListBase<dpoint> &
             auto lst = ListBase<dpoint>();
             std::copy(it[0],it[1],std::back_inserter(lst));
             CornerNormalizer<dpoint> mid = CornerNormalizer<dpoint>(lst);
-            auto middle = dpoint(mid.last().x()-mid.first().x(),mid.last().y()-mid.first().y());
+            auto middle = mid.getPointInTheMiddle();
             middle.position = -1;
             result << middle;
             //result << mid.getPointInTheMiddle();
