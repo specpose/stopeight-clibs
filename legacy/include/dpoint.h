@@ -20,7 +20,7 @@ public:
 
     QPointF rot;
     //float position;
-    qreal position;
+    int position;
 
     /*inline dpoint &operator=(QPointF &p)  {
     this->rx()=p.x();
