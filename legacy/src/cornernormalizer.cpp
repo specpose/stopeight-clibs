@@ -88,10 +88,26 @@ template<> dpoint CornerNormalizer<dpoint>::getPointInTheMiddle(){
                 dpoint point1 = myself.at(i-1);
                 // get the point2 > position
                 dpoint point2 = myself.at(i);
-                // set the new position to p1+p2/2
-                p.position=point1.position+((point2.position-point1.position)/2);
                 // use middle of two adjacent points
                 middle = (point1+point2)/2;
+                if (point1.position==-1){
+                    if (point2.position==-1){
+                        throw std::logic_error("There should not be any inserted points at this stage of the algorithm");
+                    } else {
+                        p.position = point2.position;
+                    }
+                    break;
+                }
+                if (point2.position==-1){
+                    if (point1.position==-1){
+                        throw std::logic_error("There should not be any inserted points at this stage of the algorithm");
+                    } else {
+                        p.position = point1.position;
+                    }
+                    break;
+                }
+                // set the new position to p1+p2/2
+                p.position=point1.position+((point2.position-point1.position)/2);
                 break;
             }
         }
