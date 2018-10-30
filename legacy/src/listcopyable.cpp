@@ -34,8 +34,7 @@ template ListCopyable<dpoint>::ListCopyable(CliffsAnalyzer<dpoint>& list);
 template ListCopyable<dpoint>::ListCopyable(Cliffs<dpoint>& list);
 #include "straightsanalyzer.h"
 template ListCopyable<dpoint>::ListCopyable(StraightsAnalyzer<dpoint>& list);
-#include "turnanalyzer.h"
-template ListCopyable<dpoint>::ListCopyable(TurnAnalyzer<dpoint>& list);
+template ListCopyable<dpoint>::ListCopyable(TurnNormalizer<dpoint>& list);
 template ListCopyable<dpoint>::ListCopyable(QList<dpoint>& list);
 
 /*template<> ListCopyable<dpoint> ListCopyable<dpoint>::chopCopy(int startPosition, int endPosition){

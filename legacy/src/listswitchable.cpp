@@ -30,8 +30,6 @@ template ListSwitchable<dpoint>::ListSwitchable(ListCopyable<dpoint>& list);
 #include "areaanalyzer.h"
 template ListSwitchable<dpoint>::ListSwitchable(AreaAnalyzer<dpoint>& list);
 template ListSwitchable<dpoint>::ListSwitchable(TurnNormalizer<dpoint>& list);
-#include "turnanalyzer.h"
-template ListSwitchable<dpoint>::ListSwitchable(TurnAnalyzer<dpoint>& list);
 template ListSwitchable<dpoint>::ListSwitchable(AreaNormalizer<dpoint>& list);
 template ListSwitchable<dpoint>::ListSwitchable(CliffsNormalizer<dpoint>& list);
 #include "corneranalyzer.h"
@@ -73,9 +71,6 @@ template void ListSwitchable<dpoint>::operator=(const StraightsCalculator<dpoint
 #include "cliffs.h"
 template void ListSwitchable<dpoint>::operator=(Cliffs<dpoint>& list);
 template void ListSwitchable<dpoint>::operator=(const Cliffs<dpoint>& list);
-#include "turns.h"
-template void ListSwitchable<dpoint>::operator=(Turns<dpoint>& list);
-template void ListSwitchable<dpoint>::operator=(const Turns<dpoint>& list);
 #include "corners.h"
 template void ListSwitchable<dpoint>::operator=(Corners<dpoint>& list);
 template void ListSwitchable<dpoint>::operator=(const Corners<dpoint>& list);

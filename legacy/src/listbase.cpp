@@ -47,10 +47,9 @@ template ListBase<dpoint>::ListBase(CornerNormalizer<dpoint>& list);
 #include "cliffs.h"
 template ListBase<dpoint>::ListBase(Cliffs<dpoint>& list);
 template ListBase<dpoint>::ListBase(CliffsNormalizer<dpoint>& list);
-#include "turnanalyzer.h"
-template ListBase<dpoint>::ListBase(TurnAnalyzer<dpoint>& list);
 #include "straightsanalyzer.h"
 template ListBase<dpoint>::ListBase(StraightsAnalyzer<dpoint>& list);
+#include "corneranalyzer.h"
 template ListBase<dpoint>::ListBase(CornerAnalyzer<dpoint>& list);
 template ListBase<dpoint>::ListBase(const CliffsCalculator<dpoint>& list);
 template ListBase<dpoint>::ListBase(const AreaCalculator<dpoint>& list);
@@ -60,8 +59,6 @@ template ListBase<dpoint>::ListBase(const Calculator<dpoint>& list);
 template ListBase<dpoint>::ListBase(const Spirals<dpoint>& list);
 template ListBase<dpoint>::ListBase(const StraightsCalculator<dpoint>& list);
 template ListBase<dpoint>::ListBase(const Cliffs<dpoint>& list);
-#include "turns.h"
-template ListBase<dpoint>::ListBase(const Turns<dpoint>& list);
 #include "corners.h"
 template ListBase<dpoint>::ListBase(const Corners<dpoint>& list);
 
