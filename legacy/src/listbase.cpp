@@ -61,7 +61,8 @@ template ListBase<dpoint>::ListBase(const StraightsCalculator<dpoint>& list);
 template ListBase<dpoint>::ListBase(const Cliffs<dpoint>& list);
 #include "corners.h"
 template ListBase<dpoint>::ListBase(const Corners<dpoint>& list);
-
+#include "turnanalyzer.h"
+template ListBase<dpoint>::ListBase(TurnAnalyzer<dpoint>& list);
 
 template<> QList<QPointF> ListBase<QPointF>::loadSPFile(const QString& fileName)
 {
