@@ -22,7 +22,7 @@ using fexec = const dummy;
 
 namespace grapher {
     
-    template <class ExecutionPolicy, class Iterator, class OutputIterator> void __differences::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2)
+    template <class ExecutionPolicy, class InputIterator, class OutputIterator> void __differences::operator()(ExecutionPolicy& task1, InputIterator begin, InputIterator end, OutputIterator begin2)
     {
         std::adjacent_difference(begin, end, begin2);
         //*std::begin(differences) = 0;
@@ -32,9 +32,9 @@ namespace grapher {
 	template void __differences::operator()(fexec& task1, vector_single<float> begin, vector_single<float> end, vector_single<double> begin2);
 	template void __differences::operator()(fexec& task1, vector_single<int16_t> begin, vector_single<int16_t> end, vector_single<int16_t> begin2);
    
-    template <class ExecutionPolicy, class Iterator, class OutputIterator> void __calculate_rotations::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, angle::angle& angleFunction, std::forward_iterator_tag itag)
+    template <class ExecutionPolicy, class InputIterator, class OutputIterator> void __calculate_rotations::operator()(ExecutionPolicy& task1, InputIterator begin, InputIterator end, OutputIterator begin2, angle::angle& angleFunction, std::forward_iterator_tag itag)
     {
-		using T = vector_single_T<Iterator>;
+		using T = vector_single_T<InputIterator>;
         std::transform(begin, end, begin2, [&angleFunction](T diff) {
             return angleFunction(diff);
         });
@@ -42,14 +42,14 @@ namespace grapher {
     template void __calculate_rotations::operator()(fexec& task1, vector_single<double> begin, vector_single<double> end, vector_single<double> begin2, angle::angle& angleFunction, std::forward_iterator_tag itag);
 	template void __calculate_rotations::operator()(fexec& task1, vector_single<float> begin, vector_single<float> end, vector_single<float> begin2, angle::angle& angleFunction, std::forward_iterator_tag itag);
     
-    template <class ExecutionPolicy, class Iterator, class OutputIterator> void __apply_rotation_matrix::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2)
+    template <class ExecutionPolicy, class InputIterator, class OutputIterator> void __apply_rotation_matrix::operator()(ExecutionPolicy& task1, InputIterator begin, InputIterator end, OutputIterator begin2)
     {
-		using T = vector_single_T<Iterator>;
+		using T = vector_single_T<InputIterator>;
 		OutputIterator begin2_c = begin2;
         std::transform(begin, end, begin2, begin2, [](double rot, sp::timecode<T> vec) {
             double x = (cos(rot)*vec.get_x() - sin(rot)*vec.get_y());
             double y = (sin(rot)*vec.get_x() + cos(rot)*vec.get_y());
-			auto p = sp::timecode<T>( T(x) , T(y) );
+			auto p = sp::timecode<T>{ T(x) , T(y) };
             return p;
         });
     }
@@ -60,7 +60,7 @@ namespace grapher {
     }
     template<typename T> _fixpoints<T>::~_fixpoints() {
     }
-    template<typename T> template <class ExecutionPolicy, class Iterator, class OutputIterator> void _fixpoints<T>::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, std::random_access_iterator_tag)
+    template<typename T> template <class ExecutionPolicy, class InputIterator, class OutputIterator> void _fixpoints<T>::operator()(ExecutionPolicy& task1, InputIterator begin, InputIterator end, OutputIterator begin2, std::random_access_iterator_tag)
     {
         //remove all illegal fixpoint_indices
         //Note: last can not be fixPoint
@@ -115,9 +115,9 @@ namespace grapher {
     _blocks::~_blocks() {
         
     }
-    template <class ExecutionPolicy, class Iterator, class OutputIterator> void _blocks::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, std::random_access_iterator_tag)
+    template <class ExecutionPolicy, class InputIterator, class OutputIterator> void _blocks::operator()(ExecutionPolicy& task1, InputIterator begin, InputIterator end, OutputIterator begin2, std::random_access_iterator_tag)
     {
-		using T = vector_vectors_T<Iterator>;
+		using T = vector_vectors_T<InputIterator>;
         auto spV = _samplesPerVector;
         std::for_each(begin, end, [&begin2, spV](it_element<T> slice) {
             auto size = std::distance(slice.first, slice.second);
@@ -139,14 +139,14 @@ namespace grapher {
 	template void _blocks::operator()(fexec& task1, vector_vectors<float> begin, vector_vectors<float> end, vector_vectors<float> begin2, std::random_access_iterator_tag);
   
     
-    template <class ExecutionPolicy, class Iterator, class OutputIterator> void _sum_blocks::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, std::random_access_iterator_tag)
+    template <class ExecutionPolicy, class InputIterator, class OutputIterator> void _sum_blocks::operator()(ExecutionPolicy& task1, InputIterator begin, InputIterator end, OutputIterator begin2, std::random_access_iterator_tag)
     {
-		using T = vector_vectors_T<Iterator>;
+		using T = vector_vectors_T<InputIterator>;
         //transforming intput it_element to sp:element
         std::transform(begin, end, begin2, [](it_element<T> block) {
             //both can be nonempty; preserve type of last
             if (block.first != block.second) {
-				const sp::timecode<T> e = sp::timecode<T>( 0,0 );
+				const sp::timecode<T> e = sp::timecode<T>{ 0,0 };
                 return std::accumulate(block.first, block.second, e, [](sp::timecode<T> v1, sp::timecode<T> v2) {
                     v2 += v1;
                     return v2;
@@ -162,9 +162,9 @@ namespace grapher {
     template void _sum_blocks::operator()(fexec& task1, vector_vectors<double> begin, vector_vectors<double> end, vector_pair<double> begin2, std::random_access_iterator_tag);
     template void _sum_blocks::operator()(fexec& task1, vector_vectors<float> begin, vector_vectors<float> end, vector_pair<float> begin2, std::random_access_iterator_tag);
     
-    template <class ExecutionPolicy, class Iterator, class OutputIterator> void _append::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, std::forward_iterator_tag)
+    template <class ExecutionPolicy, class InputIterator, class OutputIterator> void _append::operator()(ExecutionPolicy& task1, InputIterator begin, InputIterator end, OutputIterator begin2, std::forward_iterator_tag)
     {
-		using T = vector_pair_T<Iterator>;
+		using T = vector_pair_T<InputIterator>;
         class my_add {
         public:
 			my_add() : cache(sp::timecode<T>{0, 0}) {};
@@ -191,16 +191,16 @@ namespace grapher {
     __differences_To_VG::~__differences_To_VG() {
     }
     //partial specialization
-    template <class ExecutionPolicy, class Iterator, class OutputIterator, class UnaryFunction> void __differences_To_VG::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, UnaryFunction& angleFunction)
+    template <class ExecutionPolicy, class InputIterator, class OutputIterator, class UnaryFunction> void __differences_To_VG::operator()(ExecutionPolicy& task1, InputIterator begin, InputIterator end, OutputIterator begin2, UnaryFunction& angleFunction)
     {
-		using T = vector_single_T<Iterator>;
+		using T = vector_single_T<InputIterator>;
         //par
         //std::experimental::parallel::transform(task1, begin, end, begin, [](float f) {return 3.3f; });
         
         std::vector<T> rotations;
         //first one is invalid
-        //Windows __calculate_rotations()(task1, begin, end, std::back_inserter(rotations), angleFunction, Iterator::iterator_category{});
-        __calculate_rotations()(task1, begin, end, std::back_inserter(rotations), angleFunction, typename Iterator::iterator_category{});
+        //Windows __calculate_rotations()(task1, begin, end, std::back_inserter(rotations), angleFunction, InputIterator::iterator_category{});
+        __calculate_rotations()(task1, begin, end, std::back_inserter(rotations), angleFunction, typename InputIterator::iterator_category{});
         
         sp::result<T> vectors;
 		std::fill_n(std::back_inserter(vectors), std::distance(std::begin(rotations), std::end(rotations)), sp::timecode<T>{T(_vectorLength), 0});
@@ -208,18 +208,18 @@ namespace grapher {
         
         std::vector<it_element<T>> vectors_sliced;
         auto func = _fixpoints<T>(_fixPoint_indices);
-        //Windows func(task1, std::begin(vectors), std::end(vectors), std::back_inserter(vectors_sliced), Iterator::iterator_category{});
-        func(task1, std::begin(vectors), std::end(vectors), std::back_inserter(vectors_sliced), typename Iterator::iterator_category{});
+        //Windows func(task1, std::begin(vectors), std::end(vectors), std::back_inserter(vectors_sliced), InputIterator::iterator_category{});
+        func(task1, std::begin(vectors), std::end(vectors), std::back_inserter(vectors_sliced), typename InputIterator::iterator_category{});
         
         sp::result<T> out_vectors;
         
         /*
          //HERESTART
          std::vector<it_element> blocks;
-         _blocks(_samplesPerVector)(task1, std::begin(vectors_sliced), std::end(vectors_sliced), std::back_inserter(blocks), Iterator::iterator_category{});
+         _blocks(_samplesPerVector)(task1, std::begin(vectors_sliced), std::end(vectors_sliced), std::back_inserter(blocks), InputIterator::iterator_category{});
          
          std::vector<sp::element> sums;
-         _sum_blocks()(task1, std::begin(blocks), std::end(blocks), std::back_inserter(sums), Iterator::iterator_category{});
+         _sum_blocks()(task1, std::begin(blocks), std::end(blocks), std::back_inserter(sums), InputIterator::iterator_category{});
          
          std::move(std::begin(sums), std::end(sums), std::back_inserter(out_vectors));
          //HEREEND
@@ -234,14 +234,14 @@ namespace grapher {
             sp::result<T> ov = sp::result<T>{};//(blocks_vector.size(), { double(0), double(0) });
             //std::fill<typename std::vector<sp::element>::iterator>(std::begin(ov), std::end(ov), sp::element{ 1.0f, 1.0f });
             
-            //Windows _sum_blocks()(task1, std::begin(blocks_vector), std::end(blocks_vector), std::back_inserter(ov), Iterator::iterator_category{});
-            _sum_blocks()(task1, std::begin(blocks_vector), std::end(blocks_vector), std::back_inserter(ov), typename Iterator::iterator_category{});
+            //Windows _sum_blocks()(task1, std::begin(blocks_vector), std::end(blocks_vector), std::back_inserter(ov), InputIterator::iterator_category{});
+            _sum_blocks()(task1, std::begin(blocks_vector), std::end(blocks_vector), std::back_inserter(ov), typename InputIterator::iterator_category{});
             std::move(std::begin(ov), std::end(ov), std::back_inserter(out_vectors));
         }
         //});
         
-        //Windows _append()(task1, std::begin(out_vectors), std::end(out_vectors), std::begin(out_vectors), Iterator::iterator_category{});
-        _append()(task1, std::begin(out_vectors), std::end(out_vectors), std::begin(out_vectors), typename Iterator::iterator_category{});
+        //Windows _append()(task1, std::begin(out_vectors), std::end(out_vectors), std::begin(out_vectors), InputIterator::iterator_category{});
+        _append()(task1, std::begin(out_vectors), std::end(out_vectors), std::begin(out_vectors), typename InputIterator::iterator_category{});
         
         std::copy<typename sp::result<T>::iterator, OutputIterator>(std::begin(out_vectors), std::end(out_vectors), begin2);
     }
@@ -273,9 +273,9 @@ namespace grapher {
     samples_To_VG::~samples_To_VG() {
     }
     //partial specialization
-    template <class ExecutionPolicy, class Iterator, class OutputIterator, class UnaryFunction> void samples_To_VG::operator()(ExecutionPolicy& task1, Iterator begin, Iterator end, OutputIterator begin2, UnaryFunction& angleFunction)
+    template <class ExecutionPolicy, class InputIterator, class OutputIterator, class UnaryFunction> void samples_To_VG::operator()(ExecutionPolicy& task1, InputIterator begin, InputIterator end, OutputIterator begin2, UnaryFunction& angleFunction)
     {
-		using T = vector_single_T<Iterator>;
+		using T = vector_single_T<InputIterator>;
         //par
         //std::experimental::parallel::transform(task1, begin, end, begin, [](float f) {return 3.3f; });
         size_t size = std::distance(begin, end);

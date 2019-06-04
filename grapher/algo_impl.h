@@ -11,20 +11,20 @@ namespace grapher {
 	//specialization: 1 iterator_category, 2 value_types
 	class __differences {
 	public:
-		template <class ExecutionPolicy, class Iterator, class OutputIterator>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2);
+		template <class ExecutionPolicy, class InputIterator, class OutputIterator>void operator()(ExecutionPolicy&, InputIterator begin, InputIterator end, OutputIterator begin2);
 	};
 
 	//specialization: 1 iterator_category, 2 value_types
 	class __calculate_rotations {
 	public:
-        template <class ExecutionPolicy, class Iterator, class OutputIterator> void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2,angle::angle& angleFunction, std::forward_iterator_tag itag);
+        template <class ExecutionPolicy, class InputIterator, class OutputIterator> void operator()(ExecutionPolicy&, InputIterator begin, InputIterator end, OutputIterator begin2,angle::angle& angleFunction, std::forward_iterator_tag itag);
 		//for different implementation: overload, not specialisation
 	};
 
 	//specialization: 1 iterator_category, 2 value_types
 	class __apply_rotation_matrix {
 	public:
-		template <class ExecutionPolicy, class Iterator, class OutputIterator>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2);
+		template <class ExecutionPolicy, class InputIterator, class OutputIterator>void operator()(ExecutionPolicy&, InputIterator begin, InputIterator end, OutputIterator begin2);
 	};
 
 	//specialization: 1 iterator_category, 2 value_types
@@ -32,7 +32,7 @@ namespace grapher {
 	public:
 		_fixpoints(std::vector<int>& points);
 		~_fixpoints();
-		template <class ExecutionPolicy, class Iterator, class OutputIterator>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2, std::random_access_iterator_tag);
+		template <class ExecutionPolicy, class InputIterator, class OutputIterator>void operator()(ExecutionPolicy&, InputIterator begin, InputIterator end, OutputIterator begin2, std::random_access_iterator_tag);
 	private:
 		std::vector<int>& _fixPoint_indices;
 	};
@@ -42,7 +42,7 @@ namespace grapher {
 	public:
 		_blocks(int samplesPerVector);
 		~_blocks();
-		template <class ExecutionPolicy, class Iterator, class OutputIterator>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2, std::random_access_iterator_tag);
+		template <class ExecutionPolicy, class InputIterator, class OutputIterator>void operator()(ExecutionPolicy&, InputIterator begin, InputIterator end, OutputIterator begin2, std::random_access_iterator_tag);
 	private:
 		int _samplesPerVector;
 	};
@@ -50,13 +50,13 @@ namespace grapher {
 	//specialization: 1 iterator_category, 2 value_types
 	class _sum_blocks {
 	public:
-		template <class ExecutionPolicy, class Iterator, class OutputIterator>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2, std::random_access_iterator_tag);//freedom vector or deque//type in or out?
+		template <class ExecutionPolicy, class InputIterator, class OutputIterator>void operator()(ExecutionPolicy&, InputIterator begin, InputIterator end, OutputIterator begin2, std::random_access_iterator_tag);//freedom vector or deque//type in or out?
 	};
 
 	//specialization: 1 iterator_category, 2 value_types
 	class _append {
 	public:
-		template <class ExecutionPolicy, class Iterator, class OutputIterator>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2, std::forward_iterator_tag);
+		template <class ExecutionPolicy, class InputIterator, class OutputIterator>void operator()(ExecutionPolicy&, InputIterator begin, InputIterator end, OutputIterator begin2, std::forward_iterator_tag);
 	};
 
 	class __differences_To_VG {
@@ -65,7 +65,7 @@ namespace grapher {
 		~__differences_To_VG();
 
 		//specialization: 1 iterator_category, 2 value_types
-        template <class ExecutionPolicy, class Iterator, class OutputIterator, class UnaryFunction>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2, UnaryFunction& angleFunction);
+        template <class ExecutionPolicy, class InputIterator, class OutputIterator, class UnaryFunction>void operator()(ExecutionPolicy&, InputIterator begin, InputIterator end, OutputIterator begin2, UnaryFunction& angleFunction);
 
 	private:
 		int _samplesPerVector;
@@ -83,7 +83,7 @@ namespace grapher {
 		~samples_To_VG();
 
 		//specialization: 1 iterator_category, 2 value_types
-        template <class ExecutionPolicy, class Iterator, class OutputIterator, class UnaryFunction>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2, UnaryFunction& angleFunction);
+        template <class ExecutionPolicy, class InputIterator, class OutputIterator, class UnaryFunction>void operator()(ExecutionPolicy&, InputIterator begin, InputIterator end, OutputIterator begin2, UnaryFunction& angleFunction);
 
 	private:
 		int _samplesPerVector;
