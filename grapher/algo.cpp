@@ -44,7 +44,7 @@ namespace grapher {
     
     template <class ExecutionPolicy, class InputIterator, class OutputIterator> void __apply_rotation_matrix::operator()(ExecutionPolicy& task1, InputIterator begin, InputIterator end, OutputIterator begin2)
     {
-		using T = vector_single_T<InputIterator>;
+		using T = vector_pair_T<OutputIterator>;
 		OutputIterator begin2_c = begin2;
         std::transform(begin, end, begin2, begin2, [](double rot, sp::timecode<T> vec) {
             double x = (cos(rot)*vec.get_x() - sin(rot)*vec.get_y());
@@ -141,7 +141,7 @@ namespace grapher {
     
     template <class ExecutionPolicy, class InputIterator, class OutputIterator> void _sum_blocks::operator()(ExecutionPolicy& task1, InputIterator begin, InputIterator end, OutputIterator begin2, std::random_access_iterator_tag)
     {
-		using T = vector_vectors_T<InputIterator>;
+		using T = vector_vectors_T<InputIterator>;//?!
         //transforming intput it_element to sp:element
         std::transform(begin, end, begin2, [](it_element<T> block) {
             //both can be nonempty; preserve type of last
@@ -154,7 +154,7 @@ namespace grapher {
             }
             else {
                 //auto v = sp::construct_element((*block.first)->first, (*block.first)->second);
-                sp::timecode<T> v = *block.first;
+				sp::timecode<T> v = *block.first;
                 return v;//second could be last+1
             }
         });
@@ -164,7 +164,7 @@ namespace grapher {
     
     template <class ExecutionPolicy, class InputIterator, class OutputIterator> void _append::operator()(ExecutionPolicy& task1, InputIterator begin, InputIterator end, OutputIterator begin2, std::forward_iterator_tag)
     {
-		using T = vector_pair_T<InputIterator>;
+		using T = vector_pair_T<OutputIterator>;
         class my_add {
         public:
 			my_add() : cache(sp::timecode<T>{0, 0}) {};
@@ -193,7 +193,7 @@ namespace grapher {
     //partial specialization
     template <class ExecutionPolicy, class InputIterator, class OutputIterator, class UnaryFunction> void __differences_To_VG::operator()(ExecutionPolicy& task1, InputIterator begin, InputIterator end, OutputIterator begin2, UnaryFunction& angleFunction)
     {
-		using T = vector_single_T<InputIterator>;
+		using T = vector_single_T<InputIterator>;//?!
         //par
         //std::experimental::parallel::transform(task1, begin, end, begin, [](float f) {return 3.3f; });
         
@@ -275,7 +275,7 @@ namespace grapher {
     //partial specialization
     template <class ExecutionPolicy, class InputIterator, class OutputIterator, class UnaryFunction> void samples_To_VG::operator()(ExecutionPolicy& task1, InputIterator begin, InputIterator end, OutputIterator begin2, UnaryFunction& angleFunction)
     {
-		using T = vector_single_T<InputIterator>;
+		using T = vector_pair_T<OutputIterator>;
         //par
         //std::experimental::parallel::transform(task1, begin, end, begin, [](float f) {return 3.3f; });
         size_t size = std::distance(begin, end);
