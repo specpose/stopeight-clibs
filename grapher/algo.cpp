@@ -22,16 +22,15 @@ using fexec = const dummy;
 
 namespace grapher {
     
-    template <class ExecutionPolicy, class InputIterator, class OutputIterator> void __differences::operator()(ExecutionPolicy& task1, InputIterator begin, InputIterator end, OutputIterator begin2)
+    template<typename T> template <class ExecutionPolicy> inline void __differences<T>::operator()(ExecutionPolicy& task1, typename std::vector<data_type>::iterator begin, typename std::vector<data_type>::iterator end, typename std::vector<data_type>::iterator begin2)
     {
         std::adjacent_difference(begin, end, begin2);
         //*std::begin(differences) = 0;
     }
-    template void __differences::operator()(fexec& task1, vector_single<double> begin, vector_single<double> end, vector_single<double> begin2) ;
-    template void __differences::operator()(fexec& task1, vector_single<float> begin, vector_single<float> end, vector_single<float> begin2);
-	template void __differences::operator()(fexec& task1, vector_single<float> begin, vector_single<float> end, vector_single<double> begin2);
-	template void __differences::operator()(fexec& task1, vector_single<int16_t> begin, vector_single<int16_t> end, vector_single<int16_t> begin2);
-   
+    template void __differences<double>::operator()(fexec&, typename std::vector<double>::iterator, typename std::vector<double>::iterator, typename std::vector<double>::iterator) ;
+    template void __differences<float>::operator()(fexec&, typename std::vector<float>::iterator, typename std::vector<float>::iterator, typename std::vector<float>::iterator);
+	template void __differences<int16_t>::operator()(fexec&, typename std::vector<int16_t>::iterator, typename std::vector<int16_t>::iterator, typename std::vector<int16_t>::iterator);
+	
     template <class ExecutionPolicy, class InputIterator, class OutputIterator> void __calculate_rotations::operator()(ExecutionPolicy& task1, InputIterator begin, InputIterator end, OutputIterator begin2, angle::angle& angleFunction, std::forward_iterator_tag itag)
     {
 		using T = vector_single_T<InputIterator>;
@@ -281,7 +280,7 @@ namespace grapher {
         size_t size = std::distance(begin, end);
         if (size > 0) {
             std::vector<T> differences = std::vector<T>(size, 0);
-            __differences()(task1, begin, end, std::begin(differences));
+            __differences<T>()(task1, begin, end, std::begin(differences));
             
             __differences_To_VG(_samplesPerVector, _vectorLength, _fixPoint_indices)(task1, std::begin(differences) + 1, std::end(differences), begin2, angleFunction);
         }
