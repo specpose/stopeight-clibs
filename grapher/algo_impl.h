@@ -9,10 +9,9 @@
 namespace grapher {
 
 	//specialization: 1 iterator_category, 2 value_types
-	template <typename T> class __differences {
+	template <class T> class __differences {
 	public:
-		using data_type = typename T;
-		template <class ExecutionPolicy> void operator()(ExecutionPolicy&, typename std::vector<data_type>::iterator begin, typename std::vector<data_type>::iterator end, typename std::vector<data_type>::iterator begin2);
+		template <class ExecutionPolicy> void operator()(ExecutionPolicy&, typename std::vector<T>::iterator begin, typename std::vector<T>::iterator end, typename std::vector<T>::iterator begin2);
 	};
 
 	//specialization: 1 iterator_category, 2 value_types

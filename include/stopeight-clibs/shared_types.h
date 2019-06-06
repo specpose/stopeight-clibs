@@ -38,7 +38,7 @@ namespace sp {
 
 	//const sp::tctype turns[3] = { tctype::SWING,tctype::CREST,tctype::SPIRAL };
 
-	template<typename T> class timecode {
+	template<class T = std::enable_if<std::is_arithmetic<T>::value, T>> class timecode {
 	public:
 		//using std::array<T, 2>::array;
 		timecode() {

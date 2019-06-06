@@ -22,7 +22,7 @@ using fexec = const dummy;
 
 namespace grapher {
     
-    template<typename T> template <class ExecutionPolicy> inline void __differences<T>::operator()(ExecutionPolicy& task1, typename std::vector<data_type>::iterator begin, typename std::vector<data_type>::iterator end, typename std::vector<data_type>::iterator begin2)
+    template<class T= std::enable_if<std::is_arithmetic<T>::value,T>> template <class ExecutionPolicy> void __differences<T>::operator()(ExecutionPolicy& task1, typename std::vector<T>::iterator begin, typename std::vector<T>::iterator end, typename std::vector<T>::iterator begin2)
     {
         std::adjacent_difference(begin, end, begin2);
         //*std::begin(differences) = 0;

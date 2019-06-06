@@ -26,10 +26,10 @@ namespace angle {
 		}
     };
     
-    class angle : public std::unary_function<double, double> {
+    class angle : public std::function<double(double)> {//used to be std::unary_function
 	public:
 		virtual ~angle() {};
-		virtual result_type operator()(argument_type d) = 0;
+		virtual result_type operator()(double d) = 0;
 	};
 
 	class plainAngle : public angle {
