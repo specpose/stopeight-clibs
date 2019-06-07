@@ -23,10 +23,8 @@ using fexec = const dummy;
 namespace grapher {
     //enable if: is_arithmetic, random_access_tag, random_access_tag
 	//todo
-	//put is_arithmetic in function template
-	//check tags
 	//create aliases
-    template <class InputIterator = std::enable_if<std::is_base_of<std::random_access_iterator_tag,std::iterator_traits<InputIterator>::iterator_category>::value && std::is_arithmetic<std::iterator_traits<InputIterator>::value_type>::value,InputIterator>, class OutputIterator> void __differences::operator()(typename InputIterator begin, typename InputIterator end, typename OutputIterator begin2)
+    template <class InputIterator = sp::random_access<InputIterator>, class OutputIterator> void __differences::operator()(typename InputIterator begin, typename InputIterator end, typename OutputIterator begin2)
     {
         std::adjacent_difference(begin, end, begin2);
         //*std::begin(differences) = 0;
