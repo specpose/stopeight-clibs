@@ -26,14 +26,14 @@ namespace grapher {
 	//put is_arithmetic in function template
 	//check tags
 	//create aliases
-    template<class T= std::enable_if<std::is_arithmetic<T>::value,T>> template <class InputIterator = std::enable_if<std::is_base_of<std::random_access_iterator_tag,std::iterator_traits<InputIterator>::iterator_category>::value && std::is_arithmetic<std::iterator_traits<InputIterator>::value_type>::value,InputIterator>, class OutputIterator> void __differences<T>::operator()(typename InputIterator begin, typename InputIterator end, typename OutputIterator begin2)
+    template <class InputIterator = std::enable_if<std::is_base_of<std::random_access_iterator_tag,std::iterator_traits<InputIterator>::iterator_category>::value && std::is_arithmetic<std::iterator_traits<InputIterator>::value_type>::value,InputIterator>, class OutputIterator> void __differences::operator()(typename InputIterator begin, typename InputIterator end, typename OutputIterator begin2)
     {
         std::adjacent_difference(begin, end, begin2);
         //*std::begin(differences) = 0;
     }
-    template void __differences<double>::operator()(typename std::vector<double>::iterator, typename std::vector<double>::iterator, typename std::vector<double>::iterator) ;
-    template void __differences<float>::operator()(typename std::vector<float>::iterator, typename std::vector<float>::iterator, typename std::vector<float>::iterator);
-	template void __differences<int16_t>::operator()(typename std::vector<int16_t>::iterator, typename std::vector<int16_t>::iterator, typename std::vector<int16_t>::iterator);
+    template void __differences::operator()(typename std::vector<double>::iterator, typename std::vector<double>::iterator, typename std::vector<double>::iterator) ;
+    template void __differences::operator()(typename std::vector<float>::iterator, typename std::vector<float>::iterator, typename std::vector<float>::iterator);
+	template void __differences::operator()(typename std::vector<int16_t>::iterator, typename std::vector<int16_t>::iterator, typename std::vector<int16_t>::iterator);
 	
 	template<class T = std::enable_if<std::is_arithmetic<T>::value, T>> void __calculate_rotations<T>::operator()(typename std::vector<T>::iterator begin, typename std::vector<T>::iterator end, typename std::back_insert_iterator<std::vector<T>> begin2, angle::angle& angleFunction, std::forward_iterator_tag itag)
     {
@@ -283,7 +283,7 @@ namespace grapher {
         size_t size = std::distance(begin, end);
         if (size > 0) {
             std::vector<T> differences = std::vector<T>(size, 0);
-            __differences<T>()(begin, end, std::begin(differences));
+            __differences()(begin, end, std::begin(differences));
             
             __differences_To_VG(_samplesPerVector, _vectorLength, _fixPoint_indices)(task1, std::begin(differences) + 1, std::end(differences), begin2, angleFunction);
         }

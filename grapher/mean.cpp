@@ -26,7 +26,7 @@ namespace speczilla {
         //angle::averageScaled* afunc = nullptr;
 		if (size > 0) {
 			std::vector<T> differences = std::vector<T>(size, 0.0f);
-            auto d = grapher::__differences<T>();
+            auto d = grapher::__differences();
             d(std::begin(*buf), std::end(*buf), std::begin(differences));
             auto a = angle::__average();
             return a(std::begin(differences)+1, std::end(differences));

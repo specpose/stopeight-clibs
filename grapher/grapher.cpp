@@ -64,7 +64,7 @@ namespace speczilla {
 		angle::angle* afunc = nullptr;
 		if (size > 2) {
 			std::vector<T> differences = std::vector<T>(size, 0.0f);
-            auto d = grapher::__differences<T>();
+            auto d = grapher::__differences();
             d(std::begin(*buf), std::end(*buf), std::begin(differences));
 
 			if (_relative) {

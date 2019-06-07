@@ -8,7 +8,7 @@
 
 namespace grapher {
 
-	template <class T> class __differences {
+	class __differences {
 	public:
 		template<class InputIterator, class OutputIterator> void operator()(typename InputIterator begin, typename InputIterator end, typename OutputIterator begin2);
 	};
