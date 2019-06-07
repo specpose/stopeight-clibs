@@ -10,10 +10,7 @@ namespace grapher {
 
 	template<class InputIterator, class OutputIterator> void __differences(typename InputIterator begin, typename InputIterator end, typename OutputIterator begin2);
 
-	template <class T> class __calculate_rotations {
-	public:
-        void operator()(typename std::vector<T>::iterator begin, typename std::vector<T>::iterator end, typename std::back_insert_iterator<std::vector<T>> begin2,angle::angle& angleFunction, std::forward_iterator_tag itag);
-	};
+	template<class InputIterator, class OutputIterator> void __calculate_rotations(typename InputIterator begin, typename InputIterator end, typename OutputIterator begin2,angle::angle& angleFunction);
 
 	//specialization: 1 iterator_category, 2 value_types
 	class __apply_rotation_matrix {

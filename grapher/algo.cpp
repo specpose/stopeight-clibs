@@ -21,9 +21,6 @@ using fexec = const dummy;
 #include <math.h>
 
 namespace grapher {
-    //enable if: is_arithmetic, random_access_tag, random_access_tag
-	//todo
-	//create aliases
     template <class InputIterator = sp::random_access<InputIterator>, class OutputIterator> void __differences(typename InputIterator begin, typename InputIterator end, typename OutputIterator begin2)
     {
         std::adjacent_difference(begin, end, begin2);
@@ -33,14 +30,15 @@ namespace grapher {
     template void __differences(typename std::vector<float>::iterator, typename std::vector<float>::iterator, typename std::vector<float>::iterator);
 	template void __differences(typename std::vector<int16_t>::iterator, typename std::vector<int16_t>::iterator, typename std::vector<int16_t>::iterator);
 	
-	template<class T = std::enable_if<std::is_arithmetic<T>::value, T>> void __calculate_rotations<T>::operator()(typename std::vector<T>::iterator begin, typename std::vector<T>::iterator end, typename std::back_insert_iterator<std::vector<T>> begin2, angle::angle& angleFunction, std::forward_iterator_tag itag)
+	template<class InputIterator = sp::input_iterator<InputIterator>, class OutputIterator> void __calculate_rotations(typename InputIterator begin, typename InputIterator end, typename OutputIterator begin2, angle::angle& angleFunction)
     {
+		using T = decltype(*begin);//todo remove back_inserter -> decltype(*begin2)
         std::transform(begin, end, begin2, [&angleFunction](T diff) {
             return angleFunction(diff);
         });
     }
-    template void __calculate_rotations<double>::operator()(typename std::vector<double>::iterator, typename std::vector<double>::iterator, typename std::back_insert_iterator<std::vector<double>>, angle::angle&, std::forward_iterator_tag);
-	template void __calculate_rotations<float>::operator()(typename std::vector<float>::iterator, typename std::vector<float>::iterator, typename std::back_insert_iterator<std::vector<float>>, angle::angle&, std::forward_iterator_tag);
+    template void __calculate_rotations(typename std::vector<double>::iterator, typename std::vector<double>::iterator, typename std::back_insert_iterator<std::vector<double>>, angle::angle&);
+	template void __calculate_rotations(typename std::vector<float>::iterator, typename std::vector<float>::iterator, typename std::back_insert_iterator<std::vector<float>>, angle::angle&);
     
     template <class ExecutionPolicy, class InputIterator, class OutputIterator> void __apply_rotation_matrix::operator()(ExecutionPolicy& task1, InputIterator begin, InputIterator end, OutputIterator begin2)
     {
@@ -200,7 +198,7 @@ namespace grapher {
         std::vector<T> rotations;
         //first one is invalid
         //Windows __calculate_rotations()(task1, begin, end, std::back_inserter(rotations), angleFunction, InputIterator::iterator_category{});
-        __calculate_rotations<T>()(begin, end, std::back_inserter(rotations), angleFunction, typename InputIterator::iterator_category{});//decltype(input)
+        __calculate_rotations(begin, end, std::back_inserter(rotations), angleFunction);
         
         sp::result<T> vectors;
 		std::fill_n(std::back_inserter(vectors), std::distance(std::begin(rotations), std::end(rotations)), sp::timecode<T>{T(_vectorLength), 0});
