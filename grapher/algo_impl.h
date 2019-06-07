@@ -8,17 +8,14 @@
 
 namespace grapher {
 
-	//specialization: 1 iterator_category, 2 value_types
 	template <class T> class __differences {
 	public:
 		template <class ExecutionPolicy> void operator()(ExecutionPolicy&, typename std::vector<T>::iterator begin, typename std::vector<T>::iterator end, typename std::vector<T>::iterator begin2);
 	};
 
-	//specialization: 1 iterator_category, 2 value_types
-	class __calculate_rotations {
+	template <class T> class __calculate_rotations {
 	public:
-        template <class ExecutionPolicy, class InputIterator, class OutputIterator> void operator()(ExecutionPolicy&, InputIterator begin, InputIterator end, OutputIterator begin2,angle::angle& angleFunction, std::forward_iterator_tag itag);
-		//for different implementation: overload, not specialisation
+        template <class ExecutionPolicy> void operator()(ExecutionPolicy&, typename std::vector<T>::iterator begin, typename std::vector<T>::iterator end, typename std::back_insert_iterator<std::vector<T>> begin2,angle::angle& angleFunction, std::forward_iterator_tag itag);
 	};
 
 	//specialization: 1 iterator_category, 2 value_types
