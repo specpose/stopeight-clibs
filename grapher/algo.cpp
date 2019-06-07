@@ -21,39 +21,39 @@ using fexec = const dummy;
 #include <math.h>
 
 namespace grapher {
-    template <class InputIterator = sp::random_access<InputIterator>, class OutputIterator> void __differences(typename InputIterator begin, typename InputIterator end, typename OutputIterator begin2)
+    template<class InputIterator = sp::random_access<InputIterator>, class OutputIterator> void __differences(InputIterator begin, InputIterator end, OutputIterator begin2)
     {
         std::adjacent_difference(begin, end, begin2);
         //*std::begin(differences) = 0;
     }
-    template void __differences(typename std::vector<double>::iterator, typename std::vector<double>::iterator, typename std::vector<double>::iterator) ;
-    template void __differences(typename std::vector<float>::iterator, typename std::vector<float>::iterator, typename std::vector<float>::iterator);
-	template void __differences(typename std::vector<int16_t>::iterator, typename std::vector<int16_t>::iterator, typename std::vector<int16_t>::iterator);
+    template void __differences(std::vector<double>::iterator, std::vector<double>::iterator, std::vector<double>::iterator) ;
+    template void __differences(std::vector<float>::iterator, std::vector<float>::iterator, std::vector<float>::iterator);
+	template void __differences(std::vector<int16_t>::iterator, std::vector<int16_t>::iterator, std::vector<int16_t>::iterator);
 	
-	template<class InputIterator = sp::input_iterator<InputIterator>, class OutputIterator> void __calculate_rotations(typename InputIterator begin, typename InputIterator end, typename OutputIterator begin2, angle::angle& angleFunction)
+	template<class InputIterator = sp::input_iterator<InputIterator>, class OutputIterator> void __calculate_rotations(InputIterator begin, InputIterator end, OutputIterator begin2, angle::angle& angleFunction)
     {
 		using T = decltype(*begin);//todo remove back_inserter -> decltype(*begin2)
         std::transform(begin, end, begin2, [&angleFunction](T diff) {
             return angleFunction(diff);
         });
     }
-    template void __calculate_rotations(typename std::vector<double>::iterator, typename std::vector<double>::iterator, typename std::back_insert_iterator<std::vector<double>>, angle::angle&);
-	template void __calculate_rotations(typename std::vector<float>::iterator, typename std::vector<float>::iterator, typename std::back_insert_iterator<std::vector<float>>, angle::angle&);
+    template void __calculate_rotations(std::vector<double>::iterator, std::vector<double>::iterator, std::back_insert_iterator<std::vector<double>>, angle::angle&);
+	template void __calculate_rotations(std::vector<float>::iterator, std::vector<float>::iterator, std::back_insert_iterator<std::vector<float>>, angle::angle&);
     
-    template <class ExecutionPolicy, class InputIterator, class OutputIterator> void __apply_rotation_matrix::operator()(ExecutionPolicy& task1, InputIterator begin, InputIterator end, OutputIterator begin2)
+    template<class InputIterator = sp::random_access<InputIterator>, class OutputIterator> void __apply_rotation_matrix(InputIterator begin, InputIterator end, OutputIterator begin2)
     {
-		using T = vector_pair_T<OutputIterator>;
-		OutputIterator begin2_c = begin2;
-        std::transform(begin, end, begin2, begin2, [](double rot, sp::timecode<T> vec) {
-            double x = (cos(rot)*vec.get_x() - sin(rot)*vec.get_y());
-            double y = (sin(rot)*vec.get_x() + cos(rot)*vec.get_y());
-			auto p = sp::timecode<T>{ T(x) , T(y) };
+		using T = typename std::iterator_traits<OutputIterator>::value_type::value_type;
+		using OutputElement = typename std::iterator_traits<OutputIterator>::value_type;
+        std::transform(begin, end, begin2, begin2, [](T rot, OutputElement vec) {
+            T x = (cos(rot)*vec.get_x() - sin(rot)*vec.get_y());
+            T y = (sin(rot)*vec.get_x() + cos(rot)*vec.get_y());
+			auto p = OutputElement{ T(x) , T(y) };
             return p;
         });
     }
-    template void __apply_rotation_matrix::operator()(fexec& task1, vector_single<double> begin, vector_single<double> end, vector_pair<double> begin2);
-	template void __apply_rotation_matrix::operator()(fexec& task1, vector_single<float> begin, vector_single<float> end, vector_pair<float> begin2);
-    
+    template void __apply_rotation_matrix(std::vector<double>::iterator begin, std::vector<double>::iterator end, sp::result<double>::iterator begin2);
+	template void __apply_rotation_matrix(std::vector<float>::iterator begin, std::vector<float>::iterator end, sp::result<float>::iterator begin2);
+
     template<typename T> _fixpoints<T>::_fixpoints(std::vector<int>& points) : _fixPoint_indices(points) {
     }
     template<typename T> _fixpoints<T>::~_fixpoints() {
@@ -202,7 +202,7 @@ namespace grapher {
         
         sp::result<T> vectors;
 		std::fill_n(std::back_inserter(vectors), std::distance(std::begin(rotations), std::end(rotations)), sp::timecode<T>{T(_vectorLength), 0});
-        __apply_rotation_matrix()(task1, std::begin(rotations), std::end(rotations), std::begin(vectors));
+        __apply_rotation_matrix(std::begin(rotations), std::end(rotations), std::begin(vectors));
         
         std::vector<it_element<T>> vectors_sliced;
         auto func = _fixpoints<T>(_fixPoint_indices);

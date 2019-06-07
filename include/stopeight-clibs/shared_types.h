@@ -38,7 +38,7 @@ namespace sp {
 
 	//const sp::tctype turns[3] = { tctype::SWING,tctype::CREST,tctype::SPIRAL };
 
-	template<class T = std::enable_if<std::is_arithmetic<T>::value, T>> class timecode {
+	template<class T = std::enable_if<std::is_arithmetic<T>::value,T>> class timecode {
 	public:
 		//using std::array<T, 2>::array;
 		timecode() {
@@ -48,8 +48,8 @@ namespace sp {
 			coords = { { x, y } };
 			clear_types();
 		}
-		typedef typename std::array<T, 2>::value_type data_type;
-		typedef typename std::array<T, 2>::reference data_reference;
+		typedef typename std::array<T, 2>::value_type value_type;
+		typedef typename std::array<T, 2>::reference reference;
 		sp::FixpointType category() {
 			return type;
 		}
@@ -63,10 +63,10 @@ namespace sp {
 		}
 		//virtual ~timecode() {};
 
-		data_type get_x() { return coords[0]; };
-		data_type get_y() { return coords[1]; };
-		void set_x(const data_reference other) { coords[0] = other; };
-		void set_y(const data_reference other) { coords[1] = other; };
+		value_type get_x() { return coords[0]; };
+		value_type get_y() { return coords[1]; };
+		void set_x(const reference other) { coords[0] = other; };
+		void set_y(const reference other) { coords[1] = other; };
 
 		//template<typename U>
 		/*timecode& operator=(sp::timecode<T> other) {
@@ -144,9 +144,9 @@ template<typename T> using vector_single = typename std::vector<T>::iterator;
 template<typename T> using vector_single_T = typename std::iterator_traits<T>::value_type;
 
 template<typename T> using vector_pair = typename sp::result<T>::iterator;
-template<typename T> using vector_pair_T = typename std::iterator_traits<T>::value_type::data_type;
+template<typename T> using vector_pair_T = typename std::iterator_traits<T>::value_type::value_type;
 
 template<typename T> using vector_vectors = typename std::vector<it_element<T>>::iterator;
-template<typename T> using vector_vectors_T = typename std::iterator_traits<typename std::iterator_traits<T>::value_type::first_type>::value_type::data_type;
+template<typename T> using vector_vectors_T = typename std::iterator_traits<typename std::iterator_traits<T>::value_type::first_type>::value_type::value_type;
 
 #endif
