@@ -10,12 +10,12 @@ namespace grapher {
 
 	template <class T> class __differences {
 	public:
-		template <class ExecutionPolicy> void operator()(ExecutionPolicy&, typename std::vector<T>::iterator begin, typename std::vector<T>::iterator end, typename std::vector<T>::iterator begin2);
+		void operator()(typename std::vector<T>::iterator begin, typename std::vector<T>::iterator end, typename std::vector<T>::iterator begin2);
 	};
 
 	template <class T> class __calculate_rotations {
 	public:
-        template <class ExecutionPolicy> void operator()(ExecutionPolicy&, typename std::vector<T>::iterator begin, typename std::vector<T>::iterator end, typename std::back_insert_iterator<std::vector<T>> begin2,angle::angle& angleFunction, std::forward_iterator_tag itag);
+        void operator()(typename std::vector<T>::iterator begin, typename std::vector<T>::iterator end, typename std::back_insert_iterator<std::vector<T>> begin2,angle::angle& angleFunction, std::forward_iterator_tag itag);
 	};
 
 	//specialization: 1 iterator_category, 2 value_types

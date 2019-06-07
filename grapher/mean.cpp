@@ -27,7 +27,7 @@ namespace speczilla {
 		if (size > 0) {
 			std::vector<T> differences = std::vector<T>(size, 0.0f);
             auto d = grapher::__differences<T>();
-            d(dummy_policy, std::begin(*buf), std::end(*buf), std::begin(differences));
+            d(std::begin(*buf), std::end(*buf), std::begin(differences));
             auto a = angle::__average();
             return a(std::begin(differences)+1, std::end(differences));
 		}
