@@ -8,10 +8,7 @@
 
 namespace grapher {
 
-	class __differences {
-	public:
-		template<class InputIterator, class OutputIterator> void operator()(typename InputIterator begin, typename InputIterator end, typename OutputIterator begin2);
-	};
+	template<class InputIterator, class OutputIterator> void __differences(typename InputIterator begin, typename InputIterator end, typename OutputIterator begin2);
 
 	template <class T> class __calculate_rotations {
 	public:
