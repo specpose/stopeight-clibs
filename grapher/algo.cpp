@@ -26,7 +26,7 @@ namespace grapher {
 	//put is_arithmetic in function template
 	//check tags
 	//create aliases
-    template<class T= std::enable_if<std::is_arithmetic<T>::value,T>> void __differences<T>::operator()(typename std::vector<T>::iterator begin, typename std::vector<T>::iterator end, typename std::vector<T>::iterator begin2)
+    template<class T= std::enable_if<std::is_arithmetic<T>::value,T>> template <class InputIterator = std::enable_if<std::is_base_of<std::random_access_iterator_tag,std::iterator_traits<InputIterator>::iterator_category>::value && std::is_arithmetic<std::iterator_traits<InputIterator>::value_type>::value,InputIterator>, class OutputIterator> void __differences<T>::operator()(typename InputIterator begin, typename InputIterator end, typename OutputIterator begin2)
     {
         std::adjacent_difference(begin, end, begin2);
         //*std::begin(differences) = 0;

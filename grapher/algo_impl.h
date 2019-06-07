@@ -10,7 +10,7 @@ namespace grapher {
 
 	template <class T> class __differences {
 	public:
-		void operator()(typename std::vector<T>::iterator begin, typename std::vector<T>::iterator end, typename std::vector<T>::iterator begin2);
+		template<class InputIterator, class OutputIterator> void operator()(typename InputIterator begin, typename InputIterator end, typename OutputIterator begin2);
 	};
 
 	template <class T> class __calculate_rotations {
