@@ -32,14 +32,14 @@ namespace grapher {
 	
 	template<class InputIterator = std::enable_if<std::is_base_of<std::input_iterator_tag, std::iterator_traits<T>::iterator_category>::value && std::is_arithmetic<std::iterator_traits<T>::value_type>::value, T>, class OutputIterator> void __calculate_rotations(InputIterator begin, InputIterator end, OutputIterator begin2, angle::angle& angleFunction)
     {
-		using T = decltype(*begin);//todo remove back_inserter -> decltype(*begin2)
+		using T = std::iterator_traits<InputIterator>::value_type;//todo remove back_inserter -> std::iterator_traits<OutputIterator>::value_type;
         std::transform(begin, end, begin2, [&angleFunction](T diff) {
             return angleFunction(diff);
         });
     }
-    template void __calculate_rotations(std::vector<double>::iterator, std::vector<double>::iterator, std::back_insert_iterator<std::vector<double>>, angle::angle&);
-	template void __calculate_rotations(std::vector<float>::iterator, std::vector<float>::iterator, std::back_insert_iterator<std::vector<float>>, angle::angle&);
-    
+    template void __calculate_rotations(std::vector<double>::iterator, std::vector<double>::iterator, std::vector<double>::iterator, angle::angle&);
+	template void __calculate_rotations(std::vector<float>::iterator, std::vector<float>::iterator, std::vector<float>::iterator, angle::angle&);
+
     template<class InputIterator = std::enable_if<std::is_base_of<std::random_access_iterator_tag, std::iterator_traits<T>::iterator_category>::value && std::is_arithmetic<std::iterator_traits<T>::value_type>::value, T>, class OutputIterator> void __apply_rotation_matrix(InputIterator begin, InputIterator end, OutputIterator begin2)
     {
 		using OutputElement = typename std::iterator_traits<OutputIterator>::value_type;
@@ -96,8 +96,9 @@ namespace grapher {
             last = std::pair<size_t, size_t>{ _fixPoint_indices.back() + 1, vectors_size };// was _fixPoint_indices.back() + 1
         }
         *it++ = (last);
-		using T = std::iterator_traits<InputIterator>::value_type::value_type;//todo remove backinserter//std::iterator_traits<std::iterator_traits<OutputIterator>::first_type>::value_type::value_type;
-        std::transform(std::begin(slices), std::end(slices), begin2, [begin](std::pair<size_t, size_t> p) {
+		using T = std::iterator_traits<InputIterator>::value_type::value_type;//todo remove backinserter//std::iterator_traits<std::iterator_traits<OutputIterator>::value_type::first_type>::value_type::value_type;
+
+        std::transform(std::begin(slices), std::end(slices), begin2, [begin](std::pair<size_t, size_t> p) {//todo derive it_element
             it_element<T> e = it_element<T>();
             e.first = (begin + p.first);
             e.second = (begin + p.second);
@@ -107,35 +108,35 @@ namespace grapher {
     template void _fixpoints::operator()(sp::result<double>::iterator begin, sp::result<double>::iterator end, std::vector<it_element<double>>::iterator begin2);
 	template void _fixpoints::operator()(sp::result<float>::iterator begin, sp::result<float>::iterator end, std::vector<it_element<float>>::iterator begin2);
 
-    _blocks::_blocks(int samplesPerVector) : _samplesPerVector(samplesPerVector) {
+    _blocks::_blocks(size_t samplesPerVector) : _samplesPerVector(samplesPerVector) {
         
     }
     _blocks::~_blocks() {
         
     }
-    template <class ExecutionPolicy, class InputIterator, class OutputIterator> void _blocks::operator()(ExecutionPolicy& task1, InputIterator begin, InputIterator end, OutputIterator begin2, std::random_access_iterator_tag)
+    template <class InputIterator, class OutputIterator> void _blocks::operator()(InputIterator begin, InputIterator end, OutputIterator begin2)
     {
-		using T = vector_vectors_T<InputIterator>;
-        auto spV = _samplesPerVector;
-        std::for_each(begin, end, [&begin2, spV](it_element<T> slice) {
+		using it_pair = typename std::iterator_traits<OutputIterator>::value_type;
+		auto spV = _samplesPerVector;
+        std::for_each(begin, end, [&begin2, spV](it_pair slice) {
             auto size = std::distance(slice.first, slice.second);
             if (size > 0) {
                 auto sectionend = (spV > size) ? size : spV;
                 for (int i = 0; i < (size / sectionend); i++) {
-                    *begin2++ = (it_element<T>{ (slice.first + (i*sectionend)),(slice.first + (i*sectionend) + sectionend) });
+                    *begin2++ = (it_pair{ (slice.first + (i*sectionend)),(slice.first + (i*sectionend) + sectionend) });
                 }
                 auto remainder = size%sectionend;
                 if (remainder != 0)
-                    *begin2++ = (it_element<T>{ (slice.second - remainder),slice.second });
+                    *begin2++ = (it_pair{ (slice.second - remainder),slice.second });
             }
             else {
-                *begin2++ = (it_element<T>{ slice.first, slice.first });
+                *begin2++ = (it_pair{ slice.first, slice.first });
             }
         });
     }
-    template void _blocks::operator()(fexec& task1, vector_vectors<double> begin, vector_vectors<double> end, vector_vectors<double> begin2, std::random_access_iterator_tag);
-	template void _blocks::operator()(fexec& task1, vector_vectors<float> begin, vector_vectors<float> end, vector_vectors<float> begin2, std::random_access_iterator_tag);
-  
+    template void _blocks::operator()(std::vector<it_element<double>>::iterator begin, std::vector<it_element<double>>::iterator end, std::vector<it_element<double>>::iterator begin2);
+	template void _blocks::operator()(std::vector<it_element<float>>::iterator begin, std::vector<it_element<float>>::iterator end, std::vector<it_element<float>>::iterator begin2);
+
     
     template <class ExecutionPolicy, class InputIterator, class OutputIterator> void _sum_blocks::operator()(ExecutionPolicy& task1, InputIterator begin, InputIterator end, OutputIterator begin2, std::random_access_iterator_tag)
     {

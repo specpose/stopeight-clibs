@@ -25,11 +25,11 @@ namespace grapher {
 
 	class _blocks {
 	public:
-		_blocks(int samplesPerVector);
+		_blocks(size_t samplesPerVector);
 		~_blocks();
-		template <class ExecutionPolicy, class InputIterator, class OutputIterator>void operator()(ExecutionPolicy&, InputIterator begin, InputIterator end, OutputIterator begin2, std::random_access_iterator_tag);
+		template <class InputIterator, class OutputIterator>void operator()(InputIterator begin, InputIterator end, OutputIterator begin2);
 	private:
-		int _samplesPerVector;
+		size_t _samplesPerVector;
 	};
 
 	//specialization: 1 iterator_category, 2 value_types
