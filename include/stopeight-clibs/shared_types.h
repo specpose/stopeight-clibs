@@ -37,7 +37,7 @@ namespace sp {
 	};
 
 	//const sp::tctype turns[3] = { tctype::SWING,tctype::CREST,tctype::SPIRAL };
-
+	//pybind POD clash with is_array, alignment?
 	template<class T = std::enable_if<std::is_arithmetic<T>::value,T>> class timecode {
 	public:
 		//using std::array<T, 2>::array;
@@ -132,8 +132,8 @@ namespace sp {
 	
 	//sp::element static operator+(const sp::element& a, const sp::element& b) { return sp::element{ a.first + b.first, a.second + b.second }; };
 	//sp::element static operator-(const sp::element& a, const sp::element& b) { return sp::element{ a.first - b.first, a.second - b.second }; };
-	template<typename T = std::enable_if<std::is_base_of<std::input_iterator_tag, std::iterator_traits<T>::iterator_category>::value && std::is_arithmetic<std::iterator_traits<T>::value_type>::value, T>> using input_iterator = typename T;
-	template<typename T = std::enable_if<std::is_base_of<std::random_access_iterator_tag, std::iterator_traits<T>::iterator_category>::value && std::is_arithmetic<std::iterator_traits<T>::value_type>::value, T>> using random_access = typename T;
+	template<typename T = std::enable_if<std::is_base_of<std::input_iterator_tag, std::iterator_traits<T>::iterator_category>::value && std::is_arithmetic<std::iterator_traits<T>::value_type::value_type>::value, T>> using input_iterator = typename T;
+	template<typename T = std::enable_if<std::is_base_of<std::random_access_iterator_tag, std::iterator_traits<T>::iterator_category>::value && std::is_arithmetic<std::iterator_traits<T>::value_type::value_type>::value, T>> using random_access = typename T;
 }
 
 

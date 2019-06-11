@@ -14,17 +14,15 @@ namespace grapher {
 
 	template<class InputIterator, class OutputIterator> void __apply_rotation_matrix(InputIterator begin, InputIterator end, OutputIterator begin2);
 
-	//specialization: 1 iterator_category, 2 value_types
-	template<typename T> class _fixpoints {
+	class _fixpoints {
 	public:
 		_fixpoints(std::vector<size_t>& points);
 		~_fixpoints();
-		template <class ExecutionPolicy, class InputIterator, class OutputIterator>void operator()(ExecutionPolicy&, InputIterator begin, InputIterator end, OutputIterator begin2, std::random_access_iterator_tag);
+		template <class InputIterator, class OutputIterator>void operator()(InputIterator begin, InputIterator end, OutputIterator begin2);
 	private:
 		std::vector<size_t>& _fixPoint_indices;
 	};
 
-	//specialization: 1 iterator_category, 2 value_types
 	class _blocks {
 	public:
 		_blocks(int samplesPerVector);
@@ -46,6 +44,7 @@ namespace grapher {
 		template <class ExecutionPolicy, class InputIterator, class OutputIterator>void operator()(ExecutionPolicy&, InputIterator begin, InputIterator end, OutputIterator begin2, std::forward_iterator_tag);
 	};
 
+	//speed test formally std::vector<timecode> is generic, sp::result<type> is specialized
 	class __differences_To_VG {
 	public:
 		__differences_To_VG(int samplesPerVector, double vectorLength, std::vector<size_t> fixPoints_indices = std::vector<size_t>(1, 0));

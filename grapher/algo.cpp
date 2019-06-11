@@ -21,7 +21,7 @@ using fexec = const dummy;
 #include <math.h>
 
 namespace grapher {
-    template<class InputIterator = sp::random_access<InputIterator>, class OutputIterator> void __differences(InputIterator begin, InputIterator end, OutputIterator begin2)
+    template<class InputIterator = std::enable_if<std::is_base_of<std::random_access_iterator_tag, std::iterator_traits<T>::iterator_category>::value && std::is_arithmetic<std::iterator_traits<T>::value_type>::value, T>, class OutputIterator> void __differences(InputIterator begin, InputIterator end, OutputIterator begin2)
     {
         std::adjacent_difference(begin, end, begin2);
         //*std::begin(differences) = 0;
@@ -30,7 +30,7 @@ namespace grapher {
     template void __differences(std::vector<float>::iterator, std::vector<float>::iterator, std::vector<float>::iterator);
 	template void __differences(std::vector<int16_t>::iterator, std::vector<int16_t>::iterator, std::vector<int16_t>::iterator);
 	
-	template<class InputIterator = sp::input_iterator<InputIterator>, class OutputIterator> void __calculate_rotations(InputIterator begin, InputIterator end, OutputIterator begin2, angle::angle& angleFunction)
+	template<class InputIterator = std::enable_if<std::is_base_of<std::input_iterator_tag, std::iterator_traits<T>::iterator_category>::value && std::is_arithmetic<std::iterator_traits<T>::value_type>::value, T>, class OutputIterator> void __calculate_rotations(InputIterator begin, InputIterator end, OutputIterator begin2, angle::angle& angleFunction)
     {
 		using T = decltype(*begin);//todo remove back_inserter -> decltype(*begin2)
         std::transform(begin, end, begin2, [&angleFunction](T diff) {
@@ -40,10 +40,11 @@ namespace grapher {
     template void __calculate_rotations(std::vector<double>::iterator, std::vector<double>::iterator, std::back_insert_iterator<std::vector<double>>, angle::angle&);
 	template void __calculate_rotations(std::vector<float>::iterator, std::vector<float>::iterator, std::back_insert_iterator<std::vector<float>>, angle::angle&);
     
-    template<class InputIterator = sp::random_access<InputIterator>, class OutputIterator> void __apply_rotation_matrix(InputIterator begin, InputIterator end, OutputIterator begin2)
+    template<class InputIterator = std::enable_if<std::is_base_of<std::random_access_iterator_tag, std::iterator_traits<T>::iterator_category>::value && std::is_arithmetic<std::iterator_traits<T>::value_type>::value, T>, class OutputIterator> void __apply_rotation_matrix(InputIterator begin, InputIterator end, OutputIterator begin2)
     {
-		using T = typename std::iterator_traits<OutputIterator>::value_type::value_type;
 		using OutputElement = typename std::iterator_traits<OutputIterator>::value_type;
+		using T = typename OutputElement::value_type;
+
         std::transform(begin, end, begin2, begin2, [](T rot, OutputElement vec) {
             T x = (cos(rot)*vec.get_x() - sin(rot)*vec.get_y());
             T y = (sin(rot)*vec.get_x() + cos(rot)*vec.get_y());
@@ -54,11 +55,11 @@ namespace grapher {
     template void __apply_rotation_matrix(std::vector<double>::iterator begin, std::vector<double>::iterator end, sp::result<double>::iterator begin2);
 	template void __apply_rotation_matrix(std::vector<float>::iterator begin, std::vector<float>::iterator end, sp::result<float>::iterator begin2);
 
-    template<typename T> _fixpoints<T>::_fixpoints(std::vector<size_t>& points) : _fixPoint_indices(points) {
+    _fixpoints::_fixpoints(std::vector<size_t>& points) : _fixPoint_indices(points) {
     }
-    template<typename T> _fixpoints<T>::~_fixpoints() {
+    _fixpoints::~_fixpoints() {
     }
-    template<typename T> template <class ExecutionPolicy, class InputIterator, class OutputIterator> void _fixpoints<T>::operator()(ExecutionPolicy& task1, InputIterator begin, InputIterator end, OutputIterator begin2, std::random_access_iterator_tag)
+    template <class InputIterator = sp::random_access<InputIterator>, class OutputIterator> void _fixpoints::operator()(InputIterator begin, InputIterator end, OutputIterator begin2)
     {
         //remove all illegal fixpoint_indices
         //Note: last can not be fixPoint
@@ -95,6 +96,7 @@ namespace grapher {
             last = std::pair<size_t, size_t>{ _fixPoint_indices.back() + 1, vectors_size };// was _fixPoint_indices.back() + 1
         }
         *it++ = (last);
+		using T = std::iterator_traits<InputIterator>::value_type::value_type;//todo remove backinserter//std::iterator_traits<std::iterator_traits<OutputIterator>::first_type>::value_type::value_type;
         std::transform(std::begin(slices), std::end(slices), begin2, [begin](std::pair<size_t, size_t> p) {
             it_element<T> e = it_element<T>();
             e.first = (begin + p.first);
@@ -102,9 +104,9 @@ namespace grapher {
             return e;
         });
     }
-    template void _fixpoints<double>::operator()(fexec& task1, vector_pair<double> begin, vector_pair<double> end, vector_vectors<double> begin2, std::random_access_iterator_tag);
-    template void _fixpoints<float>::operator()(fexec& task1, vector_pair<float> begin, vector_pair<float> end, vector_vectors<float> begin2, std::random_access_iterator_tag);
-    
+    template void _fixpoints::operator()(sp::result<double>::iterator begin, sp::result<double>::iterator end, std::vector<it_element<double>>::iterator begin2);
+	template void _fixpoints::operator()(sp::result<float>::iterator begin, sp::result<float>::iterator end, std::vector<it_element<float>>::iterator begin2);
+
     _blocks::_blocks(int samplesPerVector) : _samplesPerVector(samplesPerVector) {
         
     }
@@ -203,9 +205,9 @@ namespace grapher {
         __apply_rotation_matrix(std::begin(rotations), std::end(rotations), std::begin(vectors));
         
         std::vector<it_element<T>> vectors_sliced;
-        auto func = _fixpoints<T>(_fixPoint_indices);
+        auto func = _fixpoints(_fixPoint_indices);
         //Windows func(task1, std::begin(vectors), std::end(vectors), std::back_inserter(vectors_sliced), InputIterator::iterator_category{});
-        func(task1, std::begin(vectors), std::end(vectors), std::back_inserter(vectors_sliced), typename InputIterator::iterator_category{});
+        func(std::begin(vectors), std::end(vectors), std::back_inserter(vectors_sliced));
         
         sp::result<T> out_vectors;
         
