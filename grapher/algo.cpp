@@ -162,26 +162,26 @@ namespace grapher {
     template void _sum_blocks(std::vector<it_element<double>>::iterator begin, std::vector<it_element<double>>::iterator end, sp::result<double>::iterator begin2);
 	template void _sum_blocks(std::vector<it_element<float>>::iterator begin, std::vector<it_element<float>>::iterator end, sp::result<float>::iterator begin2);
 
-    template <class ExecutionPolicy, class InputIterator, class OutputIterator> void _append::operator()(ExecutionPolicy& task1, InputIterator begin, InputIterator end, OutputIterator begin2, std::forward_iterator_tag)
+    template <class InputIterator = sp::input_iterator<InputIterator>, class OutputIterator> void _append(InputIterator begin, InputIterator end, OutputIterator begin2)
     {
-		using T = vector_pair_T<OutputIterator>;
+		using tc = std::iterator_traits<OutputIterator>::value_type;
         class my_add {
         public:
-			my_add() : cache(sp::timecode<T>{0, 0}) {};
-            sp::timecode<T> operator()(sp::timecode<T> e) {
+			my_add() : cache(tc{0, 0}) {};
+            tc operator()(tc e) {
                 auto newvalue = e;//type preserved
                 newvalue += cache;//type preserved
                 cache += e;//type mutating
                 return newvalue;
             };
         private:
-            sp::timecode<T> cache;
+            tc cache;
         };
         std::transform(begin, end, begin2, my_add());
     }
-    template void _append::operator()(fexec& task1, vector_pair<double> begin, vector_pair<double> end, vector_pair<double> begin2, std::forward_iterator_tag);
-	template void _append::operator()(fexec& task1, vector_pair<float> begin, vector_pair<float> end, vector_pair<float> begin2, std::forward_iterator_tag);
-    
+    template void _append(sp::result<double>::iterator begin, sp::result<double>::iterator end, sp::result<double>::iterator begin2);
+	template void _append(sp::result<float>::iterator begin, sp::result<float>::iterator end, sp::result<float>::iterator begin2);
+
     __differences_To_VG::__differences_To_VG(int samplesPerVector, double vectorLength, std::vector<size_t> fixPoints_indices)
     : _samplesPerVector(samplesPerVector)
     , _vectorLength(vectorLength)
@@ -239,8 +239,7 @@ namespace grapher {
         }
         //});
         
-        //Windows _append()(task1, std::begin(out_vectors), std::end(out_vectors), std::begin(out_vectors), InputIterator::iterator_category{});
-        _append()(task1, std::begin(out_vectors), std::end(out_vectors), std::begin(out_vectors), typename InputIterator::iterator_category{});
+        _append(std::begin(out_vectors), std::end(out_vectors), std::begin(out_vectors));
         
         std::copy<typename sp::result<T>::iterator, OutputIterator>(std::begin(out_vectors), std::end(out_vectors), begin2);
     }

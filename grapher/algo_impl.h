@@ -34,11 +34,7 @@ namespace grapher {
 
 	template <class InputIterator, class OutputIterator>void _sum_blocks(InputIterator begin, InputIterator end, OutputIterator begin2);//freedom vector or deque//type in or out?
 
-	//specialization: 1 iterator_category, 2 value_types
-	class _append {
-	public:
-		template <class ExecutionPolicy, class InputIterator, class OutputIterator>void operator()(ExecutionPolicy&, InputIterator begin, InputIterator end, OutputIterator begin2, std::forward_iterator_tag);
-	};
+	template <class ExecutionPolicy, class InputIterator, class OutputIterator>void _append(InputIterator begin, InputIterator end, OutputIterator begin2);
 
 	//speed test formally std::vector<timecode> is generic, sp::result<type> is specialized
 	class __differences_To_VG {
