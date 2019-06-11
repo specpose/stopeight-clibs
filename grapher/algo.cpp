@@ -138,29 +138,30 @@ namespace grapher {
 	template void _blocks::operator()(std::vector<it_element<float>>::iterator begin, std::vector<it_element<float>>::iterator end, std::vector<it_element<float>>::iterator begin2);
 
     
-    template <class ExecutionPolicy, class InputIterator, class OutputIterator> void _sum_blocks::operator()(ExecutionPolicy& task1, InputIterator begin, InputIterator end, OutputIterator begin2, std::random_access_iterator_tag)
+    template <class InputIterator, class OutputIterator> void _sum_blocks(InputIterator begin, InputIterator end, OutputIterator begin2)
     {
-		using T = vector_vectors_T<InputIterator>;//?!
-        //transforming intput it_element to sp:element
-        std::transform(begin, end, begin2, [](it_element<T> block) {
+		using it_pair = typename std::iterator_traits<InputIterator>::value_type;//it_element not available from OutputIterator
+		using tc = typename std::iterator_traits<it_pair::first_type>::value_type;
+		//transforming intput it_element to sp:element
+        std::transform(begin, end, begin2, [](it_pair block) {
             //both can be nonempty; preserve type of last
             if (block.first != block.second) {
-				const sp::timecode<T> e = sp::timecode<T>{ 0,0 };
-                return std::accumulate(block.first, block.second, e, [](sp::timecode<T> v1, sp::timecode<T> v2) {
+				const tc e = tc{ 0,0 };
+                return std::accumulate(block.first, block.second, e, [](tc v1, tc v2) {
                     v2 += v1;
                     return v2;
                 });
             }
             else {
                 //auto v = sp::construct_element((*block.first)->first, (*block.first)->second);
-				sp::timecode<T> v = *block.first;
+				tc v = *block.first;
                 return v;//second could be last+1
             }
         });
     }
-    template void _sum_blocks::operator()(fexec& task1, vector_vectors<double> begin, vector_vectors<double> end, vector_pair<double> begin2, std::random_access_iterator_tag);
-    template void _sum_blocks::operator()(fexec& task1, vector_vectors<float> begin, vector_vectors<float> end, vector_pair<float> begin2, std::random_access_iterator_tag);
-    
+    template void _sum_blocks(std::vector<it_element<double>>::iterator begin, std::vector<it_element<double>>::iterator end, sp::result<double>::iterator begin2);
+	template void _sum_blocks(std::vector<it_element<float>>::iterator begin, std::vector<it_element<float>>::iterator end, sp::result<float>::iterator begin2);
+
     template <class ExecutionPolicy, class InputIterator, class OutputIterator> void _append::operator()(ExecutionPolicy& task1, InputIterator begin, InputIterator end, OutputIterator begin2, std::forward_iterator_tag)
     {
 		using T = vector_pair_T<OutputIterator>;
@@ -218,7 +219,7 @@ namespace grapher {
          _blocks(_samplesPerVector)(task1, std::begin(vectors_sliced), std::end(vectors_sliced), std::back_inserter(blocks), InputIterator::iterator_category{});
          
          std::vector<sp::element> sums;
-         _sum_blocks()(task1, std::begin(blocks), std::end(blocks), std::back_inserter(sums), InputIterator::iterator_category{});
+         _sum_blocks()(std::begin(blocks), std::end(blocks), std::back_inserter(sums));
          
          std::move(std::begin(sums), std::end(sums), std::back_inserter(out_vectors));
          //HEREEND
@@ -233,8 +234,7 @@ namespace grapher {
             sp::result<T> ov = sp::result<T>{};//(blocks_vector.size(), { double(0), double(0) });
             //std::fill<typename std::vector<sp::element>::iterator>(std::begin(ov), std::end(ov), sp::element{ 1.0f, 1.0f });
             
-            //Windows _sum_blocks()(task1, std::begin(blocks_vector), std::end(blocks_vector), std::back_inserter(ov), InputIterator::iterator_category{});
-            _sum_blocks()(task1, std::begin(blocks_vector), std::end(blocks_vector), std::back_inserter(ov), typename InputIterator::iterator_category{});
+            _sum_blocks(std::begin(blocks_vector), std::end(blocks_vector), std::back_inserter(ov));
             std::move(std::begin(ov), std::end(ov), std::back_inserter(out_vectors));
         }
         //});

@@ -32,11 +32,7 @@ namespace grapher {
 		size_t _samplesPerVector;
 	};
 
-	//specialization: 1 iterator_category, 2 value_types
-	class _sum_blocks {
-	public:
-		template <class ExecutionPolicy, class InputIterator, class OutputIterator>void operator()(ExecutionPolicy&, InputIterator begin, InputIterator end, OutputIterator begin2, std::random_access_iterator_tag);//freedom vector or deque//type in or out?
-	};
+	template <class InputIterator, class OutputIterator>void _sum_blocks(InputIterator begin, InputIterator end, OutputIterator begin2);//freedom vector or deque//type in or out?
 
 	//specialization: 1 iterator_category, 2 value_types
 	class _append {
