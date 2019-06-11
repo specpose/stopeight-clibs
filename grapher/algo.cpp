@@ -54,7 +54,7 @@ namespace grapher {
     template void __apply_rotation_matrix(std::vector<double>::iterator begin, std::vector<double>::iterator end, sp::result<double>::iterator begin2);
 	template void __apply_rotation_matrix(std::vector<float>::iterator begin, std::vector<float>::iterator end, sp::result<float>::iterator begin2);
 
-    template<typename T> _fixpoints<T>::_fixpoints(std::vector<int>& points) : _fixPoint_indices(points) {
+    template<typename T> _fixpoints<T>::_fixpoints(std::vector<size_t>& points) : _fixPoint_indices(points) {
     }
     template<typename T> _fixpoints<T>::~_fixpoints() {
     }
@@ -63,41 +63,39 @@ namespace grapher {
         //remove all illegal fixpoint_indices
         //Note: last can not be fixPoint
         const auto vectors_size = std::distance(begin, end);
-        std::remove_if(std::begin(_fixPoint_indices), std::end(_fixPoint_indices), [vectors_size](int index) {
+        std::remove_if(std::begin(_fixPoint_indices), std::end(_fixPoint_indices), [vectors_size](size_t index) {
             if ((index >= (vectors_size - 1)) || (index == 0))
                 return true;
             return false;
         });
         //make it a fixPoint
         for (auto index : _fixPoint_indices) {
-            //**(begin + index) = sp::turn<T>(std::move(**(begin + index)));
-            //*(begin + index) = sp::fixpoint<T>(std::move(*(begin + index)));
-	    (begin + index)->set_category(sp::FixpointType::FIXPOINT);
+			(begin + index)->set_category(sp::FixpointType::FIXPOINT);
         }
-        std::vector<std::pair<int, int>> slices = std::vector<std::pair<int, int>>{};
+        std::vector<std::pair<size_t, size_t>> slices = std::vector<std::pair<size_t, size_t>>{};
         class prev {
         public:
             prev() : _prev(0) {};
-            std::pair<int, int> operator()(int curr) {
-                auto result = std::pair<int, int>{ _prev,curr };
+            std::pair<size_t, size_t> operator()(size_t curr) {
+                auto result = std::pair<size_t, size_t>{ _prev,curr };
                 _prev = curr + 1;
                 return result;
             };
         private:
-            int _prev;
+            size_t _prev;
         };
         auto it = std::back_inserter(slices);
-        std::for_each(std::begin(_fixPoint_indices), std::end(_fixPoint_indices), [&it](int index) {
+        std::for_each(std::begin(_fixPoint_indices), std::end(_fixPoint_indices), [&it](size_t index) {
             *it++ = (prev()(index));//was index
-            *it++ = (std::pair<int, int>{index, index + 1});//was index+1
+            *it++ = (std::pair<size_t, size_t>{index, index + 1});//was index+1
         });
         //tail end
-        std::pair<int, int> last = std::pair<int, int>{ 0,vectors_size };
+        std::pair<size_t, size_t> last = std::pair<size_t, size_t>{ 0,vectors_size };
         if (vectors_size > 0) {
-            last = std::pair<int, int>{ _fixPoint_indices.back() + 1, vectors_size };// was _fixPoint_indices.back() + 1
+            last = std::pair<size_t, size_t>{ _fixPoint_indices.back() + 1, vectors_size };// was _fixPoint_indices.back() + 1
         }
         *it++ = (last);
-        std::transform(std::begin(slices), std::end(slices), begin2, [begin](std::pair<int, int> p) {
+        std::transform(std::begin(slices), std::end(slices), begin2, [begin](std::pair<size_t, size_t> p) {
             it_element<T> e = it_element<T>();
             e.first = (begin + p.first);
             e.second = (begin + p.second);
@@ -180,7 +178,7 @@ namespace grapher {
     template void _append::operator()(fexec& task1, vector_pair<double> begin, vector_pair<double> end, vector_pair<double> begin2, std::forward_iterator_tag);
 	template void _append::operator()(fexec& task1, vector_pair<float> begin, vector_pair<float> end, vector_pair<float> begin2, std::forward_iterator_tag);
     
-    __differences_To_VG::__differences_To_VG(int samplesPerVector, double vectorLength, std::vector<int> fixPoints_indices)
+    __differences_To_VG::__differences_To_VG(int samplesPerVector, double vectorLength, std::vector<size_t> fixPoints_indices)
     : _samplesPerVector(samplesPerVector)
     , _vectorLength(vectorLength)
     , _fixPoint_indices(fixPoints_indices)
@@ -262,7 +260,7 @@ namespace grapher {
         return unitaryLength / showSamples;
     }
     
-    samples_To_VG::samples_To_VG(int samplesPerVector, double vectorLength, std::vector<int> fixPoints_indices)
+    samples_To_VG::samples_To_VG(int samplesPerVector, double vectorLength, std::vector<size_t> fixPoints_indices)
     : _samplesPerVector(samplesPerVector)
     , _vectorLength(vectorLength)
     , _fixPoint_indices(fixPoints_indices)

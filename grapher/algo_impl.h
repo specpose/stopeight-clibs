@@ -17,11 +17,11 @@ namespace grapher {
 	//specialization: 1 iterator_category, 2 value_types
 	template<typename T> class _fixpoints {
 	public:
-		_fixpoints(std::vector<int>& points);
+		_fixpoints(std::vector<size_t>& points);
 		~_fixpoints();
 		template <class ExecutionPolicy, class InputIterator, class OutputIterator>void operator()(ExecutionPolicy&, InputIterator begin, InputIterator end, OutputIterator begin2, std::random_access_iterator_tag);
 	private:
-		std::vector<int>& _fixPoint_indices;
+		std::vector<size_t>& _fixPoint_indices;
 	};
 
 	//specialization: 1 iterator_category, 2 value_types
@@ -48,7 +48,7 @@ namespace grapher {
 
 	class __differences_To_VG {
 	public:
-		__differences_To_VG(int samplesPerVector, double vectorLength, std::vector<int> fixPoints_indices = std::vector<int>(1, 0));
+		__differences_To_VG(int samplesPerVector, double vectorLength, std::vector<size_t> fixPoints_indices = std::vector<size_t>(1, 0));
 		~__differences_To_VG();
 
 		//specialization: 1 iterator_category, 2 value_types
@@ -57,7 +57,7 @@ namespace grapher {
 	private:
 		int _samplesPerVector;
 		double _vectorLength;
-		std::vector<int> _fixPoint_indices;
+		std::vector<size_t> _fixPoint_indices;
 	};
 
 	int samples_To_VG_vectorSize(int inputSize, int samplesPerVector=1);
@@ -66,7 +66,7 @@ namespace grapher {
 	class samples_To_VG {
 	public:
 		//experimental value from notation2.wav => sin(1.0f/300.0f)
-		samples_To_VG(int samplesPerVector, double vectorLength, std::vector<int> fixPoints_indices = std::vector<int>(1, 0));
+		samples_To_VG(int samplesPerVector, double vectorLength, std::vector<size_t> fixPoints_indices = std::vector<size_t>(1, 0));
 		~samples_To_VG();
 
 		//specialization: 1 iterator_category, 2 value_types
@@ -75,7 +75,7 @@ namespace grapher {
 	private:
 		int _samplesPerVector;
 		double _vectorLength;
-		std::vector<int> _fixPoint_indices;
+		std::vector<size_t> _fixPoint_indices;
 	};
 }
 #endif

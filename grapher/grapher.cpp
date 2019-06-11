@@ -76,7 +76,7 @@ namespace speczilla {
 			
 			//in general if uneven, middle is on left side
 			//-1 differences, -1 size
-            auto dvg = (grapher::__differences_To_VG(_samplesPerVector, vectorLength, std::vector<int>(1, (((size - 1)/ 2) - 1) )));
+            auto dvg = (grapher::__differences_To_VG(_samplesPerVector, vectorLength, std::vector<size_t>(1, (((size - 1)/ 2) - 1) )));
             dvg(dummy_policy, std::begin(differences) + 1, std::end(differences), std::back_inserter(output), *afunc);
                                                             
 			//(samples_To_VG(_samplesPerVector, vectorLength, std::vector<int>(1, (size / 2) - 1)))(dummy_policy, std::begin(*buf), std::end(*buf), std::back_inserter(output), *afunc);
