@@ -21,7 +21,7 @@ namespace speczilla {
 	{
 	public:
 		Buffer<T>(std::vector<T>* s);
-		explicit Buffer<T>(std::vector<T>* s, int showSamples, int samplesPerVector = 1, double unitaryLength = 1, bool relative = false, double average = 0.0f, double angleScale = 1.0f);
+		explicit Buffer<T>(std::vector<T>* s, size_t showSamples, size_t samplesPerVector = 1, double unitaryLength = 1, bool relative = false, double average = 0.0f, double angleScale = 1.0f);
 
 		~Buffer<T>();
 
@@ -32,7 +32,7 @@ namespace speczilla {
 		//hack: length of pointer on amd_win10_64
 		//doesnt work; crash when remove in debug from presonus
 		char buf[6];//sizeofPTR
-		char _samplesPerVector[sizeof(int)], _showSamples[sizeof(int)];
+		char _samplesPerVector[sizeof(size_t)], _showSamples[sizeof(size_t)];
 		char _unitaryLength[sizeof(double)];
 		bool _relative;
 		char _average[sizeof(double)];

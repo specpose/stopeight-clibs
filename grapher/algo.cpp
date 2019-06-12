@@ -98,15 +98,15 @@ namespace grapher {
         *it++ = (last);
 		using T = std::iterator_traits<InputIterator>::value_type::value_type;//todo remove backinserter//std::iterator_traits<std::iterator_traits<OutputIterator>::value_type::first_type>::value_type::value_type;
 
-        std::transform(std::begin(slices), std::end(slices), begin2, [begin](std::pair<size_t, size_t> p) {//todo derive it_element
-            it_element<T> e = it_element<T>();
+        std::transform(std::begin(slices), std::end(slices), begin2, [begin](std::pair<size_t, size_t> p) {//todo derive sp::it_pair
+            sp::it_pair<T> e = sp::it_pair<T>();
             e.first = (begin + p.first);
             e.second = (begin + p.second);
             return e;
         });
     }
-    template void _fixpoints::operator()(sp::result<double>::iterator begin, sp::result<double>::iterator end, std::vector<it_element<double>>::iterator begin2);
-	template void _fixpoints::operator()(sp::result<float>::iterator begin, sp::result<float>::iterator end, std::vector<it_element<float>>::iterator begin2);
+    template void _fixpoints::operator()(sp::result<double>::iterator begin, sp::result<double>::iterator end, std::vector<sp::it_pair<double>>::iterator begin2);
+	template void _fixpoints::operator()(sp::result<float>::iterator begin, sp::result<float>::iterator end, std::vector<sp::it_pair<float>>::iterator begin2);
 
     _blocks::_blocks(size_t samplesPerVector) : _samplesPerVector(samplesPerVector) {
         
@@ -134,15 +134,15 @@ namespace grapher {
             }
         });
     }
-    template void _blocks::operator()(std::vector<it_element<double>>::iterator begin, std::vector<it_element<double>>::iterator end, std::vector<it_element<double>>::iterator begin2);
-	template void _blocks::operator()(std::vector<it_element<float>>::iterator begin, std::vector<it_element<float>>::iterator end, std::vector<it_element<float>>::iterator begin2);
+    template void _blocks::operator()(std::vector<sp::it_pair<double>>::iterator begin, std::vector<sp::it_pair<double>>::iterator end, std::vector<sp::it_pair<double>>::iterator begin2);
+	template void _blocks::operator()(std::vector<sp::it_pair<float>>::iterator begin, std::vector<sp::it_pair<float>>::iterator end, std::vector<sp::it_pair<float>>::iterator begin2);
 
     
     template <class InputIterator, class OutputIterator> void _sum_blocks(InputIterator begin, InputIterator end, OutputIterator begin2)
     {
-		using it_pair = typename std::iterator_traits<InputIterator>::value_type;//it_element not available from OutputIterator
+		using it_pair = typename std::iterator_traits<InputIterator>::value_type;//sp::it_pair not available from OutputIterator
 		using tc = typename std::iterator_traits<it_pair::first_type>::value_type;
-		//transforming intput it_element to sp:element
+		//transforming intput sp::it_pair to sp:element
         std::transform(begin, end, begin2, [](it_pair block) {
             //both can be nonempty; preserve type of last
             if (block.first != block.second) {
@@ -159,8 +159,8 @@ namespace grapher {
             }
         });
     }
-    template void _sum_blocks(std::vector<it_element<double>>::iterator begin, std::vector<it_element<double>>::iterator end, sp::result<double>::iterator begin2);
-	template void _sum_blocks(std::vector<it_element<float>>::iterator begin, std::vector<it_element<float>>::iterator end, sp::result<float>::iterator begin2);
+    template void _sum_blocks(std::vector<sp::it_pair<double>>::iterator begin, std::vector<sp::it_pair<double>>::iterator end, sp::result<double>::iterator begin2);
+	template void _sum_blocks(std::vector<sp::it_pair<float>>::iterator begin, std::vector<sp::it_pair<float>>::iterator end, sp::result<float>::iterator begin2);
 
     template <class InputIterator = sp::input_iterator<InputIterator>, class OutputIterator> void _append(InputIterator begin, InputIterator end, OutputIterator begin2)
     {
@@ -211,7 +211,7 @@ namespace grapher {
 		std::fill_n(std::back_inserter(vectors), std::distance(std::begin(rotations), std::end(rotations)), sp::timecode<T>{T(_vectorLength), 0});
         __apply_rotation_matrix(std::begin(rotations), std::end(rotations), std::begin(vectors));
         
-        std::vector<it_element<T>> vectors_sliced;
+        std::vector<sp::it_pair<T>> vectors_sliced;
         auto func = _fixpoints(_fixPoint_indices);
         func(std::begin(vectors), std::end(vectors), std::back_inserter(vectors_sliced));
         
@@ -219,7 +219,7 @@ namespace grapher {
         
         /*
          //HERESTART
-         std::vector<it_element> blocks;
+         std::vector<sp::it_pair> blocks;
          _blocks(_samplesPerVector)(task1, std::begin(vectors_sliced), std::end(vectors_sliced), std::back_inserter(blocks), InputIterator::iterator_category{});
          
          std::vector<sp::element> sums;

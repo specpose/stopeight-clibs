@@ -38,6 +38,9 @@ namespace sp {
 
 	//const sp::tctype turns[3] = { tctype::SWING,tctype::CREST,tctype::SPIRAL };
 	//pybind POD clash with is_array, alignment?
+	//todo
+	//make tuple
+	//virtual constructor
 	template<class T = std::enable_if<std::is_arithmetic<T>::value,T>> class timecode {
 	public:
 		//using std::array<T, 2>::array;
@@ -129,6 +132,8 @@ namespace sp {
 		int cycle_count = 0;
 		//next*
 	};
+	template<typename T> using it_pair = std::pair< typename sp::result<T>::iterator, typename sp::result<T>::iterator >;
+
 	
 	//sp::element static operator+(const sp::element& a, const sp::element& b) { return sp::element{ a.first + b.first, a.second + b.second }; };
 	//sp::element static operator-(const sp::element& a, const sp::element& b) { return sp::element{ a.first - b.first, a.second - b.second }; };
@@ -136,17 +141,13 @@ namespace sp {
 	template<typename T = std::enable_if<std::is_base_of<std::random_access_iterator_tag, std::iterator_traits<T>::iterator_category>::value && std::is_arithmetic<std::iterator_traits<T>::value_type::value_type>::value, T>> using random_access = typename T;
 }
 
-
-
-template<typename T> using it_element = std::pair< typename sp::result<T>::iterator, typename sp::result<T>::iterator >;
-
-template<typename T> using vector_single = typename std::vector<T>::iterator;
+/*template<typename T> using vector_single = typename std::vector<T>::iterator;
 template<typename T> using vector_single_T = typename std::iterator_traits<T>::value_type;
 
 template<typename T> using vector_pair = typename sp::result<T>::iterator;
 template<typename T> using vector_pair_T = typename std::iterator_traits<T>::value_type::value_type;
 
-template<typename T> using vector_vectors = typename std::vector<it_element<T>>::iterator;
-template<typename T> using vector_vectors_T = typename std::iterator_traits<typename std::iterator_traits<T>::value_type::first_type>::value_type::value_type;
+template<typename T> using vector_vectors = typename std::vector<sp::it_pair<T>>::iterator;
+template<typename T> using vector_vectors_T = typename std::iterator_traits<typename std::iterator_traits<T>::value_type::first_type>::value_type::value_type;*/
 
 #endif

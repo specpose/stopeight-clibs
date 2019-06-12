@@ -23,18 +23,15 @@ namespace speczilla {
 	template<typename T> double Mean<T>::operator()()
 	{
 		const int size = buf->size();
-        //angle::averageScaled* afunc = nullptr;
 		if (size > 0) {
 			std::vector<T> differences = std::vector<T>(size, 0.0f);
 			grapher::__differences(std::begin(*buf), std::end(*buf), std::begin(differences));
-            auto a = angle::__average();
-            return a(std::begin(differences)+1, std::end(differences));
+            return angle::__average(std::begin(differences)+1, std::end(differences));
 		}
 		else {
 			return 0.0f;
 		}
 	}
-	//specialization
 	template double Mean<float>::operator()();
 	template double Mean<double>::operator()();
 

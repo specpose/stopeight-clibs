@@ -18,11 +18,11 @@ namespace speczilla {
                 , _angleScale(1.0)
 	{
 	}
-	template Buffer<float>::Buffer(std::vector<float>* s);
-	template Buffer<double>::Buffer(std::vector<double>* s);
-	template Buffer<int16_t>::Buffer(std::vector<int16_t>* s);
+	template Buffer<float>::Buffer(std::vector<float>*);
+	template Buffer<double>::Buffer(std::vector<double>*);
+	template Buffer<int16_t>::Buffer(std::vector<int16_t>*);
 
-	template<typename T> Buffer<T>::Buffer(std::vector<T>* s, int showSamples, int samplesPerVector, double unitaryLength, bool relative, double average, double angleScale)
+	template<typename T> Buffer<T>::Buffer(std::vector<T>* s, size_t showSamples, size_t samplesPerVector, double unitaryLength, bool relative, double average, double angleScale)
 		: Buffer<T>(s)
 	{
 		_showSamples = showSamples;
@@ -32,9 +32,9 @@ namespace speczilla {
 		_angleScale = angleScale;
 		_average = average;
 	}
-	template Buffer<float>::Buffer(std::vector<float>* s, int showSamples, int samplesPerVector, double unitaryLength, bool relative, double average, double angleScale);
-	template Buffer<double>::Buffer(std::vector<double>* s, int showSamples, int samplesPerVector, double unitaryLength, bool relative, double average, double angleScale);
-	template Buffer<int16_t>::Buffer(std::vector<int16_t>* s, int showSamples, int samplesPerVector, double unitaryLength, bool relative, double average, double angleScale);
+	template Buffer<float>::Buffer(std::vector<float>*, size_t, size_t, double, bool relative, double, double);
+	template Buffer<double>::Buffer(std::vector<double>*, size_t, size_t, double, bool relative, double, double);
+	template Buffer<int16_t>::Buffer(std::vector<int16_t>*, size_t, size_t, double, bool relative, double, double);
 
 /*	template<typename T> Buffer<T>::Buffer(std::unique_ptr<std::vector<T>> s)
 //		: PreloaderIF{ *this }
@@ -43,8 +43,8 @@ namespace speczilla {
 		, buf{s}
 	{
 	}
-	template Buffer<float>::Buffer(std::unique_ptr<std::vector<float>> s);
-	template Buffer<double>::Buffer(std::unique_ptr<std::vector<double>> s);*/
+	template Buffer<float>::Buffer(std::unique_ptr<std::vector<float>>);
+	template Buffer<double>::Buffer(std::unique_ptr<std::vector<double>>);*/
 
 	template<typename T> Buffer<T>::~Buffer() {
 	}
@@ -54,34 +54,32 @@ namespace speczilla {
 
 	template<typename T> sp::result<T> Buffer<T>::operator()()
 	{
-		const int size = buf->size();
-        int vectorSize = grapher::samples_To_VG_vectorSize((size), _samplesPerVector);
+        //size_t vectorSize = grapher::samples_To_VG_vectorSize(buf->size(), _samplesPerVector);
         T vectorLength = grapher::samples_To_VG_vectorLength(_showSamples, _unitaryLength);
 		auto output = sp::result<T>{};
 
-		//par
-		//(samples_To_VG(samplesPerPixel))(std::experimental::parallel::par_vec, std::begin(*buf), std::end(*buf), std::begin(output));
-		angle::angle* afunc = nullptr;
-		if (size > 2) {
-			std::vector<T> differences = std::vector<T>(size, 0.0f);
+		if (buf->size() > 2) {
+			std::vector<T> differences = std::vector<T>(buf->size(), 0.0);
 			grapher::__differences(std::begin(*buf), std::end(*buf), std::begin(differences));
 
+			angle::angle* afunc;
 			if (_relative) {
 				afunc = new angle::relative(std::begin(differences) + 1, std::end(differences),_average,_angleScale);
 			}
 			else {
+				//propagation means not par_unseq? introduce class for angle?
 				afunc = new angle::independent(std::begin(differences) + 1, std::end(differences),_average,_angleScale);
 			}
 			
 			//in general if uneven, middle is on left side
 			//-1 differences, -1 size
-            auto dvg = (grapher::__differences_To_VG<T>(_samplesPerVector, vectorLength, std::vector<size_t>(1, (((size - 1)/ 2) - 1) )));
+            auto dvg = (grapher::__differences_To_VG<T>(_samplesPerVector, vectorLength, std::vector<size_t>(1, (((buf->size() - 1)/ 2) - 1) )));
             output = dvg(differences, *afunc);//((vectorSize * 2) + add);
                                                             
 			//(samples_To_VG(_samplesPerVector, vectorLength, std::vector<int>(1, (size / 2) - 1)))(dummy_policy, std::begin(*buf), std::end(*buf), std::back_inserter(output), *afunc);
+			delete afunc;
 
 		}
-		delete afunc;
 
 		return output;
 	}
