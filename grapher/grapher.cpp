@@ -57,7 +57,7 @@ namespace speczilla {
 		const int size = buf->size();
         int vectorSize = grapher::samples_To_VG_vectorSize((size), _samplesPerVector);
         T vectorLength = grapher::samples_To_VG_vectorLength(_showSamples, _unitaryLength);
-		sp::result<T> output;
+		auto output = sp::result<T>{};
 
 		//par
 		//(samples_To_VG(samplesPerPixel))(std::experimental::parallel::par_vec, std::begin(*buf), std::end(*buf), std::begin(output));
@@ -72,12 +72,11 @@ namespace speczilla {
 			else {
 				afunc = new angle::independent(std::begin(differences) + 1, std::end(differences),_average,_angleScale);
 			}
-			output = sp::result<T>{};//((vectorSize * 2) + add);
 			
 			//in general if uneven, middle is on left side
 			//-1 differences, -1 size
-            auto dvg = (grapher::__differences_To_VG(_samplesPerVector, vectorLength, std::vector<size_t>(1, (((size - 1)/ 2) - 1) )));
-            dvg(dummy_policy, std::begin(differences) + 1, std::end(differences), std::back_inserter(output), *afunc);
+            auto dvg = (grapher::__differences_To_VG<T>(_samplesPerVector, vectorLength, std::vector<size_t>(1, (((size - 1)/ 2) - 1) )));
+            output = dvg(differences, *afunc);//((vectorSize * 2) + add);
                                                             
 			//(samples_To_VG(_samplesPerVector, vectorLength, std::vector<int>(1, (size / 2) - 1)))(dummy_policy, std::begin(*buf), std::end(*buf), std::back_inserter(output), *afunc);
 
@@ -86,7 +85,6 @@ namespace speczilla {
 
 		return output;
 	}
-	//specialization
 	template sp::result<float> Buffer<float>::operator()();
 	template sp::result<double> Buffer<double>::operator()();
 	template sp::result<int16_t> Buffer<int16_t>::operator()();

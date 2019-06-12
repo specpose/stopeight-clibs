@@ -182,25 +182,30 @@ namespace grapher {
     template void _append(sp::result<double>::iterator begin, sp::result<double>::iterator end, sp::result<double>::iterator begin2);
 	template void _append(sp::result<float>::iterator begin, sp::result<float>::iterator end, sp::result<float>::iterator begin2);
 
-    __differences_To_VG::__differences_To_VG(int samplesPerVector, double vectorLength, std::vector<size_t> fixPoints_indices)
+    template <class T> __differences_To_VG<T>::__differences_To_VG(size_t samplesPerVector, double vectorLength, std::vector<size_t> fixPoints_indices)
     : _samplesPerVector(samplesPerVector)
     , _vectorLength(vectorLength)
     , _fixPoint_indices(fixPoints_indices)
     {
     }
-    __differences_To_VG::~__differences_To_VG() {
+	template __differences_To_VG<double>::__differences_To_VG(size_t,double, std::vector<size_t>);
+	template __differences_To_VG<float>::__differences_To_VG(size_t, double, std::vector<size_t>);
+	template __differences_To_VG<int16_t>::__differences_To_VG(size_t, double, std::vector<size_t>);
+
+	template <class T> __differences_To_VG<T>::~__differences_To_VG() {
     }
-    //partial specialization
-    template <class ExecutionPolicy, class InputIterator, class OutputIterator, class UnaryFunction> void __differences_To_VG::operator()(ExecutionPolicy& task1, InputIterator begin, InputIterator end, OutputIterator begin2, UnaryFunction& angleFunction)
+	template __differences_To_VG<double>::~__differences_To_VG();
+	template __differences_To_VG<float>::~__differences_To_VG();
+	template __differences_To_VG<int16_t>::~__differences_To_VG();
+
+	template <class T> template <class UnaryFunction> sp::result<T> __differences_To_VG<T>::operator()(std::vector<T>& differences, UnaryFunction& angleFunction)
     {
-		using T = vector_single_T<InputIterator>;//?!
         //par
         //std::experimental::parallel::transform(task1, begin, end, begin, [](float f) {return 3.3f; });
         
         std::vector<T> rotations;
         //first one is invalid
-        //Windows __calculate_rotations()(task1, begin, end, std::back_inserter(rotations), angleFunction, InputIterator::iterator_category{});
-        __calculate_rotations(begin, end, std::back_inserter(rotations), angleFunction);
+        __calculate_rotations(std::begin(differences) + 1, std::end(differences), std::back_inserter(rotations), angleFunction);
         
         sp::result<T> vectors;
 		std::fill_n(std::back_inserter(vectors), std::distance(std::begin(rotations), std::end(rotations)), sp::timecode<T>{T(_vectorLength), 0});
@@ -208,10 +213,9 @@ namespace grapher {
         
         std::vector<it_element<T>> vectors_sliced;
         auto func = _fixpoints(_fixPoint_indices);
-        //Windows func(task1, std::begin(vectors), std::end(vectors), std::back_inserter(vectors_sliced), InputIterator::iterator_category{});
         func(std::begin(vectors), std::end(vectors), std::back_inserter(vectors_sliced));
         
-        sp::result<T> out_vectors;
+		auto out_vectors = sp::result<T>{};//((vectorSize * 2) + add);
         
         /*
          //HERESTART
@@ -241,14 +245,19 @@ namespace grapher {
         
         _append(std::begin(out_vectors), std::end(out_vectors), std::begin(out_vectors));
         
-        std::copy<typename sp::result<T>::iterator, OutputIterator>(std::begin(out_vectors), std::end(out_vectors), begin2);
+        //std::copy<typename sp::result<T>::iterator, OutputIterator>(std::begin(out_vectors), std::end(out_vectors), begin2);
+		return out_vectors;
     }
     //void grapher::__differences_To_VG::operator()<dummy const, std::__1::__wrap_iter<double*>, std::__1::__wrap_iter<sp::timecode<double>*>, angle::averageScaled>(dummy const&, std::__1::__wrap_iter<double*>, std::__1::__wrap_iter<double*>, std::__1::__wrap_iter<sp::timecode<double>*>, angle::averageScaled&);
-    template void __differences_To_VG::operator()(fexec& task1, vector_single<double> begin, vector_single<double> end, vector_pair<double> begin2, angle::angle& angleFunction);
-    template void __differences_To_VG::operator()(fexec& task1, vector_single<float> begin, vector_single<float> end, vector_pair<float> begin2, angle::angle& angleFunction);
+    template sp::result<double> __differences_To_VG<double>::operator()(std::vector<double>&, angle::angle&);
+	template sp::result<float> __differences_To_VG<float>::operator()(std::vector<float>&, angle::angle&);
+	template sp::result<int16_t> __differences_To_VG<int16_t>::operator()(std::vector<int16_t>&, angle::angle&);
+
+
+    /*template void __differences_To_VG::operator()(fexec& task1, vector_single<float> begin, vector_single<float> end, vector_pair<float> begin2, angle::angle& angleFunction);
 	template void __differences_To_VG::operator()(fexec& task1, vector_single<double> begin, vector_single<double> end, std::back_insert_iterator<sp::result<double>> begin2, angle::angle& angleFunction);
 	template void __differences_To_VG::operator()(fexec& task1, vector_single<float> begin, vector_single<float> end, std::back_insert_iterator<sp::result<float>> begin2, angle::angle& angleFunction);
-	template void __differences_To_VG::operator()(fexec& task1, vector_single<int16_t> begin, vector_single<int16_t> end, std::back_insert_iterator<sp::result<int16_t>> begin2, angle::angle& angleFunction);
+	template void __differences_To_VG::operator()(fexec& task1, vector_single<int16_t> begin, vector_single<int16_t> end, std::back_insert_iterator<sp::result<int16_t>> begin2, angle::angle& angleFunction);*/
     
     int samples_To_VG_vectorSize(int inputSize, int samplesPerVector) {
         auto size = inputSize / samplesPerVector;
@@ -262,31 +271,27 @@ namespace grapher {
         return unitaryLength / showSamples;
     }
     
-    samples_To_VG::samples_To_VG(int samplesPerVector, double vectorLength, std::vector<size_t> fixPoints_indices)
+	template<class T> samples_To_VG<T>::samples_To_VG(size_t samplesPerVector, double vectorLength, std::vector<size_t> fixPoints_indices)
     : _samplesPerVector(samplesPerVector)
     , _vectorLength(vectorLength)
     , _fixPoint_indices(fixPoints_indices)
     {
     }
-    samples_To_VG::~samples_To_VG() {
+	template<class T> samples_To_VG<T>::~samples_To_VG() {
     }
-    //partial specialization
-    template <class ExecutionPolicy, class InputIterator, class OutputIterator, class UnaryFunction> void samples_To_VG::operator()(ExecutionPolicy& task1, InputIterator begin, InputIterator end, OutputIterator begin2, UnaryFunction& angleFunction)
+    template<class T> template <class UnaryFunction> sp::result<T> samples_To_VG<T>::operator()(std::vector<T>& samples, UnaryFunction& angleFunction)
     {
-		using T = vector_pair_T<OutputIterator>;
-        //par
-        //std::experimental::parallel::transform(task1, begin, end, begin, [](float f) {return 3.3f; });
-        size_t size = std::distance(begin, end);
+        size_t size = std::distance(std::begin(samples), std::end(samples));
         if (size > 0) {
             std::vector<T> differences = std::vector<T>(size, 0);
-            __differences(begin, end, std::begin(differences));
+            __differences(std::begin(samples), std::end(samples), std::begin(differences));
             
-            __differences_To_VG(_samplesPerVector, _vectorLength, _fixPoint_indices)(task1, std::begin(differences) + 1, std::end(differences), begin2, angleFunction);
+            return __differences_To_VG<T>(_samplesPerVector, _vectorLength, _fixPoint_indices)(differences, angleFunction);
         }
     }
-    template void samples_To_VG::operator()(fexec& task1, vector_single<float> begin, vector_single<float> end, vector_pair<float> begin2, angle::angle& angleFunction);
-    template void samples_To_VG::operator()(fexec& task1, vector_single<double> begin, vector_single<double> end, vector_pair<double> begin2, angle::angle& angleFunction);
-    
+    template sp::result<double> samples_To_VG<double>::operator()(std::vector<double>&, angle::angle&);
+	template sp::result<float> samples_To_VG<float>::operator()(std::vector<float>&, angle::angle&);
+
 }
 
 //weird double defined symbol error for sycl::device from msvc
