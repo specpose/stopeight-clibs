@@ -23,7 +23,7 @@ namespace angle {
 			return sum / std::distance(begin, end);
 	};
     
-    class angle : public std::function<double(double)> {//used to be std::unary_function
+    class angle : public std::function<double(double)>, public sp::sharing_functor {//used to be std::unary_function
 	public:
 		virtual ~angle() {};
 		virtual result_type operator()(double d) = 0;
@@ -33,6 +33,7 @@ namespace angle {
 	public:
 	};
 
+	//templating struct / class differentiation not possible
 	class averageScaled : public angle {
 	public:
 		template<typename Iterator>averageScaled(Iterator begin, Iterator end, double average, double angleScale)
@@ -44,9 +45,21 @@ namespace angle {
 		double _angleScale;
 	};
 
-	class relative2 : public averageScaled {
+	//operator() contains assignments of class members that have to be applied sequentially
+	class propagating_angle : public averageScaled {
 	public:
-		template<typename Iterator>relative2(Iterator begin, Iterator end, double average=0.0, double angleScale=1.0,double initialAngle = 0.0) : averageScaled(begin, end, average, angleScale), _previous(initialAngle) {};
+		template<typename Iterator> propagating_angle(Iterator begin, Iterator end, double average, double angleScale) :averageScaled(begin, end, average, angleScale) {};
+	};
+
+	//operator() can contain assignments of class members, but they dont have to be in sequence
+	class vectorized_angle : public propagating_angle {
+	public:
+		template<typename Iterator> vectorized_angle(Iterator begin, Iterator end, double average, double angleScale) :propagating_angle(begin, end, average, angleScale) {};
+	};
+
+	class relative2 : public propagating_angle {
+	public:
+		template<typename Iterator>relative2(Iterator begin, Iterator end, double average=0.0, double angleScale=1.0,double initialAngle = 0.0) : propagating_angle(begin, end, average, angleScale), _previous(initialAngle) {};
 		double operator()(double d) {
 			if (d == 0.0 || av == 0.0)
 				return double(0.0);
@@ -58,9 +71,9 @@ namespace angle {
 		double _previous;
 	};
 
-	class independent2 : public averageScaled {
+	class independent2 : public vectorized_angle {
 	public:
-		template<typename Iterator>independent2(Iterator begin, Iterator end, double average = 0.0, double angleScale = 1.0) : averageScaled(begin, end, average, angleScale) {};
+		template<typename Iterator>independent2(Iterator begin, Iterator end, double average = 0.0, double angleScale = 1.0) : vectorized_angle(begin, end, average, angleScale) {};
 		double operator()(double d) {
 			if (d == 0.0 || av == 0.0)
 				return double(0.0);
@@ -68,10 +81,9 @@ namespace angle {
 		};
 	};
 
-	//todo struct or class type for propagating
-	class relative : public averageScaled {
+	class relative : public propagating_angle {
 	public:
-		template<typename Iterator>relative(Iterator begin, Iterator end, double average = 0.0, double angleScale = 1.0, double initialAngle = 0.0) : averageScaled(begin, end, average, angleScale), _previous(initialAngle) {};
+		template<typename Iterator>relative(Iterator begin, Iterator end, double average = 0.0, double angleScale = 1.0, double initialAngle = 0.0) : propagating_angle(begin, end, average, angleScale), _previous(initialAngle) {};
 		//propagating
 		double operator()(double d) {
 			if (d == 0.0 || av == 0.0)
@@ -83,9 +95,9 @@ namespace angle {
 		double _previous;
 	};
 
-	class independent : public averageScaled {
+	class independent : public vectorized_angle {
 	public:
-		template<typename Iterator>independent(Iterator begin, Iterator end, double average = 0.0, double angleScale = 1.0) : averageScaled(begin, end, average, angleScale) {};
+		template<typename Iterator>independent(Iterator begin, Iterator end, double average = 0.0, double angleScale = 1.0) : vectorized_angle(begin, end, average, angleScale) {};
 		//non-propagating
 		double operator()(double d) {
 			if (d == 0.0 || av == 0.0)
@@ -94,9 +106,9 @@ namespace angle {
 		};
 	};
 
-	/*class test : public averageScaled {
+	/*class test : public vectorized_angle {
 	public:
-		template<typename Iterator>test(Iterator begin, Iterator end) : averageScaled(begin, end) {};
+		template<typename Iterator>test(Iterator begin, Iterator end) : vectorized_angle(begin, end) {};
 		double operator()(double d) {
 			if (d == 0.0 || av == 0.0)
 				return double(0.0);
@@ -104,9 +116,9 @@ namespace angle {
 		};
 	};
 
-	class test2 : public averageScaled {
+	class test2 : public propagating_angle {
 	public:
-		template<typename Iterator>test2(Iterator begin, Iterator end, double initialAngle = 0.0) : averageScaled(begin, end), _previous(initialAngle) {};
+		template<typename Iterator>test2(Iterator begin, Iterator end, double initialAngle = 0.0) : propagating_angle(begin, end), _previous(initialAngle) {};
 		double operator()(double d) {
 			if (d == 0.0 || av == 0.0)
 				return double(0.0);
@@ -120,7 +132,7 @@ namespace angle {
 		double _previous;
 	};
 
-	class test3 : public plainAngle {
+	class test3 : public vectorized_angle {
 	public:
 		test3(double dummer) {};
 		double operator()(double d) {

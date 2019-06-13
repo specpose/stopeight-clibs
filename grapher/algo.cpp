@@ -21,7 +21,9 @@ using fexec = const dummy;
 #include <math.h>
 
 namespace grapher {
-    template<class InputIterator = std::enable_if<std::is_base_of<std::random_access_iterator_tag, std::iterator_traits<T>::iterator_category>::value && std::is_arithmetic<std::iterator_traits<T>::value_type>::value, T>, class OutputIterator> void __differences(InputIterator begin, InputIterator end, OutputIterator begin2)
+    template<class InputIterator ,//= std::enable_if<std::is_base_of<std::random_access_iterator_tag, std::iterator_traits<T>::iterator_category>::value && std::is_arithmetic<std::iterator_traits<T>::value_type>::value, T>,
+		class OutputIterator>
+		void __differences(InputIterator begin, InputIterator end, OutputIterator begin2)
     {
         std::adjacent_difference(begin, end, begin2);
         //*std::begin(differences) = 0;
@@ -30,15 +32,23 @@ namespace grapher {
     template void __differences(std::vector<float>::iterator, std::vector<float>::iterator, std::vector<float>::iterator);
 	template void __differences(std::vector<int16_t>::iterator, std::vector<int16_t>::iterator, std::vector<int16_t>::iterator);
 	
-	template<class InputIterator = std::enable_if<std::is_base_of<std::input_iterator_tag, std::iterator_traits<T>::iterator_category>::value && std::is_arithmetic<std::iterator_traits<T>::value_type>::value, T>, class OutputIterator> void __calculate_rotations(InputIterator begin, InputIterator end, OutputIterator begin2, angle::angle& angleFunction)
+	template<class InputIterator ,//= std::enable_if<std::is_base_of<std::input_iterator_tag, std::iterator_traits<T>::iterator_category>::value && std::is_arithmetic<std::iterator_traits<T>::value_type>::value, T>,
+		class OutputIterator>
+		void __calculate_rotations(InputIterator begin, InputIterator end, OutputIterator begin2, angle::angle& angleFunction)//angle::propagating_angle& angleFunction)
     {
 		using T = std::iterator_traits<InputIterator>::value_type;//todo remove back_inserter -> std::iterator_traits<OutputIterator>::value_type;
         std::transform(begin, end, begin2, [&angleFunction](T diff) {
             return angleFunction(diff);
         });
     }
-    template void __calculate_rotations(std::vector<double>::iterator, std::vector<double>::iterator, std::vector<double>::iterator, angle::angle&);
+	template void __calculate_rotations(std::vector<double>::iterator, std::vector<double>::iterator, std::vector<double>::iterator, angle::angle&);
 	template void __calculate_rotations(std::vector<float>::iterator, std::vector<float>::iterator, std::vector<float>::iterator, angle::angle&);
+    //template void __calculate_rotations(std::vector<double>::iterator, std::vector<double>::iterator, std::vector<double>::iterator, angle::propagating_angle&);
+	//template void __calculate_rotations(std::vector<float>::iterator, std::vector<float>::iterator, std::vector<float>::iterator, angle::propagating_angle&);
+	//template void __calculate_rotations(std::vector<double>::iterator, std::vector<double>::iterator, std::vector<double>::iterator, angle::vectorized_angle&);
+	//template void __calculate_rotations(std::vector<float>::iterator, std::vector<float>::iterator, std::vector<float>::iterator, angle::vectorized_angle&);
+
+
 
     template<class InputIterator = std::enable_if<std::is_base_of<std::random_access_iterator_tag, std::iterator_traits<T>::iterator_category>::value && std::is_arithmetic<std::iterator_traits<T>::value_type>::value, T>, class OutputIterator> void __apply_rotation_matrix(InputIterator begin, InputIterator end, OutputIterator begin2)
     {
@@ -59,7 +69,8 @@ namespace grapher {
     }
     _fixpoints::~_fixpoints() {
     }
-    template <class InputIterator = sp::random_access<InputIterator>, class OutputIterator> void _fixpoints::operator()(InputIterator begin, InputIterator end, OutputIterator begin2)
+    template <class InputIterator ,//= sp::random_access<InputIterator>,
+		class OutputIterator> void _fixpoints::operator()(InputIterator begin, InputIterator end, OutputIterator begin2)
     {
         //remove all illegal fixpoint_indices
         //Note: last can not be fixPoint
@@ -162,7 +173,9 @@ namespace grapher {
     template void _sum_blocks(std::vector<sp::it_pair<double>>::iterator begin, std::vector<sp::it_pair<double>>::iterator end, sp::result<double>::iterator begin2);
 	template void _sum_blocks(std::vector<sp::it_pair<float>>::iterator begin, std::vector<sp::it_pair<float>>::iterator end, sp::result<float>::iterator begin2);
 
-    template <class InputIterator = sp::input_iterator<InputIterator>, class OutputIterator> void _append(InputIterator begin, InputIterator end, OutputIterator begin2)
+    template <class InputIterator ,//= sp::input_iterator<InputIterator>,
+		class OutputIterator>
+		void _append(InputIterator begin, InputIterator end, OutputIterator begin2)
     {
 		using tc = std::iterator_traits<OutputIterator>::value_type;
         class my_add {
@@ -198,7 +211,10 @@ namespace grapher {
 	template __differences_To_VG<float>::~__differences_To_VG();
 	template __differences_To_VG<int16_t>::~__differences_To_VG();
 
-	template <class T> template <class UnaryFunction> sp::result<T> __differences_To_VG<T>::operator()(std::vector<T>& differences, UnaryFunction& angleFunction)
+	template <class T> template <
+		class UnaryFunction,
+		typename
+	> sp::result<T> __differences_To_VG<T>::operator()(std::vector<T>& differences, UnaryFunction& angleFunction)
     {
         //par
         //std::experimental::parallel::transform(task1, begin, end, begin, [](float f) {return 3.3f; });

@@ -10,7 +10,7 @@ namespace grapher {
 
 	template<class InputIterator, class OutputIterator> void __differences(InputIterator begin, InputIterator end, OutputIterator begin2);
 
-	template<class InputIterator, class OutputIterator> void __calculate_rotations(InputIterator begin, InputIterator end, OutputIterator begin2,angle::angle& angleFunction);
+	template<class InputIterator, class OutputIterator, class AngleFunction> void __calculate_rotations(InputIterator begin, InputIterator end, OutputIterator begin2,AngleFunction& angleFunction);
 
 	template<class InputIterator, class OutputIterator> void __apply_rotation_matrix(InputIterator begin, InputIterator end, OutputIterator begin2);
 
@@ -43,7 +43,10 @@ namespace grapher {
 		~__differences_To_VG();
 
 		//mass allocation of different types, so no iterator-functor paradigm here
-        template <class UnaryFunction> sp::result<T> operator()(std::vector<T>& differences, UnaryFunction& angleFunction);
+        template <class UnaryFunction,
+			typename = typename std::enable_if_t<std::is_base_of<angle::angle,UnaryFunction>::value>
+		>
+			sp::result<T> operator()(std::vector<T>& differences, UnaryFunction& angleFunction);
 
 	private:
 		size_t _samplesPerVector;
