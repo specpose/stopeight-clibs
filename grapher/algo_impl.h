@@ -38,7 +38,9 @@ namespace grapher {
 
 	template <class InputIterator, class OutputIterator>void _sum_blocks(InputIterator begin, InputIterator end, OutputIterator begin2);//freedom vector or deque//type in or out?
 
-	template <class ExecutionPolicy, class InputIterator, class OutputIterator>void _append(InputIterator begin, InputIterator end, OutputIterator begin2);
+	template <class InputIterator, class OutputIterator,
+		typename = typename sp::input_iterator<InputIterator>
+	>void _append(InputIterator begin, InputIterator end, OutputIterator begin2);
 
 	//speed test formally std::vector<timecode> is generic, sp::result<type> is specialized
 	template<class T> class __differences_To_VG {

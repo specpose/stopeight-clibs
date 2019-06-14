@@ -61,7 +61,8 @@ namespace grapher {
 	template void __calculate_rotations(std::vector<int16_t>::iterator, std::vector<int16_t>::iterator, std::vector<int16_t>::iterator, angle::independent&);
 
 
-    template<class InputIterator = std::enable_if<std::is_base_of<std::random_access_iterator_tag, std::iterator_traits<T>::iterator_category>::value && std::is_arithmetic<std::iterator_traits<T>::value_type>::value, T>, class OutputIterator> void __apply_rotation_matrix(InputIterator begin, InputIterator end, OutputIterator begin2)
+    template<class InputIterator //= std::enable_if<std::is_base_of<std::random_access_iterator_tag, std::iterator_traits<T>::iterator_category>::value && std::is_arithmetic<std::iterator_traits<T>::value_type>::value, T>
+		, class OutputIterator> void __apply_rotation_matrix(InputIterator begin, InputIterator end, OutputIterator begin2)
     {
 		using OutputElement = typename std::iterator_traits<OutputIterator>::value_type;
 		using T = typename OutputElement::value_type;
@@ -185,8 +186,9 @@ namespace grapher {
     template void _sum_blocks(std::vector<sp::it_pair<double>>::iterator begin, std::vector<sp::it_pair<double>>::iterator end, sp::result<double>::iterator begin2);
 	template void _sum_blocks(std::vector<sp::it_pair<float>>::iterator begin, std::vector<sp::it_pair<float>>::iterator end, sp::result<float>::iterator begin2);
 
-    template <class InputIterator ,//= sp::input_iterator<InputIterator>,
-		class OutputIterator>
+    template <class InputIterator,
+		class OutputIterator,
+		typename>
 		void _append(InputIterator begin, InputIterator end, OutputIterator begin2)
     {
 		using tc = std::iterator_traits<OutputIterator>::value_type;
