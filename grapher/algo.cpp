@@ -33,21 +33,32 @@ namespace grapher {
 	template void __differences(std::vector<int16_t>::iterator, std::vector<int16_t>::iterator, std::vector<int16_t>::iterator);
 	
 	template<class InputIterator ,//= std::enable_if<std::is_base_of<std::input_iterator_tag, std::iterator_traits<T>::iterator_category>::value && std::is_arithmetic<std::iterator_traits<T>::value_type>::value, T>,
-		class OutputIterator>
-		void __calculate_rotations(InputIterator begin, InputIterator end, OutputIterator begin2, angle::angle& angleFunction)//angle::propagating_angle& angleFunction)
+		class OutputIterator
+	>
+		void __calculate_rotations(InputIterator begin, InputIterator end, OutputIterator begin2, sp::sharing_functor<double,double>& angleFunction)//angle::propagating_angle& angleFunction)
     {
 		using T = std::iterator_traits<InputIterator>::value_type;//todo remove back_inserter -> std::iterator_traits<OutputIterator>::value_type;
         std::transform(begin, end, begin2, [&angleFunction](T diff) {
             return angleFunction(diff);
         });
     }
-	template void __calculate_rotations(std::vector<double>::iterator, std::vector<double>::iterator, std::vector<double>::iterator, angle::angle&);
-	template void __calculate_rotations(std::vector<float>::iterator, std::vector<float>::iterator, std::vector<float>::iterator, angle::angle&);
-    //template void __calculate_rotations(std::vector<double>::iterator, std::vector<double>::iterator, std::vector<double>::iterator, angle::propagating_angle&);
-	//template void __calculate_rotations(std::vector<float>::iterator, std::vector<float>::iterator, std::vector<float>::iterator, angle::propagating_angle&);
-	//template void __calculate_rotations(std::vector<double>::iterator, std::vector<double>::iterator, std::vector<double>::iterator, angle::vectorized_angle&);
-	//template void __calculate_rotations(std::vector<float>::iterator, std::vector<float>::iterator, std::vector<float>::iterator, angle::vectorized_angle&);
-
+	template void __calculate_rotations(std::vector<double>::iterator, std::vector<double>::iterator, std::vector<double>::iterator, angle::relative&);
+	template void __calculate_rotations(std::vector<float>::iterator, std::vector<float>::iterator, std::vector<float>::iterator, angle::relative&);
+	template void __calculate_rotations(std::vector<int16_t>::iterator, std::vector<int16_t>::iterator, std::vector<int16_t>::iterator, angle::relative&);
+    
+	//todo make par_unseq
+	template<class InputIterator,//= std::enable_if<std::is_base_of<std::input_iterator_tag, std::iterator_traits<T>::iterator_category>::value && std::is_arithmetic<std::iterator_traits<T>::value_type>::value, T>,
+		class OutputIterator>
+		void __calculate_rotations(InputIterator begin, InputIterator end, OutputIterator begin2, sp::readonly_functor<double,double>& angleFunction)//angle::propagating_angle& angleFunction)
+	{
+		using T = std::iterator_traits<InputIterator>::value_type;//todo remove back_inserter -> std::iterator_traits<OutputIterator>::value_type;
+		std::transform(begin, end, begin2, [&angleFunction](T diff) {
+			return angleFunction(diff);
+		});
+	}
+	template void __calculate_rotations(std::vector<double>::iterator, std::vector<double>::iterator, std::vector<double>::iterator, angle::independent&);
+	template void __calculate_rotations(std::vector<float>::iterator, std::vector<float>::iterator, std::vector<float>::iterator, angle::independent&);
+	template void __calculate_rotations(std::vector<int16_t>::iterator, std::vector<int16_t>::iterator, std::vector<int16_t>::iterator, angle::independent&);
 
 
     template<class InputIterator = std::enable_if<std::is_base_of<std::random_access_iterator_tag, std::iterator_traits<T>::iterator_category>::value && std::is_arithmetic<std::iterator_traits<T>::value_type>::value, T>, class OutputIterator> void __apply_rotation_matrix(InputIterator begin, InputIterator end, OutputIterator begin2)
@@ -265,10 +276,12 @@ namespace grapher {
 		return out_vectors;
     }
     //void grapher::__differences_To_VG::operator()<dummy const, std::__1::__wrap_iter<double*>, std::__1::__wrap_iter<sp::timecode<double>*>, angle::averageScaled>(dummy const&, std::__1::__wrap_iter<double*>, std::__1::__wrap_iter<double*>, std::__1::__wrap_iter<sp::timecode<double>*>, angle::averageScaled&);
-    template sp::result<double> __differences_To_VG<double>::operator()(std::vector<double>&, angle::angle&);
-	template sp::result<float> __differences_To_VG<float>::operator()(std::vector<float>&, angle::angle&);
-	template sp::result<int16_t> __differences_To_VG<int16_t>::operator()(std::vector<int16_t>&, angle::angle&);
-
+	template sp::result<double> __differences_To_VG<double>::operator()(std::vector<double>&, angle::relative&);
+	template sp::result<float> __differences_To_VG<float>::operator()(std::vector<float>&, angle::relative&);
+	template sp::result<int16_t> __differences_To_VG<int16_t>::operator()(std::vector<int16_t>&, angle::relative&);
+	template sp::result<double> __differences_To_VG<double>::operator()(std::vector<double>&, angle::independent&);
+	template sp::result<float> __differences_To_VG<float>::operator()(std::vector<float>&, angle::independent&);
+	template sp::result<int16_t> __differences_To_VG<int16_t>::operator()(std::vector<int16_t>&, angle::independent&);
 
     /*template void __differences_To_VG::operator()(fexec& task1, vector_single<float> begin, vector_single<float> end, vector_pair<float> begin2, angle::angle& angleFunction);
 	template void __differences_To_VG::operator()(fexec& task1, vector_single<double> begin, vector_single<double> end, std::back_insert_iterator<sp::result<double>> begin2, angle::angle& angleFunction);
@@ -305,8 +318,8 @@ namespace grapher {
             return __differences_To_VG<T>(_samplesPerVector, _vectorLength, _fixPoint_indices)(differences, angleFunction);
         }
     }
-    template sp::result<double> samples_To_VG<double>::operator()(std::vector<double>&, angle::angle&);
-	template sp::result<float> samples_To_VG<float>::operator()(std::vector<float>&, angle::angle&);
+    template sp::result<double> samples_To_VG<double>::operator()(std::vector<double>&, angle::sharing_angle&);
+	template sp::result<float> samples_To_VG<float>::operator()(std::vector<float>&, angle::sharing_angle&);
 
 }
 

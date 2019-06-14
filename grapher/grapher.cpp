@@ -62,23 +62,20 @@ namespace speczilla {
 			std::vector<T> differences = std::vector<T>(buf->size(), 0.0);
 			grapher::__differences(std::begin(*buf), std::end(*buf), std::begin(differences));
 
-			angle::angle* afunc;
+			//in general if uneven, middle is on left side
+			//-1 differences, -1 size
+			auto dvg = (grapher::__differences_To_VG<T>(_samplesPerVector, vectorLength, std::vector<size_t>(1, (((buf->size() - 1) / 2) - 1))));
 			if (_relative) {
-				afunc = new angle::relative(std::begin(differences) + 1, std::end(differences),_average,_angleScale);
+				angle::relative afunc = angle::relative(std::begin(differences) + 1, std::end(differences),_average,_angleScale);
+				output = dvg(differences, afunc);//((vectorSize * 2) + add);
 			}
 			else {
 				//propagation means not par_unseq? introduce class for angle?
-				afunc = new angle::independent(std::begin(differences) + 1, std::end(differences),_average,_angleScale);
+				angle::independent afunc = angle::independent(std::begin(differences) + 1, std::end(differences),_average,_angleScale);
+				output = dvg(differences, afunc);//((vectorSize * 2) + add);
 			}
-			
-			//in general if uneven, middle is on left side
-			//-1 differences, -1 size
-            auto dvg = (grapher::__differences_To_VG<T>(_samplesPerVector, vectorLength, std::vector<size_t>(1, (((buf->size() - 1)/ 2) - 1) )));
-            output = dvg(differences, *afunc);//((vectorSize * 2) + add);
-                                                            
+			                                                            
 			//(samples_To_VG(_samplesPerVector, vectorLength, std::vector<int>(1, (size / 2) - 1)))(dummy_policy, std::begin(*buf), std::end(*buf), std::back_inserter(output), *afunc);
-			delete afunc;
-
 		}
 
 		return output;

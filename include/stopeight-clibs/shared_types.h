@@ -139,21 +139,24 @@ namespace sp {
 	struct sharing_functor_tag {};
 	struct propagating_functor_tag {};
 	struct readonly_functor_tag {};
-	class functor {
+	template<class R,class... Args> class functor {//: public std::function<R,Args...> {
+	public:
+		virtual ~functor() {};
+		virtual R operator()(Args... arguments) = 0;
 	};
 	//member variables can be assigned from within operator(), strictly sequential
-	class sharing_functor : public functor {
+	template<class R, class... Args> class sharing_functor : public functor<R, Args...> {
 	public:
 		using functor_category = typename sharing_functor_tag;
 	};
 	//member variables can be assigned from within operator(), but this is non-blocking
 	//is it still sequential when out of order threads terminate earlier?
-	class propagating_functor : public sharing_functor {
+	template<class R, class... Args> class propagating_functor : public sharing_functor<R, Args...> {
 	public:
 		using functor_category = typename propagating_functor_tag;
 	};
 	//member variables (should) not be assigned from within operator()
-	class readonly_functor : public propagating_functor {
+	template<class R, class... Args> class readonly_functor : public propagating_functor<R, Args...> {
 	public:
 		using functor_category = typename readonly_functor_tag;
 	};

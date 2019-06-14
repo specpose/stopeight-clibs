@@ -22,21 +22,11 @@ namespace angle {
 			});
 			return sum / std::distance(begin, end);
 	};
-    
-    class angle : public std::function<double(double)>, public sp::sharing_functor {//used to be std::unary_function
-	public:
-		virtual ~angle() {};
-		virtual result_type operator()(double d) = 0;
-	};
-
-	class plainAngle : public angle {
-	public:
-	};
 
 	//templating struct / class differentiation not possible
-	class averageScaled : public angle {
+	class averageScaled {
 	public:
-		template<typename Iterator>averageScaled(Iterator begin, Iterator end, double average, double angleScale)
+		template<typename av_it>averageScaled(av_it begin, av_it end, double average, double angleScale)
 			: av((average == 0.0) ? __average(begin, end) : average)
 			, _angleScale((angleScale == 0.0) ? std::numeric_limits<double>::min() : angleScale) {
 		}
@@ -45,16 +35,21 @@ namespace angle {
 		double _angleScale;
 	};
 
+	class sharing_angle : public averageScaled, public sp::sharing_functor<double, double> {
+	public:
+		template<typename Iterator> sharing_angle(Iterator begin, Iterator end, double average, double angleScale) :averageScaled(begin, end, average, angleScale) {};
+	};
+
 	//operator() contains assignments of class members that have to be applied sequentially
-	class propagating_angle : public averageScaled {
+	class propagating_angle : public averageScaled, public sp::propagating_functor<double, double> {
 	public:
 		template<typename Iterator> propagating_angle(Iterator begin, Iterator end, double average, double angleScale) :averageScaled(begin, end, average, angleScale) {};
 	};
 
 	//operator() can contain assignments of class members, but they dont have to be in sequence
-	class vectorized_angle : public propagating_angle {
+	class vectorized_angle : public averageScaled, public sp::readonly_functor<double, double> {
 	public:
-		template<typename Iterator> vectorized_angle(Iterator begin, Iterator end, double average, double angleScale) :propagating_angle(begin, end, average, angleScale) {};
+		template<typename Iterator> vectorized_angle(Iterator begin, Iterator end, double average, double angleScale) :averageScaled(begin, end, average, angleScale) {};
 	};
 
 	class relative2 : public propagating_angle {

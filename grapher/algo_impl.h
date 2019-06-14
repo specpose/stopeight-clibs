@@ -10,7 +10,9 @@ namespace grapher {
 
 	template<class InputIterator, class OutputIterator> void __differences(InputIterator begin, InputIterator end, OutputIterator begin2);
 
-	template<class InputIterator, class OutputIterator, class AngleFunction> void __calculate_rotations(InputIterator begin, InputIterator end, OutputIterator begin2,AngleFunction& angleFunction);
+	template<class InputIterator, class OutputIterator> void __calculate_rotations(InputIterator begin, InputIterator end, OutputIterator begin2, sp::sharing_functor<double,double>& angleFunction);
+	template<class InputIterator, class OutputIterator> void __calculate_rotations(InputIterator begin, InputIterator end, OutputIterator begin2, sp::readonly_functor<double,double>& angleFunction);
+
 
 	template<class InputIterator, class OutputIterator> void __apply_rotation_matrix(InputIterator begin, InputIterator end, OutputIterator begin2);
 
@@ -44,7 +46,7 @@ namespace grapher {
 
 		//mass allocation of different types, so no iterator-functor paradigm here
         template <class UnaryFunction,
-			typename = typename std::enable_if_t<std::is_base_of<angle::angle,UnaryFunction>::value>
+			typename = typename std::enable_if_t<std::is_base_of<sp::sharing_functor<double, double>, UnaryFunction>::value>//std::enable_if_t<std::is_base_of<sp::readonly_functor<double,double>,UnaryFunction>::value>
 		>
 			sp::result<T> operator()(std::vector<T>& differences, UnaryFunction& angleFunction);
 
