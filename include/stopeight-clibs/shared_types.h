@@ -164,9 +164,9 @@ namespace sp {
 		using functor_category = typename Ftor::functor_category;
 	};
 
-	template<bool B, typename T = void> using Enable_if = typename std::enable_if<B, T>::type;
-	template<typename T = std::enable_if<std::is_base_of<std::input_iterator_tag, std::iterator_traits<T>::iterator_category>::value && std::is_arithmetic<std::iterator_traits<T>::value_type::value_type>::value, T>> using input_iterator = typename T;
-	template<typename T = std::enable_if<std::is_base_of<std::random_access_iterator_tag, std::iterator_traits<T>::iterator_category>::value && std::is_arithmetic<std::iterator_traits<T>::value_type::value_type>::value, T>> using random_access = typename T;
+	//template<typename T = std::enable_if_t<std::is_base_of<std::input_iterator_tag, std::iterator_traits<T>::iterator_category>::value && std::is_arithmetic<std::iterator_traits<T>::value_type::value_type>::value, T>> using input_iterator = typename T;
+	template<typename T> using random_access = typename std::enable_if_t<std::is_base_of<std::random_access_iterator_tag, typename std::iterator_traits<T>::iterator_category>::value && std::is_arithmetic<typename std::iterator_traits<T>::value_type::value_type>::value>;
+	//template<typename T> using random_access = typename std::enable_if_t<true>;
 }
 
 #endif

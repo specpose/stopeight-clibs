@@ -80,8 +80,9 @@ namespace grapher {
     }
     _fixpoints::~_fixpoints() {
     }
-    template <class InputIterator ,//= sp::random_access<InputIterator>,
-		class OutputIterator> void _fixpoints::operator()(InputIterator begin, InputIterator end, OutputIterator begin2)
+    template <class InputIterator,
+		class OutputIterator,
+		typename> void _fixpoints::operator()(InputIterator begin, InputIterator end, OutputIterator begin2)
     {
         //remove all illegal fixpoint_indices
         //Note: last can not be fixPoint

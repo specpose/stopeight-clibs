@@ -20,7 +20,9 @@ namespace grapher {
 	public:
 		_fixpoints(std::vector<size_t>& points);
 		~_fixpoints();
-		template <class InputIterator, class OutputIterator>void operator()(InputIterator begin, InputIterator end, OutputIterator begin2);
+		template <class InputIterator, class OutputIterator,
+		typename = typename sp::random_access<InputIterator>
+		>void operator()(InputIterator begin, InputIterator end, OutputIterator begin2);
 	private:
 		std::vector<size_t>& _fixPoint_indices;
 	};
