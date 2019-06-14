@@ -41,7 +41,10 @@ namespace sp {
 	//todo
 	//make tuple
 	//virtual constructor
-	template<class T = std::enable_if<std::is_arithmetic<T>::value,T>> class timecode {
+	//ENABLE_IF does work for classes (not in MSVC doc)
+	template<class T,
+		typename = typename std::enable_if_t<std::is_arithmetic<T>::value>
+	> class timecode {
 	public:
 		//using std::array<T, 2>::array;
 		timecode() {
@@ -134,8 +137,8 @@ namespace sp {
 	};
 	//sp::element static operator+(const sp::element& a, const sp::element& b) { return sp::element{ a.first + b.first, a.second + b.second }; };
 	//sp::element static operator-(const sp::element& a, const sp::element& b) { return sp::element{ a.first - b.first, a.second - b.second }; };
-	template<typename T> using input_iterator = typename std::enable_if_t<std::is_base_of<std::input_iterator_tag, typename std::iterator_traits<T>::iterator_category>::value && std::is_arithmetic<typename std::iterator_traits<T>::value_type::value_type>::value>;
-	template<typename T> using random_access = typename std::enable_if_t<std::is_base_of<std::random_access_iterator_tag, typename std::iterator_traits<T>::iterator_category>::value && std::is_arithmetic<typename std::iterator_traits<T>::value_type::value_type>::value>;
+	template<typename T> using input_iterator = typename std::enable_if_t < std::is_base_of<std::input_iterator_tag, typename std::iterator_traits<T>::iterator_category>::value>; //&& std::is_arithmetic<typename std::iterator_traits<T>::value_type::value_type>::value>;
+		template<typename T> using random_access = typename std::enable_if_t<std::is_base_of<std::random_access_iterator_tag, typename std::iterator_traits<T>::iterator_category>::value>; //&& std::is_arithmetic<typename std::iterator_traits<T>::value_type::value_type>::value>;
 
 	template<typename T> using it_pair = std::pair< typename sp::result<T>::iterator, typename sp::result<T>::iterator >;
 
