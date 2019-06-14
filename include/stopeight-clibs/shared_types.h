@@ -92,7 +92,7 @@ namespace sp {
 			this->set_y(two3);
 			return *this;
 			
-		};//function template*/
+		};*/
 
 		std::array<T, 2> coords;
 		sp::FixpointType type;
@@ -103,7 +103,7 @@ namespace sp {
 		a.coords[0] = a.coords[0]+b.coords[0];
 		a.coords[1] = a.coords[1]+b.coords[1];
 		return a;
-	};//function template
+	};
 	template<typename T> bool operator==(const sp::timecode<T>& a, const sp::timecode<T>& b){
 		if (a.coords==b.coords){
 			return true;
@@ -134,6 +134,9 @@ namespace sp {
 	};
 	//sp::element static operator+(const sp::element& a, const sp::element& b) { return sp::element{ a.first + b.first, a.second + b.second }; };
 	//sp::element static operator-(const sp::element& a, const sp::element& b) { return sp::element{ a.first - b.first, a.second - b.second }; };
+	template<typename T> using input_iterator = typename std::enable_if_t<std::is_base_of<std::input_iterator_tag, typename std::iterator_traits<T>::iterator_category>::value && std::is_arithmetic<typename std::iterator_traits<T>::value_type::value_type>::value>;
+	template<typename T> using random_access = typename std::enable_if_t<std::is_base_of<std::random_access_iterator_tag, typename std::iterator_traits<T>::iterator_category>::value && std::is_arithmetic<typename std::iterator_traits<T>::value_type::value_type>::value>;
+
 	template<typename T> using it_pair = std::pair< typename sp::result<T>::iterator, typename sp::result<T>::iterator >;
 
 	struct sharing_functor_tag {};
@@ -164,9 +167,6 @@ namespace sp {
 		using functor_category = typename Ftor::functor_category;
 	};
 
-	template<typename T> using input_iterator = typename std::enable_if_t<std::is_base_of<std::input_iterator_tag, typename std::iterator_traits<T>::iterator_category>::value && std::is_arithmetic<typename std::iterator_traits<T>::value_type::value_type>::value>;
-	template<typename T> using random_access = typename std::enable_if_t<std::is_base_of<std::random_access_iterator_tag, typename std::iterator_traits<T>::iterator_category>::value && std::is_arithmetic<typename std::iterator_traits<T>::value_type::value_type>::value>;
-	//template<typename T> using random_access = typename std::enable_if_t<true>;
 }
 
 #endif

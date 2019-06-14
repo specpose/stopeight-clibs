@@ -8,13 +8,23 @@
 
 namespace grapher {
 
-	template<class InputIterator, class OutputIterator> void __differences(InputIterator begin, InputIterator end, OutputIterator begin2);
+	template<class InputIterator, class OutputIterator,
+		typename = typename std::enable_if_t<std::is_base_of<std::random_access_iterator_tag, typename std::iterator_traits<InputIterator>::iterator_category>::value && std::is_arithmetic<typename std::iterator_traits<InputIterator>::value_type>::value>
+	> void __differences(InputIterator begin, InputIterator end, OutputIterator begin2);
 
-	template<class InputIterator, class OutputIterator> void __calculate_rotations(InputIterator begin, InputIterator end, OutputIterator begin2, sp::sharing_functor<double,double>& angleFunction);
-	template<class InputIterator, class OutputIterator> void __calculate_rotations(InputIterator begin, InputIterator end, OutputIterator begin2, sp::readonly_functor<double,double>& angleFunction);
+	//OVERLOAD: multiple functions for class hierarchy (btw. SPECIALISATION is only for class-templates)
+	template<class InputIterator, class OutputIterator,
+		typename = typename std::enable_if_t<std::is_base_of<std::input_iterator_tag, typename std::iterator_traits<InputIterator>::iterator_category>::value && std::is_arithmetic<typename std::iterator_traits<InputIterator>::value_type>::value>
+	> void __calculate_rotations(InputIterator begin, InputIterator end, OutputIterator begin2, sp::sharing_functor<double,double>& angleFunction);
+	//readonly functor and input_iterator_tag combination is nonsense
+	template<class InputIterator, class OutputIterator,
+		typename = typename std::enable_if_t<std::is_base_of<std::input_iterator_tag, typename std::iterator_traits<InputIterator>::iterator_category>::value && std::is_arithmetic<typename std::iterator_traits<InputIterator>::value_type>::value>
+	> void __calculate_rotations(InputIterator begin, InputIterator end, OutputIterator begin2, sp::readonly_functor<double,double>& angleFunction);
 
 
-	template<class InputIterator, class OutputIterator> void __apply_rotation_matrix(InputIterator begin, InputIterator end, OutputIterator begin2);
+	template<class InputIterator, class OutputIterator,
+		typename = typename std::enable_if_t<std::is_base_of<std::random_access_iterator_tag, typename std::iterator_traits<InputIterator>::iterator_category>::value && std::is_arithmetic<typename std::iterator_traits<InputIterator>::value_type>::value>
+	> void __apply_rotation_matrix(InputIterator begin, InputIterator end, OutputIterator begin2);
 
 	class _fixpoints {
 	public:
@@ -48,10 +58,11 @@ namespace grapher {
 		__differences_To_VG(size_t samplesPerVector, double vectorLength, std::vector<size_t> fixPoints_indices = std::vector<size_t>(1, 0));
 		~__differences_To_VG();
 
-		//mass allocation of different types, so no iterator-functor paradigm here
+		//TEMPLATE: one function for multiple types
         template <class UnaryFunction,
 			typename = typename std::enable_if_t<std::is_base_of<sp::sharing_functor<double, double>, UnaryFunction>::value>//std::enable_if_t<std::is_base_of<sp::readonly_functor<double,double>,UnaryFunction>::value>
 		>
+			//mass allocation of different types, so no iterator-functor paradigm here
 			sp::result<T> operator()(std::vector<T>& differences, UnaryFunction& angleFunction);
 
 	private:

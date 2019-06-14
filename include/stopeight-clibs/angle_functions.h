@@ -12,7 +12,7 @@
 
 namespace angle {
 
-	template<typename T> using vector_T = typename std::vector<T>::iterator;
+	//template<typename T> using vector_T = typename std::vector<T>::iterator;
 
 	template <class Iterator>double __average(Iterator begin, Iterator end) {
 			//todo sum should not be propagating
