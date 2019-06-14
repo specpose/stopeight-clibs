@@ -140,8 +140,8 @@ namespace sp {
 	template<typename T> using it_pair = std::pair< typename sp::result<T>::iterator, typename sp::result<T>::iterator >;
 
 	struct sharing_functor_tag {};
-	struct propagating_functor_tag {};
-	struct readonly_functor_tag {};
+	struct propagating_functor_tag : sharing_functor_tag {};
+	struct readonly_functor_tag : propagating_functor_tag {};
 	template<class R,class... Args> class functor {//: public std::function<R,Args...> {
 	public:
 		virtual ~functor() {};
