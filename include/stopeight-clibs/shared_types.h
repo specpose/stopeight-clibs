@@ -7,6 +7,9 @@
 #include <vector>
 #include <array>
 #include <tuple>
+#include <cassert>
+
+#include"Matrix.h"
 
 namespace sp {
 
@@ -35,27 +38,38 @@ namespace sp {
 		SPIRAL,
 		ZIGZAG
 	};
-
-	//const sp::tctype turns[3] = { tctype::SWING,tctype::CREST,tctype::SPIRAL };
-	//pybind POD clash with is_array, alignment?
-	//todo
-	//make tuple
-	//virtual constructor
-	//ENABLE_IF does work for classes (not in MSVC doc)
-	template<class T,
-		typename = typename std::enable_if_t<std::is_arithmetic<T>::value>
-	> class timecode {
+	class moogli {
 	public:
-		//using std::array<T, 2>::array;
-		timecode() {
-			clear_types();
+		decltype(auto) data() { return &(this->myd); };
+
+		double myd[3];
+	};
+	//const sp::tctype turns[3] = { tctype::SWING,tctype::CREST,tctype::SPIRAL };
+	//ENABLE_IF does work for classes (not in MSVC doc)
+	template<class T, size_t Size = 2,
+		typename = typename std::enable_if_t<std::is_arithmetic<T>::value
+		>
+	> struct timecode {//inheritance AND data members present, or tuple: not pod
+		template<typename T> using element = typename std::array<T, Size>;
+		//timecode(std::initializer_list<T>) = delete;
+		timecode<T,Size>& operator=(std::initializer_list<T>& other) {
+			static_assert(other.size() == std::tuple_size<element<T>>::value);
+			auto e = element<T>{other};
+			this->coords = e;
+			this->clear_types();
+			return *this;
 		}
-		timecode(T x, T y){
-			coords = { { x, y } };
-			clear_types();
+		timecode<T,Size>& operator+=(const timecode<T,Size>& other) {
+			//assert(this->type==FixpointType::EMPTY && other.type==FixpointType::EMPTY);
+			std::transform(std::begin(this->coords), std::end(this->coords), std::begin(other.coords), std::begin(this->coords), std::plus<T>{});
+			return *this;
 		}
-		typedef typename std::array<T, 2>::value_type value_type;
-		typedef typename std::array<T, 2>::reference reference;
+		bool operator==(const timecode<T,Size>& other) {
+			return std::equal(std::begin(this->coords), std::end(this->coords),std::begin(other.coords)) ;
+		}
+
+		typedef typename element<T>::value_type value_type;
+		typedef typename element<T>::reference reference;
 		sp::FixpointType category() {
 			return type;
 		}
@@ -67,78 +81,61 @@ namespace sp {
 			tct_type = sp::tctype::EMPTY;
 			cov_type = sp::covertype::EMPTY;
 		}
-		//virtual ~timecode() {};
 
 		value_type get_x() { return coords[0]; };
 		value_type get_y() { return coords[1]; };
 		void set_x(const reference other) { coords[0] = other; };
 		void set_y(const reference other) { coords[1] = other; };
 
-		//template<typename U>
-		/*timecode& operator=(sp::timecode<T> other) {
-			T one = other.get_x();
-			this->set_x(one);
-			T two = other.get_y();
-			this->set_y(two);
-			this->type = other.category();
-			return *this;
-		}
-		//template<typename U>
-		timecode& operator+=(const sp::timecode<T>& b) {
-			const T one1 = this->get_x();
-			const T one2{ coords[0] };
-			T one3{ one1 + one2 };
-			this->set_x(one3);
-			const T two1 = this->get_y();
-			const T two2{ coords[1] };
-			T two3 = two1 + two2;
-			this->set_y(two3);
-			return *this;
-			
-		};*/
+	//public: //assignment operator does not work when private members present and no CLASS constructor
+	//construction by order of appearance!
+		element<T> coords;//1
+		sp::FixpointType type;//1
+		sp::tctype tct_type;//3
+		sp::covertype cov_type;//4
+	};
+	/*template<typename T> timecode<T> make_timecode(T x,T y,FixpointType type= FixpointType::EMPTY) {
+		timecode<T> tc;
+		tc.set_x(x);
+		tc.set_y(y);
+		tc.set_category(type);
+		return tc;
+	};*/
+	class Test0 : public std::array<double, 3> {
+	public:
+		//Test() = delete;//not a pod
+		//using std::array<double, 3>::array;
+	};
+	class Test1 : public Test0 {
 
-		std::array<T, 2> coords;
-		sp::FixpointType type;
-		sp::tctype tct_type;
-		sp::covertype cov_type;
 	};
-	template<typename T> sp::timecode<T> operator+=(sp::timecode<T>& a, const sp::timecode<T>& b) {
-		a.coords[0] = a.coords[0]+b.coords[0];
-		a.coords[1] = a.coords[1]+b.coords[1];
-		return a;
-	};
-	template<typename T> bool operator==(const sp::timecode<T>& a, const sp::timecode<T>& b){
-		if (a.coords==b.coords){
-			return true;
-		} else {
-			return false;
-		}	
-	};
-	template<typename T> class empty : public sp::timecode<T> {
+	class Test2 {
 	public:
-		using sp::timecode<T>::timecode;
-		empty<T>(timecode<T>&& other) {
-			this->type = sp::FixpointType::EMPTY;
-		};
+		//Test2() = delete;//not a pod
+		double x, y, z;
 	};
-	template<typename T> class fixpoint : public sp::timecode<T> {
+	template<typename T, size_t Size = 2,
+			typename = typename std::enable_if_t<std::is_pod<timecode<T,Size>>::value>
+	> class result : public std::vector<timecode<T,Size>> {
 	public:
-		using sp::timecode<T>::timecode;
-		fixpoint<T>(timecode<T>&& other) {
-			this->type = sp::FixpointType::FIXPOINT;
+		result() : std::vector<timecode<T,Size>>() {
+			timecode<T,Size> tc = { 0,0 };
+			tc.tct_type = tctype::EMPTY;
 		};
-	};
-	template<typename T> class result : public std::vector<timecode<T>> {
-		using std::vector<timecode<T>>::vector;
+		result(size_t n) : std::vector<timecode<T,Size>>(n) {
+			timecode<T,Size> tc = { 0,0 };
+			tc.clear_types();
+			std::fill(std::begin(this), std::end(this), tc);
+		};
+		result(std::initializer_list<T>) = delete;
 
 		bool invalid = false;
 		int cycle_count = 0;
 		//next*
 	};
-	//sp::element static operator+(const sp::element& a, const sp::element& b) { return sp::element{ a.first + b.first, a.second + b.second }; };
-	//sp::element static operator-(const sp::element& a, const sp::element& b) { return sp::element{ a.first - b.first, a.second - b.second }; };
+
 	template<typename T> using input_iterator = typename std::enable_if_t < std::is_base_of<std::input_iterator_tag, typename std::iterator_traits<T>::iterator_category>::value>; //&& std::is_arithmetic<typename std::iterator_traits<T>::value_type::value_type>::value>;
-		template<typename T> using random_access = typename std::enable_if_t<std::is_base_of<std::random_access_iterator_tag, typename std::iterator_traits<T>::iterator_category>::value>; //&& std::is_arithmetic<typename std::iterator_traits<T>::value_type::value_type>::value>;
+	template<typename T> using random_access = typename std::enable_if_t<std::is_base_of<std::random_access_iterator_tag, typename std::iterator_traits<T>::iterator_category>::value>; //&& std::is_arithmetic<typename std::iterator_traits<T>::value_type::value_type>::value>;
 
 	template<typename T> using it_pair = std::pair< typename sp::result<T>::iterator, typename sp::result<T>::iterator >;
 
