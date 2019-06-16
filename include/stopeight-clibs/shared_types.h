@@ -9,8 +9,6 @@
 #include <tuple>
 #include <cassert>
 
-#include"Matrix.h"
-
 namespace sp {
 
 	enum class FixpointType {
@@ -38,12 +36,6 @@ namespace sp {
 		SPIRAL,
 		ZIGZAG
 	};
-	class moogli {
-	public:
-		decltype(auto) data() { return &(this->myd); };
-
-		double myd[3];
-	};
 	//const sp::tctype turns[3] = { tctype::SWING,tctype::CREST,tctype::SPIRAL };
 	//ENABLE_IF does work for classes (not in MSVC doc)
 	template<class T, size_t Size = 2,
@@ -52,13 +44,13 @@ namespace sp {
 	> struct timecode {//inheritance AND data members present, or tuple: not pod
 		template<typename T> using element = typename std::array<T, Size>;
 		//timecode(std::initializer_list<T>) = delete;
-		timecode<T,Size>& operator=(std::initializer_list<T>& other) {
+		/*timecode<T,Size>& operator=(std::initializer_list<T>& other) {
 			static_assert(other.size() == std::tuple_size<element<T>>::value);
 			auto e = element<T>{other};
 			this->coords = e;
 			this->clear_types();
 			return *this;
-		}
+		}*/
 		timecode<T,Size>& operator+=(const timecode<T,Size>& other) {
 			//assert(this->type==FixpointType::EMPTY && other.type==FixpointType::EMPTY);
 			std::transform(std::begin(this->coords), std::end(this->coords), std::begin(other.coords), std::begin(this->coords), std::plus<T>{});
@@ -81,16 +73,20 @@ namespace sp {
 			tct_type = sp::tctype::EMPTY;
 			cov_type = sp::covertype::EMPTY;
 		}
+		void __init() {
+			std::fill(std::begin(coords), std::end(coords), value_type(0));
+			clear_types();
+		}
 
 		value_type get_x() { return coords[0]; };
 		value_type get_y() { return coords[1]; };
-		void set_x(const reference other) { coords[0] = other; };
-		void set_y(const reference other) { coords[1] = other; };
+		void set_x(value_type other) { coords[0] = other; };
+		void set_y(value_type other) { coords[1] = other; };
 
 	//public: //assignment operator does not work when private members present and no CLASS constructor
 	//construction by order of appearance!
 		element<T> coords;//1
-		sp::FixpointType type;//1
+		sp::FixpointType type;//2
 		sp::tctype tct_type;//3
 		sp::covertype cov_type;//4
 	};
@@ -101,34 +97,21 @@ namespace sp {
 		tc.set_category(type);
 		return tc;
 	};*/
-	class Test0 : public std::array<double, 3> {
-	public:
-		//Test() = delete;//not a pod
-		//using std::array<double, 3>::array;
-	};
-	class Test1 : public Test0 {
-
-	};
-	class Test2 {
-	public:
-		//Test2() = delete;//not a pod
-		double x, y, z;
-	};
+	
 	template<typename T, size_t Size = 2,
 			typename = typename std::enable_if_t<std::is_pod<timecode<T,Size>>::value>
-	> class result : public std::vector<timecode<T,Size>> {
+	> class result : public std::vector<timecode<T,Size>> {//is not gonna be a numpy_dtype -> no pod needed
 	public:
 		result() : std::vector<timecode<T,Size>>() {
-			timecode<T,Size> tc = { 0,0 };
-			tc.tct_type = tctype::EMPTY;
-		};
+		};//todo: delete -> proper allocation
 		result(size_t n) : std::vector<timecode<T,Size>>(n) {
-			timecode<T,Size> tc = { 0,0 };
-			tc.clear_types();
-			std::fill(std::begin(this), std::end(this), tc);
+			auto tc = timecode<T, Size>{};
+			tc.__init();
+			std::fill(std::begin(*this), std::end(*this), tc);
 		};
 		result(std::initializer_list<T>) = delete;
 
+		//only for numpy test at the moment
 		bool invalid = false;
 		int cycle_count = 0;
 		//next*

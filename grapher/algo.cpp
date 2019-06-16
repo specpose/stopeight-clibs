@@ -75,9 +75,10 @@ namespace grapher {
         std::transform(begin, end, begin2, begin2, [](T rot, OutputElement vec) {
             T x = (cos(rot)*vec.get_x() - sin(rot)*vec.get_y());
             T y = (sin(rot)*vec.get_x() + cos(rot)*vec.get_y());
-			//auto p = OutputElement{ T(x) , T(y) };
-			OutputElement p = { T(x) , T(y) };
-			//OutputElement p{ {},{},{},{} };
+			auto p = OutputElement{};
+			p.__init();
+			p.set_x(x);
+			p.set_y(y);
             return p;
         });
     }
@@ -177,7 +178,8 @@ namespace grapher {
         std::transform(begin, end, begin2, [](it_pair block) {
             //both can be nonempty; preserve type of last
             if (block.first != block.second) {
-				const tc e = { 0,0 };
+				tc e {};
+				e.__init();
                 return std::accumulate(block.first, block.second, e, [](tc v1, tc v2) {
                     v2 += v1;
                     return v2;
@@ -201,7 +203,7 @@ namespace grapher {
 		using tc = std::iterator_traits<OutputIterator>::value_type;
         class my_add {
         public:
-			my_add() : cache({}) { cache = { 0,0 }; };
+			my_add() : cache({}) { cache.__init(); };
             tc operator()(tc e) {
                 auto newvalue = e;//type preserved
                 newvalue += cache;//type preserved
@@ -245,7 +247,10 @@ namespace grapher {
         __calculate_rotations(std::begin(differences) + 1, std::end(differences), std::back_inserter(rotations), angleFunction);
         
         sp::result<T> vectors;
-		sp::timecode<T> tc = { T(_vectorLength), 0 };
+		auto tc = sp::timecode<T>{};
+		tc.__init();
+		tc.set_x(_vectorLength);
+		tc.set_y(0);
 		std::fill_n(std::back_inserter(vectors), std::distance(std::begin(rotations), std::end(rotations)), tc);//sp::make_timecode<T>(T(_vectorLength), 0));//sp::timecode<T>{T(_vectorLength), 0});
         __apply_rotation_matrix(std::begin(rotations), std::end(rotations), std::begin(vectors));
         
