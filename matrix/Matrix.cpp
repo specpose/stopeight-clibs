@@ -66,6 +66,10 @@ template<typename PodClass,typename T>template<typename U> Matrix<PodClass,T>::M
 template Matrix<Vector<float>>::Matrix(float x1, float x2, float x3, float y1,
 							   float y2, float y3, float z1, float z2, float z3);
 
+template<typename PodClass,typename T> std::array<T,9>* Matrix<PodClass,T>::data(){
+	return &elems;
+}
+
 template<typename PodClass, typename T> Matrix<PodClass,T> Matrix<PodClass,T>::identity() {
 	auto m = Matrix<PodClass>{	T(1),T(0),T(0),
 		T(0),T(1),T(0),
