@@ -39,14 +39,14 @@ namespace grapher {
 	>
 		void __calculate_rotations(InputIterator begin, InputIterator end, OutputIterator begin2, sp::sharing_functor<double,double>& angleFunction)
     {
-		using T = std::iterator_traits<InputIterator>::value_type;//todo remove back_inserter -> std::iterator_traits<OutputIterator>::value_type;
+		using T = typename std::iterator_traits<InputIterator>::value_type;//todo remove back_inserter -> std::iterator_traits<OutputIterator>::value_type;
         std::transform(begin, end, begin2, [&angleFunction](T diff) {
             return angleFunction(diff);
         });
     }
-	template void __calculate_rotations(std::vector<double>::iterator, std::vector<double>::iterator, std::vector<double>::iterator, angle::relative&);
-	template void __calculate_rotations(std::vector<float>::iterator, std::vector<float>::iterator, std::vector<float>::iterator, angle::relative&);
-	template void __calculate_rotations(std::vector<int16_t>::iterator, std::vector<int16_t>::iterator, std::vector<int16_t>::iterator, angle::relative&);
+	template void __calculate_rotations(std::vector<double>::iterator, std::vector<double>::iterator, std::vector<double>::iterator, sp::sharing_functor<double,double>&);
+	template void __calculate_rotations(std::vector<float>::iterator, std::vector<float>::iterator, std::vector<float>::iterator, sp::sharing_functor<double,double>&);
+	template void __calculate_rotations(std::vector<int16_t>::iterator, std::vector<int16_t>::iterator, std::vector<int16_t>::iterator, sp::sharing_functor<double,double>&);
     
 	//todo make par_unseq
 	template<class InputIterator,
@@ -55,14 +55,14 @@ namespace grapher {
 	>
 		void __calculate_rotations(InputIterator begin, InputIterator end, OutputIterator begin2, sp::readonly_functor<double,double>& angleFunction)
 	{
-		using T = std::iterator_traits<InputIterator>::value_type;//todo remove back_inserter -> std::iterator_traits<OutputIterator>::value_type;
+		using T = typename std::iterator_traits<InputIterator>::value_type;//todo remove back_inserter -> std::iterator_traits<OutputIterator>::value_type;
 		std::transform(begin, end, begin2, [&angleFunction](T diff) {
 			return angleFunction(diff);
 		});
 	}
-	template void __calculate_rotations(std::vector<double>::iterator, std::vector<double>::iterator, std::vector<double>::iterator, angle::independent&);
-	template void __calculate_rotations(std::vector<float>::iterator, std::vector<float>::iterator, std::vector<float>::iterator, angle::independent&);
-	template void __calculate_rotations(std::vector<int16_t>::iterator, std::vector<int16_t>::iterator, std::vector<int16_t>::iterator, angle::independent&);
+	template void __calculate_rotations(std::vector<double>::iterator, std::vector<double>::iterator, std::vector<double>::iterator, sp::readonly_functor<double,double>&);
+	template void __calculate_rotations(std::vector<float>::iterator, std::vector<float>::iterator, std::vector<float>::iterator, sp::readonly_functor<double,double>&);
+	template void __calculate_rotations(std::vector<int16_t>::iterator, std::vector<int16_t>::iterator, std::vector<int16_t>::iterator, sp::readonly_functor<double,double>&);
 
 
     template<class InputIterator
@@ -128,7 +128,7 @@ namespace grapher {
             last = std::pair<size_t, size_t>{ _fixPoint_indices.back() + 1, vectors_size };// was _fixPoint_indices.back() + 1
         }
         *it++ = (last);
-		using T = std::iterator_traits<InputIterator>::value_type::value_type;//todo remove backinserter//std::iterator_traits<std::iterator_traits<OutputIterator>::value_type::first_type>::value_type::value_type;
+		using T = typename std::iterator_traits<InputIterator>::value_type::value_type;//todo remove backinserter//std::iterator_traits<std::iterator_traits<OutputIterator>::value_type::first_type>::value_type::value_type;
 
         std::transform(std::begin(slices), std::end(slices), begin2, [begin](std::pair<size_t, size_t> p) {//todo derive sp::it_pair
             sp::it_pair<T> e = sp::it_pair<T>();
@@ -172,8 +172,8 @@ namespace grapher {
     
     template <class InputIterator, class OutputIterator> void _sum_blocks(InputIterator begin, InputIterator end, OutputIterator begin2)
     {
-		using it_pair = typename std::iterator_traits<InputIterator>::value_type;//sp::it_pair not available from OutputIterator
-		using tc = typename std::iterator_traits<it_pair::first_type>::value_type;
+		using it_pair = typename std::iterator_traits<InputIterator>::value_type;//vector of pairs -> pair//sp::it_pair not available from OutputIterator
+		using tc = typename it_pair::first_type::value_type;//pair -> tc -> T
 		//transforming intput sp::it_pair to sp:element
         std::transform(begin, end, begin2, [](it_pair block) {
             //both can be nonempty; preserve type of last
@@ -200,7 +200,7 @@ namespace grapher {
 		typename>
 		void _append(InputIterator begin, InputIterator end, OutputIterator begin2)
     {
-		using tc = std::iterator_traits<OutputIterator>::value_type;
+		using tc = typename std::iterator_traits<OutputIterator>::value_type;
         class my_add {
         public:
 			my_add() : cache({}) { cache.__init(); };

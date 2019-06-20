@@ -8,6 +8,7 @@
 #include <array>
 #include <tuple>
 #include <cassert>
+#include <algorithm>
 
 namespace sp {
 
@@ -42,11 +43,11 @@ namespace sp {
 		typename = typename std::enable_if_t<std::is_arithmetic<T>::value
 		>
 	> struct timecode {//inheritance AND data members present, or tuple: not pod
-		template<typename T> using element = typename std::array<T, Size>;
+		using element = typename std::array<T, Size>;
 		//timecode(std::initializer_list<T>) = delete;
 		/*timecode<T,Size>& operator=(std::initializer_list<T>& other) {
-			static_assert(other.size() == std::tuple_size<element<T>>::value);
-			auto e = element<T>{other};
+			static_assert(other.size() == std::tuple_size<element>::value);
+			auto e = element{other};
 			this->coords = e;
 			this->clear_types();
 			return *this;
@@ -60,8 +61,8 @@ namespace sp {
 			return std::equal(std::begin(this->coords), std::end(this->coords),std::begin(other.coords)) ;
 		}
 
-		typedef typename element<T>::value_type value_type;
-		typedef typename element<T>::reference reference;
+		typedef typename element::value_type value_type;
+		typedef typename element::reference reference;
 		sp::FixpointType category() {
 			return type;
 		}
@@ -85,7 +86,7 @@ namespace sp {
 
 	//public: //assignment operator does not work when private members present and no CLASS constructor
 	//construction by order of appearance!
-		element<T> coords;//1
+		element coords;//1
 		sp::FixpointType type;//2
 		sp::tctype tct_type;//3
 		sp::covertype cov_type;//4
@@ -133,18 +134,18 @@ namespace sp {
 	//member variables can be assigned from within operator(), strictly sequential
 	template<class R, class... Args> class sharing_functor : public functor<R, Args...> {
 	public:
-		using functor_category = typename sharing_functor_tag;
+		using functor_category = sharing_functor_tag;
 	};
 	//member variables can be assigned from within operator(), but this is non-blocking
 	//is it still sequential when out of order threads terminate earlier?
 	template<class R, class... Args> class propagating_functor : public sharing_functor<R, Args...> {
 	public:
-		using functor_category = typename propagating_functor_tag;
+		using functor_category = propagating_functor_tag;
 	};
 	//member variables (should) not be assigned from within operator()
 	template<class R, class... Args> class readonly_functor : public propagating_functor<R, Args...> {
 	public:
-		using functor_category = typename readonly_functor_tag;
+		using functor_category = readonly_functor_tag;
 	};
 	template<class Ftor> struct functor_traits{
 		using functor_category = typename Ftor::functor_category;

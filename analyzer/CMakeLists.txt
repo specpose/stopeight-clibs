@@ -4,7 +4,6 @@ project(stopeight-clibs-analyzer)
 aux_source_directory(. SRC_LIST)
 set(${PROJECT_NAME}_sources
     src/test.cpp
-    src/Matrix.cpp
 )
 add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_sources})
 
