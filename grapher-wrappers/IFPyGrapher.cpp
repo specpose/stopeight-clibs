@@ -45,7 +45,7 @@ PYBIND11_MODULE(grapher, m){
 		})
 	.def("__array__",[](std::vector<double> &vec)->array{return cast(vec);})
 	;*/
-    PYBIND11_NUMPY_DTYPE(sp::timecode<double>, coords, type, tct_type, cover_type);
+    PYBIND11_NUMPY_DTYPE(sp::timecode<double>, coords, type, tct_type, cov_type);
     class_<std::vector<sp::timecode<double>>>(m,"VectorTimeCodeDouble",buffer_protocol())
 	.def(init<>())
 	.def_buffer([](std::vector<sp::timecode<double>>& vector) -> buffer_info{
@@ -105,13 +105,13 @@ PYBIND11_MODULE(grapher, m){
 	return cast(out);
     },arg("vector"),arg("samplesPerVector")=1,arg("unitaryLength")=1.0,arg("relative")=false,arg("average")=0.0,arg("averageScale")=1.0, return_value_policy::move);
 
-    class_<samples_To_VG>(m,"Samples_To_VG")
-            .def(init<int,double,std::vector<int>>())
+    class_<samples_To_VG<double>>(m,"Samples_To_VG")
+            .def(init<size_t,double,std::vector<size_t>>())
 //            .def("exec",overload_cast<fexec&, vector_single<double>,vector_single<double>,vector_pair<double>,angle::angle&>(&samples_To_VG::operator()<fexec,vector_single<double>,vector_pair<double>,angle::angle>))
 //            .def("exec",overload_cast<fexec&, vector_single<double>,vector_single<double>,vector_pair<double>,angle::angle&>(&samples_To_VG::operator()))
 //            .def("exec",(void (samples_To_VG::*)(fexec&, vector_single<double>,vector_single<double>,vector_pair<double>,angle::angle&)) &samples_To_VG::operator()<fexec,vector_single<double>,vector_pair<double>,angle::angle> )
 //            .def("exec",(void (samples_To_VG::*)(fexec&, vector_single<double>,vector_single<double>,vector_pair<double>,angle::angle&)) &samples_To_VG::operator() )
-            .def("exec", &samples_To_VG::operator()<fexec,vector_single<double>,vector_pair<double>,angle::angle> )
+            .def("exec", &samples_To_VG<double>::operator()<angle::sharing_angle&> )
             ;
 
 }

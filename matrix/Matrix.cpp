@@ -23,7 +23,9 @@ template Vector<float>& Vector<float>::__init(double x,double y, double z);
 
 template<typename PodClass,typename T, typename tf> Vectors<PodClass,T,tf>::Vectors() : std::vector<PodClass>() {
 };
-template Vectors<Vector<float,3,void>,float,void>::Vectors();
+//template Vectors<Vector<float,3,void>,float,void>::Vectors();
+template Vectors<Vector<float>>::Vectors();
+template Vectors<Vector<double>>::Vectors();
 
 //propagating: par
 template<typename PodClass,typename T, typename tf>void Vectors<PodClass,T,tf>::apply(Stack<PodClass>& stack) {
