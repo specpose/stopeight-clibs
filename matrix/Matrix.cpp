@@ -1,7 +1,7 @@
 // Copyright (C) 2017 Fassio Blatter
 // GNU Lesser General Public License, version 2.1
 
-#include "Matrix_impl.h"
+#include "stopeight-clibs/Matrix.h"
 #include <Math.h>
 //#include "GLPlatform.h"
 
