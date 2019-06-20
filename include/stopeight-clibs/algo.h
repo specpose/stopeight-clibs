@@ -4,91 +4,89 @@
 #ifndef ALGO_H
 #define ALGO_H
 
-#include "angle_functions.h"
+#include <stopeight-clibs/angle_functions.h>
 
 namespace grapher {
 
-	//specialization: 1 iterator_category, 2 value_types
-	class __differences {
-	public:
-		template <class ExecutionPolicy, class Iterator, class OutputIterator>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2);
-	};
+	template<class InputIterator, class OutputIterator,
+		typename = typename std::enable_if_t<std::is_base_of<std::random_access_iterator_tag, typename std::iterator_traits<InputIterator>::iterator_category>::value && std::is_arithmetic<typename std::iterator_traits<InputIterator>::value_type>::value>
+	> void __differences(InputIterator begin, InputIterator end, OutputIterator begin2);
 
-	//specialization: 1 iterator_category, 2 value_types
-	class __calculate_rotations {
-	public:
-		template <class ExecutionPolicy, class Iterator, class OutputIterator> void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2, angle::angle& angleFunction, std::forward_iterator_tag itag);
-		//for different implementation: overload, not specialisation
-	};
+	//OVERLOAD: multiple functions for class hierarchy (btw. SPECIALISATION is only for class-templates)
+	template<class InputIterator, class OutputIterator,
+		typename = typename std::enable_if_t<std::is_base_of<std::input_iterator_tag, typename std::iterator_traits<InputIterator>::iterator_category>::value && std::is_arithmetic<typename std::iterator_traits<InputIterator>::value_type>::value>
+	> void __calculate_rotations(InputIterator begin, InputIterator end, OutputIterator begin2, sp::sharing_functor<double,double>& angleFunction);
+	//readonly functor and input_iterator_tag combination is nonsense
+	template<class InputIterator, class OutputIterator,
+		typename = typename std::enable_if_t<std::is_base_of<std::input_iterator_tag, typename std::iterator_traits<InputIterator>::iterator_category>::value && std::is_arithmetic<typename std::iterator_traits<InputIterator>::value_type>::value>
+	> void __calculate_rotations(InputIterator begin, InputIterator end, OutputIterator begin2, sp::readonly_functor<double,double>& angleFunction);
 
-	//specialization: 1 iterator_category, 2 value_types
-	class __apply_rotation_matrix {
-	public:
-		template <class ExecutionPolicy, class Iterator, class OutputIterator>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2);
-	};
 
-	//specialization: 1 iterator_category, 2 value_types
-	template<typename T> class _fixpoints {
+	template<class InputIterator, class OutputIterator,
+		typename = typename std::enable_if_t<std::is_base_of<std::random_access_iterator_tag, typename std::iterator_traits<InputIterator>::iterator_category>::value && std::is_arithmetic<typename std::iterator_traits<InputIterator>::value_type>::value>
+	> void __apply_rotation_matrix(InputIterator begin, InputIterator end, OutputIterator begin2);
+
+	class _fixpoints {
 	public:
-		_fixpoints(std::vector<int>& points);
+		_fixpoints(std::vector<size_t>& points);
 		~_fixpoints();
-		template <class ExecutionPolicy, class Iterator, class OutputIterator>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2, std::random_access_iterator_tag);
+		template <class InputIterator, class OutputIterator,
+		typename = typename sp::random_access<InputIterator>
+		>void operator()(InputIterator begin, InputIterator end, OutputIterator begin2);
 	private:
-		char _fixPoint_indices[sizeof(std::vector<int>&)];
+		std::vector<size_t>& _fixPoint_indices;
 	};
 
-	//specialization: 1 iterator_category, 2 value_types
 	class _blocks {
 	public:
-		_blocks(int samplesPerVector);
+		_blocks(size_t samplesPerVector);
 		~_blocks();
-		template <class ExecutionPolicy, class Iterator, class OutputIterator>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2, std::random_access_iterator_tag);
+		template <class InputIterator, class OutputIterator>void operator()(InputIterator begin, InputIterator end, OutputIterator begin2);
 	private:
-		char _samplesPerVector[sizeof(int)];
+		size_t _samplesPerVector;
 	};
 
-	//specialization: 1 iterator_category, 2 value_types
-	class _sum_blocks {
-	public:
-		template <class ExecutionPolicy, class Iterator, class OutputIterator>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2, std::random_access_iterator_tag);//freedom vector or deque//type in or out?
-	};
+	template <class InputIterator, class OutputIterator>void _sum_blocks(InputIterator begin, InputIterator end, OutputIterator begin2);//freedom vector or deque//type in or out?
 
-	//specialization: 1 iterator_category, 2 value_types
-	class _append {
-	public:
-		template <class ExecutionPolicy, class Iterator, class OutputIterator>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2, std::forward_iterator_tag);
-	};
+	template <class InputIterator, class OutputIterator,
+		typename = typename sp::input_iterator<InputIterator>
+	>void _append(InputIterator begin, InputIterator end, OutputIterator begin2);
 
-	class __differences_To_VG {
+	//speed test formally std::vector<timecode> is generic, sp::result<type> is specialized
+	template<class T> class __differences_To_VG {
 	public:
-		__differences_To_VG(int samplesPerVector, double vectorLength, std::vector<int> fixPoints_indices = std::vector<int>(1, 0));
+		__differences_To_VG(size_t samplesPerVector, double vectorLength, std::vector<size_t> fixPoints_indices = std::vector<size_t>(1, 0));
 		~__differences_To_VG();
 
-		//specialization: 1 iterator_category, 2 value_types
-		template <class ExecutionPolicy, class Iterator, class OutputIterator, class UnaryFunction>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2, UnaryFunction& angleFunction);
+		//TEMPLATE: one function for multiple types
+        template <class UnaryFunction,
+			typename = typename std::enable_if_t<std::is_base_of<sp::sharing_functor<double, double>, UnaryFunction>::value>//std::enable_if_t<std::is_base_of<sp::readonly_functor<double,double>,UnaryFunction>::value>
+		>
+			//mass allocation of different types, so no iterator-functor paradigm here
+			sp::result<T> operator()(std::vector<T>& differences, UnaryFunction& angleFunction);
 
 	private:
-		char _samplesPerVector[sizeof(int)];
-		char _vectorLength[sizeof(double)];
-		char _fixPoint_indices[sizeof(std::vector<int>)];
+		size_t _samplesPerVector;
+		double _vectorLength;
+		std::vector<size_t> _fixPoint_indices;
 	};
 
-	int samples_To_VG_vectorSize(int inputSize, int samplesPerVector = 1);
+	int samples_To_VG_vectorSize(int inputSize, int samplesPerVector=1);
 	double samples_To_VG_vectorLength(int showSamples, double unitaryLength = 1);
 
-	class samples_To_VG {
+	template<class T> class samples_To_VG {
 	public:
 		//experimental value from notation2.wav => sin(1.0f/300.0f)
-		samples_To_VG(int samplesPerVector, double vectorLength, std::vector<int> fixPoints_indices = std::vector<int>(1, 0));
+		samples_To_VG(size_t samplesPerVector, double vectorLength, std::vector<size_t> fixPoints_indices = std::vector<size_t>(1, 0));
 		~samples_To_VG();
 
-		//specialization: 1 iterator_category, 2 value_types
-		template <class ExecutionPolicy, class Iterator, class OutputIterator, class UnaryFunction>void operator()(ExecutionPolicy&, Iterator begin, Iterator end, OutputIterator begin2, UnaryFunction& angleFunction);
+		//uses functions with allocations, so no iterator-functor paradigm either!
+		template <class UnaryFunction> sp::result<T> operator()(std::vector<T>& samples, UnaryFunction& angleFunction);
 
 	private:
-		char _samplesPerVector[sizeof(int)];
-		char _vectorLength[sizeof(double)];
-		char _fixPoint_indices[sizeof(std::vector<int>)];
+		size_t _samplesPerVector;
+		double _vectorLength;
+		std::vector<size_t> _fixPoint_indices;
 	};
 }
 #endif

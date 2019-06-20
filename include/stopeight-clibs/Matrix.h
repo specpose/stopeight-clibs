@@ -5,34 +5,39 @@
 #include <array>
 #include <vector>
 #include <iterator>
-#include <memory>
 
-template<typename T> class Vector : public std::array<T,3>{
+template<typename T, size_t Size = 3,
+	typename tf= typename std::enable_if_t<std::is_arithmetic<T>::value>
+	> class Vector {
 public:
-	using value_type = T;
+	template<typename T> using element = typename std::array<T, Size>;
+	typedef typename element<T>::value_type value_type;
+	typedef typename element<T>::reference reference;
 
-	template<typename U> explicit Vector(U x,U y, U z=1);
+	//template<typename U> Vector(U x,U y, U z=1)=delete;
+	template<typename U> Vector<T, Size,tf>& __init(U x = U(0), U y = U(0), U z = U(1));
 
+	std::array<T, Size> coords;
 };
 
-template<typename T> class Vectors;
-
-template<typename T> using basetype = std::iterator<std::forward_iterator_tag,Vectors<T>>;
+template<typename PodClass, typename T=PodClass::value_type, typename tf = typename std::enable_if_t<std::is_pod<PodClass>::value>> class Vectors;//forward declaration! same as in real declaration below
 
 /* Row Major 2D*/
-template<typename T> class Matrix {
+template<typename PodClass,typename T = typename PodClass::value_type> class Matrix {
 public:
 	friend class Matrix;
-	friend class Vectors<T>;
-	using value_type = T;
+	friend class Vectors<PodClass,T>;
 	
 	Matrix(const Matrix& other) = default;
 	Matrix(Matrix&& other) = default;
 	template<typename U> explicit Matrix(U x1, U x2, U x3, U y1, U y2, U y3, U z1, U z2, U z3);
 	Matrix& operator=(const Matrix& other) = default;
-	bool operator!=(const Matrix& other);
-	bool operator==(const Matrix& other);
-	std::array<T,9>* data();
+	bool operator!=(const Matrix& other){
+		return (elems != other.elems);
+	}
+	bool operator==(const Matrix& other){
+		return (elems == other.elems);
+	}
 	
 	static Matrix identity();
 
@@ -49,14 +54,15 @@ public:
 	double static _degToRad(double deg);
 
 private:
-
 	static Matrix mul(const Matrix a, const Matrix b);
-	void apply(Vectors<T>& transform);
+	void apply(Vectors<PodClass,T>& transform);
 private:
 	std::array<T,9> elems;
 };
 
-template<typename T> class Stack : public std::vector<Matrix<T>> {
+template<typename PodClass> class Stack : public std::vector<Matrix<PodClass>> {
+	using T = typename PodClass::value_type;
+
 public:
 	Stack();
 	
@@ -64,18 +70,22 @@ public:
 	template<typename U> void scale(U x, U y);
 	void rotate(float deg);
 	template<typename U> void translate(U x, U y);
-
 };
 
-template<typename T> class Vectors : public std::vector<Vector<T>> {
+template<typename PodClass,
+	typename T = typename PodClass::value_type,
+	typename = typename std::enable_if_t<std::is_pod<PodClass>::value>
+> // same as in forward declaration above!
+class Vectors : public std::vector<PodClass> {
 public:
 	Vectors();
-	//using std::vector<Vector<T>>::push_back;
-	void push_back(const typename std::vector<Vector<T>>::value_type& val){
-		return std::vector<Vector<T>>::push_back(val);
-	}
 	
-	void apply(Stack<T>& stack);
+	void apply(Stack<PodClass>& stack);
 
-	const T* _to_C_array();
+	const T* _to_C_array(){
+		if (this->size()>0)
+			return &(this->at(0))[0];
+		else
+			return nullptr;
+	}
 };
