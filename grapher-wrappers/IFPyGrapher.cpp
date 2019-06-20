@@ -45,7 +45,7 @@ PYBIND11_MODULE(grapher, m){
 		})
 	.def("__array__",[](std::vector<double> &vec)->array{return cast(vec);})
 	;*/
-    PYBIND11_NUMPY_DTYPE(sp::timecode<double>, coords, type);
+    PYBIND11_NUMPY_DTYPE(sp::timecode<double>, coords, type, tct_type, cover_type);
     class_<std::vector<sp::timecode<double>>>(m,"VectorTimeCodeDouble",buffer_protocol())
 	.def(init<>())
 	.def_buffer([](std::vector<sp::timecode<double>>& vector) -> buffer_info{

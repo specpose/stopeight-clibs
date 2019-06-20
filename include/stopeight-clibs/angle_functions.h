@@ -9,6 +9,7 @@
 #include <functional>
 #include <math.h>
 #include <limits>
+#include "stopeight-clibs/shared_types.h"
 
 namespace angle {
 
