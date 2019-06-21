@@ -2,7 +2,7 @@
 // GNU Lesser General Public License, version 2.1
 
 #include "grapher_impl.h"
-#include "algo_impl.h"
+#include "stopeight-clibs/algo.h"
 #include "dummy.h"
 
 namespace speczilla {

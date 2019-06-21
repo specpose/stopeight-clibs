@@ -8,7 +8,7 @@
 #include "dummy.h"
 using fexec = const dummy;
 
-#include "algo_impl.h"
+#include "stopeight-clibs/algo.h"
 #include "containers.h"
 //#include "iterators.h"
 
