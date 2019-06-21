@@ -70,7 +70,7 @@ public:
 	
 	void identity();
 	template<typename U> void scale(U x, U y);
-	void rotate(float deg);
+	template<typename U> void rotate(U deg);
 	template<typename U> void translate(U x, U y);
 };
 

@@ -76,9 +76,9 @@ PYBIND11_MODULE(matrix, m){
 		{sizeof(Stack<Vector<double>>::value_type)}
 	);
 	})
-	.def("identity",&Stack<Vector<double>>::identity)
-	.def("scale",&Stack<Vector<double>>::scale<double>)
-	.def("rotate",&Stack<Vector<double>>::rotate)
+//	.def("identity",&Stack<Vector<double>>::identity)
+//	.def("scale",&Stack<Vector<double>>::scale<double>)
+	.def("rotate",&Stack<Vector<double>>::rotate<double>)
 	.def("translate",&Stack<Vector<double>>::translate<double>)
 	.def("__array__",[](Stack<Vector<double>> &stk)->array{return cast(stk);})
 	;

@@ -18,7 +18,6 @@ target_include_directories(${PROJECT_NAME}
 
 project(matrix)
 pybind11_add_module(${PROJECT_NAME} IFPyMatrix.cpp)
-target_link_libraries(${PROJECT_NAME} PRIVATE stopeight-clibs-grapher)
 target_include_directories(${PROJECT_NAME}
     PRIVATE
     "../include"

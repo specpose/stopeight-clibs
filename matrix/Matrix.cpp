@@ -2,7 +2,8 @@
 // GNU Lesser General Public License, version 2.1
 
 #include "stopeight-clibs/Matrix.h"
-#include <Math.h>
+#include <cmath>
+#include <algorithm>
 //#include "GLPlatform.h"
 
 // not available on windows:
@@ -52,6 +53,7 @@ template<typename PodClass,typename T, typename tf>void Vectors<PodClass,T,tf>::
 	});*/
 }
 template void Vectors<Vector<float>>::apply(Stack<Vector<float>>& stack);
+template void Vectors<Vector<double>>::apply(Stack<Vector<double>>& stack);
 
 /* Row Major 2D*/
 template<typename PodClass,typename T>template<typename U> Matrix<PodClass,T>::Matrix(U x1, U x2, U x3, U y1, U y2, U y3, U z1, U z2, U z3) {
@@ -67,10 +69,14 @@ template<typename PodClass,typename T>template<typename U> Matrix<PodClass,T>::M
 }
 template Matrix<Vector<float>>::Matrix(float x1, float x2, float x3, float y1,
 							   float y2, float y3, float z1, float z2, float z3);
+template Matrix<Vector<double>>::Matrix(double x1, double x2, double x3, double y1,
+							   double y2, double y3, double z1, double z2, double z3);
 
 template<typename PodClass,typename T> std::array<T,9>* Matrix<PodClass,T>::data(){
 	return &elems;
 }
+template std::array<double,9>* Matrix<Vector<double>>::data();
+template std::array<float,9>* Matrix<Vector<float>>::data();
 
 template<typename PodClass, typename T> Matrix<PodClass,T> Matrix<PodClass,T>::identity() {
 	auto m = Matrix<PodClass>{	T(1),T(0),T(0),
@@ -80,6 +86,7 @@ template<typename PodClass, typename T> Matrix<PodClass,T> Matrix<PodClass,T>::i
 	return std::move(m);
 }
 template Matrix<Vector<float>> Matrix<Vector<float>>::identity();
+template Matrix<Vector<double>> Matrix<Vector<double>>::identity();
 
 template<typename PodClass, typename T> T Matrix<PodClass,T>::det() {
 	auto& e = elems;
@@ -87,6 +94,7 @@ template<typename PodClass, typename T> T Matrix<PodClass,T>::det() {
 	return det;
 }
 template float Matrix<Vector<float>>::det();
+template double Matrix<Vector<double>>::det();
 
 template<typename PodClass, typename T> bool Matrix<PodClass,T>::isSingular(){
 #if DEVELOPMENT
@@ -104,6 +112,8 @@ template<typename PodClass, typename T>template<typename U> Matrix<PodClass,T> M
 	return std::move(m);
 }
 template Matrix<Vector<float>> Matrix<Vector<float>>::scale(double x, double y);
+template Matrix<Vector<double>> Matrix<Vector<double>>::scale(double x, double y);
+
 
 template<typename PodClass, typename T>template<typename U>  Matrix<PodClass,T> Matrix<PodClass,T>::rotate(U deg) {
 	U rad = _degToRad(deg);
@@ -114,6 +124,7 @@ template<typename PodClass, typename T>template<typename U>  Matrix<PodClass,T> 
 	return std::move(m);
 }
 template Matrix<Vector<float>> Matrix<Vector<float>>::rotate(double deg);
+template Matrix<Vector<double>> Matrix<Vector<double>>::rotate(double deg);
 
 template<typename PodClass, typename T>template<typename U> Matrix<PodClass,T> Matrix<PodClass,T>::translate(U x, U y) {
 	auto m = Matrix<PodClass>{	T(1),T(0),T(x),
@@ -123,9 +134,11 @@ template<typename PodClass, typename T>template<typename U> Matrix<PodClass,T> M
 	return std::move(m);
 }
 template Matrix<Vector<float>> Matrix<Vector<float>>::translate(double x, double y);
+template Matrix<Vector<double>> Matrix<Vector<double>>::translate(double x, double y);
 
 template<typename PodClass, typename T>double Matrix<PodClass,T>::_radToDeg(double rad) { return rad * (180.0 / M_PI); }//  pi/rad = 180/x, x(pi/rad)=180, x=180/(pi/rad)
 template double Matrix<Vector<float>>::_radToDeg(double rad);
+template double Matrix<Vector<double>>::_radToDeg(double rad);
 template<typename PodClass, typename T>double Matrix<PodClass,T>::_degToRad(double deg) { return deg / (180.0 / M_PI); }
 
 template<typename PodClass, typename T> Matrix<PodClass,T> Matrix<PodClass,T>::mul(const Matrix<PodClass,T> a, const Matrix<PodClass,T> b) {
@@ -157,26 +170,32 @@ template<typename PodClass, typename T> void Matrix<PodClass,T>::apply(Vectors<P
 
 template<typename PodClass> Stack<PodClass>::Stack() : std::vector<Matrix<PodClass>>() {};
 template<> Stack<Vector<float>>::Stack() : std::vector<Matrix<Vector<float>>>() {};
+template<> Stack<Vector<double>>::Stack() : std::vector<Matrix<Vector<double>>>() {};
 
 template<typename PodClass> void Stack<PodClass>::identity(){
 	this->clear();
 }
 template void Stack<Vector<float>>::identity();
+template void Stack<Vector<double>>::identity();
 
 template<typename PodClass>template<typename U> void Stack<PodClass>::scale(U x,U y){
 	if (!((1.0==x)&&(1.0==y)))
 		this->push_back( Matrix<PodClass>::scale(x,y));
 }
 template void Stack<Vector<float>>::scale(double x,double y);
+template void Stack<Vector<double>>::scale(double x,double y);
 
-template<typename PodClass> void Stack<PodClass>::rotate(float deg){
-	if (!(deg==0.0f))
+template<typename PodClass>template<typename U> void Stack<PodClass>::rotate(U deg){
+	if (!(deg==0.0))
 		this->push_back( Matrix<PodClass>::rotate(deg));
 }
 template void Stack<Vector<float>>::rotate(float deg);
+template void Stack<Vector<double>>::rotate(double deg);
+template void Stack<Vector<double>>::rotate(float deg);
 
 template<typename PodClass>template<typename U> void Stack<PodClass>::translate(U x,U y){
 	if (!((0.0==x)&&(0.0==y)))
 		this->push_back( Matrix<PodClass>::translate(x, y));
 }
-template void Stack<Vector<float>>::translate(double x,double y);
+template void Stack<Vector<float>>::translate(float x,float y);
+template void Stack<Vector<double>>::translate(double x,double y);
