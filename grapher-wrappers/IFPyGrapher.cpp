@@ -105,7 +105,7 @@ PYBIND11_MODULE(grapher, m){
 	return cast(out);
     },arg("vector"),arg("samplesPerVector")=1,arg("unitaryLength")=1.0,arg("relative")=false,arg("average")=0.0,arg("averageScale")=1.0, return_value_policy::move);
 
-//    class_<samples_To_VG<double>>(m,"Samples_To_VG")//needs constructor?!
+//    class_<samples_To_VG<double>>(m,"Samples_To_VG")
 //            .def(init<size_t,double,std::vector<size_t>>())//needs std::vector<size_t> type
 ////            .def("exec",overload_cast<fexec&, vector_single<double>,vector_single<double>,vector_pair<double>,angle::angle&>(&samples_To_VG::operator()<fexec,vector_single<double>,vector_pair<double>,angle::angle>))
 ////            .def("exec",overload_cast<fexec&, vector_single<double>,vector_single<double>,vector_pair<double>,angle::angle&>(&samples_To_VG::operator()))

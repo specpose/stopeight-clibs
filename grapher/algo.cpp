@@ -315,8 +315,12 @@ namespace grapher {
     , _fixPoint_indices(fixPoints_indices)
     {
     }
+    template samples_To_VG<double>::samples_To_VG(size_t,double,std::vector<size_t>);
+    template samples_To_VG<float>::samples_To_VG(size_t,double,std::vector<size_t>);
 	template<class T> samples_To_VG<T>::~samples_To_VG() {
     }
+    template samples_To_VG<double>::~samples_To_VG();
+    template samples_To_VG<float>::~samples_To_VG();
     template<class T> template <class UnaryFunction> sp::result<T> samples_To_VG<T>::operator()(std::vector<T>& samples, UnaryFunction& angleFunction)
     {
         size_t size = std::distance(std::begin(samples), std::end(samples));
