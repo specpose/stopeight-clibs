@@ -22,6 +22,6 @@ target_link_libraries(${PROJECT_NAME} PRIVATE stopeight-clibs-grapher)
 target_include_directories(${PROJECT_NAME}
     PRIVATE
     "../include"
-    "../grapher"
+    "../matrix"
     ${stopeight-clibs_INCLUDE_DIRS}
 )
