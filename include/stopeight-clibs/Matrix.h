@@ -62,6 +62,7 @@ private:
 	std::array<T,9> elems;
 };
 
+//todo disable type conversions here?
 template<typename PodClass> class Stack : public std::vector<Matrix<PodClass>> {
 	using T = typename PodClass::value_type;
 
@@ -70,6 +71,7 @@ public:
 	
 	void identity();
 	template<typename U> void scale(U x, U y);
+	//this was void rotate(float deg); why?!
 	template<typename U> void rotate(U deg);
 	template<typename U> void translate(U x, U y);
 };

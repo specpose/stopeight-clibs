@@ -39,7 +39,7 @@ namespace sp {
 	};
 	//const sp::tctype turns[3] = { tctype::SWING,tctype::CREST,tctype::SPIRAL };
 	//ENABLE_IF does work for classes (not in MSVC doc)
-	template<class T, size_t Size = 2,
+	template<class T, size_t Size = 3,
 		typename = typename std::enable_if_t<std::is_arithmetic<T>::value
 		>
 	> struct timecode {//inheritance AND data members present, or tuple: not pod
@@ -52,6 +52,16 @@ namespace sp {
 			this->clear_types();
 			return *this;
 		}*/
+		template<typename U> timecode<T, Size>& __init(U x = U(0), U y = U(0), U z = U(1)) {
+			//todo compile-time/stack loops?
+			std::get<0>(coords) = T(x);
+			std::get<1>(coords) = T(y);
+			if (std::tuple_size<element>::value > 2) {
+				std::get<2>(coords) = T(z);
+				std::fill(std::begin(coords)+3, std::end(coords), value_type(0));
+			}
+			return *this;
+		}
 		timecode<T,Size>& operator+=(const timecode<T,Size>& other) {
 			//assert(this->type==FixpointType::EMPTY && other.type==FixpointType::EMPTY);
 			std::transform(std::begin(this->coords), std::end(this->coords), std::begin(other.coords), std::begin(this->coords), std::plus<T>{});
@@ -79,10 +89,11 @@ namespace sp {
 			clear_types();
 		}
 
-		value_type get_x() { return coords[0]; };
+//todo get/set element-wise with templated size
+/*		value_type get_x() { return coords[0]; };
 		value_type get_y() { return coords[1]; };
 		void set_x(value_type other) { coords[0] = other; };
-		void set_y(value_type other) { coords[1] = other; };
+		void set_y(value_type other) { coords[1] = other; };*/
 
 	//public: //assignment operator does not work when private members present and no CLASS constructor
 	//construction by order of appearance!
