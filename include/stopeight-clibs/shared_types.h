@@ -39,7 +39,7 @@ namespace sp {
 	};
 	//const sp::tctype turns[3] = { tctype::SWING,tctype::CREST,tctype::SPIRAL };
 	//ENABLE_IF does work for classes (not in MSVC doc)
-	template<class T, size_t Size = 2,
+	template<class T, size_t Size = 3,
 		typename = typename std::enable_if_t<std::is_arithmetic<T>::value
 		>
 	> struct timecode {//inheritance AND data members present, or tuple: not pod
@@ -52,14 +52,11 @@ namespace sp {
 			this->clear_types();
 			return *this;
 		}*/
-		template<typename U> timecode<T, Size>& __init(U x = U(0), U y = U(0), U z = U(1)) {
+		timecode<T, Size>& __init(std::initializer_list<T> list){//U x = U(0), U y = U(0), U z = U(1)) {
 			//todo compile-time/stack loops?
-			std::get<0>(coords) = T(x);
-			std::get<1>(coords) = T(y);
-			if (Size > 2){//std::tuple_size<element>::value > 2) {
-				std::get<2>(coords) = T(z);
-				std::fill(std::begin(coords)+3, std::end(coords), value_type(0));
-			}
+			std::copy(std::begin(list),std::end(list),std::begin(coords));
+			std::fill(std::begin(coords)+list.size(), std::end(coords), T(0));
+			this->clear_types();
 			return *this;
 		}
 		timecode<T,Size>& operator+=(const timecode<T,Size>& other) {
@@ -83,10 +80,6 @@ namespace sp {
 			type = sp::FixpointType::EMPTY;
 			tct_type = sp::tctype::EMPTY;
 			cov_type = sp::covertype::EMPTY;
-		}
-		void __init() {
-			std::fill(std::begin(coords), std::end(coords), value_type(0));
-			clear_types();
 		}
 
 //todo get/set element-wise with templated size
@@ -115,7 +108,7 @@ namespace sp {
 		return std::equal(std::begin(a.coords), std::end(a.coords),std::begin(b.coords)) ;
 	}
 	
-	template<typename T, size_t Size = 2,
+	template<typename T, size_t Size = 3,
 			typename = typename std::enable_if_t<std::is_pod<timecode<T,Size>>::value>
 	> class result : public std::vector<timecode<T,Size>> {//is not gonna be a numpy_dtype -> no pod needed
 	public:
@@ -123,7 +116,7 @@ namespace sp {
 		};//todo: delete -> proper allocation
 		result(size_t n) : std::vector<timecode<T,Size>>(n) {
 			auto tc = timecode<T, Size>{};
-			tc.__init();
+			tc.__init({0,0});
 			std::fill(std::begin(*this), std::end(*this), tc);
 		};
 		result(std::initializer_list<T>) = delete;

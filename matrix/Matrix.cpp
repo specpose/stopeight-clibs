@@ -12,16 +12,13 @@
 #define M_PI        3.14159265358979323846264338327950288
 #endif
 
-template<typename T, size_t Size, typename tf>template<typename U> Vector<T, Size,tf>& Vector<T,Size,tf>::__init(U x,U y, U z) {
-	std::get<0>(coords) = T(x);
-	std::get<1>(coords) = T(y);
-	std::get<2>(coords) = T(z);
-	std::fill(std::begin(coords)+3, std::end(coords), value_type(0));
+template<typename T, size_t Size, typename tf> Vector<T, Size,tf>& Vector<T,Size,tf>::__init(std::initializer_list<T> list) {
+	std::copy(std::begin(list),std::end(list),std::begin(coords));
+	std::fill(std::begin(coords)+list.size(), std::end(coords), T(0));
 	return *this;
 }
-template Vector<double>& Vector<double>::__init(double x,double y, double z);
-template Vector<float>& Vector<float>::__init(float x,float y, float z);
-template Vector<float>& Vector<float>::__init(double x,double y, double z);
+template Vector<double>& Vector<double>::__init(std::initializer_list<double>);
+template Vector<float>& Vector<float>::__init(std::initializer_list<float>);
 
 /* template<typename PodClass,typename T, typename tf> Vectors<PodClass,T,tf>::Vectors() : std::vector<PodClass>() {
 };
@@ -180,9 +177,9 @@ template<typename Container, typename PodClass, typename T> void Matrix<Containe
 	auto& e = elems;
 	std::transform(std::begin(transform), std::end(transform), std::begin(transform), [&e](PodClass a) {
 		auto v = a;
-		return PodClass{}.__init(	(e[0] * std::get<0>(v.coords) + e[1] * std::get<1>(v.coords) + e[2] * std::get<2>(v.coords)),
+		return PodClass{}.__init(	{(e[0] * std::get<0>(v.coords) + e[1] * std::get<1>(v.coords) + e[2] * std::get<2>(v.coords)),
 			(e[3]*std::get<0>(v.coords)+e[4]* std::get<1>(v.coords) +e[5]* std::get<2>(v.coords)),
-			(e[6]* std::get<0>(v.coords) +e[7]* std::get<1>(v.coords) +e[8]* std::get<2>(v.coords))
+			(e[6]* std::get<0>(v.coords) +e[7]* std::get<1>(v.coords) +e[8]* std::get<2>(v.coords))}
 		);
 	});
 }

@@ -76,9 +76,7 @@ namespace grapher {
             T x = (cos(rot)*vec.get_x() - sin(rot)*vec.get_y());
             T y = (sin(rot)*vec.get_x() + cos(rot)*vec.get_y());
 			auto p = OutputElement{};
-			p.__init();
-			p.set_x(x);
-			p.set_y(y);
+			p.__init({x,y});
             return p;
         });
     }
@@ -179,7 +177,7 @@ namespace grapher {
             //both can be nonempty; preserve type of last
             if (block.first != block.second) {
 				tc e {};
-				e.__init();
+				e.__init({0,0});
                 return std::accumulate(block.first, block.second, e, [](tc v1, tc v2) {
                     v2 += v1;
                     return v2;
@@ -203,7 +201,7 @@ namespace grapher {
 		using tc = typename std::iterator_traits<OutputIterator>::value_type;
         class my_add {
         public:
-			my_add() : cache({}) { cache.__init(); };
+			my_add() : cache({}) { cache.__init({0,0}); };
             tc operator()(tc e) {
                 auto newvalue = e;//type preserved
                 newvalue += cache;//type preserved
@@ -247,9 +245,7 @@ namespace grapher {
         __calculate_rotations(std::begin(differences) + 1, std::end(differences), std::back_inserter(rotations), angleFunction);
         
 		auto tc = sp::timecode<T>{};
-		tc.__init();
-		tc.set_x(_vectorLength);
-		tc.set_y(0);
+		tc.__init({_vectorLength,0});
         const auto vectors_size = std::distance(std::begin(rotations), std::end(rotations));
         auto vectors = sp::result<T>(vectors_size);
 		std::fill_n(std::begin(vectors), vectors_size, tc);//sp::make_timecode<T>(T(_vectorLength), 0));//sp::timecode<T>{T(_vectorLength), 0});

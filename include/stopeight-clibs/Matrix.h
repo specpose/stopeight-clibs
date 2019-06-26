@@ -15,7 +15,7 @@ public:
 	typedef typename element::reference reference;
 
 	//template<typename U> Vector(U x,U y, U z=1)=delete;
-	template<typename U> Vector<T, Size,tf>& __init(U x = U(0), U y = U(0), U z = U(1));
+	Vector<T, Size,tf>& __init(std::initializer_list<T> list);
 
 	std::array<T, Size> coords;
 };
