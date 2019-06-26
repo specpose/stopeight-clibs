@@ -109,6 +109,11 @@ namespace sp {
 		tc.set_category(type);
 		return tc;
 	};*/
+
+	//todo unify with inclass operator
+	template<typename T>bool operator==(const sp::timecode<T> a,const sp::timecode<T> b){
+		return std::equal(std::begin(a.coords), std::end(a.coords),std::begin(b.coords)) ;
+	}
 	
 	template<typename T, size_t Size = 2,
 			typename = typename std::enable_if_t<std::is_pod<timecode<T,Size>>::value>

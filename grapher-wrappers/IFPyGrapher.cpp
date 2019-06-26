@@ -30,6 +30,8 @@ PYBIND11_MODULE(grapher, m){
 //PYBIND11_PLUGIN(grapher){
 //    pybind11::module m("grapher","");
 //old
+	object matrix_module = module::import("stopeight.matrix");
+
     /*class_<std::vector<double>>(m,"VectorDouble",buffer_protocol())
 	.def(init<>())
 	.def_buffer([](std::vector<double>& vector) -> buffer_info{
@@ -45,7 +47,6 @@ PYBIND11_MODULE(grapher, m){
 		})
 	.def("__array__",[](std::vector<double> &vec)->array{return cast(vec);})
 	;*/
-    PYBIND11_NUMPY_DTYPE(sp::timecode<double>, coords, type, tct_type, cov_type);
     class_<std::vector<sp::timecode<double>>>(m,"VectorTimeCodeDouble",buffer_protocol())
 	.def(init<>())
 	.def_buffer([](std::vector<sp::timecode<double>>& vector) -> buffer_info{
@@ -66,9 +67,17 @@ PYBIND11_MODULE(grapher, m){
 
     m.def("np_to_tc",[](array_t<sp::timecode<double>,array::c_style> in)->std::vector<sp::timecode<double>>{
 	buffer_info info = in.request();
-	if (info.format != "T{(2)d:coords:i:type:}"){
-		//std::cout<<"\n"<<format_descriptor<sp::timecode<double>>::format()<<"\n";
-                //std::cout<<info.format<<"\n";
+	    // There is an existing bug in NumPy (as of v1.11): trailing bytes are
+    // not encoded explicitly into the format string. This will supposedly
+    // get fixed in v1.12; for further details, see these:
+    // - https://github.com/numpy/numpy/issues/7797
+    // - https://github.com/numpy/numpy/pull/7798
+    // Because of this, we won't use numpy's logic to generate buffer format
+// strings and will just do it ourselves.
+	if (info.format != format_descriptor<sp::timecode<double>>::format()){
+		//todo
+		std::cout<<"\n"<<format_descriptor<sp::timecode<double>>::format()<<"\n";
+        std::cout<<info.format<<"\n";
 		throw std::runtime_error("Incompatible format: Expected a timecode array format descriptor");
         }
 	if (info.itemsize != sizeof(sp::timecode<double>))

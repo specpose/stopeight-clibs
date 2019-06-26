@@ -81,8 +81,13 @@ template<typename PodClass,
 	typename// = typename std::enable_if_t<std::is_pod<PodClass>::value>
 > // same as in forward declaration above!
 class Vectors : public std::vector<PodClass> {
+	//todo
+	//we cannot make Vectors a pod type
+	//AND std::vector can not use memory of numpy_array; (they're both in stack)
+	//-> no move constructor from numpy array
 public:
-	Vectors();
+	//Vectors();
+	using std::vector<PodClass>::vector;
 	
 	void apply(Stack<PodClass>& stack);
 
