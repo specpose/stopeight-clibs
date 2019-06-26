@@ -20,13 +20,13 @@ public:
 	std::array<T, Size> coords;
 };
 
-template<typename PodClass, typename T= typename PodClass::value_type, typename tf = typename std::enable_if_t<std::is_pod<PodClass>::value>> class Vectors;//forward declaration! same as in real declaration below
+template<typename Container, typename PodClass= typename Container::value_type, typename T= typename PodClass::value_type, typename tf = typename std::enable_if_t<std::is_pod<PodClass>::value>> class Vectors;//forward declaration! same as in real declaration below
 
 /* Row Major 2D*/
-template<typename PodClass,typename T = typename PodClass::value_type> class Matrix {
+template<typename Container, typename PodClass= typename Container::value_type,typename T = typename PodClass::value_type> class Matrix {
 public:
 	friend class Matrix;
-	friend class Vectors<PodClass,T>;
+	friend class Vectors<Container,PodClass,T>;
 	
 	Matrix(const Matrix& other) = default;
 	Matrix(Matrix&& other) = default;
@@ -57,13 +57,13 @@ public:
 
 private:
 	static Matrix mul(const Matrix a, const Matrix b);
-	void apply(Vectors<PodClass,T>& transform);
+	void apply(Vectors<Container,PodClass,T>& transform);
 private:
 	std::array<T,9> elems;
 };
 
 //todo disable type conversions here?
-template<typename PodClass> class Stack : public std::vector<Matrix<PodClass>> {
+template<typename Container, typename PodClass= typename Container::value_type> class Stack : public std::vector<Matrix<Container>> {
 	using T = typename PodClass::value_type;
 
 public:
@@ -76,20 +76,21 @@ public:
 	template<typename U> void translate(U x, U y);
 };
 
-template<typename PodClass,
+template<typename Container,
+	typename PodClass,//= typename Container::value_type,
 	typename T,// = typename PodClass::value_type,
 	typename// = typename std::enable_if_t<std::is_pod<PodClass>::value>
 > // same as in forward declaration above!
-class Vectors : public std::vector<PodClass> {
+class Vectors : public Container {
 	//todo
 	//we cannot make Vectors a pod type
 	//AND std::vector can not use memory of numpy_array; (they're both in stack)
 	//-> no move constructor from numpy array
 public:
 	//Vectors();
-	using std::vector<PodClass>::vector;
+	using Container::vector;
 	
-	void apply(Stack<PodClass>& stack);
+	void apply(Stack<Container,PodClass>& stack);
 
 	const T* _to_C_array(){
 		if (this->size()>0)

@@ -11,7 +11,7 @@
 #include <iostream>
 
 //#include <pybind11/stl_bind.h>
-PYBIND11_MAKE_OPAQUE(Vectors<sp::timecode<double>>);
+PYBIND11_MAKE_OPAQUE(Vectors<std::vector<sp::timecode<double>>>);
 
 using namespace pybind11;
 
@@ -52,9 +52,9 @@ PYBIND11_MODULE(matrix, m){
 	.def_readwrite("tct_type", &sp::timecode<double>::tct_type)
 	.def_readwrite("cov_type", &sp::timecode<double>::cov_type);
 
-    class_<Matrix<sp::timecode<double>>>(m,"Matrix",buffer_protocol())
+    class_<Matrix<std::vector<sp::timecode<double>>>>(m,"Matrix",buffer_protocol())
 	.def(init<double,double,double,double,double,double,double,double,double>())
-	.def_buffer([](Matrix<sp::timecode<double>>& matrix) -> buffer_info{
+	.def_buffer([](Matrix<std::vector<sp::timecode<double>>>& matrix) -> buffer_info{
 	return buffer_info(
 		matrix.data(),
 		sizeof(double),
@@ -65,21 +65,21 @@ PYBIND11_MODULE(matrix, m){
 		sizeof(double) }
 	);
     	})
-	.def("__array__",[](Matrix<sp::timecode<double>> &mat)->array{return cast(mat);})
+	.def("__array__",[](Matrix<std::vector<sp::timecode<double>>> &mat)->array{return cast(mat);})
 	;
 	
 //this enables append, insert, etc. but overwrites init constructors below
-//	bind_vector<Vectors<sp::timecode<double>>>(m,"Vectors", buffer_protocol())
-    class_<Vectors<sp::timecode<double>>>(m,"Vectors",buffer_protocol())
+//	bind_vector<Vectors<std::vector<sp::timecode<double>>>>(m,"Vectors", buffer_protocol())
+    class_<Vectors<std::vector<sp::timecode<double>>>>(m,"Vectors",buffer_protocol())
 	.def(init<>())
  	.def(init([](array_t<sp::timecode<double>,array::c_style> buffer){
 		auto info = buffer.request();
 		auto data = static_cast<sp::timecode<double>*>(info.ptr);
-		auto vector = Vectors<sp::timecode<double>>(data,data+info.shape[0]);
+		auto vector = Vectors<std::vector<sp::timecode<double>>>(data,data+info.shape[0]);
 		std::cout<<vector.data();
 		return vector;
 	}))
- 	.def_buffer([](Vectors<sp::timecode<double>>& vectors) -> buffer_info{
+ 	.def_buffer([](Vectors<std::vector<sp::timecode<double>>>& vectors) -> buffer_info{
 	return buffer_info(
 		vectors.data(),
 		sizeof(sp::timecode<double>),
@@ -90,47 +90,47 @@ PYBIND11_MODULE(matrix, m){
 	);
 	}) 
 //todo
-//	.def("push_back",&Vectors<sp::timecode<double>>::push_back)
-	.def("apply",&Vectors<sp::timecode<double>>::apply)
-	.def("__array__",[](Vectors<sp::timecode<double>> &vecs)->array{return cast(vecs);})
+//	.def("push_back",&Vectors<std::vector<sp::timecode<double>>>::push_back)
+	.def("apply",&Vectors<std::vector<sp::timecode<double>>>::apply)
+	.def("__array__",[](Vectors<std::vector<sp::timecode<double>>> &vecs)->array{return cast(vecs);})
 	;
-//	m.def("dtype",[](){return format_descriptor<std::declval<Vectors<sp::timecode<double>>>()>::format();});
+//	m.def("dtype",[](){return format_descriptor<std::declval<Vectors<std::vector<sp::timecode<double>>>>()>::format();});
 //	m.def("dtype",[](){return std::declval<array>().dtype;});
 //	m.def("dtype",[](){return dtype(format_descriptor<sp::timecode<double>>::format());});
-	m.def("ptr_v",[](Vectors<sp::timecode<double>> &vecs){
+	m.def("ptr_v",[](Vectors<std::vector<sp::timecode<double>>> &vecs){
 		std::cout<<vecs.data();
 	});
 	m.def("ptr_n",[](array_t<sp::timecode<double>,array::c_style> buffer){
 		auto info = buffer.request();
 		std::cout<<info.ptr;
 	});
-	m.def("to_tc",[](array_t<sp::timecode<double>,array::c_style> buffer)->Vectors<sp::timecode<double>>{
+	m.def("to_tc",[](array_t<sp::timecode<double>,array::c_style> buffer)->Vectors<std::vector<sp::timecode<double>>>{
 //	m.def("to_tc",[](array_t<sp::timecode<double>,array::c_style> buffer){
 //		auto info = buffer.request();
 //		auto data = static_cast<sp::timecode<double>*>(info.ptr);
-//		auto vector = Vectors<sp::timecode<double>>(data,data+info.shape[0]);
+//		auto vector = Vectors<std::vector<sp::timecode<double>>>(data,data+info.shape[0]);
 //		std::cout<<vector.data();
 //		return vector;
-		return buffer.cast<Vectors<sp::timecode<double>>>();
+		return buffer.cast<Vectors<std::vector<sp::timecode<double>>>>();
 	});
-    m.def("matrixsize",[](){return sizeof(Matrix<sp::timecode<double>>);});
+    m.def("matrixsize",[](){return sizeof(Matrix<std::vector<sp::timecode<double>>>);});
     m.def("array",[](){return sizeof(std::array<double,9>);});
-    class_<Stack<sp::timecode<double>>>(m,"Stack",buffer_protocol())
+    class_<Stack<std::vector<sp::timecode<double>>>>(m,"Stack",buffer_protocol())
 	.def(init<>())
-	.def_buffer([](Stack<sp::timecode<double>>& stack) -> buffer_info{
+	.def_buffer([](Stack<std::vector<sp::timecode<double>>>& stack) -> buffer_info{
 	return buffer_info(
 		stack.data(),
-		sizeof(Stack<sp::timecode<double>>::value_type),
+		sizeof(Stack<std::vector<sp::timecode<double>>>::value_type),
 		format_descriptor<std::array<double,9>>::format(),
 		1,
 		{stack.size()},
-		{sizeof(Stack<sp::timecode<double>>::value_type)}
+		{sizeof(Stack<std::vector<sp::timecode<double>>>::value_type)}
 	);
 	})
-	.def("identity",&Stack<sp::timecode<double>>::identity)
-	.def("scale",&Stack<sp::timecode<double>>::scale<double>)
-	.def("rotate",&Stack<sp::timecode<double>>::rotate<double>)
-	.def("translate",&Stack<sp::timecode<double>>::translate<double>)
-	.def("__array__",[](Stack<sp::timecode<double>> &stk)->array{return cast(stk);})
+	.def("identity",&Stack<std::vector<sp::timecode<double>>>::identity)
+	.def("scale",&Stack<std::vector<sp::timecode<double>>>::scale<double>)
+	.def("rotate",&Stack<std::vector<sp::timecode<double>>>::rotate<double>)
+	.def("translate",&Stack<std::vector<sp::timecode<double>>>::translate<double>)
+	.def("__array__",[](Stack<std::vector<sp::timecode<double>>> &stk)->array{return cast(stk);})
 	;
 }
