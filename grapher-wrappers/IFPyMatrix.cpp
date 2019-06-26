@@ -45,8 +45,8 @@ PYBIND11_MODULE(matrix, m){
     PYBIND11_NUMPY_DTYPE(sp::timecode<double>, coords, type, tct_type, cov_type);
 	class_<sp::timecode<double>> time_code(m,"TimeCode");
 	time_code.def(init([](double x, double y){
-		sp::timecode<double> tc;
-		return tc.__init(x,y);
+		sp::timecode<double> tc{};
+		return tc.__init({x,y});
 	}))
 	.def_readwrite("type", &sp::timecode<double>::type)
 	.def_readwrite("tct_type", &sp::timecode<double>::tct_type)
