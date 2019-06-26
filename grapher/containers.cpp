@@ -30,9 +30,9 @@ namespace stopeight {
 				this->at(o) = v;
 			}
 		};
-	template blocks<sp::timecode<double,2>,std::pair< sp::result<double>::iterator,sp::result<double>::iterator >>::blocks(std::pair< typename sp::result<double>::iterator, typename sp::result<double>::iterator > vec, const size_t seg_size);
-	template blocks<sp::timecode<float,2>,std::pair< sp::result<float>::iterator,sp::result<float>::iterator >>::blocks(std::pair< typename sp::result<float>::iterator, typename sp::result<float>::iterator > vec, const size_t seg_size);
-	template blocks<sp::timecode<double,2>,std::pair< sp::result<int16_t>::iterator,sp::result<int16_t>::iterator >>::blocks(std::pair< typename sp::result<int16_t>::iterator, typename sp::result<int16_t>::iterator > vec, const size_t seg_size);
+	template blocks<sp::timecode<double>,std::pair< std::vector<sp::timecode<double>>::iterator,std::vector<sp::timecode<double>>::iterator >>::blocks(std::pair< typename std::vector<sp::timecode<double>>::iterator, typename std::vector<sp::timecode<double>>::iterator > vec, const size_t seg_size);
+	template blocks<sp::timecode<float>,std::pair< std::vector<sp::timecode<float>>::iterator,std::vector<sp::timecode<float>>::iterator >>::blocks(std::pair< typename std::vector<sp::timecode<float>>::iterator, typename std::vector<sp::timecode<float>>::iterator > vec, const size_t seg_size);
+	template blocks<sp::timecode<int16_t>,std::pair< std::vector<sp::timecode<int16_t>>::iterator,std::vector<sp::timecode<int16_t>>::iterator >>::blocks(std::pair< typename std::vector<sp::timecode<int16_t>>::iterator, typename std::vector<sp::timecode<int16_t>>::iterator > vec, const size_t seg_size);
 	
 	template<typename DataType,typename bounds> size_t blocks<DataType,bounds>::calculateSize(size_t vec_size, size_t seg_size) {
 			if (vec_size > seg_size) {

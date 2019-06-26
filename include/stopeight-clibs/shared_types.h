@@ -39,7 +39,7 @@ namespace sp {
 	};
 	//const sp::tctype turns[3] = { tctype::SWING,tctype::CREST,tctype::SPIRAL };
 	//ENABLE_IF does work for classes (not in MSVC doc)
-	template<class T, size_t Size = 3,
+	template<class T, size_t Size = 2,
 		typename = typename std::enable_if_t<std::is_arithmetic<T>::value
 		>
 	> struct timecode {//inheritance AND data members present, or tuple: not pod

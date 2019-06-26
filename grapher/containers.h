@@ -8,9 +8,9 @@
 #include "stopeight-clibs/shared_types.h"
 
 namespace stopeight {
-	//template<typename T> using bounds = std::pair< typename sp::result<T>::iterator, typename sp::result<T>::iterator >;
+	//template<typename T> using bounds = std::pair< typename std::vector<T>::iterator, typename std::vector<T>::iterator >;
 	//has to be sequential, random access to avoid copy
-	template<typename DataType, typename bounds = std::pair< typename sp::result<DataType>::iterator, typename sp::result<DataType>::iterator >>//same as it_pair shared_types
+	template<typename DataType, typename bounds = std::pair< typename std::vector<DataType>::iterator, typename std::vector<DataType>::iterator >>//same as it_pair shared_types
 	//enable_if check for contiguous allocation, ie. std::vector::iterator
 	class blocks : public std::vector<bounds> {
 	public:

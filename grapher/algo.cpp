@@ -246,7 +246,7 @@ namespace grapher {
         //first one is invalid
         __calculate_rotations(std::begin(differences) + 1, std::end(differences), std::back_inserter(rotations), angleFunction);
         
-		auto tc = sp::timecode<T,2>{};
+		auto tc = sp::timecode<T>{};
 		tc.__init();
 		tc.set_x(_vectorLength);
 		tc.set_y(0);
@@ -255,7 +255,7 @@ namespace grapher {
 		std::fill_n(std::begin(vectors), vectors_size, tc);//sp::make_timecode<T>(T(_vectorLength), 0));//sp::timecode<T>{T(_vectorLength), 0});
         __apply_rotation_matrix(std::begin(rotations), std::end(rotations), std::begin(vectors));
         
-        std::vector<sp::it_pair<T>> vectors_sliced;
+        std::vector<std::pair< typename std::vector<sp::timecode<T>>::iterator, typename std::vector<sp::timecode<T>>::iterator >> vectors_sliced;
         auto func = _fixpoints(_fixPoint_indices);
         func(std::begin(vectors), std::end(vectors), std::back_inserter(vectors_sliced));
         
@@ -276,7 +276,7 @@ namespace grapher {
         //hierarchy all to 1
         //std::transform(std::begin(vectors_sliced), std::end(vectors_sliced), std::back_inserter(out_vectors), [_samplesPerVector](decltype(vectors_sliced) v) {
         for (auto v : vectors_sliced) {
-            stopeight::blocks<T> blocks_vector = stopeight::blocks<T>(v, _samplesPerVector);//v is it_pair<T>
+            stopeight::blocks<sp::timecode<T>> blocks_vector = stopeight::blocks<sp::timecode<T>>(v, _samplesPerVector);//v is it_pair<T>
             //std::move(slice), _samplesPerVector);
             
             sp::result<T> ov = sp::result<T>{};//(blocks_vector.size(), { double(0), double(0) });
