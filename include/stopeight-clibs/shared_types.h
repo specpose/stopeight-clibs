@@ -56,7 +56,7 @@ namespace sp {
 			//todo compile-time/stack loops?
 			std::get<0>(coords) = T(x);
 			std::get<1>(coords) = T(y);
-			if (std::tuple_size<element>::value > 2) {
+			if (Size > 2){//std::tuple_size<element>::value > 2) {
 				std::get<2>(coords) = T(z);
 				std::fill(std::begin(coords)+3, std::end(coords), value_type(0));
 			}
@@ -90,10 +90,10 @@ namespace sp {
 		}
 
 //todo get/set element-wise with templated size
-/*		value_type get_x() { return coords[0]; };
+		value_type get_x() { return coords[0]; };
 		value_type get_y() { return coords[1]; };
 		void set_x(value_type other) { coords[0] = other; };
-		void set_y(value_type other) { coords[1] = other; };*/
+		void set_y(value_type other) { coords[1] = other; };
 
 	//public: //assignment operator does not work when private members present and no CLASS constructor
 	//construction by order of appearance!

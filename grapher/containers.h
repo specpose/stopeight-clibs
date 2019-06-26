@@ -5,27 +5,27 @@
 #define CONTAINERS_H
 
 #include <vector>
+#include "stopeight-clibs/shared_types.h"
 
 namespace stopeight {
-	template<typename DataType> using bounds = std::pair<typename std::vector<DataType>::iterator, typename std::vector<DataType>::iterator>;
-
+	//template<typename T> using bounds = std::pair< typename sp::result<T>::iterator, typename sp::result<T>::iterator >;
 	//has to be sequential, random access to avoid copy
-	template<typename DataType>
+	template<typename DataType, typename bounds = std::pair< typename sp::result<DataType>::iterator, typename sp::result<DataType>::iterator >>//same as it_pair shared_types
 	//enable_if check for contiguous allocation, ie. std::vector::iterator
-	class blocks : public std::vector<bounds<DataType>> {
+	class blocks : public std::vector<bounds> {
 	public:
-		explicit blocks(bounds<DataType> vec, const int seg_size = 1);
+		explicit blocks(bounds vec, const size_t seg_size = 1);
 
-		static int calculateSize(int vec_size, int seg_size);
+		static size_t calculateSize(size_t vec_size, size_t seg_size);
 		
 
 	private:
-		static int mySize(const bounds<DataType> vec, int seg_size);
+		static size_t mySize(const bounds vec, size_t seg_size);
 		//needed in initializer
-		static int endFull(int vec_size, int seg_size);
+		static size_t endFull(size_t vec_size, size_t seg_size);
 		//static int addedFixPoints(const bounds<DataType> vec);
-		bounds<DataType> _vec;
-		int _seg_size;
+		bounds _vec;
+		size_t _seg_size;
 	};
 }
 #endif

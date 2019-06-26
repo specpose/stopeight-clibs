@@ -97,7 +97,7 @@ namespace grapher {
         //Note: last can not be fixPoint
         const auto vectors_size = std::distance(begin, end);
         std::remove_if(std::begin(_fixPoint_indices), std::end(_fixPoint_indices), [vectors_size](size_t index) {
-            if ((index >= (vectors_size - 1)) || (index == 0))
+            if ((index >= (vectors_size - size_t(1) )) || (index == size_t(0) ))
                 return true;
             return false;
         });
@@ -246,12 +246,13 @@ namespace grapher {
         //first one is invalid
         __calculate_rotations(std::begin(differences) + 1, std::end(differences), std::back_inserter(rotations), angleFunction);
         
-        sp::result<T> vectors;
-		auto tc = sp::timecode<T>{};
+		auto tc = sp::timecode<T,2>{};
 		tc.__init();
 		tc.set_x(_vectorLength);
 		tc.set_y(0);
-		std::fill_n(std::back_inserter(vectors), std::distance(std::begin(rotations), std::end(rotations)), tc);//sp::make_timecode<T>(T(_vectorLength), 0));//sp::timecode<T>{T(_vectorLength), 0});
+        const auto vectors_size = std::distance(std::begin(rotations), std::end(rotations));
+        auto vectors = sp::result<T>(vectors_size);
+		std::fill_n(std::begin(vectors), vectors_size, tc);//sp::make_timecode<T>(T(_vectorLength), 0));//sp::timecode<T>{T(_vectorLength), 0});
         __apply_rotation_matrix(std::begin(rotations), std::end(rotations), std::begin(vectors));
         
         std::vector<sp::it_pair<T>> vectors_sliced;
@@ -275,7 +276,7 @@ namespace grapher {
         //hierarchy all to 1
         //std::transform(std::begin(vectors_sliced), std::end(vectors_sliced), std::back_inserter(out_vectors), [_samplesPerVector](decltype(vectors_sliced) v) {
         for (auto v : vectors_sliced) {
-            stopeight::blocks<sp::timecode<T>> blocks_vector = stopeight::blocks<sp::timecode<T>>(v, _samplesPerVector);
+            stopeight::blocks<T> blocks_vector = stopeight::blocks<T>(v, _samplesPerVector);//v is it_pair<T>
             //std::move(slice), _samplesPerVector);
             
             sp::result<T> ov = sp::result<T>{};//(blocks_vector.size(), { double(0), double(0) });
