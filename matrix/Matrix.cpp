@@ -205,6 +205,7 @@ template<typename Container,typename PodClass>template<typename U> void Stack<Co
 		this->push_back( Matrix<Container,PodClass>::scale(x,y));
 }
 template void Stack<std::vector<Vector<float>>>::scale(float x,float y);
+template void Stack<std::vector<Vector<float>>>::scale(double x, double y);
 template void Stack<std::vector<Vector<double>>>::scale(double x,double y);
 //todo span
 template void Stack<std::vector<sp::timecode<float>>>::scale(float x,float y);
@@ -215,6 +216,7 @@ template<typename Container,typename PodClass>template<typename U> void Stack<Co
 		this->push_back( Matrix<Container,PodClass>::rotate(deg));
 }
 template void Stack<std::vector<Vector<float>>>::rotate(float deg);
+template void Stack<std::vector<Vector<float>>>::rotate(double deg);
 template void Stack<std::vector<Vector<double>>>::rotate(double deg);
 //todo span
 template void Stack<std::vector<sp::timecode<double>>>::rotate(double deg);
@@ -225,6 +227,7 @@ template<typename Container,typename PodClass>template<typename U> void Stack<Co
 		this->push_back( Matrix<Container,PodClass>::translate(x, y));
 }
 template void Stack<std::vector<Vector<float>>>::translate(float x,float y);
+template void Stack<std::vector<Vector<float>>>::translate(double x, double y);
 template void Stack<std::vector<Vector<double>>>::translate(double x,double y);
 template void Stack<std::vector<sp::timecode<float>>>::translate(float x,float y);
 template void Stack<std::vector<sp::timecode<double>>>::translate(double x,double y);

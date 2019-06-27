@@ -245,7 +245,7 @@ namespace grapher {
         __calculate_rotations(std::begin(differences) + 1, std::end(differences), std::back_inserter(rotations), angleFunction);
         
 		auto tc = sp::timecode<T>{};
-		tc.__init({_vectorLength,0});
+		tc.__init({T(_vectorLength),T(0)});
         const auto vectors_size = std::distance(std::begin(rotations), std::end(rotations));
         auto vectors = sp::result<T>(vectors_size);
 		std::fill_n(std::begin(vectors), vectors_size, tc);//sp::make_timecode<T>(T(_vectorLength), 0));//sp::timecode<T>{T(_vectorLength), 0});
