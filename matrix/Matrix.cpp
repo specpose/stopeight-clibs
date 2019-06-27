@@ -21,7 +21,7 @@ template Vector<double>& Vector<double>::__init(std::initializer_list<double>);
 template Vector<float>& Vector<float>::__init(std::initializer_list<float>);
 
 //propagating: par
-template<typename Container, typename tf>void Vectors<Container,tf>::apply(Stack<Container,PodClass>& stack) {
+template<typename Container, typename tf>void Vectors<Container,tf>::apply(Stack<Container>& stack) {
 	auto& me = *this;
 	auto first = std::find_if(std::begin(stack), std::end(stack), [](Matrix<Container>& m){ return !m.isSingular();});
 	if (first!=std::end(stack)){
@@ -176,14 +176,14 @@ template<typename Container> void Matrix<Container>::apply(Vectors<Container>& t
 	});
 }
 
-template<typename Container, typename PodClass> Stack<Container,PodClass>::Stack() : std::vector<Matrix<Container>>() {};
+template<typename Container> Stack<Container>::Stack() : std::vector<Matrix<Container>>() {};
 template<> Stack<std::vector<Vector<float>>>::Stack() : std::vector<Matrix<std::vector<Vector<float>>>>() {};
 template<> Stack<std::vector<Vector<double>>>::Stack() : std::vector<Matrix<std::vector<Vector<double>>>>() {};
 //todo span
 template<> Stack<std::vector<sp::timecode<float>>>::Stack() : std::vector<Matrix<std::vector<sp::timecode<float>>>>() {};
 template<> Stack<std::vector<sp::timecode<double>>>::Stack() : std::vector<Matrix<std::vector<sp::timecode<double>>>>() {};
 
-template<typename Container,typename PodClass> void Stack<Container,PodClass>::identity(){
+template<typename Container> void Stack<Container>::identity(){
 	this->clear();
 }
 template void Stack<std::vector<Vector<float>>>::identity();
@@ -192,7 +192,7 @@ template void Stack<std::vector<Vector<double>>>::identity();
 template void Stack<std::vector<sp::timecode<float>>>::identity();
 template void Stack<std::vector<sp::timecode<double>>>::identity();
 
-template<typename Container,typename PodClass>template<typename U> void Stack<Container,PodClass>::scale(U x,U y){
+template<typename Container>template<typename U> void Stack<Container>::scale(U x,U y){
 	if (!(( U(1.0)==x)&&( U(1.0)==y)))
 		this->push_back( Matrix<Container>::scale(x,y));
 }
@@ -203,7 +203,7 @@ template void Stack<std::vector<Vector<double>>>::scale(double x,double y);
 template void Stack<std::vector<sp::timecode<float>>>::scale(float x,float y);
 template void Stack<std::vector<sp::timecode<double>>>::scale(double x,double y);
 
-template<typename Container,typename PodClass>template<typename U> void Stack<Container,PodClass>::rotate(U deg){
+template<typename Container>template<typename U> void Stack<Container>::rotate(U deg){
 	if (!(deg== U(0.0) ))
 		this->push_back( Matrix<Container>::rotate(deg));
 }
@@ -214,7 +214,7 @@ template void Stack<std::vector<Vector<double>>>::rotate(double deg);
 template void Stack<std::vector<sp::timecode<double>>>::rotate(double deg);
 template void Stack<std::vector<sp::timecode<float>>>::rotate(float deg);
 
-template<typename Container,typename PodClass>template<typename U> void Stack<Container,PodClass>::translate(U x,U y){
+template<typename Container>template<typename U> void Stack<Container>::translate(U x,U y){
 	if (!(( U(0.0)==x)&&( U(0.0)==y)))
 		this->push_back( Matrix<Container>::translate(x, y));
 }

@@ -14,7 +14,6 @@ public:
 	typedef typename element::value_type value_type;
 	typedef typename element::reference reference;
 
-	//template<typename U> Vector(U x,U y, U z=1)=delete;
 	Vector<T, Size,tf>& __init(std::initializer_list<T> list);
 
 	std::array<T, Size> coords;
@@ -26,7 +25,6 @@ template<typename Container, typename tf = typename std::enable_if_t<std::is_pod
 template<typename Container> class Matrix {
 public:
 	using PodClass = typename Container::value_type;
-	//typedef typename Container::value_type::value_type T;
 	using T = typename Container::value_type::value_type;
 
 	friend class Matrix;
@@ -47,6 +45,7 @@ public:
 	
 	static Matrix identity();
 
+	//MSVC: function return type (and signature) is read before alias definition
 	typename Container::value_type::value_type det();
 	
 	bool isSingular();
@@ -67,8 +66,7 @@ private:
 };
 
 //todo disable type conversions here?
-template<typename Container, typename PodClass= typename Container::value_type> class Stack : public std::vector<Matrix<Container>> {
-	using T = typename PodClass::value_type;
+template<typename Container> class Stack : public std::vector<Matrix<Container>> {
 
 public:
 	Stack();
@@ -95,7 +93,7 @@ public:
 	using PodClass = typename Container::value_type;
 	using T = typename PodClass::value_type;
 	
-	void apply(Stack<Container,PodClass>& stack);
+	void apply(Stack<Container>& stack);
 
 	const T* _to_C_array(){
 		if (this->size()>0)
