@@ -23,8 +23,12 @@ public:
 template<typename Container, typename tf = typename std::enable_if_t<std::is_pod<typename Container::value_type>::value>> class Vectors;//forward declaration! same as in real declaration below
 
 /* Row Major 2D*/
-template<typename Container, typename PodClass= typename Container::value_type,typename T = typename PodClass::value_type> class Matrix {
+template<typename Container> class Matrix {
 public:
+	using PodClass = typename Container::value_type;
+	//typedef typename Container::value_type::value_type T;
+	using T = typename Container::value_type::value_type;
+
 	friend class Matrix;
 	friend class Vectors<Container>;
 	
@@ -43,7 +47,7 @@ public:
 	
 	static Matrix identity();
 
-	T det();
+	typename Container::value_type::value_type det();
 	
 	bool isSingular();
 	
