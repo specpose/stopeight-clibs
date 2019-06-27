@@ -51,7 +51,7 @@ template void Vectors<std::vector<sp::timecode<float>>>::apply(Stack<std::vector
 template void Vectors<std::vector<sp::timecode<double>>>::apply(Stack<std::vector<sp::timecode<double>>>& stack);
 
 /* Row Major 2D*/
-template<typename Container>template<typename U> Matrix<Container>::Matrix(U x1, U x2, U x3, U y1, U y2, U y3, U z1, U z2, U z3) {
+template<typename Container> Matrix<Container>::Matrix(T x1, T x2, T x3, T y1, T y2, T y3, T z1, T z2, T z3) {
 	elems[0] = x1;
 	elems[1] = x2;
 	elems[2] = x3;
@@ -107,41 +107,41 @@ template<typename Container> bool Matrix<Container>::isSingular(){
 #endif
 }
 
-template<typename Container>template<typename U> Matrix<Container> Matrix<Container>::scale(U x, U y) {
+template<typename Container> Matrix<Container> Matrix<Container>::scale(T x, T y) {
 	auto m = Matrix<Container>{	T(x),T(0),T(0),
 		T(0),T(y),T(0),
 		T(0),T(0),T(1)
 	};
 	return std::move(m);
 }
-template Matrix<std::vector<Vector<float>>> Matrix<std::vector<Vector<float>>>::scale(double x, double y);
+template Matrix<std::vector<Vector<float>>> Matrix<std::vector<Vector<float>>>::scale(float x, float y);
 template Matrix<std::vector<Vector<double>>> Matrix<std::vector<Vector<double>>>::scale(double x, double y);
 //todo span
-template Matrix<std::vector<sp::timecode<float>>> Matrix<std::vector<sp::timecode<float>>>::scale(double x, double y);
+template Matrix<std::vector<sp::timecode<float>>> Matrix<std::vector<sp::timecode<float>>>::scale(float x, float y);
 template Matrix<std::vector<sp::timecode<double>>> Matrix<std::vector<sp::timecode<double>>>::scale(double x, double y);
 
-template<typename Container>template<typename U>  Matrix<Container> Matrix<Container>::rotate(U deg) {
-	U rad = _degToRad(deg);
+template<typename Container> Matrix<Container> Matrix<Container>::rotate(T deg) {
+	T rad = _degToRad(deg);
 	auto m = Matrix<Container>{	T(cos(rad)),T(-sin(rad)),T(0),
 						T(sin(rad)),T(cos(rad)),T(0),
 						T(0),T(0),T(1)
 	};
 	return std::move(m);
 }
-template Matrix<std::vector<Vector<float>>> Matrix<std::vector<Vector<float>>>::rotate(double deg);
+template Matrix<std::vector<Vector<float>>> Matrix<std::vector<Vector<float>>>::rotate(float deg);
 template Matrix<std::vector<Vector<double>>> Matrix<std::vector<Vector<double>>>::rotate(double deg);
 //todo span
-template Matrix<std::vector<sp::timecode<float>>> Matrix<std::vector<sp::timecode<float>>>::rotate(double deg);
+template Matrix<std::vector<sp::timecode<float>>> Matrix<std::vector<sp::timecode<float>>>::rotate(float deg);
 template Matrix<std::vector<sp::timecode<double>>> Matrix<std::vector<sp::timecode<double>>>::rotate(double deg);
 
-template<typename Container>template<typename U> Matrix<Container> Matrix<Container>::translate(U x, U y) {
+template<typename Container> Matrix<Container> Matrix<Container>::translate(T x, T y) {
 	auto m = Matrix<Container>{	T(1),T(0),T(x),
 		T(0),T(1),T(y),
 		T(0),T(0),T(1)
 	};
 	return std::move(m);
 }
-template Matrix<std::vector<Vector<float>>> Matrix<std::vector<Vector<float>>>::translate(double x, double y);
+template Matrix<std::vector<Vector<float>>> Matrix<std::vector<Vector<float>>>::translate(float x, float y);
 template Matrix<std::vector<Vector<double>>> Matrix<std::vector<Vector<double>>>::translate(double x, double y);
 
 template<typename Container>double Matrix<Container>::_radToDeg(double rad) { return rad * (180.0 / M_PI); }//  pi/rad = 180/x, x(pi/rad)=180, x=180/(pi/rad)
@@ -192,34 +192,31 @@ template void Stack<std::vector<Vector<double>>>::identity();
 template void Stack<std::vector<sp::timecode<float>>>::identity();
 template void Stack<std::vector<sp::timecode<double>>>::identity();
 
-template<typename Container>template<typename U> void Stack<Container>::scale(U x,U y){
-	if (!(( U(1.0)==x)&&( U(1.0)==y)))
+template<typename Container> void Stack<Container>::scale(T x,T y){
+	if (!(( T(1.0)==x)&&( T(1.0)==y)))
 		this->push_back( Matrix<Container>::scale(x,y));
 }
 template void Stack<std::vector<Vector<float>>>::scale(float x,float y);
-template void Stack<std::vector<Vector<float>>>::scale(double x, double y);
 template void Stack<std::vector<Vector<double>>>::scale(double x,double y);
 //todo span
 template void Stack<std::vector<sp::timecode<float>>>::scale(float x,float y);
 template void Stack<std::vector<sp::timecode<double>>>::scale(double x,double y);
 
-template<typename Container>template<typename U> void Stack<Container>::rotate(U deg){
-	if (!(deg== U(0.0) ))
+template<typename Container> void Stack<Container>::rotate(T deg){
+	if (!(deg== T(0.0) ))
 		this->push_back( Matrix<Container>::rotate(deg));
 }
 template void Stack<std::vector<Vector<float>>>::rotate(float deg);
-template void Stack<std::vector<Vector<float>>>::rotate(double deg);
 template void Stack<std::vector<Vector<double>>>::rotate(double deg);
 //todo span
 template void Stack<std::vector<sp::timecode<double>>>::rotate(double deg);
 template void Stack<std::vector<sp::timecode<float>>>::rotate(float deg);
 
-template<typename Container>template<typename U> void Stack<Container>::translate(U x,U y){
-	if (!(( U(0.0)==x)&&( U(0.0)==y)))
+template<typename Container> void Stack<Container>::translate(T x,T y){
+	if (!(( T(0.0)==x)&&( T(0.0)==y)))
 		this->push_back( Matrix<Container>::translate(x, y));
 }
 template void Stack<std::vector<Vector<float>>>::translate(float x,float y);
-template void Stack<std::vector<Vector<float>>>::translate(double x, double y);
 template void Stack<std::vector<Vector<double>>>::translate(double x,double y);
 template void Stack<std::vector<sp::timecode<float>>>::translate(float x,float y);
 template void Stack<std::vector<sp::timecode<double>>>::translate(double x,double y);

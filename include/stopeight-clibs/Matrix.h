@@ -32,7 +32,7 @@ public:
 	
 	Matrix(const Matrix& other) = default;
 	Matrix(Matrix&& other) = default;
-	template<typename U> explicit Matrix(U x1, U x2, U x3, U y1, U y2, U y3, U z1, U z2, U z3);
+	explicit Matrix(T x1, T x2, T x3, T y1, T y2, T y3, T z1, T z2, T z3);
 	std::array<T,9>* data();
 
 	Matrix& operator=(const Matrix& other) = default;
@@ -50,11 +50,11 @@ public:
 	
 	bool isSingular();
 	
-	template<typename U> static Matrix scale(U x, U y);
+	static Matrix scale(T x, T y);
 	
-	template<typename U> static Matrix rotate(U deg);
+	static Matrix rotate(T deg);
 	
-	template<typename U> static Matrix translate(U x, U y);
+	static Matrix translate(T x, T y);
 	double static _radToDeg(double rad);
 	double static _degToRad(double deg);
 
@@ -69,13 +69,16 @@ private:
 template<typename Container> class Stack : public std::vector<Matrix<Container>> {
 
 public:
+	using PodClass = typename Container::value_type;
+	using T = typename PodClass::value_type;
+
 	Stack();
 	
 	void identity();
-	template<typename U> void scale(U x, U y);
-	//this was void rotate(float deg); why?!
-	template<typename U> void rotate(U deg);
-	template<typename U> void translate(U x, U y);
+	void scale(T x, T y);
+	//this was void rotate(FLOAT deg); why?!
+	void rotate(T deg);
+	void translate(T x, T y);
 };
 
 template<typename Container,
