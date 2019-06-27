@@ -20,13 +20,13 @@ public:
 	std::array<T, Size> coords;
 };
 
-template<typename Container, typename PodClass= typename Container::value_type, typename T= typename PodClass::value_type, typename tf = typename std::enable_if_t<std::is_pod<PodClass>::value>> class Vectors;//forward declaration! same as in real declaration below
+template<typename Container, typename tf = typename std::enable_if_t<std::is_pod<typename Container::value_type>::value>> class Vectors;//forward declaration! same as in real declaration below
 
 /* Row Major 2D*/
 template<typename Container, typename PodClass= typename Container::value_type,typename T = typename PodClass::value_type> class Matrix {
 public:
 	friend class Matrix;
-	friend class Vectors<Container,PodClass,T>;
+	friend class Vectors<Container>;
 	
 	Matrix(const Matrix& other) = default;
 	Matrix(Matrix&& other) = default;
@@ -57,7 +57,7 @@ public:
 
 private:
 	static Matrix mul(const Matrix a, const Matrix b);
-	void apply(Vectors<Container,PodClass,T>& transform);
+	void apply(Vectors<Container>& transform);
 private:
 	std::array<T,9> elems;
 };
@@ -77,8 +77,6 @@ public:
 };
 
 template<typename Container,
-	typename PodClass,//= typename Container::value_type,
-	typename T,// = typename PodClass::value_type,
 	typename// = typename std::enable_if_t<std::is_pod<PodClass>::value>
 > // same as in forward declaration above!
 class Vectors : public Container {
@@ -89,6 +87,9 @@ class Vectors : public Container {
 public:
 	//Vectors();
 	using Container::vector;
+
+	using PodClass = typename Container::value_type;
+	using T = typename PodClass::value_type;
 	
 	void apply(Stack<Container,PodClass>& stack);
 

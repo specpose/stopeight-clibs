@@ -20,16 +20,8 @@ template<typename T, size_t Size, typename tf> Vector<T, Size,tf>& Vector<T,Size
 template Vector<double>& Vector<double>::__init(std::initializer_list<double>);
 template Vector<float>& Vector<float>::__init(std::initializer_list<float>);
 
-/* template<typename PodClass,typename T, typename tf> Vectors<PodClass,T,tf>::Vectors() : std::vector<PodClass>() {
-};
-//template Vectors<Vector<float,3,void>,float,void>::Vectors();
-template Vectors<Vector<float>>::Vectors();
-template Vectors<Vector<double>>::Vectors();
-template Vectors<sp::timecode<float>>::Vectors();
-template Vectors<sp::timecode<double>>::Vectors();*/
-
 //propagating: par
-template<typename Container, typename PodClass,typename T, typename tf>void Vectors<Container,PodClass,T,tf>::apply(Stack<Container,PodClass>& stack) {
+template<typename Container, typename tf>void Vectors<Container,tf>::apply(Stack<Container,PodClass>& stack) {
 	auto& me = *this;
 	auto first = std::find_if(std::begin(stack), std::end(stack), [](Matrix<Container,PodClass>& m){ return !m.isSingular();});
 	if (first!=std::end(stack)){
@@ -173,7 +165,7 @@ template<typename Container, typename PodClass, typename T> Matrix<Container, Po
 
 //this may have to be compiled with a different compiler: NOT HEADER ONLY
 //readonly: par_unseq
-template<typename Container, typename PodClass, typename T> void Matrix<Container,PodClass,T>::apply(Vectors<Container,PodClass,T>& transform) {
+template<typename Container, typename PodClass, typename T> void Matrix<Container,PodClass,T>::apply(Vectors<Container>& transform) {
 	auto& e = elems;
 	std::transform(std::begin(transform), std::end(transform), std::begin(transform), [&e](PodClass a) {
 		auto v = a;
