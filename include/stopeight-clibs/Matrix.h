@@ -60,7 +60,7 @@ public:
 
 private:
 	static Matrix mul(const Matrix a, const Matrix b);
-	void apply(Vectors<Container>& transform);
+	void apply3(Vectors<Container>& transform);
 private:
 	std::array<T,9> elems;
 };

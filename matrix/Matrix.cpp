@@ -38,7 +38,7 @@ template<typename Container, typename tf>void Vectors<Container,tf>::apply(Stack
 			if (!m.isSingular())
 				all = Matrix<Container>::mul(all,m);
 		});
-		all.apply(me);
+		all.apply3(me);
 	}
 	/*std::for_each(std::rbegin(stack), std::rend(stack), [&me](Matrix<Container>& m) {
 		m.apply(me);
@@ -165,13 +165,13 @@ template<typename Container> Matrix<Container> Matrix<Container>::mul(const Matr
 
 //this may have to be compiled with a different compiler: NOT HEADER ONLY
 //readonly: par_unseq
-template<typename Container> void Matrix<Container>::apply(Vectors<Container>& transform) {
+template<typename Container> void Matrix<Container>::apply3(Vectors<Container>& transform) {
 	auto& e = elems;
 	std::transform(std::begin(transform), std::end(transform), std::begin(transform), [&e](PodClass a) {
-		auto v = a;
-		return PodClass{}.__init(	{(e[0] * std::get<0>(v.coords) + e[1] * std::get<1>(v.coords) + e[2] * std::get<2>(v.coords)),
-			(e[3]*std::get<0>(v.coords)+e[4]* std::get<1>(v.coords) +e[5]* std::get<2>(v.coords)),
-			(e[6]* std::get<0>(v.coords) +e[7]* std::get<1>(v.coords) +e[8]* std::get<2>(v.coords))}
+		return PodClass{}.__init(	{
+			(e[0]* a.coords[0] +e[1]* a.coords[1] +e[2]* a.coords[2]),
+			(e[3]* a.coords[0] +e[4]* a.coords[1] +e[5]* a.coords[2]),
+			(e[6]* a.coords[0] +e[7]* a.coords[1] +e[8]* a.coords[2])}
 		);
 	});
 }
