@@ -38,7 +38,13 @@ template<typename Container, typename tf>void Vectors<Container,tf>::apply(Stack
 			if (!m.isSingular())
 				all = Matrix<Container>::mul(all,m);
 		});
-		all.apply3(me);
+		static const size_t size = PodClass{}.coords.size();
+		if (size < 2)
+			throw std::logic_error("Matrix class does not work with vector dimensions lower than 2");
+		else if (size == 2)
+			all.apply2(me);
+		else
+			all.apply3(me);
 	}
 	/*std::for_each(std::rbegin(stack), std::rend(stack), [&me](Matrix<Container>& m) {
 		m.apply(me);
@@ -172,6 +178,15 @@ template<typename Container> void Matrix<Container>::apply3(Vectors<Container>& 
 			(e[0]* a.coords[0] +e[1]* a.coords[1] +e[2]* a.coords[2]),
 			(e[3]* a.coords[0] +e[4]* a.coords[1] +e[5]* a.coords[2]),
 			(e[6]* a.coords[0] +e[7]* a.coords[1] +e[8]* a.coords[2])}
+		);
+	});
+}
+template<typename Container> void Matrix<Container>::apply2(Vectors<Container>& transform) {
+	auto& e = elems;
+	std::transform(std::begin(transform), std::end(transform), std::begin(transform), [&e](PodClass a) {
+		return PodClass{}.__init({
+			(e[0] * a.coords[0] + e[1] * a.coords[1] + e[2] * 1),
+			(e[3] * a.coords[0] + e[4] * a.coords[1] + e[5] * 1)}
 		);
 	});
 }

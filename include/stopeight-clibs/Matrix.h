@@ -6,7 +6,7 @@
 #include <vector>
 #include <iterator>
 
-template<typename T, size_t Size = 3,
+template<typename T, size_t Size = 2,
 	typename tf= typename std::enable_if_t<std::is_arithmetic<T>::value>
 	> class Vector {
 public:
@@ -61,6 +61,7 @@ public:
 private:
 	static Matrix mul(const Matrix a, const Matrix b);
 	void apply3(Vectors<Container>& transform);
+	void apply2(Vectors<Container>& transform);
 private:
 	std::array<T,9> elems;
 };
@@ -95,7 +96,7 @@ public:
 
 	using PodClass = typename Container::value_type;
 	using T = typename PodClass::value_type;
-	
+
 	void apply(Stack<Container>& stack);
 
 	const T* _to_C_array(){
