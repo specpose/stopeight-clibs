@@ -99,10 +99,10 @@ public:
 
 	void apply(Stack<Container>& stack);
 
-	const T* _to_C_array(){
+	/*const T* _to_C_array(){
 		if (this->size()>0)
 			return &(this->at(0))[0];
 		else
 			return nullptr;
-	}
+	}*/
 };
