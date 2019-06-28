@@ -128,9 +128,9 @@ PYBIND11_MODULE(matrix, m){
 	);
 	})
 	.def("identity",&Stack<std::vector<sp::timecode<double>>>::identity)
-	.def("scale",&Stack<std::vector<sp::timecode<double>>>::scale<double>)
-	.def("rotate",&Stack<std::vector<sp::timecode<double>>>::rotate<double>)
-	.def("translate",&Stack<std::vector<sp::timecode<double>>>::translate<double>)
+	.def("scale",&Stack<std::vector<sp::timecode<double>>>::scale)
+	.def("rotate",&Stack<std::vector<sp::timecode<double>>>::rotate)
+	.def("translate",&Stack<std::vector<sp::timecode<double>>>::translate)
 	.def("__array__",[](Stack<std::vector<sp::timecode<double>>> &stk)->array{return cast(stk);})
 	;
 }

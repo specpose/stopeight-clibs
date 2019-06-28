@@ -15,6 +15,7 @@ using namespace grapher;
 //cant make this opaque; have to use stl or manual move: cast py::array to std::vector
 //PYBIND11_MAKE_OPAQUE(std::vector<double>);
 //cant remove opaque; no custom caster vector -> array?
+#include <iostream>
 PYBIND11_MAKE_OPAQUE(std::vector<sp::timecode<double>>);
 using namespace pybind11;
 
@@ -31,6 +32,7 @@ PYBIND11_MODULE(grapher, m){
 //    pybind11::module m("grapher","");
 //old
 	object matrix_module = module::import("stopeight.matrix");
+	PYBIND11_NUMPY_DTYPE(sp::timecode<double>, coords, type, tct_type, cov_type);
 
     /*class_<std::vector<double>>(m,"VectorDouble",buffer_protocol())
 	.def(init<>())
@@ -105,13 +107,14 @@ PYBIND11_MODULE(grapher, m){
 	size_t size = info.shape[0];
 	if (info.strides[0]!=sizeof(double))
 		throw std::runtime_error("Incompatible format: Incompatible step size");
-	//auto doubles=static_cast<double*>(info.ptr);
-	//auto vec = std::vector<double>(doubles,doubles+size);
-	//needs stl.h (copy?)
-	auto vec = in.cast<std::vector<double>>();
+	auto doubles=static_cast<double*>(info.ptr);
+	auto vec = std::vector<double>(doubles,doubles+size);
+	////needs stl.h (copy?)
+	//auto vec = in.cast<std::vector<double>>();
 	auto data = speczilla::Buffer<double>(&vec,vec.size(),samplesPerVector,unitaryLength,relative,average,averageScale);
-	auto out = data();
-	return cast(out);
+	auto out = std::vector<sp::timecode<double>>{data()};
+	//return array_t<sp::timecode<double>,array::c_style>{};
+	return cast(out);//sp::result to array
     },arg("vector"),arg("samplesPerVector")=1,arg("unitaryLength")=1.0,arg("relative")=false,arg("average")=0.0,arg("averageScale")=1.0, return_value_policy::move);
 
 //    class_<samples_To_VG<double>>(m,"Samples_To_VG")
