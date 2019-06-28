@@ -162,7 +162,6 @@
     <ClCompile Include="mean.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="algo_impl.h" />
     <ClInclude Include="dummy.h" />
     <ClInclude Include="grapher_impl.h" />
     <ClInclude Include="mean_impl.h" />
