@@ -32,7 +32,6 @@ PYBIND11_MODULE(grapher, m){
 //    pybind11::module m("grapher","");
 //old
 	object matrix_module = module::import("stopeight.matrix");
-	PYBIND11_NUMPY_DTYPE(sp::timecode<double>, coords, type, tct_type, cov_type);
 
     /*class_<std::vector<double>>(m,"VectorDouble",buffer_protocol())
 	.def(init<>())
