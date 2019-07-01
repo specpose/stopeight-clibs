@@ -4,8 +4,11 @@
 #include <stopeight-clibs/shared_types.h>
 
 #include <pybind11/pybind11.h>
+
+//For TimeCode, Vectors
 #include <pybind11/numpy.h>
-//#include <pybind11/stl_bind.h>
+//For Stack
+#include <pybind11/stl.h>
 
 #undef NDEBUG
 #include <iostream>
@@ -44,23 +47,6 @@ PYBIND11_MODULE(matrix, m){
 	.def_readwrite("type", &sp::timecode<double>::type)
 	.def_readwrite("tct_type", &sp::timecode<double>::tct_type)
 	.def_readwrite("cov_type", &sp::timecode<double>::cov_type);
-
-    class_<Matrix<std::vector<sp::timecode<double>>>>(m,"Matrix",buffer_protocol())
-	.def(init<double,double,double,double,double,double,double,double,double>())
-	//hack because Matrix has constructors but could be a POD type
-	.def_buffer([](Matrix<std::vector<sp::timecode<double>>>& matrix) -> buffer_info{
-	return buffer_info(
-		matrix.data(),
-		sizeof(double),
-		format_descriptor<double>::format(),
-		2,
-		{3,3},//rows, cols
-		{ sizeof(double) * 3,//rows
-		sizeof(double) }
-	);
-    	})
-	.def("__array__",[](Matrix<std::vector<sp::timecode<double>>> &mat)->array{return cast(mat);})
-	;
 	
 //// enables append, insert, etc. but overwrites init constructors below
 //	bind_vector<Vectors<std::vector<sp::timecode<double>>>>(m,"Vectors", buffer_protocol())
@@ -85,8 +71,6 @@ PYBIND11_MODULE(matrix, m){
 	.def("ptr",[](Vectors<std::vector<sp::timecode<double>>> &vecs){
 		std::cout<<vecs.data();
 	}) 
-//todo
-//	.def("push_back",&Vectors<std::vector<sp::timecode<double>>>::push_back)
 	.def("apply",&Vectors<std::vector<sp::timecode<double>>>::apply)
 	.def("__array__",[](Vectors<std::vector<sp::timecode<double>>> &vecs)->array_t<sp::timecode<double>,array::c_style>{return cast(vecs);})
 	.def("__iter__", [](Vectors<std::vector<sp::timecode<double>>> &v) {
@@ -99,23 +83,11 @@ PYBIND11_MODULE(matrix, m){
 		std::cout<<info.ptr;
 	});
 
-    class_<Stack<std::vector<sp::timecode<double>>>>(m,"Stack",buffer_protocol())
+	class_<Stack<std::vector<sp::timecode<double>>>>(m,"Stack")
 	.def(init<>())
-	.def_buffer([](Stack<std::vector<sp::timecode<double>>>& stack) -> buffer_info{
-	return buffer_info(
-		stack.data(),
-		sizeof(Stack<std::vector<sp::timecode<double>>>::value_type),
-		//see Matrix not POD above
-		format_descriptor<Matrix<std::vector<sp::timecode<double>>>>::format(),
-		1,
-		{stack.size()},
-		{sizeof(Stack<std::vector<sp::timecode<double>>>::value_type)}
-	);
-	})
 	.def("identity",&Stack<std::vector<sp::timecode<double>>>::identity)
 	.def("scale",&Stack<std::vector<sp::timecode<double>>>::scale)
 	.def("rotate",&Stack<std::vector<sp::timecode<double>>>::rotate)
 	.def("translate",&Stack<std::vector<sp::timecode<double>>>::translate)
-	.def("__array__",[](Stack<std::vector<sp::timecode<double>>> &stk)->array{return cast(stk);})
 	;
 }
