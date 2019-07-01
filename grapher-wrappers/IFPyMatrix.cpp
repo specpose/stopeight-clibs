@@ -5,24 +5,17 @@
 
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
+//#include <pybind11/stl_bind.h>
 
 #undef NDEBUG
-#define DEBUG
 #include <iostream>
 
-//#include <pybind11/stl_bind.h>
 PYBIND11_MAKE_OPAQUE(Vectors<std::vector<sp::timecode<double>>>);
 
 using namespace pybind11;
 
-//new >2.2
 PYBIND11_MODULE(matrix, m){
-//old
-//PYBIND11_PLUGIN(grapher){
-//    pybind11::module m("matrix","");
-//old
 
-//    PYBIND11_NUMPY_DTYPE(Vector<double>, coords);
 	enum_<sp::FixpointType>(m,"FixpointType",module_local(false))
 		.value("EMPTY",sp::FixpointType::EMPTY)
 		.value("FIXPOINT",sp::FixpointType::FIXPOINT);
@@ -54,6 +47,7 @@ PYBIND11_MODULE(matrix, m){
 
     class_<Matrix<std::vector<sp::timecode<double>>>>(m,"Matrix",buffer_protocol())
 	.def(init<double,double,double,double,double,double,double,double,double>())
+	//hack because Matrix has constructors but could be a POD type
 	.def_buffer([](Matrix<std::vector<sp::timecode<double>>>& matrix) -> buffer_info{
 	return buffer_info(
 		matrix.data(),
@@ -68,7 +62,7 @@ PYBIND11_MODULE(matrix, m){
 	.def("__array__",[](Matrix<std::vector<sp::timecode<double>>> &mat)->array{return cast(mat);})
 	;
 	
-//this enables append, insert, etc. but overwrites init constructors below
+//// enables append, insert, etc. but overwrites init constructors below
 //	bind_vector<Vectors<std::vector<sp::timecode<double>>>>(m,"Vectors", buffer_protocol())
     class_<Vectors<std::vector<sp::timecode<double>>>>(m,"Vectors",buffer_protocol())
 	.def(init<>())
@@ -76,7 +70,6 @@ PYBIND11_MODULE(matrix, m){
 		auto info = buffer.request();
 		auto data = static_cast<sp::timecode<double>*>(info.ptr);
 		auto vector = Vectors<std::vector<sp::timecode<double>>>(data,data+info.shape[0]);
-		std::cout<<vector.data();
 		return vector;
 	}))
  	.def_buffer([](Vectors<std::vector<sp::timecode<double>>>& vectors) -> buffer_info{
@@ -88,40 +81,32 @@ PYBIND11_MODULE(matrix, m){
 		{size_t(vectors.size())},
 		{sizeof(sp::timecode<double>)}
 	);
+	})
+	.def("ptr",[](Vectors<std::vector<sp::timecode<double>>> &vecs){
+		std::cout<<vecs.data();
 	}) 
 //todo
 //	.def("push_back",&Vectors<std::vector<sp::timecode<double>>>::push_back)
 	.def("apply",&Vectors<std::vector<sp::timecode<double>>>::apply)
-	.def("__array__",[](Vectors<std::vector<sp::timecode<double>>> &vecs)->array{return cast(vecs);})
+	.def("__array__",[](Vectors<std::vector<sp::timecode<double>>> &vecs)->array_t<sp::timecode<double>,array::c_style>{return cast(vecs);})
+	.def("__iter__", [](Vectors<std::vector<sp::timecode<double>>> &v) {
+       return make_iterator(v.begin(), v.end());
+    }, keep_alive<0, 1>())
+	.def("__len__", [](const Vectors<std::vector<sp::timecode<double>>> &v) { return v.size(); })
 	;
-//	m.def("dtype",[](){return format_descriptor<std::declval<Vectors<std::vector<sp::timecode<double>>>>()>::format();});
-//	m.def("dtype",[](){return std::declval<array>().dtype;});
-//	m.def("dtype",[](){return dtype(format_descriptor<sp::timecode<double>>::format());});
-	m.def("ptr_v",[](Vectors<std::vector<sp::timecode<double>>> &vecs){
-		std::cout<<vecs.data();
-	});
-	m.def("ptr_n",[](array_t<sp::timecode<double>,array::c_style> buffer){
+	m.def("ptr",[](array_t<sp::timecode<double>,array::c_style> buffer){
 		auto info = buffer.request();
 		std::cout<<info.ptr;
 	});
-	m.def("to_tc",[](array_t<sp::timecode<double>,array::c_style> buffer)->Vectors<std::vector<sp::timecode<double>>>{
-//	m.def("to_tc",[](array_t<sp::timecode<double>,array::c_style> buffer){
-//		auto info = buffer.request();
-//		auto data = static_cast<sp::timecode<double>*>(info.ptr);
-//		auto vector = Vectors<std::vector<sp::timecode<double>>>(data,data+info.shape[0]);
-//		std::cout<<vector.data();
-//		return vector;
-		return buffer.cast<Vectors<std::vector<sp::timecode<double>>>>();
-	});
-    m.def("matrixsize",[](){return sizeof(Matrix<std::vector<sp::timecode<double>>>);});
-    m.def("array",[](){return sizeof(std::array<double,9>);});
+
     class_<Stack<std::vector<sp::timecode<double>>>>(m,"Stack",buffer_protocol())
 	.def(init<>())
 	.def_buffer([](Stack<std::vector<sp::timecode<double>>>& stack) -> buffer_info{
 	return buffer_info(
 		stack.data(),
 		sizeof(Stack<std::vector<sp::timecode<double>>>::value_type),
-		format_descriptor<std::array<double,9>>::format(),
+		//see Matrix not POD above
+		format_descriptor<Matrix<std::vector<sp::timecode<double>>>>::format(),
 		1,
 		{stack.size()},
 		{sizeof(Stack<std::vector<sp::timecode<double>>>::value_type)}
