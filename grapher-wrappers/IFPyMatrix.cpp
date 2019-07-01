@@ -49,6 +49,7 @@ PYBIND11_MODULE(matrix, m){
 	.def_readwrite("cov_type", &sp::timecode<double>::cov_type);
 	
 //// enables append, insert, etc. but overwrites init constructors below
+//// not possible because it's numpy
 //	bind_vector<Vectors<std::vector<sp::timecode<double>>>>(m,"Vectors", buffer_protocol())
     class_<Vectors<std::vector<sp::timecode<double>>>>(m,"Vectors",buffer_protocol())
 	.def(init<>())
