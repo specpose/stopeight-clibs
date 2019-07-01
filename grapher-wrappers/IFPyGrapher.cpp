@@ -41,7 +41,7 @@ PYBIND11_MODULE(grapher, m){
 		);
 		})
 	;
-	m.def("create_vector_graph", [](array_t<double,array::c_style> buffer, int samplesPerVector, double unitaryLength, bool relative , double average, double averageScale)->array_t<sp::timecode<double>,array::c_style>{
+	m.def("create_vector_graph", [](array_t<double,array::c_style> buffer, int samplesPerVector, double unitaryLength, bool relative , double average, double averageScale)->std::vector<sp::timecode<double>>{
 		auto info = buffer.request();
 		if (info.format != format_descriptor<double>::format())
 			throw std::runtime_error("Incompatible format: Expected a double array format descriptor");
@@ -52,8 +52,7 @@ PYBIND11_MODULE(grapher, m){
 		auto data = static_cast<double*>(info.ptr);
 		auto vec = std::vector<double>(data,data+info.shape[0]);
 		auto op = speczilla::Buffer<double>(&vec,vec.size(),samplesPerVector,unitaryLength,relative,average,averageScale);
-		auto out = std::vector<sp::timecode<double>>{op()};//is sp::result, not std::vector<timecode>
-		return cast(out);
+		return std::vector<sp::timecode<double>>{op()};//is sp::result, not std::vector<timecode>
     },arg("vector"),arg("samplesPerVector")=1,arg("unitaryLength")=1.0,arg("relative")=false,arg("average")=0.0,arg("averageScale")=1.0)
 	;
 
