@@ -8,8 +8,6 @@
 
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
-PYBIND11_MAKE_OPAQUE(std::vector<double>);
-PYBIND11_MAKE_OPAQUE(std::vector<sp::timecode<double>>);
 
 using namespace pybind11;
 
@@ -18,7 +16,7 @@ PYBIND11_MODULE(grapher, m){
 
     class_<std::vector<double>>(m,"VectorDouble",buffer_protocol())
 	.def(init<>())
-	.def(init([](array_t<double,array::c_style> buffer){
+	/* .def(init([](array_t<double,array::c_style> buffer){
 		auto info = buffer.request();
 		if (info.format != format_descriptor<double>::format())
 			throw std::runtime_error("Incompatible format: Expected a double array format descriptor");
@@ -27,9 +25,9 @@ PYBIND11_MODULE(grapher, m){
 		if (info.ndim!= 1)
 			throw std::runtime_error("Incompatible buffer dimensions");
 		auto data = static_cast<double*>(info.ptr);
-		auto vector = std::vector<double>(data,data+info.shape[0]);
+		auto vector =  new std::vector<double>(data,data+info.shape[0]);
 		return vector;
-	}))
+	}))*/
 	.def_buffer([](std::vector<double>& vector) -> buffer_info{
 		return buffer_info(
 			vector.data(),
@@ -40,6 +38,10 @@ PYBIND11_MODULE(grapher, m){
 			{sizeof(double)}
 		);
 		})
+	/* .def("create_vector_graph", [](std::vector<double>& vec, int samplesPerVector, double unitaryLength, bool relative , double average, double averageScale)->std::vector<sp::timecode<double>>{
+		auto op = speczilla::Buffer<double>(&vec,vec.size(),samplesPerVector,unitaryLength,relative,average,averageScale);
+		return std::vector<sp::timecode<double>>{op()};//is sp::result, not std::vector<timecode>
+    },arg("samplesPerVector")=1,arg("unitaryLength")=1.0,arg("relative")=false,arg("average")=0.0,arg("averageScale")=1.0)*/
 	;
 	m.def("create_vector_graph", [](array_t<double,array::c_style> buffer, int samplesPerVector, double unitaryLength, bool relative , double average, double averageScale)->std::vector<sp::timecode<double>>{
 		auto info = buffer.request();
@@ -50,16 +52,15 @@ PYBIND11_MODULE(grapher, m){
 		if (info.ndim!= 1)
 			throw std::runtime_error("Incompatible buffer dimensions");
 		auto data = static_cast<double*>(info.ptr);
-		auto vec = std::vector<double>(data,data+info.shape[0]);
-		auto op = speczilla::Buffer<double>(&vec,vec.size(),samplesPerVector,unitaryLength,relative,average,averageScale);
+		auto vector = std::vector<double>(data,data+info.shape[0]);
+		auto op = speczilla::Buffer<double>(&vector,vector.size(),samplesPerVector,unitaryLength,relative,average,averageScale);
 		return std::vector<sp::timecode<double>>{op()};//is sp::result, not std::vector<timecode>
-    },arg("vector"),arg("samplesPerVector")=1,arg("unitaryLength")=1.0,arg("relative")=false,arg("average")=0.0,arg("averageScale")=1.0)
-	;
+    },arg("vector"),arg("samplesPerVector")=1,arg("unitaryLength")=1.0,arg("relative")=false,arg("average")=0.0,arg("averageScale")=1.0);
 
 	//basically the same as Vector, but not requiring matrix.h
     class_<std::vector<sp::timecode<double>>>(m,"VectorTimeCodeDouble",buffer_protocol())
 	.def(init<>())
-	.def(init([](array_t<sp::timecode<double>,array::c_style> buffer){
+	/* .def(init([](array_t<sp::timecode<double>,array::c_style> buffer){
 		auto info = buffer.request();
 		// There is an existing bug in NumPy (as of v1.11): trailing bytes are
     	// not encoded explicitly into the format string. This will supposedly
@@ -77,11 +78,11 @@ PYBIND11_MODULE(grapher, m){
 			throw std::runtime_error("Incompatible buffer dimensions");
 		size_t size = info.shape[0];
 		if (info.strides[0]!=sizeof(sp::timecode<double>))
-		throw std::runtime_error("Incompatible format: Incompatible step size");
+			throw std::runtime_error("Incompatible format: Incompatible step size");
 		auto data = static_cast<sp::timecode<double>*>(info.ptr);
-		auto vector = std::vector<sp::timecode<double>>(data,data+size);
+		auto vector = new std::vector<sp::timecode<double>>(data,data+size);
 		return vector;
-	}))
+	}))*/
 	.def_buffer([](std::vector<sp::timecode<double>>& vector) -> buffer_info{
 		return buffer_info(
 			vector.data(),

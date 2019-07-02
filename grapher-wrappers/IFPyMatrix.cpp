@@ -13,8 +13,6 @@
 #undef NDEBUG
 #include <iostream>
 
-PYBIND11_MAKE_OPAQUE(Vectors<std::vector<sp::timecode<double>>>);
-
 using namespace pybind11;
 
 PYBIND11_MODULE(matrix, m){
@@ -55,8 +53,25 @@ PYBIND11_MODULE(matrix, m){
 	.def(init<>())
  	.def(init([](array_t<sp::timecode<double>,array::c_style> buffer){
 		auto info = buffer.request();
+		// There is an existing bug in NumPy (as of v1.11): trailing bytes are
+    	// not encoded explicitly into the format string. This will supposedly
+		// get fixed in v1.12; for further details, see these:
+		// - https://github.com/numpy/numpy/issues/7797
+		// - https://github.com/numpy/numpy/pull/7798
+		// Because of this, we won't use numpy's logic to generate buffer format
+		// strings and will just do it ourselves.
+		//if (info.format != format_descriptor<sp::timecode<double>>::format()){
+		//	throw std::runtime_error("Incompatible format: Expected a timecode array format descriptor");
+		//	}
+		if (info.itemsize != sizeof(sp::timecode<double>))
+			throw std::runtime_error("Incompatible format: Expected timecode size items");
+		if (info.ndim!= 1)
+			throw std::runtime_error("Incompatible buffer dimensions");
+		size_t size = info.shape[0];
+		if (info.strides[0]!=sizeof(sp::timecode<double>))
+			throw std::runtime_error("Incompatible format: Incompatible step size");
 		auto data = static_cast<sp::timecode<double>*>(info.ptr);
-		auto vector = Vectors<std::vector<sp::timecode<double>>>(data,data+info.shape[0]);
+		auto vector = new Vectors<std::vector<sp::timecode<double>>>(data,data+info.shape[0]);
 		return vector;
 	}))
  	.def_buffer([](Vectors<std::vector<sp::timecode<double>>>& vectors) -> buffer_info{
