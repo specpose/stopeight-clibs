@@ -7,7 +7,7 @@
 namespace speczilla {
 
 	template<typename T> Buffer<T>::Buffer(std::vector<T>* s)
-    : PreloaderIF<T,sp::result<T>>( *this )
+    : PreloaderIF<T,std::vector<sp::timecode<T>>>( *this )
 		, buf(s)
                 , _showSamples(s->size())
 		, _samplesPerVector(1)
@@ -51,11 +51,11 @@ namespace speczilla {
 	template Buffer<double>::~Buffer();
 	template Buffer<int16_t>::~Buffer();
 
-	template<typename T> sp::result<T> Buffer<T>::operator()()
+	template<typename T> std::vector<sp::timecode<T>> Buffer<T>::operator()()
 	{
         //size_t vectorSize = grapher::samples_To_VG_vectorSize(buf->size(), _samplesPerVector);
         T vectorLength = grapher::samples_To_VG_vectorLength(_showSamples, _unitaryLength);
-		auto output = sp::result<T>{};
+		auto output = std::vector<sp::timecode<T>>{};
 
 		if (buf->size() > 2) {
 			std::vector<T> differences = std::vector<T>(buf->size(), 0.0);
@@ -79,9 +79,9 @@ namespace speczilla {
 
 		return output;
 	}
-	template sp::result<float> Buffer<float>::operator()();
-	template sp::result<double> Buffer<double>::operator()();
-	template sp::result<int16_t> Buffer<int16_t>::operator()();
+	template std::vector<sp::timecode<float>> Buffer<float>::operator()();
+	template std::vector<sp::timecode<double>> Buffer<double>::operator()();
+	template std::vector<sp::timecode<int16_t>> Buffer<int16_t>::operator()();
 
 }
 

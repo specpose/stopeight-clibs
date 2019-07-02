@@ -12,7 +12,7 @@
 
 namespace speczilla {
 
-	template<typename T>class Buffer : public PreloaderIF<T, sp::result<T>>
+	template<typename T>class Buffer : public PreloaderIF<T, std::vector<sp::timecode<T>>>
 	{
 	public:
 		Buffer<T>(std::vector<T>* s);
@@ -20,7 +20,7 @@ namespace speczilla {
 
 		~Buffer<T>();
 
-		sp::result<T> operator()();
+		std::vector<sp::timecode<T>> operator()();
 
 	private:
 		std::vector<T>* buf;
