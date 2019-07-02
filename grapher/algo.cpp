@@ -146,21 +146,21 @@ namespace grapher {
     }
     template <class InputIterator, class OutputIterator> void _blocks::operator()(InputIterator begin, InputIterator end, OutputIterator begin2)
     {
-		using it_pair = typename std::iterator_traits<OutputIterator>::value_type;
+		using my_pair = typename std::iterator_traits<InputIterator>::value_type;//todo from OutputIterator; remove backinserter
 		auto spV = _samplesPerVector;
-        std::for_each(begin, end, [&begin2, spV](it_pair slice) {
+        std::for_each(begin, end, [&begin2, spV](my_pair slice) {
             auto size = std::distance(slice.first, slice.second);
             if (size > 0) {
                 auto sectionend = (spV > size) ? size : spV;
                 for (int i = 0; i < (size / sectionend); i++) {
-                    *begin2++ = (it_pair{ (slice.first + (i*sectionend)),(slice.first + (i*sectionend) + sectionend) });
+                    *begin2++ = (my_pair{ (slice.first + (i*sectionend)),(slice.first + (i*sectionend) + sectionend) });
                 }
                 auto remainder = size%sectionend;
                 if (remainder != 0)
-                    *begin2++ = (it_pair{ (slice.second - remainder),slice.second });
+                    *begin2++ = (my_pair{ (slice.second - remainder),slice.second });
             }
             else {
-                *begin2++ = (it_pair{ slice.first, slice.first });
+                *begin2++ = (my_pair{ slice.first, slice.first });
             }
         });
     }
@@ -257,17 +257,19 @@ namespace grapher {
         
 		auto out_vectors = sp::result<T>{};//((vectorSize * 2) + add);
         
-        /*
+        
          //HERESTART
-         std::vector<sp::it_pair> blocks;
-         _blocks(_samplesPerVector)(task1, std::begin(vectors_sliced), std::end(vectors_sliced), std::back_inserter(blocks), InputIterator::iterator_category{});
+         /* using bounds = std::pair< typename sp::result<T>::iterator, typename sp::result<T>::iterator >;//same as it_pair shared_types
+         std::vector<bounds> blocks;
+         auto b = _blocks(_samplesPerVector);
+         b(std::begin(vectors_sliced), std::end(vectors_sliced), std::back_inserter(blocks));
          
-         std::vector<sp::element> sums;
-         _sum_blocks()(std::begin(blocks), std::end(blocks), std::back_inserter(sums));
+         std::vector<sp::timecode<T>> sums;
+         _sum_blocks(std::begin(blocks), std::end(blocks), std::back_inserter(sums));
          
-         std::move(std::begin(sums), std::end(sums), std::back_inserter(out_vectors));
+         std::move(std::begin(sums), std::end(sums), std::back_inserter(out_vectors));*/
          //HEREEND
-         */
+         
         
         //hierarchy all to 1
         //std::transform(std::begin(vectors_sliced), std::end(vectors_sliced), std::back_inserter(out_vectors), [_samplesPerVector](decltype(vectors_sliced) v) {
