@@ -3,10 +3,6 @@
 
 //#include <experimental/algorithm>//CYCLIC DEPENDENCY
 #include <stopeight-clibs/shared_types.h>//CYCLIC DEPENDENCY
-//#include <experimental/impl/algorithm_impl.h>
-//using fexec = std::experimental::parallel::parallel_vector_execution_policy;
-#include "dummy.h"
-using fexec = const dummy;
 
 #include "stopeight-clibs/algo.h"
 #include "containers.h"
@@ -237,9 +233,6 @@ namespace grapher {
 		typename
 	> sp::result<T> __differences_To_VG<T>::operator()(std::vector<T>& differences, UnaryFunction& angleFunction)
     {
-        //par
-        //std::experimental::parallel::transform(task1, begin, end, begin, [](float f) {return 3.3f; });
-        
         std::vector<T> rotations;
         //first one is invalid
         __calculate_rotations(std::begin(differences) + 1, std::end(differences), std::back_inserter(rotations), angleFunction);
@@ -334,7 +327,3 @@ namespace grapher {
 	template sp::result<float> samples_To_VG<float>::operator()(std::vector<float>&, angle::sharing_angle&);
 
 }
-
-//weird double defined symbol error for sycl::device from msvc
-//msvc compile
-//#include "shared_types.cpp"

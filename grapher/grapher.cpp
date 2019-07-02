@@ -3,7 +3,6 @@
 
 #include "grapher_impl.h"
 #include "stopeight-clibs/algo.h"
-#include "dummy.h"
 
 namespace speczilla {
 
