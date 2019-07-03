@@ -15,9 +15,11 @@ namespace speczilla {
 		//makes implementation!!
 		//PreloaderIF<T>();
 		//PreloaderIF<T, ReturnType>(std::vector<T>* s);
-		virtual ~PreloaderIF<T, ReturnType>() {};
+		//pybind11: *** stack smashing detected ***: <unknown> terminated
+		//virtual ~PreloaderIF<T, ReturnType>() {};
 
-		virtual ReturnType operator()() =0;
+		//pybind11: *** stack smashing detected ***: <unknown> terminated
+		//virtual ReturnType operator()() =0;
 	};
 }
 

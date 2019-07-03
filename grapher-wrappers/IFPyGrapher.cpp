@@ -41,6 +41,10 @@ PYBIND11_MODULE(grapher, m){
 		);
 		})
 	.def("create_vector_graph", [](std::vector<double>& vec, int samplesPerVector, double unitaryLength, bool relative , double average, double averageScale)->std::vector<sp::timecode<double>>{
+		auto op = speczilla::Buffer<double>(&vec,vec.size(),samplesPerVector,unitaryLength,relative,average,averageScale);
+		return op();//is sp::result, not std::vector<timecode>
+    },arg("samplesPerVector")=1,arg("unitaryLength")=1.0,arg("relative")=false,arg("average")=0.0,arg("averageScale")=1.0);
+	/* .def("create_vector_graph", [](std::vector<double>& vec, int samplesPerVector, double unitaryLength, bool relative , double average, double averageScale)->std::vector<sp::timecode<double>>{
 		//same code as grapher, except:
 		//PreloaderIF or Destructor -> stack smash?
 		using T = double;
@@ -65,7 +69,7 @@ PYBIND11_MODULE(grapher, m){
 			}
 		}
 		return output;
-	},arg("samplesPerVector")=1,arg("unitaryLength")=1.0,arg("relative")=false,arg("average")=0.0,arg("averageScale")=1.0)
+	},arg("samplesPerVector")=1,arg("unitaryLength")=1.0,arg("relative")=false,arg("average")=0.0,arg("averageScale")=1.0)*/
 	;
 	//this works!!
 	m.def("create_vector_graph", [](array_t<double,array::c_style> buffer, int samplesPerVector, double unitaryLength, bool relative , double average, double averageScale)->std::vector<sp::timecode<double>>{

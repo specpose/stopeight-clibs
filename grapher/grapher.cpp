@@ -7,8 +7,8 @@
 namespace speczilla {
 
 	template<typename T> Buffer<T>::Buffer(std::vector<T>* s)
-    : PreloaderIF<T,std::vector<sp::timecode<T>>>( *this )
-		, buf(s)
+    :// PreloaderIF<T,std::vector<sp::timecode<T>>>(),
+		buf(s)
                 , _showSamples(s->size())
 		, _samplesPerVector(1)
                 , _unitaryLength(1.0)
