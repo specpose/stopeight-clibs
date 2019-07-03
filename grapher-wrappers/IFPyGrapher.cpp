@@ -2,6 +2,8 @@
 // GNU Lesser General Public License, version 2.1
 #include <stopeight-clibs/shared_types.h>
 #include <stopeight-clibs/grapher.h>
+#include <stopeight-clibs/algo.h>
+#include <stopeight-clibs/angle_functions.h>
 
 #undef NDEBUG
 #include <iostream>
@@ -16,7 +18,7 @@ PYBIND11_MODULE(grapher, m){
 
     class_<std::vector<double>>(m,"VectorDouble",buffer_protocol())
 	.def(init<>())
-	/* .def(init([](array_t<double,array::c_style> buffer){
+	.def(init([](array_t<double,array::c_style> buffer){
 		auto info = buffer.request();
 		if (info.format != format_descriptor<double>::format())
 			throw std::runtime_error("Incompatible format: Expected a double array format descriptor");
@@ -27,7 +29,7 @@ PYBIND11_MODULE(grapher, m){
 		auto data = static_cast<double*>(info.ptr);
 		auto vector =  new std::vector<double>(data,data+info.shape[0]);
 		return vector;
-	}))*/
+	}))
 	.def_buffer([](std::vector<double>& vector) -> buffer_info{
 		return buffer_info(
 			vector.data(),
@@ -38,10 +40,29 @@ PYBIND11_MODULE(grapher, m){
 			{sizeof(double)}
 		);
 		})
-	/* .def("create_vector_graph", [](std::vector<double>& vec, int samplesPerVector, double unitaryLength, bool relative , double average, double averageScale)->std::vector<sp::timecode<double>>{
-		auto op = speczilla::Buffer<double>(&vec,vec.size(),samplesPerVector,unitaryLength,relative,average,averageScale);
-		return std::vector<sp::timecode<double>>{op()};//is sp::result, not std::vector<timecode>
-    },arg("samplesPerVector")=1,arg("unitaryLength")=1.0,arg("relative")=false,arg("average")=0.0,arg("averageScale")=1.0)*/
+	.def("create_vector_graph", [](std::vector<double>& vec, int samplesPerVector, double unitaryLength, bool relative , double average, double averageScale)->std::vector<sp::timecode<double>>{
+		using T = double;
+        T vectorLength = grapher::samples_To_VG_vectorLength(vec.size(), unitaryLength);
+		auto output = std::vector<sp::timecode<T>>{};
+		if (vec.size() > 2) {
+			std::vector<T> differences = std::vector<T>(vec.size(), 0.0);
+			grapher::__differences(std::begin(vec), std::end(vec), std::begin(differences));
+
+			//in general if uneven, middle is on left side
+			//-1 differences, -1 size
+			auto dvg = (grapher::__differences_To_VG<T>(samplesPerVector, vectorLength, std::vector<size_t>(1, (((vec.size() - 1) / 2) - 1))));
+			if (relative) {
+				angle::relative afunc = angle::relative(std::begin(differences) + 1, std::end(differences),average,averageScale);
+				output = dvg(differences, afunc);//((vectorSize * 2) + add);
+			}
+			else {
+				//propagation means not par_unseq? introduce class for angle?
+				angle::independent afunc = angle::independent(std::begin(differences) + 1, std::end(differences),average,averageScale);
+				output = dvg(differences, afunc);//((vectorSize * 2) + add);
+			}
+		}
+		return output;
+	},arg("samplesPerVector")=1,arg("unitaryLength")=1.0,arg("relative")=false,arg("average")=0.0,arg("averageScale")=1.0)
 	;
 	m.def("create_vector_graph", [](array_t<double,array::c_style> buffer, int samplesPerVector, double unitaryLength, bool relative , double average, double averageScale)->std::vector<sp::timecode<double>>{
 		auto info = buffer.request();
