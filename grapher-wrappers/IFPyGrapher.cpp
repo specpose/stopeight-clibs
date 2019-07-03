@@ -41,12 +41,15 @@ PYBIND11_MODULE(grapher, m){
 		);
 		})
 	.def("create_vector_graph", [](std::vector<double>& vec, int samplesPerVector, double unitaryLength, bool relative , double average, double averageScale)->std::vector<sp::timecode<double>>{
+		//same code as grapher, except:
+		//PreloaderIF or Destructor -> stack smash?
 		using T = double;
-        T vectorLength = grapher::samples_To_VG_vectorLength(vec.size(), unitaryLength);
+		std::vector<T>* buf(&vec);
+        T vectorLength = grapher::samples_To_VG_vectorLength(buf->size(), unitaryLength);
 		auto output = std::vector<sp::timecode<T>>{};
-		if (vec.size() > 2) {
-			std::vector<T> differences = std::vector<T>(vec.size(), 0.0);
-			grapher::__differences(std::begin(vec), std::end(vec), std::begin(differences));
+		if (buf->size() > 2) {
+			std::vector<T> differences = std::vector<T>(buf->size(), 0.0);
+			grapher::__differences(std::begin(*buf), std::end(*buf), std::begin(differences));
 
 			//in general if uneven, middle is on left side
 			//-1 differences, -1 size
@@ -64,6 +67,7 @@ PYBIND11_MODULE(grapher, m){
 		return output;
 	},arg("samplesPerVector")=1,arg("unitaryLength")=1.0,arg("relative")=false,arg("average")=0.0,arg("averageScale")=1.0)
 	;
+	//this works!!
 	m.def("create_vector_graph", [](array_t<double,array::c_style> buffer, int samplesPerVector, double unitaryLength, bool relative , double average, double averageScale)->std::vector<sp::timecode<double>>{
 		auto info = buffer.request();
 		if (info.format != format_descriptor<double>::format())
