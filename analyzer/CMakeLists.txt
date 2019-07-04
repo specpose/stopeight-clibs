@@ -3,7 +3,7 @@ cmake_minimum_required (VERSION 3.4.3)
 project(stopeight-clibs-analyzer)
 aux_source_directory(. SRC_LIST)
 set(${PROJECT_NAME}_sources
-    src/turns.cpp
+    turns.cpp
 )
 add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_sources})
 
