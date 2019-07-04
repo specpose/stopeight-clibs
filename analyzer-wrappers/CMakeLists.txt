@@ -3,7 +3,7 @@ cmake_minimum_required (VERSION 3.4.3)
 project(analyzer)
 
 pybind11_add_module(${PROJECT_NAME} 
-	interfacepython.cpp
+	IFPyAnalyzer.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE stopeight-clibs-analyzer)
@@ -11,6 +11,6 @@ target_link_libraries(${PROJECT_NAME} PRIVATE stopeight-clibs-analyzer)
 target_include_directories(${PROJECT_NAME}
     PRIVATE
     "../include"
-    "../analyzer/include"
+    "../analyzer"
     ${stopeight-clibs_INCLUDE_DIRS}
 )
