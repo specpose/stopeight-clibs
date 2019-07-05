@@ -2,7 +2,7 @@
 // GNU Lesser General Public License, version 2.1
 #include "stopeight-clibs/shared_types.h"
 
-template<typename T> using it_pair = std::pair< typename sp::result<T>::iterator, typename sp::result<T>::iterator >;
+namespace analyzer {
 
 template <typename T, size_t Size = 2,
           typename = typename std::enable_if_t<std::is_pod<sp::timecode<T, Size>>::value>>
@@ -23,3 +23,7 @@ public:
     int cycle_count = 0;
     //next*
 };
+
+template<typename T> using it_pair = std::pair< typename result<T>::iterator, typename result<T>::iterator >;
+
+}
