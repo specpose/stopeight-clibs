@@ -108,29 +108,8 @@ namespace sp {
 		return std::equal(std::begin(a.coords), std::end(a.coords),std::begin(b.coords)) ;
 	}
 	
-	template<typename T, size_t Size = 2,
-			typename = typename std::enable_if_t<std::is_pod<timecode<T,Size>>::value>
-	> class result : public std::vector<timecode<T,Size>> {//is not gonna be a numpy_dtype -> no pod needed
-	public:
-		result() : std::vector<timecode<T,Size>>() {
-		};//todo: delete -> proper allocation
-		result(size_t n) : std::vector<timecode<T,Size>>(n) {
-			auto tc = timecode<T, Size>{};
-			tc.__init({0,0});
-			std::fill(std::begin(*this), std::end(*this), tc);
-		};
-		result(std::initializer_list<T>) = delete;
-
-		//only for numpy test at the moment
-		bool invalid = false;
-		int cycle_count = 0;
-		//next*
-	};
-
 	template<typename T> using input_iterator = typename std::enable_if_t < std::is_base_of<std::input_iterator_tag, typename std::iterator_traits<T>::iterator_category>::value>; //&& std::is_arithmetic<typename std::iterator_traits<T>::value_type::value_type>::value>;
 	template<typename T> using random_access = typename std::enable_if_t<std::is_base_of<std::random_access_iterator_tag, typename std::iterator_traits<T>::iterator_category>::value>; //&& std::is_arithmetic<typename std::iterator_traits<T>::value_type::value_type>::value>;
-
-	template<typename T> using it_pair = std::pair< typename sp::result<T>::iterator, typename sp::result<T>::iterator >;
 
 	struct sharing_functor_tag {};
 	struct propagating_functor_tag : sharing_functor_tag {};

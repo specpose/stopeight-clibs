@@ -76,8 +76,8 @@ namespace grapher {
             return p;
         });
     }
-    template void __apply_rotation_matrix(std::vector<double>::iterator begin, std::vector<double>::iterator end, sp::result<double>::iterator begin2);
-	template void __apply_rotation_matrix(std::vector<float>::iterator begin, std::vector<float>::iterator end, sp::result<float>::iterator begin2);
+    template void __apply_rotation_matrix(std::vector<double>::iterator begin, std::vector<double>::iterator end, std::vector<sp::timecode<double>>::iterator begin2);
+	template void __apply_rotation_matrix(std::vector<float>::iterator begin, std::vector<float>::iterator end, std::vector<sp::timecode<float>>::iterator begin2);
 
     _fixpoints::_fixpoints(std::vector<size_t>& points) : _fixPoint_indices(points) {
     }
@@ -124,15 +124,15 @@ namespace grapher {
         *it++ = (last);
 		using T = typename std::iterator_traits<InputIterator>::value_type::value_type;//todo remove backinserter//std::iterator_traits<std::iterator_traits<OutputIterator>::value_type::first_type>::value_type::value_type;
 
-        std::transform(std::begin(slices), std::end(slices), begin2, [begin](std::pair<size_t, size_t> p) {//todo derive sp::it_pair
-            sp::it_pair<T> e = sp::it_pair<T>();
+        std::transform(std::begin(slices), std::end(slices), begin2, [begin](std::pair<size_t, size_t> p) {//todo derive it_pair
+            it_pair<T> e = it_pair<T>();
             e.first = (begin + p.first);
             e.second = (begin + p.second);
             return e;
         });
     }
-    template void _fixpoints::operator()(sp::result<double>::iterator begin, sp::result<double>::iterator end, std::vector<sp::it_pair<double>>::iterator begin2);
-	template void _fixpoints::operator()(sp::result<float>::iterator begin, sp::result<float>::iterator end, std::vector<sp::it_pair<float>>::iterator begin2);
+    template void _fixpoints::operator()(std::vector<sp::timecode<double>>::iterator begin, std::vector<sp::timecode<double>>::iterator end, std::vector<it_pair<double>>::iterator begin2);
+	template void _fixpoints::operator()(std::vector<sp::timecode<float>>::iterator begin, std::vector<sp::timecode<float>>::iterator end, std::vector<it_pair<float>>::iterator begin2);
 
     _blocks::_blocks(size_t samplesPerVector) : _samplesPerVector(samplesPerVector) {
         
@@ -160,15 +160,15 @@ namespace grapher {
             }
         });
     }
-    template void _blocks::operator()(std::vector<sp::it_pair<double>>::iterator begin, std::vector<sp::it_pair<double>>::iterator end, std::vector<sp::it_pair<double>>::iterator begin2);
-	template void _blocks::operator()(std::vector<sp::it_pair<float>>::iterator begin, std::vector<sp::it_pair<float>>::iterator end, std::vector<sp::it_pair<float>>::iterator begin2);
+    template void _blocks::operator()(std::vector<it_pair<double>>::iterator begin, std::vector<it_pair<double>>::iterator end, std::vector<it_pair<double>>::iterator begin2);
+	template void _blocks::operator()(std::vector<it_pair<float>>::iterator begin, std::vector<it_pair<float>>::iterator end, std::vector<it_pair<float>>::iterator begin2);
 
     
     template <class InputIterator, class OutputIterator> void _sum_blocks(InputIterator begin, InputIterator end, OutputIterator begin2)
     {
-		using it_pair = typename std::iterator_traits<InputIterator>::value_type;//vector of pairs -> pair//sp::it_pair not available from OutputIterator
+		using it_pair = typename std::iterator_traits<InputIterator>::value_type;//vector of pairs -> pair//it_pair not available from OutputIterator
 		using tc = typename it_pair::first_type::value_type;//pair -> tc -> T
-		//transforming intput sp::it_pair to sp:element
+		//transforming intput it_pair to sp:element
         std::transform(begin, end, begin2, [](it_pair block) {
             //both can be nonempty; preserve type of last
             if (block.first != block.second) {
@@ -186,8 +186,8 @@ namespace grapher {
             }
         });
     }
-    template void _sum_blocks(std::vector<sp::it_pair<double>>::iterator begin, std::vector<sp::it_pair<double>>::iterator end, sp::result<double>::iterator begin2);
-	template void _sum_blocks(std::vector<sp::it_pair<float>>::iterator begin, std::vector<sp::it_pair<float>>::iterator end, sp::result<float>::iterator begin2);
+    template void _sum_blocks(std::vector<it_pair<double>>::iterator begin, std::vector<it_pair<double>>::iterator end, std::vector<sp::timecode<double>>::iterator begin2);
+	template void _sum_blocks(std::vector<it_pair<float>>::iterator begin, std::vector<it_pair<float>>::iterator end, std::vector<sp::timecode<float>>::iterator begin2);
 
     template <class InputIterator,
 		class OutputIterator,
@@ -209,8 +209,8 @@ namespace grapher {
         };
         std::transform(begin, end, begin2, my_add());
     }
-    template void _append(sp::result<double>::iterator begin, sp::result<double>::iterator end, sp::result<double>::iterator begin2);
-	template void _append(sp::result<float>::iterator begin, sp::result<float>::iterator end, sp::result<float>::iterator begin2);
+    template void _append(std::vector<sp::timecode<double>>::iterator begin, std::vector<sp::timecode<double>>::iterator end, std::vector<sp::timecode<double>>::iterator begin2);
+	template void _append(std::vector<sp::timecode<float>>::iterator begin, std::vector<sp::timecode<float>>::iterator end, std::vector<sp::timecode<float>>::iterator begin2);
 
     template <class T> __differences_To_VG<T>::__differences_To_VG(size_t samplesPerVector, double vectorLength, std::vector<size_t> fixPoints_indices)
     : _samplesPerVector(samplesPerVector)
@@ -231,7 +231,7 @@ namespace grapher {
 	template <class T> template <
 		class UnaryFunction,
 		typename
-	> sp::result<T> __differences_To_VG<T>::operator()(std::vector<T>& differences, UnaryFunction& angleFunction)
+	> std::vector<sp::timecode<T>> __differences_To_VG<T>::operator()(std::vector<T>& differences, UnaryFunction& angleFunction)
     {
         std::vector<T> rotations;
         //first one is invalid
@@ -240,7 +240,7 @@ namespace grapher {
 		auto tc = sp::timecode<T>{};
 		tc.__init({T(_vectorLength),T(0)});
         const auto vectors_size = std::distance(std::begin(rotations), std::end(rotations));
-        auto vectors = sp::result<T>(vectors_size);
+        auto vectors = std::vector<sp::timecode<T>>(vectors_size);
 		std::fill_n(std::begin(vectors), vectors_size, tc);//sp::make_timecode<T>(T(_vectorLength), 0));//sp::timecode<T>{T(_vectorLength), 0});
         __apply_rotation_matrix(std::begin(rotations), std::end(rotations), std::begin(vectors));
         
@@ -248,11 +248,11 @@ namespace grapher {
         auto func = _fixpoints(_fixPoint_indices);
         func(std::begin(vectors), std::end(vectors), std::back_inserter(vectors_sliced));
         
-		auto out_vectors = sp::result<T>{};//((vectorSize * 2) + add);
+		auto out_vectors = std::vector<sp::timecode<T>>{};//((vectorSize * 2) + add);
         
         
          //HERESTART
-         /* using bounds = std::pair< typename sp::result<T>::iterator, typename sp::result<T>::iterator >;//same as it_pair shared_types
+         /* using bounds = std::pair< typename std::vector<sp::timecode<T>>::iterator, typename std::vector<sp::timecode<T>>::iterator >;//same as it_pair shared_types
          std::vector<bounds> blocks;
          auto b = _blocks(_samplesPerVector);
          b(std::begin(vectors_sliced), std::end(vectors_sliced), std::back_inserter(blocks));
@@ -270,7 +270,7 @@ namespace grapher {
             stopeight::blocks<sp::timecode<T>> blocks_vector = stopeight::blocks<sp::timecode<T>>(v, _samplesPerVector);//v is it_pair<T>
             //std::move(slice), _samplesPerVector);
             
-            sp::result<T> ov = sp::result<T>{};//(blocks_vector.size(), { double(0), double(0) });
+            std::vector<sp::timecode<T>> ov = std::vector<sp::timecode<T>>{};//(blocks_vector.size(), { double(0), double(0) });
             //std::fill<typename std::vector<sp::element>::iterator>(std::begin(ov), std::end(ov), sp::element{ 1.0f, 1.0f });
             
             _sum_blocks(std::begin(blocks_vector), std::end(blocks_vector), std::back_inserter(ov));
@@ -282,12 +282,12 @@ namespace grapher {
         
 		return out_vectors;
     }
-	template sp::result<double> __differences_To_VG<double>::operator()(std::vector<double>&, angle::relative&);
-	template sp::result<float> __differences_To_VG<float>::operator()(std::vector<float>&, angle::relative&);
-	template sp::result<int16_t> __differences_To_VG<int16_t>::operator()(std::vector<int16_t>&, angle::relative&);
-	template sp::result<double> __differences_To_VG<double>::operator()(std::vector<double>&, angle::independent&);
-	template sp::result<float> __differences_To_VG<float>::operator()(std::vector<float>&, angle::independent&);
-	template sp::result<int16_t> __differences_To_VG<int16_t>::operator()(std::vector<int16_t>&, angle::independent&);
+	template std::vector<sp::timecode<double>> __differences_To_VG<double>::operator()(std::vector<double>&, angle::relative&);
+	template std::vector<sp::timecode<float>> __differences_To_VG<float>::operator()(std::vector<float>&, angle::relative&);
+	template std::vector<sp::timecode<int16_t>> __differences_To_VG<int16_t>::operator()(std::vector<int16_t>&, angle::relative&);
+	template std::vector<sp::timecode<double>> __differences_To_VG<double>::operator()(std::vector<double>&, angle::independent&);
+	template std::vector<sp::timecode<float>> __differences_To_VG<float>::operator()(std::vector<float>&, angle::independent&);
+	template std::vector<sp::timecode<int16_t>> __differences_To_VG<int16_t>::operator()(std::vector<int16_t>&, angle::independent&);
     
     int samples_To_VG_vectorSize(int inputSize, int samplesPerVector) {
         auto size = inputSize / samplesPerVector;
@@ -313,7 +313,7 @@ namespace grapher {
     }
     template samples_To_VG<double>::~samples_To_VG();
     template samples_To_VG<float>::~samples_To_VG();
-    template<class T> template <class UnaryFunction> sp::result<T> samples_To_VG<T>::operator()(std::vector<T>& samples, UnaryFunction& angleFunction)
+    template<class T> template <class UnaryFunction> std::vector<sp::timecode<T>> samples_To_VG<T>::operator()(std::vector<T>& samples, UnaryFunction& angleFunction)
     {
         size_t size = std::distance(std::begin(samples), std::end(samples));
         if (size > 0) {
@@ -323,7 +323,7 @@ namespace grapher {
             return __differences_To_VG<T>(_samplesPerVector, _vectorLength, _fixPoint_indices)(differences, angleFunction);
         }
     }
-    template sp::result<double> samples_To_VG<double>::operator()(std::vector<double>&, angle::sharing_angle&);
-	template sp::result<float> samples_To_VG<float>::operator()(std::vector<float>&, angle::sharing_angle&);
+    template std::vector<sp::timecode<double>> samples_To_VG<double>::operator()(std::vector<double>&, angle::sharing_angle&);
+	template std::vector<sp::timecode<float>> samples_To_VG<float>::operator()(std::vector<float>&, angle::sharing_angle&);
 
 }

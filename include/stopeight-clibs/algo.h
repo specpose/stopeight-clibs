@@ -8,6 +8,8 @@
 
 namespace grapher {
 
+	template<typename T> using it_pair = std::pair< typename std::vector<sp::timecode<T>>::iterator, typename std::vector<sp::timecode<T>>::iterator >;
+
 	template<class InputIterator, class OutputIterator,
 		typename = typename std::enable_if_t<std::is_base_of<std::random_access_iterator_tag, typename std::iterator_traits<InputIterator>::iterator_category>::value && std::is_arithmetic<typename std::iterator_traits<InputIterator>::value_type>::value>
 	> void __differences(InputIterator begin, InputIterator end, OutputIterator begin2);
@@ -52,7 +54,6 @@ namespace grapher {
 		typename = typename sp::input_iterator<InputIterator>
 	>void _append(InputIterator begin, InputIterator end, OutputIterator begin2);
 
-	//speed test formally std::vector<timecode> is generic, sp::result<type> is specialized
 	template<class T> class __differences_To_VG {
 	public:
 		__differences_To_VG(size_t samplesPerVector, double vectorLength, std::vector<size_t> fixPoints_indices = std::vector<size_t>(1, 0));
@@ -63,7 +64,7 @@ namespace grapher {
 			typename = typename std::enable_if_t<std::is_base_of<sp::sharing_functor<double, double>, UnaryFunction>::value>//std::enable_if_t<std::is_base_of<sp::readonly_functor<double,double>,UnaryFunction>::value>
 		>
 			//mass allocation of different types, so no iterator-functor paradigm here
-			sp::result<T> operator()(std::vector<T>& differences, UnaryFunction& angleFunction);
+			std::vector<sp::timecode<T>> operator()(std::vector<T>& differences, UnaryFunction& angleFunction);
 
 	private:
 		size_t _samplesPerVector;
@@ -81,7 +82,7 @@ namespace grapher {
 		~samples_To_VG();
 
 		//uses functions with allocations, so no iterator-functor paradigm either!
-		template <class UnaryFunction> sp::result<T> operator()(std::vector<T>& samples, UnaryFunction& angleFunction);
+		template <class UnaryFunction> std::vector<sp::timecode<T>> operator()(std::vector<T>& samples, UnaryFunction& angleFunction);
 
 	private:
 		size_t _samplesPerVector;
