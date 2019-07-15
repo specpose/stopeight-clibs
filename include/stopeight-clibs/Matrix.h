@@ -92,7 +92,7 @@ class Vectors : public Container {
 	//-> no move constructor from numpy array
 public:
 	//Vectors();
-	using Container::vector;
+	using Container::Container;
 
 	using PodClass = typename Container::value_type;
 	using T = typename PodClass::value_type;
