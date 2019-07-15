@@ -1,20 +1,14 @@
 cmake_minimum_required (VERSION 3.4.3)
 
-project(stopeight-clibs-analyzer)
+project(stopeight-clibs-matrix)
+
 aux_source_directory(. SRC_LIST)
 set(${PROJECT_NAME}_sources
-    turns.cpp
+    Matrix.cpp
 )
 add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_sources})
-
-target_link_libraries(${PROJECT_NAME}
-    PRIVATE
-    stopeight-clibs-matrix
-)
-
 target_include_directories(${PROJECT_NAME}
     PRIVATE
     ${stopeight-clibs_INCLUDE_DIRS}
 )
-
 install(TARGETS ${PROJECT_NAME} DESTINATION lib)
