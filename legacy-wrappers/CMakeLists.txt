@@ -12,6 +12,7 @@ target_include_directories(${PROJECT_NAME}
     PRIVATE
     "../legacy/include"
     "../include"
+    "../cmake-git-version-tracking/better-example"
 )
 
 project(finders)
@@ -32,6 +33,7 @@ target_include_directories(${PROJECT_NAME}
     "../legacy/include"
     "../include"
     "./"
+    "../cmake-git-version-tracking/better-example"
 )
 
 project(getters)
@@ -52,4 +54,5 @@ target_include_directories(${PROJECT_NAME}
     "../legacy/include"
     "../include"
     "./"
+    "../cmake-git-version-tracking/better-example"
 )

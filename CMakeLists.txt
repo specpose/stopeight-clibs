@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.1.3)
+cmake_minimum_required (VERSION 3.2)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -7,19 +7,21 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 project(stopeight-clibs)
 add_library(${PROJECT_NAME} INTERFACE)
-#target_sources(${PROJECT_NAME} INTERFACE
-#    include/stopeight-clibs/algo.h
-#    include/stopeight-clibs/angle_functions.h
-#    include/stopeight-clibs/grapher.h
-#    include/stopeight-clibs/mean.h
-#    include/stopeight-clibs/preloaderif.h
-#    include/stopeight-clibs/shared_types.h
-#)
 target_include_directories(${PROJECT_NAME} INTERFACE ${PROJECT_SOURCE_DIR}/include/)
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION include)
 
 set(${PROJECT_NAME}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include
     CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE)
+
+# Define the two required variables before including
+# the source code for watching a git repository.
+set(PRE_CONFIGURE_FILE "${PROJECT_SOURCE_DIR}/cmake-git-version-tracking/better-example/git.cc.in")
+set(POST_CONFIGURE_FILE "${CMAKE_CURRENT_BINARY_DIR}/git.cpp")
+file(APPEND "${CMAKE_CURRENT_BINARY_DIR}/git.cpp" "")
+include(${PROJECT_SOURCE_DIR}/cmake-git-version-tracking/git_watcher.cmake)
+
+# Danger injection from submodule
+set(GIT_HEADER_DIR "${PROJECT_SOURCE_DIR}/cmake-git-version-tracking/better-example/")
 
 add_subdirectory(grapher)
 add_subdirectory(analyzer)

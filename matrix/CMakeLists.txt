@@ -5,10 +5,13 @@ project(stopeight-clibs-matrix)
 aux_source_directory(. SRC_LIST)
 set(${PROJECT_NAME}_sources
     Matrix.cpp
+    ${POST_CONFIGURE_FILE}
 )
 add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_sources})
 target_include_directories(${PROJECT_NAME}
     PRIVATE
     ${stopeight-clibs_INCLUDE_DIRS}
+    ${GIT_HEADER_DIR}
 )
+add_dependencies(${PROJECT_NAME} check_git)
 install(TARGETS ${PROJECT_NAME} DESTINATION lib)

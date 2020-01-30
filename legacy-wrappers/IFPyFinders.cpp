@@ -1,3 +1,4 @@
+#include "git.h"
 #include <IFPyShared.h>
 #undef NDEBUG
 #include <pybind11/stl.h>
@@ -18,6 +19,15 @@ std::vector<size_t> transform_indices(QList<dpoint> result_qt){
 }
 
 PYBIND11_MODULE(finders, f){
+	if(GitMetadata::Populated()) {
+		object sha;
+	        if(GitMetadata::AnyUncommittedChanges()) {
+			sha = cast(GitMetadata::CommitSHA1()+"+dirty");
+	        } else {
+			sha = cast(GitMetadata::CommitSHA1());
+		}
+		f.attr("version") = sha;
+	}
         //static QList<dpoint> findTurns(ListCopyable<dpoint> toBeProcessed);
         f.def("Turns",[](QList<dpoint>& in)->std::vector<size_t>{
             return transform_indices(Turns<dpoint>::findTurns(in));

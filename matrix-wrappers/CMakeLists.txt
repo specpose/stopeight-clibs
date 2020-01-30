@@ -11,4 +11,5 @@ target_include_directories(${PROJECT_NAME}
     "../include"
     "../matrix"
     ${stopeight-clibs_INCLUDE_DIRS}
+    "../cmake-git-version-tracking/better-example"
 )

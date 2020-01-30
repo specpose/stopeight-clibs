@@ -36,6 +36,7 @@ set(${PROJECT_NAME}_sources
     src/straightsnormalizer.cpp
     src/corners.cpp
     src/render.cpp
+    ${POST_CONFIGURE_FILE}
 )
 #set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -std=c++11")
 
@@ -56,6 +57,7 @@ target_link_libraries(${PROJECT_NAME}
 target_include_directories(${PROJECT_NAME}
     PRIVATE
     "include"
+    ${GIT_HEADER_DIR}
 )
-
+add_dependencies(${PROJECT_NAME} check_git)
 install(TARGETS ${PROJECT_NAME} DESTINATION lib)

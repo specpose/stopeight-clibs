@@ -1,3 +1,4 @@
+#include "git.h"
 #include <IFPyShared.h>
 #undef NDEBUG
 #include <pybind11/stl.h>
@@ -5,6 +6,15 @@
 PYBIND11_MAKE_OPAQUE(std::vector<sp::timecode<double>>);
 
 PYBIND11_MODULE(getters, g){
+	if(GitMetadata::Populated()) {
+		object sha;
+	        if(GitMetadata::AnyUncommittedChanges()) {
+			sha = cast(GitMetadata::CommitSHA1()+"+dirty");
+	        } else {
+			sha = cast(GitMetadata::CommitSHA1());
+		}
+		g.attr("version") = sha;
+	}
     py::class_<QListWrapper>(g,"QListDpoint", py::buffer_protocol())
 	.def(py::init<py::array_t<sp::timecode<double>,py::array::c_style>>())
 	;

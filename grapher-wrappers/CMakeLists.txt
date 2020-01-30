@@ -17,4 +17,5 @@ target_include_directories(${PROJECT_NAME}
     "../include"
     "../grapher"
     ${stopeight-clibs_INCLUDE_DIRS}
+    "../cmake-git-version-tracking/better-example"
 )
