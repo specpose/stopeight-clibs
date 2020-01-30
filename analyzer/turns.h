@@ -9,7 +9,7 @@
 namespace analyzer {
     //    predicate contains hardcoded type
     //    returns a bool
-    template<typename Coords_T> class predicate : std::function<bool(result<Coords_T>&)>{
+    /*template<typename Coords_T> class predicate : std::function<bool(result<Coords_T>&)>{
     public:
         predicate()=delete;
         virtual const sp::tctype type()=0;
@@ -33,14 +33,16 @@ namespace analyzer {
     //,typename = typename std::enable_if_t<std::is_base_of<std::contiguous_iterator_tag, typename std::iterator_traits<Iterator>::iterator_category>::value>
     > void predicate_exec(Iterator start,Iterator growingEnd,Iterator partition_end,bool& foundOne,bool& absolute_index,predicate<typename std::iterator_traits<Iterator>::value_type>& predicate){//return by reference not tie
         auto result = std::find_if(start,growingEnd,&predicate);//capture incremental->transform2?
-        //HEAD AND TAIL NEED TO BE IN PREDICATE?
-        /*if (result!=partition_end){
-            foundOne = true;
-            absolute_index = std::distance(start,end-head);
-            type = predicate::tctype
-            //break: avoid continuing predicate sequence because of possible exceptions?
-        }*/
-    }
+        ////HEAD AND TAIL NEED TO BE IN PREDICATE?
+        //if (result!=partition_end){
+        //    foundOne = true;
+        //    absolute_index = std::distance(start,end-head);
+        //    type = predicate::tctype
+        //    //break: avoid continuing predicate sequence because of possible exceptions?
+        //}
+    }*/
+
+    
     /*
 
     template<typename T> using partition_bounds = typename std::array<std::random_access_iterator<result<T>>,2>;
