@@ -1,5 +1,10 @@
 cmake_minimum_required (VERSION 3.4.3)
 
+find_package(Qt5Core)
+find_package(Qt5Gui)
+
+if (Qt5Core_FOUND AND Qt5Gui_FOUND)
+
 project(stopeight-clibs-legacy)
 aux_source_directory(. SRC_LIST)
 set(${PROJECT_NAME}_sources
@@ -38,16 +43,9 @@ set(${PROJECT_NAME}_sources
     src/render.cpp
     ${POST_CONFIGURE_FILE}
 )
-#set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -std=c++11")
 
 add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_sources})
 
-find_package(Qt5Core REQUIRED)
-find_package(Qt5Gui REQUIRED)
-#qt5_use_modules(${PROJECT_NAME}
-#     Core
-#     Gui
-#)
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
     Qt5::Core
@@ -61,3 +59,5 @@ target_include_directories(${PROJECT_NAME}
 )
 add_dependencies(${PROJECT_NAME} check_git)
 install(TARGETS ${PROJECT_NAME} DESTINATION lib)
+
+endif (Qt5Core_FOUND AND Qt5Gui_FOUND)

@@ -23,7 +23,7 @@ include(${PROJECT_SOURCE_DIR}/cmake-git-version-tracking/git_watcher.cmake)
 # Danger injection from submodule
 set(GIT_HEADER_DIR "${PROJECT_SOURCE_DIR}/cmake-git-version-tracking/better-example/")
 
+add_subdirectory(matrix)
 add_subdirectory(grapher)
 add_subdirectory(analyzer)
 add_subdirectory(legacy)
-add_subdirectory(matrix)
