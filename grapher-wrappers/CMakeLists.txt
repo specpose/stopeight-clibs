@@ -1,8 +1,5 @@
 cmake_minimum_required (VERSION 3.4.3)
 
-find_library(stopeight-clibs-grapher_FOUND stopeight-clibs-grapher)
-if (stopeight-clibs-grapher_FOUND)
-
 project(grapher)
 pybind11_add_module(${PROJECT_NAME} IFPyGrapher.cpp)
 
@@ -18,5 +15,3 @@ target_include_directories(${PROJECT_NAME}
     ${stopeight-clibs_INCLUDE_DIRS}
     "../cmake-git-version-tracking/better-example"
 )
-
-endif (stopeight-clibs-grapher_FOUND)

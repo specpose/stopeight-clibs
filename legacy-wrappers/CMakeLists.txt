@@ -1,7 +1,8 @@
 cmake_minimum_required (VERSION 3.4.3)
 
-find_library(stopeight-clibs-legacy_FOUND stopeight-clibs-legacy)
-if (stopeight-clibs-legacy_FOUND)
+find_package(Qt5Core)
+find_package(Qt5Gui)
+if (Qt5Core_FOUND AND Qt5Gui_FOUND)
 
 project(legacy)
 pybind11_add_module(${PROJECT_NAME} 
@@ -61,4 +62,4 @@ target_include_directories(${PROJECT_NAME}
 #    "../cmake-git-version-tracking/better-example"
 #)
 
-endif (stopeight-clibs-legacy_FOUND)
+endif (Qt5Core_FOUND AND Qt5Gui_FOUND)
