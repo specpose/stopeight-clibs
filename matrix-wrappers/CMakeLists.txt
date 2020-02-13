@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 3.4.3)
 
-find_package(stopeight-clibs-matrix)
+find_library(stopeight-clibs-matrix_FOUND stopeight-clibs-matrix)
 if (stopeight-clibs-matrix_FOUND)
 
 project(matrix)

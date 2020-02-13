@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 3.4.3)
 
-find_package(stopeight-clibs-legacy)
+find_library(stopeight-clibs-legacy_FOUND stopeight-clibs-legacy)
 if (stopeight-clibs-legacy_FOUND)
 
 project(legacy)

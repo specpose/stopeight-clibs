@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 3.4.3)
 
-find_package(stopeight-clibs-analyzer)
+find_library(stopeight-clibs-analyzer_FOUND stopeight-clibs-analyzer)
 if (stopeight-clibs-analyzer_FOUND)
 
 project(analyzer)

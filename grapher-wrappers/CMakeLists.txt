@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 3.4.3)
 
-find_package(stopeight-clibs-grapher)
+find_library(stopeight-clibs-grapher_FOUND stopeight-clibs-grapher)
 if (stopeight-clibs-grapher_FOUND)
 
 project(grapher)
