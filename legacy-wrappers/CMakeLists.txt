@@ -1,5 +1,8 @@
 cmake_minimum_required (VERSION 3.4.3)
 
+find_package(stopeight-clibs-legacy)
+if (stopeight-clibs-legacy_FOUND)
+
 project(legacy)
 pybind11_add_module(${PROJECT_NAME} 
     interfacepython.cpp
@@ -57,3 +60,5 @@ target_include_directories(${PROJECT_NAME}
 #    "./"
 #    "../cmake-git-version-tracking/better-example"
 #)
+
+endif (stopeight-clibs-legacy_FOUND)
