@@ -17,6 +17,7 @@ target_include_directories(${PROJECT_NAME}
     "../legacy/include"
     "../include"
     "../cmake-git-version-tracking/better-example"
+    ${Qt5Core_INCLUDE_DIRS}
 #ubuntu includes/qt5/
 )
 
