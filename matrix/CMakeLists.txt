@@ -7,6 +7,7 @@ set(${PROJECT_NAME}_sources
     Matrix.cpp
     ${POST_CONFIGURE_FILE}
 )
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
 add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_sources})
 target_include_directories(${PROJECT_NAME}
     PRIVATE
