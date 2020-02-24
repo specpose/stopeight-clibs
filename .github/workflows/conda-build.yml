@@ -1,4 +1,4 @@
-name: "Example 2: Other shells"
+name: "Conda Build"
 
 on:
   push:
@@ -9,8 +9,8 @@ on:
     - 'actions-conda'
 
 jobs:
-  example-2-linux:
-    name: Ex2 Linux
+  conda-build-ubuntu:
+    name: Ubuntu Conda Build
     runs-on: 'ubuntu-latest'
     steps:
       - uses: actions/checkout@v2
@@ -26,8 +26,8 @@ jobs:
         run: |
           conda build .
 
-  example-2-mac:
-    name: Ex2 Mac
+  conda-build-mac:
+    name: Mac Conda Build
     runs-on: 'macos-latest'
     steps:
       - uses: actions/checkout@v2
@@ -43,36 +43,27 @@ jobs:
         run: |
           conda build .
 
-  example-2-win:
-    name: Ex2 Windows
+  conda-build-win:
+    name: Windows Conda Build
     runs-on: 'windows-latest'
     steps:
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: 'false'
       - uses: goanpeca/setup-miniconda@v1
         with:
           miniconda-version: 'latest'
-          activate-environment: foo
-      - name: Bash
-        shell: bash -l {0}
-        run: |
-          conda info
-          conda list
-      - name: Sh
-        shell: sh -l {0}
-        run: |
-          conda info
-          conda list
+          activate-environment: conda-build-env
+          environment-file: etc/conda-build-environment.yml
       - name: PowerShell
         shell: powershell
         run: |
-          conda info
-          conda list
+          conda build .
       - name: PowerShell Core
         shell: pwsh
         run: |
-          conda info
-          conda list
+          conda build .
       - name: Cmd.exe
         shell: cmd /C CALL {0}
         run: >-
-          conda info &&
-          conda list
+          conda build .
