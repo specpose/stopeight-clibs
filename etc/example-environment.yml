@@ -1,3 +1,11 @@
-name: anaconda-client-env
+name: conda-build-env
 dependencies:
+  - conda-build
+  - cmake
+  - qt
+
+name: anaconda-upload-env
+  - conda-build
+  - cmake
+  - qt
   - anaconda-client

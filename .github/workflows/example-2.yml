@@ -19,7 +19,7 @@ jobs:
       - uses: goanpeca/setup-miniconda@v1
         with:
           miniconda-version: 'latest'
-          activate-environment: anaconda-client-env
+          activate-environment: conda-build-env
           environment-file: etc/example-environment.yml
       - name: Sh
         shell: sh -l {0}
