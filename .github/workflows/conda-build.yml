@@ -55,14 +55,6 @@ jobs:
           miniconda-version: 'latest'
           activate-environment: conda-build-env
           environment-file: etc/conda-build-environment.yml
-      - name: PowerShell
-        shell: powershell
-        run: |
-          conda build .
-      - name: PowerShell Core
-        shell: pwsh
-        run: |
-          conda build .
       - name: Cmd.exe
         shell: cmd /C CALL {0}
         run: >-
