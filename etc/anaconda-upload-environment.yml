@@ -1,4 +1,5 @@
 name: anaconda-upload-env
+  - vs2017_win-64  # [win]
   - conda-build
   - cmake
   - qt
