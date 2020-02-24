@@ -19,6 +19,7 @@ jobs:
       - name: Bash
         shell: bash -l {0}
         run: |
+          git submodule update --init
           mkdir build
           cd build
           cmake ../
@@ -35,6 +36,7 @@ jobs:
       - name: Sh
         shell: sh -l {0}
         run: |
+          git submodule update --init
           mkdir build
           cd build
           cmake ../
@@ -52,6 +54,7 @@ jobs:
         shell: cmd /C CALL {0}
         run: >-
           setlocal EnableDelayedExpansion
+          git submodule update --init
           mkdir build
           cd build
           cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE:STRING=Release ..
