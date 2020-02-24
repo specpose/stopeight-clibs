@@ -14,7 +14,7 @@ source:
 
 requirements:
   build:
-    - vs2019_win-64  # [win]
+    - vs2017_win-64  # [win]
     - cmake >=3.4.3
     - qt >=5.6.0
 

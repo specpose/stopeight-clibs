@@ -41,7 +41,7 @@ jobs:
       - name: Sh
         shell: sh -l {0}
         run: |
-          conda build .
+          conda build --verbose .
 
   conda-build-win:
     name: Windows Conda Build
