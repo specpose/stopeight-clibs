@@ -1,0 +1,62 @@
+name: "CMake Build"
+
+on:
+  push:
+    branches:
+    - 'actions-cmake'
+  pull_request:
+    branches:
+    - 'actions-cmake'
+
+jobs:
+  cmake-build-ubuntu:
+    name: Ubuntu CMake Build
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: 'false'
+      - name: Bash
+        shell: bash -l {0}
+        run: |
+          mkdir build
+          cd build
+          cmake ../
+          cmake --build . --config Release
+          cmake --build . --target install
+
+  cmake-build-mac:
+    name: Mac CMake Build
+    runs-on: 'macos-latest'
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: 'false'
+      - name: Sh
+        shell: sh -l {0}
+        run: |
+          mkdir build
+          cd build
+          cmake ../
+          cmake --build . --config Release
+          cmake --build . --target install
+
+  cmake-build-win:
+    name: Windows CMake Build
+    runs-on: 'windows-latest'
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: 'false'
+      - name: Cmd.exe
+        shell: cmd /C CALL {0}
+        run: >-
+          setlocal EnableDelayedExpansion
+          mkdir build
+          cd build
+          cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE:STRING=Release ..
+          if errorlevel 1 exit 1
+          nmake
+          if errorlevel 1 exit 1
+          nmake install
+          if errorlevel 1 exit 1
