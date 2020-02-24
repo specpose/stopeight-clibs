@@ -1,0 +1,5 @@
+name: conda-build-env
+dependencies:
+  - conda-build
+  - cmake
+  - qt

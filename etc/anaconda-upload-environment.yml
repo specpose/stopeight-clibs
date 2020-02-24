@@ -1,9 +1,3 @@
-name: conda-build-env
-dependencies:
-  - conda-build
-  - cmake
-  - qt
-
 name: anaconda-upload-env
   - conda-build
   - cmake
