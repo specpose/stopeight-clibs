@@ -16,9 +16,6 @@ jobs:
       - uses: actions/checkout@v2
         with:
           persist-credentials: 'false'
-      - uses: goanpeca/setup-miniconda@v1
-        with:
-          miniconda-version: 'latest'
       - name: Bash
         shell: bash -l {0}
         run: |
@@ -32,9 +29,6 @@ jobs:
       - uses: actions/checkout@v2
         with:
           persist-credentials: 'false'
-      - uses: goanpeca/setup-miniconda@v1
-        with:
-          miniconda-version: 'latest'
       - name: Sh
         shell: sh -l {0}
         run: |
@@ -48,9 +42,6 @@ jobs:
       - uses: actions/checkout@v2
         with:
           persist-credentials: 'false'
-      - uses: goanpeca/setup-miniconda@v1
-        with:
-          miniconda-version: 'latest'
       - name: Cmd.exe
         shell: cmd /C CALL {0}
         run: |
