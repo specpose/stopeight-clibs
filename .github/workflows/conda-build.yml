@@ -59,4 +59,5 @@ jobs:
         shell: cmd /C CALL {0}
         run: |
           conda install vs2017_win-64
+          SET WindowsSDKVer=10.0.18362.0
           conda build .
