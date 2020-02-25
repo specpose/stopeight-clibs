@@ -1,5 +1,0 @@
-name: anaconda-upload-env
-  - conda-build
-  - cmake
-  - qt
-  - anaconda-client
