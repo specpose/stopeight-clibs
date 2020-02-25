@@ -45,6 +45,7 @@ jobs:
       - name: Cmd.exe
         shell: cmd /C CALL {0}
         run: |
+          SET PATH=%PATH%;%CONDA%;%CONDA%\Scripts\
           conda install vs2017_win-64 conda-build cmake qt
           SET WindowsSDKVer=10.0.18362.0
           conda build .
