@@ -19,7 +19,7 @@ jobs:
       - name: Bash
         shell: bash -l {0}
         run: |
-          conda install conda-build cmake qt
+          conda install conda-build
           conda build .
 
   conda-build-mac:
@@ -32,7 +32,7 @@ jobs:
       - name: Sh
         shell: sh -l {0}
         run: |
-          conda install conda-build cmake qt
+          conda install conda-build
           conda build --debug .
 
   conda-build-win:
@@ -46,6 +46,6 @@ jobs:
         shell: cmd /C CALL {0}
         run: |
           SET PATH=%PATH%;%CONDA%;%CONDA%\Scripts\
-          conda install vs2017_win-64 conda-build cmake qt
-          SET WindowsSDKVer=10.0.18362.0
+          conda install vs2017_win-64 conda-build
+          rd /s /q "C:\Program Files (x86)\Windows Kits\10\\include\wdf"
           conda build .
