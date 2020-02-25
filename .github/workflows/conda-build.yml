@@ -32,10 +32,10 @@ jobs:
       - name: Sh
         shell: sh -l {0}
         run: |
-          sudo su -
           source $CONDA/bin/activate
-          conda install conda-build
-          conda build --debug .
+          conda create --name build_test
+          conda install -n build_test conda-build
+          conda build -n build_test --debug .
 
   conda-build-win:
     name: Windows Conda Build
