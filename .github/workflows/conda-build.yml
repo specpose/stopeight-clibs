@@ -58,4 +58,5 @@ jobs:
       - name: Cmd.exe
         shell: cmd /C CALL {0}
         run: >-
+          conda install vs2017_win-64
           conda build .
