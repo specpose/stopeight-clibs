@@ -19,11 +19,10 @@ jobs:
       - uses: goanpeca/setup-miniconda@v1
         with:
           miniconda-version: 'latest'
-          activate-environment: conda-build-env
-          environment-file: conda.recipe/conda-build-environment.yml
       - name: Bash
         shell: bash -l {0}
         run: |
+          conda install conda-build cmake qt
           conda build .
 
   conda-build-mac:
@@ -36,11 +35,10 @@ jobs:
       - uses: goanpeca/setup-miniconda@v1
         with:
           miniconda-version: 'latest'
-          activate-environment: conda-build-env
-          environment-file: conda.recipe/conda-build-environment.yml
       - name: Sh
         shell: sh -l {0}
         run: |
+          conda install conda-build cmake qt
           conda build --debug .
 
   conda-build-win:
@@ -53,11 +51,9 @@ jobs:
       - uses: goanpeca/setup-miniconda@v1
         with:
           miniconda-version: 'latest'
-          activate-environment: conda-build-env
-          environment-file: conda.recipe/conda-build-environment.yml
       - name: Cmd.exe
         shell: cmd /C CALL {0}
         run: |
-          conda install vs2017_win-64
+          conda install vs2017_win-64 conda-build cmake qt
           SET WindowsSDKVer=10.0.18362.0
           conda build .
