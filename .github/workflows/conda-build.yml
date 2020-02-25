@@ -32,6 +32,7 @@ jobs:
       - name: Sh
         shell: sh -l {0}
         run: |
+          source $CONDA/bin/activate
           conda install conda-build
           conda build --debug .
 
