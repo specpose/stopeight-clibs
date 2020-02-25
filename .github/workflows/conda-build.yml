@@ -1,12 +1,6 @@
 name: "Conda Build"
 
-on:
-  push:
-    branches:
-    - 'actions-conda'
-  pull_request:
-    branches:
-    - 'actions-conda'
+on: [push, pull-request]
 
 jobs:
   conda-build-ubuntu:
