@@ -33,9 +33,10 @@ jobs:
         shell: sh -l {0}
         run: |
           source $CONDA/bin/activate
-          conda create --name build_test
-          conda install -n build_test conda-build
-          conda build -n build_test --debug .
+          conda create --prefix ./envs
+          conda activate ./envs
+          conda install conda-build
+          conda build --debug .
 
   conda-build-win:
     name: Windows Conda Build
