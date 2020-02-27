@@ -33,7 +33,7 @@ jobs:
           conda create --name btest
           conda activate btest
           $CONDA_EXE install conda-build
-          $CONDA_EXE build .
+          $CONDA_EXE build --debug .
 
   conda-build-win:
     name: Windows Conda Build
@@ -47,6 +47,7 @@ jobs:
         run: |
           $env:Path += ";"+$env:CONDA+"\Scripts"
           & $env:CONDA"\condabin\conda.bat" activate
+          conda update conda
           conda install conda-build
           Remove-Item -Path "C:\Program Files (x86)\Windows Kits\10\\include\wdf" -Recurse
           conda build .
