@@ -13,8 +13,11 @@ jobs:
       - name: Bash
         shell: bash -l {0}
         run: |
-          conda install conda-build
-          conda build .
+          echo "Checking if CONDA is set"
+          echo $CONDA
+          source /usr/share/miniconda/bin/activate
+          $CONDA_EXE install conda-build
+          $CONDA_EXE build .
 
   conda-build-mac:
     name: Mac Conda Build
@@ -27,10 +30,10 @@ jobs:
         shell: sh -l {0}
         run: |
           source $CONDA/bin/activate
-          conda create --prefix ./envs
-          conda activate ./envs
-          conda install conda-build
-          conda build --debug .
+          conda create --name btest
+          conda activate btest
+          $CONDA_EXE install conda-build
+          $CONDA_EXE build .
 
   conda-build-win:
     name: Windows Conda Build
@@ -39,10 +42,11 @@ jobs:
       - uses: actions/checkout@v2
         with:
           persist-credentials: 'false'
-      - name: Cmd.exe
-        shell: cmd /C CALL {0}
+      - name: PowerShell Core
+        shell: pwsh
         run: |
-          SET PATH=%PATH%;%CONDA%;%CONDA%\Scripts\
+          $env:Path += ";"+$env:CONDA+"\Scripts"
+          & $env:CONDA"\condabin\conda.bat" activate
           conda install conda-build
-          rd /s /q "C:\Program Files (x86)\Windows Kits\10\\include\wdf"
+          Remove-Item -Path "C:\Program Files (x86)\Windows Kits\10\\include\wdf" -Recurse
           conda build .
