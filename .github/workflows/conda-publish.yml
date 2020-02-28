@@ -1,0 +1,64 @@
+name: "Conda Upload"
+
+on:
+  release:
+    types: [created]
+    branches:
+      - master
+
+jobs:
+  conda-upload-ubuntu:
+    name: Ubuntu Conda Upload
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: 'false'
+      - name: Bash
+        shell: bash -l {0}
+        run: |
+          echo "Checking if CONDA is set"
+          echo $CONDA
+          source /usr/share/miniconda/bin/activate
+          $CONDA_EXE install conda-build anaconda-client
+          $CONDA_EXE config --set anaconda_upload yes
+          anaconda login --username ${{ secrets.ANACONDA_USERNAME }} --password ${{ secrets.ANACONDA_TOKEN }}
+          $CONDA_EXE build .
+          anaconda logout
+
+  conda-upload-mac:
+    name: Mac Conda Upload
+    runs-on: 'macos-latest'
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: 'false'
+      - name: Sh
+        shell: sh -l {0}
+        run: |
+          source $CONDA/bin/activate
+          conda create --name btest
+          conda activate btest
+          $CONDA_EXE install conda-build anaconda-client
+          $CONDA_EXE config --set anaconda_upload yes
+          anaconda login --username ${{ secrets.ANACONDA_USERNAME }} --password ${{ secrets.ANACONDA_TOKEN }}
+          $CONDA_EXE build .
+          anaconda logout
+
+  conda-upload-win:
+    name: Windows Conda Upload
+    runs-on: 'windows-latest'
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: 'false'
+      - name: Cmd.exe
+        shell: cmd /C CALL {0}
+        run: |
+          SET PATH=%PATH%;%CONDA%;%CONDA%\Scripts\
+          conda install conda-build anaconda-client
+          rd /s /q "C:\Program Files (x86)\Windows Kits\10\\include\wdf"
+          conda config --set anaconda_upload yes
+          anaconda login --username ${{ secrets.ANACONDA_USERNAME }} --password ${{ secrets.ANACONDA_TOKEN }}
+          conda build .
+          anaconda logout
