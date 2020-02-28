@@ -47,6 +47,7 @@ jobs:
         run: |
           $env:Path += ";"+$env:CONDA+"\Scripts"
           & $env:CONDA"\condabin\conda.bat" activate
+          conda init --verbose
           conda create --debug --name btest
           conda activate --debug btest
           echo "Checking if CONDA is updated"
