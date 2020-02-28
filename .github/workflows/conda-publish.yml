@@ -20,9 +20,7 @@ jobs:
           source $CONDA/bin/activate
           $CONDA_EXE install conda-build anaconda-client
           $CONDA_EXE config --set anaconda_upload yes
-          anaconda login --username ${{ secrets.ANACONDA_USERNAME }} --password ${{ secrets.ANACONDA_TOKEN }}
-          $CONDA_EXE build .
-          anaconda logout
+          $CONDA_EXE build --user ${{ secrets.ANACONDA_USERNAME }} --token ${{ secrets.ANACONDA_TOKEN }} .
 
   conda-upload-mac:
     name: Mac Conda Upload
@@ -39,9 +37,7 @@ jobs:
           conda activate btest
           $CONDA_EXE install conda-build anaconda-client
           $CONDA_EXE config --set anaconda_upload yes
-          anaconda login --username ${{ secrets.ANACONDA_USERNAME }} --password ${{ secrets.ANACONDA_TOKEN }}
-          $CONDA_EXE build .
-          anaconda logout
+          $CONDA_EXE build --user ${{ secrets.ANACONDA_USERNAME }} --token ${{ secrets.ANACONDA_TOKEN }} .
 
   conda-upload-win:
     name: Windows Conda Upload
@@ -57,6 +53,4 @@ jobs:
           conda install conda-build anaconda-client
           rd /s /q "C:\Program Files (x86)\Windows Kits\10\\include\wdf"
           conda config --set anaconda_upload yes
-          anaconda login --username ${{ secrets.ANACONDA_USERNAME }} --password ${{ secrets.ANACONDA_TOKEN }}
-          conda build .
-          anaconda logout
+          conda build --user ${{ secrets.ANACONDA_USERNAME }} --token ${{ secrets.ANACONDA_TOKEN }} .
