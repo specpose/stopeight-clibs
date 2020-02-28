@@ -54,7 +54,7 @@ template ListCopyable<dpoint>::ListCopyable(TurnAnalyzer<dpoint>& list);
     return filet;
 }*/
 
-template <> std::array<QList<dpoint>::iterator,2> ListCopyable<dpoint>::position_to_iterator(int startPosition,int endPosition){
+template <> ArrayOfTwoQListDpointIterators ListCopyable<dpoint>::position_to_iterator(int startPosition,int endPosition){
     auto start = size_t(startPosition);
     auto end = size_t(endPosition);
     if (start > end)
@@ -65,9 +65,10 @@ template <> std::array<QList<dpoint>::iterator,2> ListCopyable<dpoint>::position
     if ((end-start)!= chop_length){
         throw std::length_error("ListCopyable is missing elements. Use full copy instead.");
     } else {
-        return std::array<ListCopyable<dpoint>::iterator,2>{first,last};
+        return ArrayOfTwoQListDpointIterators{first,last};
     }
 }
+template ArrayOfTwoQListDpointIterators ListCopyable<dpoint>::position_to_iterator(int startPosition, int endPosition);
 
 
 /*template <> void ListCopyable<dpoint>::reverse(){
