@@ -45,10 +45,12 @@ jobs:
       - name: PowerShell Core
         shell: pwsh
         run: |
+          Set-ExecutionPolicy RemoteSigned
+          Get-ExecutionPolicy
           $env:Path += ";"+$env:CONDA+"\Scripts"
           & $env:CONDA"\condabin\conda.bat" activate
           conda create --debug --name btest
-          & $env:CONDA"\condabin\conda.bat" activate --debug btest
+          conda activate --debug btest
           echo "Checking if CONDA is updated"
           echo $env:CONDA
           conda install conda-build
