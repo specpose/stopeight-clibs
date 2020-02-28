@@ -20,7 +20,7 @@ jobs:
           source $CONDA/bin/activate
           $CONDA_EXE install conda-build anaconda-client
           $CONDA_EXE config --set anaconda_upload yes
-          $CONDA_EXE build -c specpose --user ${{ secrets.ANACONDA_USERNAME }} --token ${{ secrets.ANACONDA_TOKEN }} .
+          $CONDA_EXE build --channel specpose --label main --token ${{ secrets.ANACONDA_TOKEN }} .
 
   conda-upload-mac:
     name: Mac Conda Upload
@@ -37,7 +37,7 @@ jobs:
           conda activate btest
           $CONDA_EXE install conda-build anaconda-client
           $CONDA_EXE config --set anaconda_upload yes
-          $CONDA_EXE build -c specpose --user ${{ secrets.ANACONDA_USERNAME }} --token ${{ secrets.ANACONDA_TOKEN }} .
+          $CONDA_EXE build --channel specpose --label main --token ${{ secrets.ANACONDA_TOKEN }} .
 
   conda-upload-win:
     name: Windows Conda Upload
@@ -53,4 +53,4 @@ jobs:
           conda install conda-build anaconda-client
           rd /s /q "C:\Program Files (x86)\Windows Kits\10\\include\wdf"
           conda config --set anaconda_upload yes
-          conda build -c specpose --user ${{ secrets.ANACONDA_USERNAME }} --token ${{ secrets.ANACONDA_TOKEN }} .
+          conda build --channel specpose --label main --token ${{ secrets.ANACONDA_TOKEN }} .
