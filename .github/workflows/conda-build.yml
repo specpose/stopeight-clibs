@@ -13,9 +13,7 @@ jobs:
       - name: Bash
         shell: bash -l {0}
         run: |
-          echo "Checking if CONDA is set"
-          echo $CONDA
-          source /usr/share/miniconda/bin/activate
+          source $CONDA/bin/activate
           $CONDA_EXE install conda-build
           $CONDA_EXE build .
 

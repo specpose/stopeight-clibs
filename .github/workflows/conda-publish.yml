@@ -17,9 +17,7 @@ jobs:
       - name: Bash
         shell: bash -l {0}
         run: |
-          echo "Checking if CONDA is set"
-          echo $CONDA
-          source /usr/share/miniconda/bin/activate
+          source $CONDA/bin/activate
           $CONDA_EXE install conda-build anaconda-client
           $CONDA_EXE config --set anaconda_upload yes
           anaconda login --username ${{ secrets.ANACONDA_USERNAME }} --password ${{ secrets.ANACONDA_TOKEN }}
