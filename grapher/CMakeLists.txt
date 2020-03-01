@@ -14,6 +14,7 @@ set(${PROJECT_NAME}_sources
 )
 
 #add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_sources})
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
 add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_sources})
 
 #include_directories(${stopeight-clibs_INCLUDE_DIRS})

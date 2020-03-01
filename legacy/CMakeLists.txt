@@ -43,7 +43,7 @@ set(${PROJECT_NAME}_sources
     src/render.cpp
     ${POST_CONFIGURE_FILE}
 )
-
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
 add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_sources})
 
 target_link_libraries(${PROJECT_NAME}
