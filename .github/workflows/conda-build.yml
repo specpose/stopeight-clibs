@@ -31,6 +31,8 @@ jobs:
           conda create --name btest
           conda activate btest
           $CONDA_EXE install conda-build
+          echo `ls -alF /usr/bin/gcc`
+          echo `clang --version`
           $CONDA_EXE build --debug .
 
   conda-build-win:
