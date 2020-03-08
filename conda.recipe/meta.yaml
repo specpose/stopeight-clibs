@@ -15,6 +15,7 @@ source:
 requirements:
   build:
     - vs2017_win-64  # [win]
+    - clangxx_osx-64  # [osx]
     - cmake >=3.4.3
     - qt >=5.6.0
 
