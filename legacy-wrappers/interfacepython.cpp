@@ -46,9 +46,8 @@ PyObject* legacy_wrappers::parse_file(PyObject *self, PyObject *args) {
 		return legacy_wrappers::error(text);
 	}
 	catch (...) {
-		return legacy_wrappers::error("undefined");
+		return legacy_wrappers::error("Undefined C-Style Wrapper Error");
 	}
-	std::cout << "Loaded " << myList.size() << " points from file " << pythonpath << "\n";
 	return legacy_wrappers::convert(myList);
 }
 

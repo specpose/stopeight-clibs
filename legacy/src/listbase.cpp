@@ -2,6 +2,8 @@
 // GNU Lesser General Public License, version 2.1
 
 #include "listbase.h"
+#include <string>
+
 
 //#define debug() QNoDebug()
 
@@ -66,14 +68,9 @@ template ListBase<dpoint>::ListBase(TurnAnalyzer<dpoint>& list);
 
 template<> QList<QPointF> ListBase<QPointF>::loadSPFile(const QString& fileName)
 {
-//    debug()<<"legacy::ListBase<dpoint>::loadSPFile "+fileName.toLatin1();
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly)) {
-		//C++11
-		//throw legacy::alg_logic_error((file.errorString().toStdString()+file.fileName().toStdString()).c_str(),__FILE__,__func__);
-        throw legacy::alg_logic_error("Unknown filename",__FILE__,"");//(file.errorString().toStdString()+file.fileName().toStdString()).c_str(),__FILE__,"");
-		//throw std::string(file.errorString().toStdString() + " reading file " + file.fileName().toStdString());
-        //return false;
+        throw legacy::runtime_error(file.errorString().toStdString()+" "+file.fileName().toStdString(),__FILE__,__func__);
     }
     QDataStream in(&file);
     in.setVersion(QDataStream::Qt_4_5);
@@ -81,9 +78,7 @@ template<> QList<QPointF> ListBase<QPointF>::loadSPFile(const QString& fileName)
     unsigned int magic;
     in >> magic;
     if (magic != MagicNumber) {
-//        debug()<<"File is invalid."<<file.fileName()<<endl<<file.errorString();
-        throw std::runtime_error("MainWindow::loadSPFile: Wrong magic number: "+magic);
-        //return false;
+        throw legacy::runtime_error("Wrong magic number: "+std::to_string(magic)+" in file "+file.fileName().toStdString(),__FILE__,__func__);
     }
 
     dpoint p;
