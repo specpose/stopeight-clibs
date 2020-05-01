@@ -40,11 +40,7 @@ jobs:
           echo `ls -alF /usr/bin/gcc`
           echo `clang --version`
           eval "$($CONDA/condabin/conda shell.zsh hook)"
-          conda create --name btest
-          conda activate btest
           conda install conda-build
-          echo `ls -alF /usr/bin/gcc`
-          echo `clang --version`
           conda build --debug .
 
   conda-build-win:

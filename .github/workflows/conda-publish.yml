@@ -45,8 +45,6 @@ jobs:
           echo `ls -alF /usr/bin/gcc`
           echo `clang --version`
           eval "$($CONDA/condabin/conda shell.zsh hook)"
-          conda create --name btest
-          conda activate btest
           conda install conda-build conda-verify anaconda-client
           conda config --set anaconda_upload yes
           conda build --channel specpose --token ${{ secrets.ANACONDA_TOKEN }} .
