@@ -37,14 +37,15 @@ jobs:
       - name: Zsh
         shell: zsh -l {0}
         run: |
-          echo "Activating conda version 4.7.x"
-          source $CONDA/bin/activate
           echo `ls -alF /usr/bin/gcc`
           echo `clang --version`
+          echo "Activating conda version 4.8.x"
+          sudo chown -R 501:20 /usr/local/miniconda
+          eval "$($CONDA/condabin/conda shell.zsh hook)"
           conda create --name btest
           conda activate btest
-          $CONDA_EXE install conda-build
-          $CONDA_EXE build --debug .
+          conda install conda-build
+          conda build --debug .
 
   conda-build-win:
     name: Windows Conda Build
@@ -53,10 +54,21 @@ jobs:
       - uses: actions/checkout@v2
         with:
           persist-credentials: 'false'
-      - name: Cmd.exe
-        shell: cmd /C CALL {0}
+      - name: Checkout submodules
+        shell: powershell
         run: |
-          SET PATH=%PATH%;%CONDA%;%CONDA%\Scripts\
+          git submodule update --init --recursive
+      - name: PowerShell
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Continue'
+          echo $ErrorActionPreference
+          Get-ExecutionPolicy
+          Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+          Get-ExecutionPolicy
+          echo "Activating conda version 4.6.x"
+          (& $env:CONDA"\Scripts\conda.exe" "shell.powershell" "hook") | Out-String | Invoke-Expression
+          conda create --name btest
+          conda activate btest
           conda install conda-build
-          rd /s /q "C:\Program Files (x86)\Windows Kits\10\\include\wdf"
           conda build .
