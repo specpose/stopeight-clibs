@@ -10,12 +10,18 @@ jobs:
       - uses: actions/checkout@v2
         with:
           persist-credentials: 'false'
+      - name: Checkout submodules
+        shell: bash -l {0}
+        run: |
+          git submodule update --init --recursive
       - name: Bash
         shell: bash -l {0}
         run: |
-          source $CONDA/bin/activate
-          $CONDA_EXE install conda-build
-          $CONDA_EXE build .
+          eval "$($CONDA/condabin/conda shell.bash hook)"
+          conda create --name btest
+          conda activate btest
+          conda install conda-build
+          conda build .
 
   conda-build-mac:
     name: Mac Conda Build
@@ -24,16 +30,22 @@ jobs:
       - uses: actions/checkout@v2
         with:
           persist-credentials: 'false'
-      - name: Sh
-        shell: sh -l {0}
+      - name: Checkout submodules
+        shell: zsh -l {0}
         run: |
-          source $CONDA/bin/activate
-          conda create --name btest
-          conda activate btest
-          $CONDA_EXE install conda-build
+          git submodule update --init --recursive
+      - name: Zsh
+        shell: zsh -l {0}
+        run: |
           echo `ls -alF /usr/bin/gcc`
           echo `clang --version`
-          $CONDA_EXE build --debug .
+          eval "$($CONDA/condabin/conda shell.zsh hook)"
+          conda create --name btest
+          conda activate btest
+          conda install conda-build
+          echo `ls -alF /usr/bin/gcc`
+          echo `clang --version`
+          conda build --debug .
 
   conda-build-win:
     name: Windows Conda Build
