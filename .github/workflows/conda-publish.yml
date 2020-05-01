@@ -42,12 +42,15 @@ jobs:
       - name: Zsh
         shell: zsh -l {0}
         run: |
+          echo "Activating conda version 4.7.x"
+          source $CONDA/bin/activate
           echo `ls -alF /usr/bin/gcc`
           echo `clang --version`
-          eval "$($CONDA/condabin/conda shell.zsh hook)"
-          conda install conda-build conda-verify anaconda-client
-          conda config --set anaconda_upload yes
-          conda build --channel specpose --token ${{ secrets.ANACONDA_TOKEN }} .
+          conda create --name btest
+          conda activate btest
+          $CONDA_EXE install conda-build conda-verify anaconda-client
+          $CONDA_EXE config --set anaconda_upload yes
+          $CONDA_EXE build --channel specpose --token ${{ secrets.ANACONDA_TOKEN }} .
 
   conda-upload-win:
     name: Windows Conda Upload
