@@ -60,11 +60,23 @@ jobs:
       - uses: actions/checkout@v2
         with:
           persist-credentials: 'false'
-      - name: Cmd.exe
-        shell: cmd /C CALL {0}
+      - name: Checkout submodules
+        shell: powershell
         run: |
-          SET PATH=%PATH%;%CONDA%;%CONDA%\Scripts\
+          git submodule update --init --recursive
+      - name: PowerShell
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Continue'
+          echo $ErrorActionPreference
+          Get-ExecutionPolicy
+          Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+          Get-ExecutionPolicy
+          echo "Activating conda version 4.6.x"
+          (& $env:CONDA"\Scripts\conda.exe" "shell.powershell" "hook") | Out-String | Invoke-Expression
+          conda create --name btest
+          conda activate btest
           conda install conda-build conda-verify anaconda-client
-          rd /s /q "C:\Program Files (x86)\Windows Kits\10\\include\wdf"
+          Remove-Item "C:\Program Files (x86)\Windows Kits\10\\include\wdf" -Recurse -Force -ErrorAction SilentlyContinue
           conda config --set anaconda_upload yes
           conda build --channel specpose --token ${{ secrets.ANACONDA_TOKEN }} .

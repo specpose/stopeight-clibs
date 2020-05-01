@@ -71,4 +71,5 @@ jobs:
           conda create --name btest
           conda activate btest
           conda install conda-build
+          Remove-Item "C:\Program Files (x86)\Windows Kits\10\\include\wdf" -Recurse -Force -ErrorAction SilentlyContinue
           conda build .
