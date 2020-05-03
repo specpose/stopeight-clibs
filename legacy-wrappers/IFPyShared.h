@@ -5,6 +5,7 @@ namespace py = pybind11;
 
 #include "turnanalyzer.h"
 #include <stopeight-clibs/shared_types.h>
+#include <stopeight-clibs/Matrix.h>
 
 class QListWrapper : public ListSwitchable<dpoint>
 {

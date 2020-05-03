@@ -29,6 +29,9 @@ template ListRotator<dpoint>::ListRotator(AreaNormalizer<dpoint>& list);
 template ListRotator<dpoint>::ListRotator(CliffsNormalizer<dpoint>& list);
 #include "corneranalyzer.h"
 template ListRotator<dpoint>::ListRotator(CornerAnalyzer<dpoint>& list);
+#include "turnanalyzer.h"
+template ListRotator<dpoint>::ListRotator(TurnAnalyzer<dpoint>& list);
+
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> void ListRotator<dpoint>::operator=(F& list){

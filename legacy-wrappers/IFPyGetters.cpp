@@ -7,11 +7,11 @@ PYBIND11_MAKE_OPAQUE(std::vector<sp::timecode<double>>);
 
 PYBIND11_MODULE(getters, g){
 	if(GitMetadata::Populated()) {
-		object sha;
+		py::object sha;
 	        if(GitMetadata::AnyUncommittedChanges()) {
-			sha = cast(GitMetadata::CommitSHA1()+"+dirty");
+			sha = py::cast(GitMetadata::CommitSHA1()+"+dirty");
 	        } else {
-			sha = cast(GitMetadata::CommitSHA1());
+			sha = py::cast(GitMetadata::CommitSHA1());
 		}
 		g.attr("version") = sha;
 	}

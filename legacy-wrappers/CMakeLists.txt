@@ -27,8 +27,6 @@ target_include_directories(${PROJECT_NAME}
 #    IFPyFinders.cpp
 #    IFPyShared.cpp
 #)
-#find_package(Qt5Core REQUIRED)
-#find_package(Qt5Gui REQUIRED)
 #target_link_libraries(${PROJECT_NAME}
 #    PRIVATE
 #    stopeight-clibs-legacy
@@ -41,27 +39,26 @@ target_include_directories(${PROJECT_NAME}
 #    "../include"
 #    "./"
 #    "../cmake-git-version-tracking/better-example"
+#    ${Qt5Core_INCLUDE_DIRS}
 #)
 
-#project(getters)
-#pybind11_add_module(${PROJECT_NAME}
-#    IFPyGetters.cpp
-#    IFPyShared.cpp
-#)
-#find_package(Qt5Core REQUIRED)
-#find_package(Qt5Gui REQUIRED)
-#target_link_libraries(${PROJECT_NAME}
-#    PRIVATE
-#    stopeight-clibs-legacy
-#    Qt5::Core
-#    Qt5::Gui
-#)
-#target_include_directories(${PROJECT_NAME}
-#    PRIVATE
-#    "../legacy/include"
-#    "../include"
-#    "./"
-#    "../cmake-git-version-tracking/better-example"
-#)
+project(getters)
+pybind11_add_module(${PROJECT_NAME}
+    IFPyGetters.cpp
+    IFPyShared.cpp
+)
+target_link_libraries(${PROJECT_NAME}
+    PRIVATE
+    stopeight-clibs-legacy
+    Qt5::Core
+)
+target_include_directories(${PROJECT_NAME}
+    PRIVATE
+    "../legacy/include"
+    "../include"
+    "./"
+    "../cmake-git-version-tracking/better-example"
+    ${Qt5Core_INCLUDE_DIRS}
+)
 
 endif (Qt5Core_FOUND AND Qt5Gui_FOUND)

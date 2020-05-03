@@ -34,6 +34,8 @@ template ListSwitchable<dpoint>::ListSwitchable(AreaNormalizer<dpoint>& list);
 template ListSwitchable<dpoint>::ListSwitchable(CliffsNormalizer<dpoint>& list);
 #include "corneranalyzer.h"
 template ListSwitchable<dpoint>::ListSwitchable(CornerAnalyzer<dpoint>& list);
+#include "turnanalyzer.h"
+template ListSwitchable<dpoint>::ListSwitchable(TurnAnalyzer<dpoint>& list);
 
 // Note: ALL datamembers of target class destroyed
 template<>template<typename F> void ListSwitchable<dpoint>::operator=(F& list){
