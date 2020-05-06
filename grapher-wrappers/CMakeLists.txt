@@ -6,6 +6,7 @@ pybind11_add_module(${PROJECT_NAME} IFPyGrapher.cpp)
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
     stopeight-clibs-grapher
+    stopeight-clibs-matrix
 )
 
 target_include_directories(${PROJECT_NAME}

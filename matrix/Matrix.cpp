@@ -20,6 +20,36 @@ template<typename T, size_t Size, typename tf> Vector<T, Size,tf>& Vector<T,Size
 template Vector<double>& Vector<double>::__init(std::initializer_list<double>);
 template Vector<float>& Vector<float>::__init(std::initializer_list<float>);
 
+template<typename Container, typename tf> Vectors<Container,tf>::Vectors() : Container() {
+}
+//todo span
+template Vectors<std::vector<sp::timecode<float>>>::Vectors();
+template Vectors<std::vector<sp::timecode<double>>>::Vectors();
+template<typename Container, typename tf> Vectors<Container,tf>::Vectors(const Container& other) : Container(other) {
+//	int test = 5/0;
+//	*this = Vectors<Container,tf>();//other;
+}
+//todo span
+template Vectors<std::vector<sp::timecode<float>>>::Vectors(const std::vector<sp::timecode<float>>& other);
+template Vectors<std::vector<sp::timecode<double>>>::Vectors(const std::vector<sp::timecode<double>>& other);
+template<typename Container, typename tf> Vectors<Container,tf>::Vectors(Container&& other) : Container{std::move(other)} {
+	//Vectors<Container,tf> temp = std::move(other);
+	//*this = temp;
+	//*this = static_cast<Container>(other);
+	//*this = std::move(other);
+}
+//todo span
+template Vectors<std::vector<sp::timecode<float>>>::Vectors(std::vector<sp::timecode<float>>&& other);
+template Vectors<std::vector<sp::timecode<double>>>::Vectors(std::vector<sp::timecode<double>>&& other);
+template<typename Container, typename tf> Vectors<Container,tf>& Vectors<Container,tf>::operator=(Container&& other) {
+	//Vectors<Container,tf> temp = std::move(other);
+	Container::operator=(std::move(other));
+	return *this;
+}
+//todo span
+template Vectors<std::vector<sp::timecode<float>>>& Vectors<std::vector<sp::timecode<float>>>::operator=(std::vector<sp::timecode<float>>&& other);
+template Vectors<std::vector<sp::timecode<double>>>& Vectors<std::vector<sp::timecode<double>>>::operator=(std::vector<sp::timecode<double>>&& other);
+
 //propagating: par
 template<typename Container, typename tf>void Vectors<Container,tf>::apply(Stack<Container>& stack) {
 	auto& me = *this;

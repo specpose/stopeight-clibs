@@ -91,8 +91,11 @@ class Vectors : public Container {
 	//AND std::vector can not use memory of numpy_array; (they're both in stack)
 	//-> no move constructor from numpy array
 public:
-	//Vectors();
 	using Container::Container;
+	Vectors();
+	Vectors(const Container& other);
+	Vectors(Container&& other);
+	Vectors& operator=(Container&& other);
 
 	using PodClass = typename Container::value_type;
 	using T = typename PodClass::value_type;
