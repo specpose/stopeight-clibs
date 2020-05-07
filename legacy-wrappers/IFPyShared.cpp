@@ -26,4 +26,4 @@ template<class inType> TurnAnalyzerWrapper::TurnAnalyzerWrapper(inType &other) :
 template TurnAnalyzerWrapper::TurnAnalyzerWrapper(QListWrapper& list);
 
 template<class inType> QListWrapper::QListWrapper(inType& other) : ListSwitchable<dpoint>(static_cast<TurnAnalyzer<dpoint> &>(other)){};
-template QListWrapper::QListWrapper(TurnAnalyzerWrapper& list);
+//template QListWrapper::QListWrapper(TurnAnalyzerWrapper& list);
