@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 3.4.3)
 
-find_package(stopeight-clibs-matrix)
-if (stopeight-clibs-matrix_FOUND)
+#find_package(stopeight-clibs-matrix)
+#if (stopeight-clibs-matrix_FOUND)
 
 project(matrix)
 pybind11_add_module(${PROJECT_NAME} IFPyMatrix.cpp)
@@ -17,4 +17,4 @@ target_include_directories(${PROJECT_NAME}
     "../cmake-git-version-tracking/better-example"
 )
 
-endif (stopeight-clibs-matrix_FOUND)
+#endif (stopeight-clibs-matrix_FOUND)

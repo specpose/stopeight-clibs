@@ -4,8 +4,8 @@ find_package(Qt5Core)
 find_package(Qt5Gui)
 if (Qt5Core_FOUND AND Qt5Gui_FOUND)
 
-find_package(stopeight-clibs-legacy)
-if (stopeight-clibs-legacy_FOUND)
+#find_package(stopeight-clibs-legacy)
+#if (stopeight-clibs-legacy_FOUND)
 project(legacy)
 pybind11_add_module(${PROJECT_NAME} 
     interfacepython.cpp
@@ -23,10 +23,10 @@ target_include_directories(${PROJECT_NAME}
     ${Qt5Core_INCLUDE_DIRS}
 #ubuntu includes/qt5/
 )
-endif (stopeight-clibs-legacy_FOUND)
+#endif (stopeight-clibs-legacy_FOUND)
 
-#find_package(stopeight-clibs-legacy)
-#if (stopeight-clibs-legacy_FOUND)
+##find_package(stopeight-clibs-legacy)
+##if (stopeight-clibs-legacy_FOUND)
 #project(finders)
 #pybind11_add_module(${PROJECT_NAME} 
 #    IFPyFinders.cpp
@@ -46,11 +46,11 @@ endif (stopeight-clibs-legacy_FOUND)
 #    "../cmake-git-version-tracking/better-example"
 #    ${Qt5Core_INCLUDE_DIRS}
 #)
-#endif (stopeight-clibs-legacy_FOUND)
+##endif (stopeight-clibs-legacy_FOUND)
 
-find_package(stopeight-clibs-legacy)
-find_package(stopeight-clibs-matrix)
-if (stopeight-clibs-legacy_FOUND AND stopeight-clibs-matrix_FOUND)
+#find_package(stopeight-clibs-legacy)
+#find_package(stopeight-clibs-matrix)
+#if (stopeight-clibs-legacy_FOUND AND stopeight-clibs-matrix_FOUND)
 project(getters)
 pybind11_add_module(${PROJECT_NAME}
     IFPyGetters.cpp
@@ -70,6 +70,6 @@ target_include_directories(${PROJECT_NAME}
     "../cmake-git-version-tracking/better-example"
     ${Qt5Core_INCLUDE_DIRS}
 )
-endif (stopeight-clibs-legacy_FOUND AND stopeight-clibs-matrix_FOUND)
+#endif (stopeight-clibs-legacy_FOUND AND stopeight-clibs-matrix_FOUND)
 
 endif (Qt5Core_FOUND AND Qt5Gui_FOUND)
