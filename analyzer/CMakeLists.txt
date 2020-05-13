@@ -12,6 +12,7 @@ add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_sources})
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
     stopeight-clibs-matrix
+    git
 )
 
 target_include_directories(${PROJECT_NAME}
@@ -19,5 +20,4 @@ target_include_directories(${PROJECT_NAME}
     ${stopeight-clibs_INCLUDE_DIRS}
     ${GIT_HEADER_DIR}
 )
-add_dependencies(${PROJECT_NAME} check_git)
 install(TARGETS ${PROJECT_NAME} DESTINATION lib)

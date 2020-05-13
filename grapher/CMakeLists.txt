@@ -23,5 +23,5 @@ target_include_directories(${PROJECT_NAME}
     ${stopeight-clibs_INCLUDE_DIRS}
     ${GIT_HEADER_DIR}
 )
-add_dependencies(${PROJECT_NAME} check_git)
+target_link_libraries(${PROJECT_NAME} git)
 install(TARGETS ${PROJECT_NAME} DESTINATION lib)

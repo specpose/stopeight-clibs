@@ -50,6 +50,7 @@ target_link_libraries(${PROJECT_NAME}
     PRIVATE
     Qt5::Core
     Qt5::Gui
+    git
 )
 
 target_include_directories(${PROJECT_NAME}
@@ -57,7 +58,6 @@ target_include_directories(${PROJECT_NAME}
     "include"
     ${GIT_HEADER_DIR}
 )
-add_dependencies(${PROJECT_NAME} check_git)
 install(TARGETS ${PROJECT_NAME} DESTINATION lib)
 
 endif (Qt5Core_FOUND AND Qt5Gui_FOUND)
