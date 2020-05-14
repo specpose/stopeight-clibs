@@ -6,23 +6,17 @@
 
 #include "listbase.h"
 #include "cliffsnormalizer.h"
-#include "listcopyable.h"
 
 template<typename T> class CliffsAnalyzer : public CliffsNormalizer<T>
 {
 public:
-    CliffsAnalyzer<T>();
-    template<typename F> CliffsAnalyzer<T>(F& list);
+    using CliffsNormalizer::CliffsNormalizer;
 
     // This is the replacement for getFirstCliff
-    ListCopyable<dpoint> getFirstLegalSegment();
+    ListSwitchable<dpoint> getFirstLegalSegment();
 
-    ListCopyable<dpoint> getFirstCliff(qreal limit=M_PIl);
+    ListSwitchable<dpoint> getFirstCliff(qreal limit=M_PIl);
     //ListCopyable<dpoint> getFirstCliffTCT(qreal limit=M_PIl);
-
-
-    // used by filters and analyzer
-    int hasIllegalSegment();
 
 };
 

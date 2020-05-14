@@ -9,63 +9,6 @@
 
 //using namespace legacy;
 
-template<> ListBase<dpoint>::ListBase() : QList<dpoint>::QList()
-{
-}
-
-//template<> ListBase<dpoint>::~ListBase(){}
-
-
-// Note: ALL datamembers of target class destroyed
-template<>template<typename F> ListBase<dpoint>::ListBase(F& list) : QList<dpoint>::QList(list){
-    *this = static_cast<ListBase<dpoint>& >(list);
-}
-
-template<>template<typename F> ListBase<dpoint>::ListBase(const F& list) : QList<dpoint>::QList(list){
-    *this = list;
-}
-
-// would need to append constructor to QList
-//template<>template<typename F> QList<dpoint>::QList(F& list) : QList<dpoint>::QList(list) {
-//	*this = static_cast<QList<dpoint>& >(list);
-//}
-//template QList<dpoint>::QList(ListBase<dpoint>& list);
-
-template ListBase<dpoint>::ListBase(ListBase<dpoint>& list);
-#include "spirals.h"
-template ListBase<dpoint>::ListBase(Spirals<dpoint>& list);
-template ListBase<dpoint>::ListBase(Analyzer<dpoint>& list);
-template ListBase<dpoint>::ListBase(AreaAnalyzer<dpoint>& list);
-template ListBase<dpoint>::ListBase(CliffsAnalyzer<dpoint>& list);
-template ListBase<dpoint>::ListBase(AreaCalculator<dpoint>& list);
-template ListBase<dpoint>::ListBase(ListCopyable<dpoint>& list);
-template ListBase<dpoint>::ListBase(const ListCopyable<dpoint>& list);
-template ListBase<dpoint>::ListBase(TurnNormalizer<dpoint>& list);
-template ListBase<dpoint>::ListBase(Calculator<dpoint>& list);
-template ListBase<dpoint>::ListBase(ListSwitchable<dpoint>& list);
-template ListBase<dpoint>::ListBase(QList<dpoint>& list);
-template ListBase<dpoint>::ListBase(AreaNormalizer<dpoint>& list);
-template ListBase<dpoint>::ListBase(CornerNormalizer<dpoint>& list);
-#include "cliffs.h"
-template ListBase<dpoint>::ListBase(Cliffs<dpoint>& list);
-template ListBase<dpoint>::ListBase(CliffsNormalizer<dpoint>& list);
-#include "straightsanalyzer.h"
-template ListBase<dpoint>::ListBase(StraightsAnalyzer<dpoint>& list);
-#include "corneranalyzer.h"
-template ListBase<dpoint>::ListBase(CornerAnalyzer<dpoint>& list);
-template ListBase<dpoint>::ListBase(const CliffsCalculator<dpoint>& list);
-template ListBase<dpoint>::ListBase(const AreaCalculator<dpoint>& list);
-template ListBase<dpoint>::ListBase(const TurnCalculator<dpoint>& list);
-template ListBase<dpoint>::ListBase(const CornerCalculator<dpoint>& list);
-template ListBase<dpoint>::ListBase(const Calculator<dpoint>& list);
-template ListBase<dpoint>::ListBase(const Spirals<dpoint>& list);
-template ListBase<dpoint>::ListBase(const StraightsCalculator<dpoint>& list);
-template ListBase<dpoint>::ListBase(const Cliffs<dpoint>& list);
-#include "corners.h"
-template ListBase<dpoint>::ListBase(const Corners<dpoint>& list);
-#include "turnanalyzer.h"
-template ListBase<dpoint>::ListBase(TurnAnalyzer<dpoint>& list);
-
 template<> QList<QPointF> ListBase<QPointF>::loadSPFile(const QString& fileName)
 {
     QFile file(fileName);
@@ -123,4 +66,64 @@ template<> bool ListBase<dpoint>::checkPrecision() {
 		}
 	}
 	return false;
+}
+
+template <> ArrayOfTwoQListDpointIterators ListBase<dpoint>::position_to_iterator(int startPosition, int endPosition) {
+    auto start = size_t(startPosition);
+    auto end = size_t(endPosition);
+    if (start > end)
+        throw std::out_of_range("Trying to chop from reverse.");
+    QList<dpoint>::iterator first = std::begin(*this) + (start - size_t(std::begin(*this)->position));
+    QList<dpoint>::iterator last = std::begin(*this) + (end - size_t(std::begin(*this)->position));
+    auto chop_length = std::distance(first, last);
+    if ((end - start) != chop_length) {
+        throw std::length_error("List is missing elements. This is not allowed for derived classes of ListSwitchable.");
+    }
+    else {
+        return ArrayOfTwoQListDpointIterators{ first,last };
+    }
+}
+template ArrayOfTwoQListDpointIterators ListBase<dpoint>::position_to_iterator(int startPosition, int endPosition);
+
+template <> qreal ListBase<dpoint>::lengthAt(int position) {
+    QListIterator<dpoint> i(*this);
+    if (i.findNext(this->at(position))) {
+        dpoint point1;
+        if (i.hasPrevious()) {
+            point1 = i.previous();
+            if (i.hasNext()) {
+                i.next();
+                if (i.hasNext()) {
+                    dpoint point2 = i.next();
+                    dpoint point = point2 - point1;
+                    return lengthOf(point);
+                }
+                else {
+                    return 0;
+                }
+            }
+            else {
+                return 0;
+            }
+
+        }
+        else {
+            return 0;
+        }
+
+    }
+    else {
+        return 0;
+    }
+}
+template <> qreal ListBase<dpoint>::lengthOf(QPointF difference) {
+    return sqrt(pow(difference.x(), 2) + pow(difference.y(), 2));
+}
+
+template <> qreal ListBase<dpoint>::sumLength() {
+    qreal sumLength = 0;
+    for (int i = 0; i < this->size() - 1; i++) {
+        sumLength += lengthAt(i);
+    }
+    return sumLength;
 }

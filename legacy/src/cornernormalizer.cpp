@@ -3,36 +3,16 @@
 
 #include "cornernormalizer.h"
 
-template<> CornerNormalizer<dpoint>::CornerNormalizer() : CornerCalculator<dpoint>() {}
-
-// Note: ALL datamembers of target class destroyed
-template<>template<typename F> CornerNormalizer<dpoint>::CornerNormalizer(F& list) : CornerCalculator<dpoint>(list){
-    ListBase<dpoint> c = static_cast<ListBase<dpoint>& >(list);
-    *this= static_cast<CornerNormalizer<dpoint>& >(c);
-}
-
-template CornerNormalizer<dpoint>::CornerNormalizer(ListBase<dpoint>& list);
-#include "areanormalizer.h"
-template CornerNormalizer<dpoint>::CornerNormalizer(TurnNormalizer<dpoint>& list);
-#include "cliffsnormalizer.h"
-template CornerNormalizer<dpoint>::CornerNormalizer(CliffsNormalizer<dpoint>& list);
-#include "listcopyable.h"
-template CornerNormalizer<dpoint>::CornerNormalizer(ListCopyable<dpoint>& list);
-template CornerNormalizer<dpoint>::CornerNormalizer(AreaNormalizer<dpoint>& list);
-template CornerNormalizer<dpoint>::CornerNormalizer(CornerNormalizer<dpoint>& list);
-
 template <> void CornerNormalizer<dpoint>::requireMinimumLength(qreal lnt){
     bool foundOne = false;
-    Calculator<dpoint> calc = Calculator<dpoint>(*this);
-    for (int i=calc.size()-2;i>0;i--){
+    for (int i=this->size()-2;i>0;i--){
 
-        if (calc.lengthAt(i)<lnt){
-            calc.removeAt(i);
+        if (this->lengthAt(i)<lnt){
+            this->removeAt(i);
             foundOne = true;
             break;
         }
     }
-    *this=CornerNormalizer<dpoint>(calc);
     if (foundOne){
         requireMinimumLength(lnt);
     }
@@ -40,32 +20,29 @@ template <> void CornerNormalizer<dpoint>::requireMinimumLength(qreal lnt){
 
 template<>void CornerNormalizer<dpoint>::intRaster(qreal threshold)
 {
-	ListCopyable<dpoint> newlist = ListCopyable<dpoint>();
 	for (int i = 0; i < this->size(); i++) {
 		if ( (fmod(this->at(i).x(),1) <=threshold) &&
 			 (fmod(this->at(i).y(),1) <= threshold) ) {
-			newlist << this->at(i);
+			*this << this->at(i);
 		}
 	}
-	*this = CornerNormalizer<dpoint>(newlist);
 }
 
 
 template <> void CornerNormalizer<dpoint>::cornerFilters(){
 	// CHECKPRECISION?!
 	//debug() << "Before filter corner: ";
-    TurnNormalizer<dpoint> a = TurnNormalizer<dpoint>(*this);
-    a.smoothingJitter(0);
-    CornerNormalizer<dpoint> b = CornerNormalizer<dpoint>(a);
+    this->smoothingJitter(0);
+    CornerNormalizer<dpoint> b = CornerNormalizer<dpoint>(*this);
     b.requireMinimumLength(1.00001);
-    ListRotator<dpoint> c = ListRotator<dpoint>(b);
+    ListSwitchable<dpoint> c = ListSwitchable<dpoint>(b);
     c.rotateSegmentToXAxis();
     //this->normalizeCorners();
     //debug() << "After filter corner: ";
 }
 
 template<> dpoint CornerNormalizer<dpoint>::getPointInTheMiddle(){
-    StraightsCalculator<dpoint> myself = StraightsCalculator<dpoint>(*this);
+    ListSwitchable<dpoint> myself = ListSwitchable<dpoint>(*this);
     if (myself.size()>2){
         QPointF middle;
 
@@ -79,7 +56,7 @@ template<> dpoint CornerNormalizer<dpoint>::getPointInTheMiddle(){
         // -> create one
         // get the length of section
         // find position of adjacent to half length
-        StraightsCalculator<dpoint> newsection = StraightsCalculator<dpoint>();
+        ListSwitchable<dpoint> newsection = ListSwitchable<dpoint>();
         newsection << myself.first();
         for (int i=1;i<myself.size();i++){
             newsection<<myself.at(i);

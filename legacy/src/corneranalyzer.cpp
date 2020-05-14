@@ -5,20 +5,7 @@
 
 #define debug() QNoDebug()
 
-template<> CornerAnalyzer<dpoint>::CornerAnalyzer() : CornerNormalizer<dpoint>() {}
-
-// Note: ALL datamembers of target class destroyed
-template<>template<typename F> CornerAnalyzer<dpoint>::CornerAnalyzer(F& list) : CornerNormalizer<dpoint>(list){
-    ListBase<dpoint> c = static_cast<ListBase<dpoint>& >(list);
-    *this= static_cast<CornerAnalyzer<dpoint>& >(c);
-}
-
-#include "areanormalizer.h"
-template CornerAnalyzer<dpoint>::CornerAnalyzer(AreaNormalizer<dpoint>& list);
-template CornerAnalyzer<dpoint>::CornerAnalyzer(CornerNormalizer<dpoint>& list);
-template CornerAnalyzer<dpoint>::CornerAnalyzer(ListCopyable<dpoint>& list);
-
-template <> ListCopyable<dpoint> CornerAnalyzer<dpoint>::getFirstCorner(){
+template <> ListSwitchable<dpoint> CornerAnalyzer<dpoint>::getFirstCorner(){
     Analyzer<dpoint> result = Analyzer<dpoint>();
 
     // used to be >1

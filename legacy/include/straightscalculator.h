@@ -4,17 +4,13 @@
 #ifndef STRAIGHTSCALCULATOR_H
 #define STRAIGHTSCALCULATOR_H
 
-#include "listswitchable.h"
+#include "listcopyable.h"
 #include "calculator.h"
 
-template<typename T> class StraightsCalculator : public ListSwitchable<T>
+template<typename T> class StraightsCalculator : public ListCopyable<T>
 {
 public:
-    StraightsCalculator<T>();
-    template<typename F> StraightsCalculator<T>(F& list);
-
-    // length of curve between "all"! points / curvature not included
-    qreal sumLength();
+    using ListCopyable::ListCopyable;
 
     qreal sumRotYFrom(int start);
     // erroneos integration

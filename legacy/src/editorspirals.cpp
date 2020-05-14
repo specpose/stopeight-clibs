@@ -22,7 +22,7 @@ void EditorSpirals::process(ListBase<dpoint> &toBeProcessed){
         QList<dpoint> cliffs;
 
         /* SPIRALS */
-        Spirals<dpoint> spirals = Spirals<dpoint>(toBeProcessed);
+        Spirals<dpoint> spirals = Spirals<dpoint>(toBeProcessed);//should be move? listswitchable::ListSwitchable(ListBase&&) not working
         cliffs= Spirals<dpoint>::findSpiralCliffs(spirals);
 
         /* SHARED After this cliffs is const */

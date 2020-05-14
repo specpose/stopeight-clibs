@@ -2,21 +2,6 @@
 // GNU Lesser General Public License, version 2.1
 
 #include "areanormalizer.h"
-
-template<> AreaNormalizer<dpoint>::AreaNormalizer() : AreaCalculator<dpoint>() {}
-
-// Note: ALL datamembers of target class destroyed
-template<>template<typename F> AreaNormalizer<dpoint>::AreaNormalizer(F& list): AreaCalculator<dpoint>(){
-    ListBase<dpoint> c = static_cast<ListBase<dpoint>& >(list);
-    *this= static_cast<AreaNormalizer<dpoint>& >(c);
-}
-
-#include "listcopyable.h"
-template AreaNormalizer<dpoint>::AreaNormalizer(ListCopyable<dpoint>& list);
-template AreaNormalizer<dpoint>::AreaNormalizer(ListBase<dpoint>& list);
-#include "areaanalyzer.h"
-template AreaNormalizer<dpoint>::AreaNormalizer(AreaAnalyzer<dpoint>& list);
-
 //hdojo version
 template <> void AreaNormalizer<dpoint>::removeInlays(){
     if (this->size()>4){
@@ -43,7 +28,7 @@ template <>void AreaNormalizer<dpoint>::areaFilters(){
 		//END OLD
 
 
-		CornerNormalizer<dpoint> zero = CornerNormalizer<dpoint>(*this);
+		CornerNormalizer<dpoint> zero = CornerNormalizer<dpoint>(std::move(*this));
 		zero.requireMinimumLength(5);
 
 		//from linux wacom only:
@@ -52,19 +37,18 @@ template <>void AreaNormalizer<dpoint>::areaFilters(){
 		//removeinlays
 		//
 
-		TurnNormalizer<dpoint> a = TurnNormalizer<dpoint>(zero);
-		a.risingJitter(0);
+		zero.risingJitter(0);
 		//a.smoothingJitter(0);
-		a.risingJitter(0);
+		zero.risingJitter(0);
 
 		//
 
-		CornerNormalizer<dpoint> b = CornerNormalizer<dpoint>(a);
+		CornerNormalizer<dpoint> b = CornerNormalizer<dpoint>(std::move(zero));
 		//from below
 		b.requireMinimumLength(7);
 		//
 		b.rotateSegmentToXAxis();
-		*this = AreaNormalizer<dpoint>(b);
+		*this = AreaNormalizer<dpoint>(std::move(b));
 		this->removeInlays();
 	}
 	//if (this->checkPrecision()) {
@@ -73,16 +57,15 @@ template <>void AreaNormalizer<dpoint>::areaFilters(){
 	//	*this = AreaNormalizer<dpoint>(a);
 	//}
 	else {
-		TurnNormalizer<dpoint> a = TurnNormalizer<dpoint>(*this);
-		a.smoothingJitter(0);
-		CornerNormalizer<dpoint> b = CornerNormalizer<dpoint>(a);
+		this->smoothingJitter(0);
+		CornerNormalizer<dpoint> b = CornerNormalizer<dpoint>(*this);
 		b.requireMinimumLength(9);
 		b.rotateSegmentToXAxis();
 
 		//Port: UNUSED
 		//this->risingJitter(0);
 
-		*this = AreaNormalizer<dpoint>(b);
+		*this = AreaNormalizer<dpoint>(std::move(b));
 		this->removeInlays();
 	}
 

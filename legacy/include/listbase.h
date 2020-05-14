@@ -15,19 +15,15 @@
 
 #include "error.h"
 
+#include <array>
+#include <QtCore/QList>
+struct ArrayOfTwoQListDpointIterators : std::array<QList<dpoint>::iterator, 2>{};
+
 /* This is being used by both the qt-based editor AND python legacy-wrappers! */
 template<typename T> class ListBase : public QList<T>
 {
 public:
-    //has to be templated because of QList
-    ListBase<T>();
-    //virtual ~ListBase()=0;
-
-    //this should be C++11 move F&& constructor
-    //is there a copy created when using F& instead of F?
-    template<typename F> ListBase<T>(F& list);
-    template<typename F> ListBase<T>(const F& list);
-
+    using QList::QList;
 
     // method for access from python
     static QList<QPointF> open(const char* fileName);
@@ -38,6 +34,13 @@ public:
 	// method for access from both
 	static QList<QPointF> convert(ListBase<dpoint> list);
 
+    //from ListCopyAble
+    ArrayOfTwoQListDpointIterators position_to_iterator(int startPosition, int endPosition);
+    qreal lengthAt(int i);
+    static qreal lengthOf(QPointF difference);
+    //from Straights
+    // length of curve between "all"! points / curvature not included
+    qreal sumLength();
 
 
 protected:

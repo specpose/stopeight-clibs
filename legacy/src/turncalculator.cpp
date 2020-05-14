@@ -3,23 +3,6 @@
 
 #include "turncalculator.h"
 
-template<> TurnCalculator<dpoint>::TurnCalculator() : ListSwitchable<dpoint>() {}
-
-// Note: ALL datamembers of target class destroyed
-template<>template<typename F> TurnCalculator<dpoint>::TurnCalculator(F& list) : ListSwitchable<dpoint>(list) {
-    ListBase<dpoint> c = static_cast<ListBase<dpoint>& >(list);
-    *this= static_cast<TurnCalculator<dpoint>& >(c);
-}
-
-#include "areanormalizer.h"
-template TurnCalculator<dpoint>::TurnCalculator(AreaNormalizer<dpoint>& list);
-template TurnCalculator<dpoint>::TurnCalculator(CornerNormalizer<dpoint>& list);
-template TurnCalculator<dpoint>::TurnCalculator(TurnNormalizer<dpoint>& list);
-#include "listcopyable.h"
-template TurnCalculator<dpoint>::TurnCalculator(ListCopyable<dpoint>& list);
-#include "listswitchable.h"
-template TurnCalculator<dpoint>::TurnCalculator(ListSwitchable<dpoint>& list);
-
 // this has performance penalty!
 template <> qreal TurnCalculator<dpoint>::getRegressionValueFor2Points(int pos, bool value){
     if (pos>=0 && pos<this->size()-3){
@@ -60,4 +43,61 @@ template <> bool TurnCalculator<dpoint>::isRegLineThroughAt(int i){
     } else {
         return false;
     }
+}
+
+template <> void TurnCalculator<dpoint>::smoothingJitter(int pos) {
+    bool foundOne = false;
+    for (int i = pos; i < this->size() - 3; i++) {
+        //if ( (this->sumOfRegressionAt(i) <= 0.5) &&
+        if (
+            (!this->isRegLineThroughAt(i))) {
+            //if (this->isJitterAt(i) == true) {
+            this->removeAt(i + 1);
+            // danger index change
+            this->removeAt(i + 1);
+            foundOne = true;
+            break;
+        }
+    }
+    if (foundOne) {
+        smoothingJitter(pos + 1);
+    }
+}
+
+template <> void TurnCalculator<dpoint>::risingJitter(int pos) {
+    bool foundOne = false;
+    for (int i = pos; i < this->size() - 3; i++) {
+        //if ( (this->sumOfRegressionAt(i) <= 0.5) &&
+        if (
+            (this->isRegLineThroughAt(i))) {
+            //if (this->isJitterAt(i) == true) {
+            this->removeAt(i + 1);
+            // danger index change
+            this->removeAt(i + 1);
+            //this->removeAt(i);
+            foundOne = true;
+            break;
+        }
+    }
+    if (foundOne) {
+        risingJitter(pos + 1);
+    }
+}
+
+template <> int TurnCalculator<dpoint>::hasIllegalSegment() {
+    ListRotator<dpoint> rotator = ListRotator<dpoint>(std::move(*this));
+    // has to change to steepest possible?
+    rotator.rotateSegmentToXAxis();
+    //rotateLastVectorToYAxis();
+
+    for (int i = 0; i < rotator.size() - 1; i++) {
+        if ((rotator.at(i + 1).rot.x() <= rotator.at(i).rot.x())
+            //&&(rotator.at(i+1).rot.y()<HIGHPASS_LOW_LIMIT)
+            )
+        {
+            //debug() << "Illegal Segment found at " << rotator.at(i+1);
+            return rotator.at(i + 1).position;
+        }
+    }
+    return -1;
 }

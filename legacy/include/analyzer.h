@@ -12,15 +12,14 @@
 template<typename T> class Analyzer : public Calculator<T>
 {
 public:
-    Analyzer<T>();
-    template<typename F> Analyzer<T>(F& list);
+    using Calculator::Calculator;
 
     // careful: this is changing order
     // does not change index-numbering variable
     void reverseOrder();
 
     // make const?
-    static Calculator<dpoint> populateTurns(ListBase<dpoint>& originalData, const QList<QList<dpoint> > slices);
+    static Calculator<dpoint> populateTurns(const ListBase<dpoint>& originalData, const QList<QList<dpoint> > slices);
 
 };
 

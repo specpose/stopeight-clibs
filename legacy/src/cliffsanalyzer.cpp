@@ -3,39 +3,7 @@
 
 #include "cliffsanalyzer.h"
 
-template<> CliffsAnalyzer<dpoint>::CliffsAnalyzer() : CliffsNormalizer<dpoint>() {}
-
-// Note: ALL datamembers of target class destroyed
-template<>template<typename F> CliffsAnalyzer<dpoint>::CliffsAnalyzer(F& list) : CliffsNormalizer<dpoint>(list){
-    // should be listswitchable
-    ListBase<dpoint> c = static_cast<ListBase<dpoint>& >(list);
-    *this= static_cast<CliffsAnalyzer<dpoint>& >(c);
-}
-
-#include "areaanalyzer.h"
-//area to cliff ok
-template CliffsAnalyzer<dpoint>::CliffsAnalyzer(AreaAnalyzer<dpoint>& list);
-template CliffsAnalyzer<dpoint>::CliffsAnalyzer(ListCopyable<dpoint>& list);
-
-template <> int CliffsAnalyzer<dpoint>::hasIllegalSegment(){
-    ListRotator<dpoint> rotator = ListRotator<dpoint>(*this);
-    // has to change to steepest possible?
-    rotator.rotateSegmentToXAxis();
-    //rotateLastVectorToYAxis();
-
-    for (int i=0;i<rotator.size()-1;i++){
-        if ((rotator.at(i+1).rot.x()<=rotator.at(i).rot.x())
-                //&&(rotator.at(i+1).rot.y()<HIGHPASS_LOW_LIMIT)
-                )
-        {
-            //debug() << "Illegal Segment found at " << rotator.at(i+1);
-            return rotator.at(i+1).position;
-        }
-    }
-    return -1;
-}
-
-template<> ListCopyable<dpoint> CliffsAnalyzer<dpoint>::getFirstLegalSegment(){
+template<> ListSwitchable<dpoint> CliffsAnalyzer<dpoint>::getFirstLegalSegment(){
     CliffsAnalyzer<dpoint> result = CliffsAnalyzer<dpoint>();
     if (this->size()>1){
 
@@ -68,7 +36,7 @@ template<> ListCopyable<dpoint> CliffsAnalyzer<dpoint>::getFirstLegalSegment(){
 //NEVER USED
 //editorcliffs implementation is using getFirstLegalSegment
 //FOR REFERENCE
-template<> ListCopyable<dpoint> CliffsAnalyzer<dpoint>::getFirstCliff(qreal limit){
+/*template<> ListCopyable<dpoint> CliffsAnalyzer<dpoint>::getFirstCliff(qreal limit){
     //specialised internally!
     dpoint result = dpoint();
 
@@ -140,14 +108,14 @@ template<> ListCopyable<dpoint> CliffsAnalyzer<dpoint>::getFirstCliff(qreal limi
 
     // TCT implementation was here, now getFirstCliffTCT
 
-}
+}*/
 
 //NEVER USED
 //editorcliffs implementation is using getFirstLegalSegment
 //FOR REFERENCE
 /*template<> ListCopyable<dpoint> CliffsAnalyzer<dpoint>::getFirstCliffTCT(qreal limit){
     ListCopyable<dpoint> copy = ListCopyable<dpoint>(*this);
-    ListCopyable<dpoint> calculator = ListCopyable(*this);
+    ListCopyable<dpoint> calculator = ListCopyable<dpoint(*this);
     // TCT implementation?
 
     // first Operation without preceding triangles and areas

@@ -10,15 +10,12 @@
 template<typename T> class Calculator : public ListSwitchable<T>
 {
 public:
-    Calculator<T>();
-    template<typename F> Calculator<T>(F& list);
+    using ListSwitchable::ListSwitchable;
 
-    qreal lengthAt(int i);
 
     // Note: this is simple reversal. it is not checking order. Should be static.
     void reverse();
 
-    static qreal lengthOf(QPointF difference);
 
 
 };

@@ -6,18 +6,8 @@
 //#define debug() QDebug(QtDebugMsg)//::QDebug(QtDebugMsg)
 //#define debug() QNoDebug()
 
-template<> Turns<dpoint>::Turns() : ListSwitchable<dpoint>() {}
-
-// Note: typename F can be any implementation of ListBase WITHOUT data members
-template<>template<typename F> Turns<dpoint>::Turns(F& list) : ListSwitchable<dpoint>(){
-    ListSwitchable<dpoint>& c = static_cast<ListSwitchable<dpoint>& >(list);
-    *this= static_cast<Turns<dpoint>& >(c);
-}
-
-template Turns<dpoint>::Turns(ListBase<dpoint>& list);
-
 //ShapeMatcher::findTurns
-template<> QList<dpoint> Turns<dpoint>::findTurns(ListCopyable<dpoint> toBeProcessed){
+/*template<> QList<dpoint> Turns<dpoint>::findTurns(ListCopyable<dpoint> toBeProcessed){
     //debug()<<"Turns::findTurns started with "<<toBeProcessed.size()<<" input points";
     QList<dpoint> result = QList<dpoint>();
     TurnAnalyzer<dpoint> crest = TurnAnalyzer<dpoint>(toBeProcessed);
@@ -31,4 +21,4 @@ template<> QList<dpoint> Turns<dpoint>::findTurns(ListCopyable<dpoint> toBeProce
     result.removeLast();
     //}
     return result;
-}
+}*/

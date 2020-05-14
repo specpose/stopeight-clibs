@@ -6,21 +6,6 @@
 #define ZERO_INCLIN1 0
 #define ZERO_INCLIN2 0
 
-template<> CliffsCalculator<dpoint>::CliffsCalculator() : ListSwitchable<dpoint>() {}
-
-// Note: ALL datamembers of target class destroyed
-template<>template<typename F> CliffsCalculator<dpoint>::CliffsCalculator(F& list) : ListSwitchable<dpoint>(list){
-    // should be listswitchable
-    ListBase<dpoint> c = static_cast<ListBase<dpoint>& >(list);
-    *this= static_cast<CliffsCalculator<dpoint>& >(c);
-}
-
-#include "areaanalyzer.h"
-template CliffsCalculator<dpoint>::CliffsCalculator(AreaAnalyzer<dpoint>& list);
-template CliffsCalculator<dpoint>::CliffsCalculator(ListCopyable<dpoint>& list);
-#include "corneranalyzer.h"
-template CliffsCalculator<dpoint>::CliffsCalculator(CornerAnalyzer<dpoint>& list);
-
 // inline specialisation
 template <> QPointF CliffsCalculator<dpoint>::delta1At(int position){
 

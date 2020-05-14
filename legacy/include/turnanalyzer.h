@@ -4,18 +4,16 @@
 #ifndef TURNANALYZER_H
 #define TURNANALYZER_H
 
-#include "turnnormalizer.h"
-#include "listcopyable.h"
+//#include "turnnormalizer.h"
+//#include "corneranalyzer.h"
 #include "straightsanalyzer.h"
-#include "corneranalyzer.h"
 
 template<typename T> class TurnAnalyzer : public TurnNormalizer<T>
 {
 public:
-    TurnAnalyzer<T>();
-    template<typename F> TurnAnalyzer<T>(F& list);
+    using TurnNormalizer::TurnNormalizer;
 
-    ListCopyable<dpoint> getFirstTurnByTriplets();
+    //ListCopyable<dpoint> getFirstTurnByTriplets();
     // This is replacement for old_code scalar/crest approach
     ListCopyable<dpoint> getFirstTriplet();
 };

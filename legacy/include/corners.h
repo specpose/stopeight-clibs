@@ -5,17 +5,15 @@
 //#define CORNERS_H
 
 #include "listswitchable.h"
-#include "listcopyable.h"
 #include "corneranalyzer.h"
 
 template<typename T> class Corners : public ListSwitchable<T>
 {
 public:
-    Corners<T>();
-    template<typename F> Corners<T>(F& list);
+    using ListSwitchable::ListSwitchable;
 
     // Note: These only work as expected, if crests have been sliced. Otherwise: Only 1st result reliable
-    static QList<dpoint> findCorners(ListCopyable<dpoint> toBeProcessed);
+    static QList<dpoint> findCorners(ListSwitchable<dpoint> toBeProcessed);
 
 };
 

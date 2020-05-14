@@ -7,21 +7,6 @@
 
 //#define debug() QNoDebug()
 
-template<> TurnAnalyzer<dpoint>::TurnAnalyzer() : TurnNormalizer<dpoint>() {}
-
-// Note: ALL datamembers of target class destroyed
-template<>template<typename F> TurnAnalyzer<dpoint>::TurnAnalyzer(F& list) : TurnNormalizer<dpoint>(list){
-    ListBase<dpoint> c = static_cast<ListBase<dpoint>& >(list);
-    *this= static_cast<TurnAnalyzer<dpoint>& >(c);
-}
-
-#include "areanormalizer.h"
-template TurnAnalyzer<dpoint>::TurnAnalyzer(AreaNormalizer<dpoint>& list);
-template TurnAnalyzer<dpoint>::TurnAnalyzer(CornerNormalizer<dpoint>& list);
-template TurnAnalyzer<dpoint>::TurnAnalyzer(ListCopyable<dpoint>& list);
-#include "listswitchable.h"
-template TurnAnalyzer<dpoint>::TurnAnalyzer(ListSwitchable<dpoint>& list);
-
 template <> ListCopyable<dpoint> TurnAnalyzer<dpoint>::getFirstTriplet(){
     StraightsAnalyzer<dpoint> result = StraightsAnalyzer<dpoint>();
     if (this->size()>1){
@@ -77,7 +62,7 @@ template <> ListCopyable<dpoint> TurnAnalyzer<dpoint>::getFirstTriplet(){
  integrate segment of secondCorner and firstCorner to get 1st turn'
  get point in the middle of first triplet and 1st turn'
 */
-template <> ListCopyable<dpoint> TurnAnalyzer<dpoint>::getFirstTurnByTriplets(){
+/*template <> ListCopyable<dpoint> TurnAnalyzer<dpoint>::getFirstTurnByTriplets(){
 
     TurnAnalyzer<dpoint> result = TurnAnalyzer<dpoint>();
     ListCopyable<dpoint> origin = ListCopyable<dpoint>(*this);
@@ -176,4 +161,4 @@ template <> ListCopyable<dpoint> TurnAnalyzer<dpoint>::getFirstTurnByTriplets(){
     }
 
     return result;
-}
+}*/

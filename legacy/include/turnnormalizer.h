@@ -4,21 +4,12 @@
 #ifndef TURNNORMALIZER_H
 #define TURNNORMALIZER_H
 
-#include "turncalculator.h"
-#include "listswitchable.h"
+#include "listcopyable.h"
 
-template<typename T> class TurnNormalizer : public TurnCalculator<T>
+template<typename T> class TurnNormalizer : public ListCopyable<T>
 {
 public:
-    TurnNormalizer<T>();
-    template<typename F> TurnNormalizer<T>(F& list);
-
-
-    //ACL: foreign
-    // this will just produce a whole lot of straight lines
-    void smoothingJitter(int pos);
-    // supposed to produce curves -> will be replaced by dot product intrapolation
-    void risingJitter(int pos);
+    using ListCopyable::ListCopyable;
 
     void tripletFilters();
 };

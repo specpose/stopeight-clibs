@@ -5,14 +5,13 @@
 #define AREANORMALIZER_H
 
 #include "areacalculator.h"
-#include "turnnormalizer.h"
+//#include "turnnormalizer.h"
 #include "cornernormalizer.h"
 
 template<typename T> class AreaNormalizer : public AreaCalculator<T>
 {
 public:
-    AreaNormalizer<T>();
-    template<typename F> AreaNormalizer<T>(F& list);
+    using AreaCalculator::AreaCalculator;
 
     // these methods are being used for cleaning up the segments before the corner detection
     void areaFilters();

@@ -4,19 +4,26 @@
 #ifndef TURNCALCULATOR_H
 #define TURNCALCULATOR_H
 
-#include "listswitchable.h"
+#include "listrotator.h"
 
 #define REGH1 true
 #define REGH2 false
 
-template<typename T> class TurnCalculator : public ListSwitchable<T>
+template<typename T> class TurnCalculator : public ListRotator<T>
 {
 public:
-    TurnCalculator<T>();
-    template<typename F> TurnCalculator<T>(F& list);
+    using ListRotator::ListRotator;
 
     bool isRegLineThroughAt(int i);
-
+    //from TurnNormalizer
+    //ACL: foreign
+    // this will just produce a whole lot of straight lines
+    void smoothingJitter(int pos);
+    // supposed to produce curves -> will be replaced by dot product intrapolation
+    void risingJitter(int pos);
+    //from CliffsAnalyzer
+    // used by filters and analyzer
+    int hasIllegalSegment();
 private:
     qreal regH1At(int i);
     qreal regH2At(int i);

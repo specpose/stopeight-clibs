@@ -4,18 +4,16 @@
 //#ifndef TURNS_H
 //#define TURNS_H
 
-#include "listswitchable.h"
 #include "listcopyable.h"
 #include "turnanalyzer.h"
 
-template<typename T> class Turns : public ListSwitchable<T>
+template<typename T> class Turns : public ListCopyable<T>
 {
 public:
-    Turns<T>();
-    template<typename F> Turns<T>(F& list);
+    using ListCopyable::ListCopyable;
 
     // Note: These only work as expected, if crests have been sliced. Otherwise: Only 1st result reliable
-    static QList<dpoint> findTurns(ListCopyable<dpoint> toBeProcessed);
+    //static QList<dpoint> findTurns(ListCopyable<dpoint> toBeProcessed);
 
 };
 

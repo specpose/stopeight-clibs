@@ -5,21 +5,6 @@
 
 #define debug() QNoDebug()
 
-template<> Analyzer<dpoint>::Analyzer() : Calculator(){}
-
-// Note: ALL datamembers of target class destroyed
-template<>template<typename F> Analyzer<dpoint>::Analyzer(F& list) : Calculator(list) {
-    ListBase<dpoint> c = static_cast<ListBase<dpoint>& >(list);
-    // ListCopyable to Analyzer NOT ok
-    *this= static_cast<Analyzer<dpoint>& >(c);
-    //*this = static_cast<Analyzer<dpoint>& >(list);
-}
-
-template Analyzer<dpoint>::Analyzer(Analyzer<dpoint>& list);
-template Analyzer<dpoint>::Analyzer(ListBase<dpoint>& list);
-template Analyzer<dpoint>::Analyzer(ListCopyable<dpoint>& list);
-template Analyzer<dpoint>::Analyzer(QList<dpoint>& list);
-
 // Sould only be allowed in ListCopyable
 // only call ONCE
 template<> void Analyzer<dpoint>::reverseOrder(){
@@ -35,18 +20,17 @@ template<> void Analyzer<dpoint>::reverseOrder(){
     this->append(reversed);
 }
 
-template<> Calculator<dpoint> Analyzer<dpoint>::populateTurns(ListBase<dpoint> &originalData, const QList<QList<dpoint> > slices){
+template<> Calculator<dpoint> Analyzer<dpoint>::populateTurns(const ListBase<dpoint>& originalData, const QList<QList<dpoint> > slices){
     Calculator<dpoint> result;
     for (int k=0;k<slices.size();k++){
         for (int l=0;l<slices[k].size()-1;l++){
             result << slices[k][l];
             // this is for debugging turn detection
-            ListCopyable<dpoint> iter = ListCopyable<dpoint>(originalData);
             //ListBase<dpoint> lst = iter.chopCopy(slices[k][l].position,slices[k][l+1].position);
-            auto it = iter.position_to_iterator(slices[k][l].position,slices[k][l+1].position);
-            auto lst = ListBase<dpoint>();
-            std::copy(it[0],it[1],std::back_inserter(lst));
-            CornerNormalizer<dpoint> mid = CornerNormalizer<dpoint>(lst);
+            ListBase<dpoint>& temp = const_cast<ListBase<dpoint>&>(originalData);
+            auto it = temp.position_to_iterator(slices[k][l].position,slices[k][l+1].position);
+            auto mid = CornerNormalizer<dpoint>();
+            std::copy(it[0],it[1],std::back_inserter(mid));
             auto middle = mid.getPointInTheMiddle();
             middle.position = -1;
             result << middle;

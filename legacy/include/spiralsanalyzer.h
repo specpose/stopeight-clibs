@@ -10,8 +10,7 @@
 template<typename T> class SpiralsAnalyzer : public SpiralsCalculator<T>
 {
 public:
-    SpiralsAnalyzer<T>();
-    template<typename F> SpiralsAnalyzer<T>(F& list);
+    using SpiralsCalculator::SpiralsCalculator;
 
     static bool consistencyCheck(QList<dpoint> cliffs);
 

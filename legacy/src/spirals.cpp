@@ -10,19 +10,7 @@
 //#define LIMIT_TEST M_PIl
 #define LIMIT_ITERATION_STEP 0.1
 
-template<> Spirals<dpoint>::Spirals() : ListSwitchable<dpoint>() {}
-
-// Note: typename F can be any implementation of ListBase WITHOUT data members
-template<>template<typename F> Spirals<dpoint>::Spirals(F& list) : ListSwitchable<dpoint>(){
-    ListSwitchable<dpoint>& c = static_cast<ListSwitchable<dpoint>& >(list);
-    *this= static_cast<Spirals<dpoint>& >(c);
-}
-
-template Spirals<dpoint>::Spirals(Spirals<dpoint>& list);
-template Spirals<dpoint>::Spirals(ListBase<dpoint>& list);
-
-
-template<> QList<dpoint> Spirals<dpoint>::findAreas(ListCopyable<dpoint> &stroke, qreal limit){
+template<> QList<dpoint> Spirals<dpoint>::findAreas(const ListSwitchable<dpoint> stroke, qreal limit){
     AreaAnalyzer<dpoint> spiral = AreaAnalyzer<dpoint>(stroke);
 
     QList<dpoint> result=QList<dpoint>();
@@ -45,7 +33,7 @@ template<> QList<dpoint> Spirals<dpoint>::findAreas(ListCopyable<dpoint> &stroke
 }
 
 // TODO use listcopyables
-template<> qreal Spirals<dpoint>::findLimit(ListCopyable<dpoint> toBeProcessed){
+template<> qreal Spirals<dpoint>::findLimit(const ListSwitchable<dpoint> toBeProcessed){
     QList<dpoint> cliffs;
     qreal MyLimit;
     //Old working:
@@ -87,8 +75,7 @@ template<> qreal Spirals<dpoint>::findLimit(ListCopyable<dpoint> toBeProcessed){
     return MyLimit;
 }
 
-template<> QList<dpoint> Spirals<dpoint>::findSpiralCliffs(ListCopyable<dpoint> toBeProcessed){
-    ListCopyable<dpoint> forward = ListCopyable<dpoint>(toBeProcessed);
+template<> QList<dpoint> Spirals<dpoint>::findSpiralCliffs(const ListSwitchable<dpoint> toBeProcessed){
 
     //qreal frontSpiral= toBeProcessed.measureSpiral();
     //debug()<<"Forward Spiral Size is: "<<frontSpiral;
@@ -102,7 +89,7 @@ template<> QList<dpoint> Spirals<dpoint>::findSpiralCliffs(ListCopyable<dpoint> 
     reversed.reverseOrder();
     //qreal backSpiral= reversed.measureSpiral();
     //debug()<<"Backward Spiral Size is: "<<backSpiral;
-    ListCopyable<dpoint> backward = ListCopyable<dpoint>(reversed);
+    ListSwitchable<dpoint> backward = ListSwitchable<dpoint>(std::move(reversed));
     qreal backLimit = findLimit(backward);
     //debug()<<"Limit from backward analysis is: "<<backLimit;
     //if (static_cast<int>(frontSpiral)!=static_cast<int>(backSpiral)){
@@ -121,11 +108,11 @@ template<> QList<dpoint> Spirals<dpoint>::findSpiralCliffs(ListCopyable<dpoint> 
             *cliffs = calc;
             //}
         } else {
-            *cliffs = findAreas(forward,limit);
+            *cliffs = findAreas(toBeProcessed,limit);
         }
     } else {
         //debug()<<"******************* findAreas::Main **********************";
-        *cliffs = findAreas(forward,limit);
+        *cliffs = findAreas(toBeProcessed,limit);
     }
     return *cliffs;
 }

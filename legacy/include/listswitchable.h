@@ -6,17 +6,18 @@
 
 #define HIGHPASS_LOW_LIMIT 0.0001
 
-#include "listrotator.h"
+#include "turncalculator.h"
 //#include <limits>
 
-template<typename T> class ListSwitchable : public ListRotator<dpoint>
+template<typename T> class ListSwitchable : public TurnCalculator<dpoint>
 {
 public:
     ListSwitchable();
-    template<typename F> ListSwitchable<T>(F& list);
+    template<typename F> ListSwitchable<T>(const F&);
+    template<typename F> ListSwitchable<T>(F&&);
     //THIS THING AND ALL INHERITING CAN NOT BE COPIED
-    template<typename F> void operator=(F& list);
     template<typename F> void operator=(const F& list);
+    template<typename F> void operator=(F&& list);
 
 
     void removeAt(int i);

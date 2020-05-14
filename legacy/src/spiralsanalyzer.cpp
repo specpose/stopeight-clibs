@@ -5,13 +5,6 @@
 
 //#define debug() QNoDebug()
 
-template<> SpiralsAnalyzer<dpoint>::SpiralsAnalyzer() : SpiralsCalculator<dpoint>() {}
-
-// Note: ALL datamembers of target class destroyed
-template<>template<typename F> SpiralsAnalyzer<dpoint>::SpiralsAnalyzer(F& list) : SpiralsCalculator<dpoint>(list){
-    *this = static_cast<SpiralsAnalyzer<dpoint>& >(list);
-}
-
 template<> bool SpiralsAnalyzer<dpoint>::consistencyCheck(QList<dpoint> cliffs){
     //debug()<<"We have "<< cliffs.size() << " cliffs in input.";
 	//if (cliffs.size()!=0 && fmod(cliffs.size(),2) == 0){

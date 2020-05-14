@@ -11,10 +11,9 @@
 template<typename T> class Cliffs : public ListSwitchable<T>
 {
 public:
-    Cliffs<T>();
-    template<typename F> Cliffs<T>(F& list);
+    using ListSwitchable::ListSwitchable;
 
-    static QList<dpoint> findCliffs(ListCopyable<dpoint> output);
+    static QList<dpoint> findCliffs(ListSwitchable<dpoint> output);
 
 };
 

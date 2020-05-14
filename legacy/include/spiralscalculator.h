@@ -9,8 +9,7 @@
 template<typename T> class SpiralsCalculator : public ListSwitchable<T>
 {
 public:
-    SpiralsCalculator<T>();
-    template<typename F> SpiralsCalculator<T>(F& list);
+    using ListSwitchable::ListSwitchable;
 
 };
 

@@ -10,8 +10,7 @@
 template<typename T> class AreaCalculator : public ListSwitchable<T>
 {
 public:
-    AreaCalculator<T>();
-    template<typename F> AreaCalculator<T>(F& list);
+    using ListSwitchable::ListSwitchable;
 
     // a.k.a integration up to triangle / curvature not included
     qreal sumOfDxAreasRotY();

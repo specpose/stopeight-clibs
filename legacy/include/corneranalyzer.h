@@ -5,18 +5,16 @@
 #define CORNERANALYZER_H
 
 #include "cornernormalizer.h"
-#include "listcopyable.h"
 #include "analyzer.h"
 #include "cliffscalculator.h"
 
 template<typename T> class CornerAnalyzer : public CornerNormalizer<T>
 {
 public:
-    CornerAnalyzer<T>();
-    template<typename F> CornerAnalyzer<T>(F& list);
+    using CornerNormalizer::CornerNormalizer;
 
     // implementation of "clean" math; as opposed to old_code shrinkToDeltas
-    ListCopyable<dpoint> getFirstCorner();
+    ListSwitchable<dpoint> getFirstCorner();
 };
 
 #endif // CORNERANALYZER_H

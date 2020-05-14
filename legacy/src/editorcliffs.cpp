@@ -47,9 +47,8 @@ void EditorCliffs::process(ListBase<dpoint> &toBeProcessed){
 
 // this is a drop-in replacement for processSegment used for clarifying math
 QList<dpoint> EditorCliffs::processSegment(QList<dpoint>::iterator start,QList<dpoint>::iterator end){
-    auto list = QList<dpoint>();
-    std::copy(start,end,std::back_inserter(list));
-    ListRotator<dpoint> cliff = ListRotator<dpoint>(list);
+    auto cliff = ListRotator<dpoint>();
+    std::copy(start,end,std::back_inserter(cliff));
     QList<dpoint> path_section = QList<dpoint>();
     if (cliff.size()>1){
         cliff.rotateSegmentToXAxis();

@@ -5,39 +5,6 @@
 
 //#define debug() QNoDebug()
 
-template<> ListRotator<dpoint>::ListRotator() : ListBase<dpoint>() {}
-
-// Note: ALL datamembers of target class destroyed
-template<>template<typename F> ListRotator<dpoint>::ListRotator(F& list) : ListBase<dpoint>(list){
-    ListBase<dpoint> c = static_cast<ListBase<dpoint>& >(list);
-    *this= static_cast<ListRotator<dpoint>& >(c);
-}
-
-template ListRotator<dpoint>::ListRotator(QList<dpoint>& list);
-#include "cliffsanalyzer.h"
-template ListRotator<dpoint>::ListRotator(CliffsAnalyzer<dpoint>& list);
-#include "areaanalyzer.h"
-template ListRotator<dpoint>::ListRotator(AreaAnalyzer<dpoint>& list);
-template ListRotator<dpoint>::ListRotator(ListBase<dpoint>& list);
-template ListRotator<dpoint>::ListRotator(ListCopyable<dpoint>& list);
-template ListRotator<dpoint>::ListRotator(TurnNormalizer<dpoint>& list);
-template ListRotator<dpoint>::ListRotator(AreaCalculator<dpoint>& list);
-template ListRotator<dpoint>::ListRotator(CornerNormalizer<dpoint>& list);
-template ListRotator<dpoint>::ListRotator(Calculator<dpoint>& list);
-template ListRotator<dpoint>::ListRotator(ListSwitchable<dpoint>& list);
-template ListRotator<dpoint>::ListRotator(AreaNormalizer<dpoint>& list);
-template ListRotator<dpoint>::ListRotator(CliffsNormalizer<dpoint>& list);
-#include "corneranalyzer.h"
-template ListRotator<dpoint>::ListRotator(CornerAnalyzer<dpoint>& list);
-#include "turnanalyzer.h"
-template ListRotator<dpoint>::ListRotator(TurnAnalyzer<dpoint>& list);
-
-
-// Note: ALL datamembers of target class destroyed
-template<>template<typename F> void ListRotator<dpoint>::operator=(F& list){
-    this->swap(list);
-}
-
 template <> void ListRotator<dpoint>::moveRotToZero(){
     QTransform transMat;
 
@@ -180,4 +147,3 @@ template <> void ListRotator<dpoint>::rotateSegmentToSteepest(QPointF lastVector
     rotate(deg);
     moveRotToZero();
 }*/
-
