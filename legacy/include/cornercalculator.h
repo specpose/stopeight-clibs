@@ -9,7 +9,7 @@
 template<typename T> class CornerCalculator : public ListSwitchable<T>
 {
 public:
-    using ListSwitchable::ListSwitchable;
+    using ListSwitchable<T>::ListSwitchable;
 
 };
 

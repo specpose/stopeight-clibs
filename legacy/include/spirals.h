@@ -11,7 +11,7 @@
 template<typename T> class Spirals : public ListSwitchable<T>
 {
 public:
-    using ListSwitchable::ListSwitchable;
+    using ListSwitchable<T>::ListSwitchable;
 
     static QList<dpoint> findSpiralCliffs(const ListSwitchable<dpoint> output);
 

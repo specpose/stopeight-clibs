@@ -12,7 +12,7 @@
 template<typename T> class Analyzer : public Calculator<T>
 {
 public:
-    using Calculator::Calculator;
+    using Calculator<T>::Calculator;
 
     // careful: this is changing order
     // does not change index-numbering variable

@@ -10,7 +10,7 @@
 template<typename T> class Calculator : public ListSwitchable<T>
 {
 public:
-    using ListSwitchable::ListSwitchable;
+    using ListSwitchable<T>::ListSwitchable;
 
 
     // Note: this is simple reversal. it is not checking order. Should be static.

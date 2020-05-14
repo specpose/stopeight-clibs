@@ -12,7 +12,7 @@
 template<typename T> class TurnCalculator : public ListRotator<T>
 {
 public:
-    using ListRotator::ListRotator;
+    using ListRotator<T>::ListRotator;
 
     bool isRegLineThroughAt(int i);
     //from TurnNormalizer

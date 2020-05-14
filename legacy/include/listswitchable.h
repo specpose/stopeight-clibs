@@ -12,7 +12,7 @@
 template<typename T> class ListSwitchable : public TurnCalculator<dpoint>
 {
 public:
-    ListSwitchable();
+    ListSwitchable<T>();
     template<typename F> ListSwitchable<T>(const F&);
     template<typename F> ListSwitchable<T>(F&&);
     //THIS THING AND ALL INHERITING CAN NOT BE COPIED

@@ -23,7 +23,7 @@ struct ArrayOfTwoQListDpointIterators : std::array<QList<dpoint>::iterator, 2>{}
 template<typename T> class ListBase : public QList<T>
 {
 public:
-    using QList::QList;
+    using QList<T>::QList;
 
     // method for access from python
     static QList<QPointF> open(const char* fileName);

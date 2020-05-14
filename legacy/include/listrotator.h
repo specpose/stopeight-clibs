@@ -23,7 +23,7 @@
 template<typename T> class ListRotator : public ListBase<T>
 {
 public:
-    using ListBase::ListBase;
+    using ListBase<T>::ListBase;
 
     void rotateSegmentToXAxis();
     //void rotateLastVectorToYAxis();

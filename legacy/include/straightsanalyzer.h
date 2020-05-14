@@ -11,7 +11,7 @@
 template<typename T> class StraightsAnalyzer : public StraightsCalculator<T>
 {
 public:
-    using StraightsCalculator::StraightsCalculator;
+    using StraightsCalculator<T>::StraightsCalculator;
 
     bool checkIfSectionIsStraightLine(qreal sumLengthFactor);
 };

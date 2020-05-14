@@ -10,7 +10,7 @@
 template<typename T> class Corners : public ListSwitchable<T>
 {
 public:
-    using ListSwitchable::ListSwitchable;
+    using ListSwitchable<T>::ListSwitchable;
 
     // Note: These only work as expected, if crests have been sliced. Otherwise: Only 1st result reliable
     static QList<dpoint> findCorners(ListSwitchable<dpoint> toBeProcessed);

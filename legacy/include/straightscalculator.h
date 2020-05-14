@@ -10,7 +10,7 @@
 template<typename T> class StraightsCalculator : public ListCopyable<T>
 {
 public:
-    using ListCopyable::ListCopyable;
+    using ListCopyable<T>::ListCopyable;
 
     qreal sumRotYFrom(int start);
     // erroneos integration

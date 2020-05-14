@@ -5,7 +5,7 @@
 
 //#define debug() QDebug::QDebug(QtDebugMsg)
 //#define debug() QNoDebug()
-ListSwitchable<dpoint>::ListSwitchable() : TurnCalculator<dpoint>() {
+template<> ListSwitchable<dpoint>::ListSwitchable() : TurnCalculator<dpoint>() {
 }
 template<>template<typename F> ListSwitchable<dpoint>::ListSwitchable(const F& list) : TurnCalculator<dpoint>(list) {
 //    *this = static_cast<ListSwitchable<dpoint>&>(list);

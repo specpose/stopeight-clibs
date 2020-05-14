@@ -11,7 +11,7 @@
 template<typename T> class CornerAnalyzer : public CornerNormalizer<T>
 {
 public:
-    using CornerNormalizer::CornerNormalizer;
+    using CornerNormalizer<T>::CornerNormalizer;
 
     // implementation of "clean" math; as opposed to old_code shrinkToDeltas
     ListSwitchable<dpoint> getFirstCorner();

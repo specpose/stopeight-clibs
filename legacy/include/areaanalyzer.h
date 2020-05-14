@@ -10,7 +10,7 @@
 template<typename T> class AreaAnalyzer : public AreaNormalizer<T>
 {
 public:
-    using AreaNormalizer::AreaNormalizer;
+    using AreaNormalizer<T>::AreaNormalizer;
 
     ListSwitchable<dpoint> getFirstArea(qreal limit);
 

@@ -10,7 +10,7 @@
 template<typename T> class CliffsAnalyzer : public CliffsNormalizer<T>
 {
 public:
-    using CliffsNormalizer::CliffsNormalizer;
+    using CliffsNormalizer<T>::CliffsNormalizer;
 
     // This is the replacement for getFirstCliff
     ListSwitchable<dpoint> getFirstLegalSegment();

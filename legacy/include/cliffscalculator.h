@@ -9,7 +9,7 @@
 template<typename T> class CliffsCalculator : public ListSwitchable<T>
 {
 public:
-    using ListSwitchable::ListSwitchable;
+    using ListSwitchable<T>::ListSwitchable;
 
     QPointF delta1At(int position);
     bool deriv1Crossed(int pos);

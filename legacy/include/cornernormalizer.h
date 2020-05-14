@@ -10,7 +10,7 @@
 template<typename T> class CornerNormalizer : public CornerCalculator<T>
 {
 public:
-    using CornerCalculator::CornerCalculator;
+    using CornerCalculator<T>::CornerCalculator;
 
     void requireMinimumLength(qreal length);
 	void intRaster(qreal threshold);

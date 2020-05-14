@@ -11,7 +11,7 @@
 template<typename T> class AreaNormalizer : public AreaCalculator<T>
 {
 public:
-    using AreaCalculator::AreaCalculator;
+    using AreaCalculator<T>::AreaCalculator;
 
     // these methods are being used for cleaning up the segments before the corner detection
     void areaFilters();
