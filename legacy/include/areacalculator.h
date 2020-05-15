@@ -18,7 +18,8 @@ template<typename F> AreaCalculator(const F& list) {
 }
 //Upcast Move Constructor
 template<typename F> AreaCalculator(F&& list) {
-    *this = std::move(static_cast<AreaCalculator<dpoint>&&>(list));
+    auto copy = std::move(list);
+    *this = static_cast<AreaCalculator<dpoint>>(copy);
 }
     // a.k.a integration up to triangle / curvature not included
     qreal sumOfDxAreasRotY();

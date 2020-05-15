@@ -12,22 +12,25 @@
 template<typename T> class ListSwitchable : public TurnCalculator<dpoint>
 {
 public:
-    ListSwitchable<T>(): TurnCalculator<dpoint>() {}
+    using TurnCalculator<T>::TurnCalculator;
+    //ListSwitchable<T>() = default;
+    //ListSwitchable<T>(const ListSwitchable<T>&) = default;
+    //ListSwitchable<T>(ListSwitchable<T>&&) = default;
 //    template<typename F> ListSwitchable<T>(const F&);
 //    template<typename F> ListSwitchable<T>(F&&);
 ////THIS THING AND ALL INHERITING CAN NOT BE COPIED
 //    template<typename F> void operator=(const F& list);
 //    template<typename F> void operator=(F&& list);
 
-//Upcast Copy Constructor
-template<typename F> ListSwitchable(const F& list) {
-    auto copy = F(list);
-    *this = static_cast<ListSwitchable<dpoint>&>(copy);
-}
-//Upcast Move Constructor
-template<typename F> ListSwitchable(F&& list) {
-    *this = std::move(static_cast<ListSwitchable<dpoint>&&>(list));
-}
+    ListSwitchable<T>(const QList<T>& list) {
+        auto copy = QList<T>(list);
+        *this = static_cast<ListSwitchable<T>&>(copy);
+    }
+    //Upcast Move Constructor
+    ListSwitchable<T>(QList<T>&& list) {
+        auto copy = std::move(list);
+        *this = static_cast<ListSwitchable<T>>(copy);
+    }
 
     void removeAt(int i);
 

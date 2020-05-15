@@ -19,7 +19,8 @@ template<typename F> CliffsNormalizer(const F& list) {
 }
 //Upcast Move Constructor
 template<typename F> CliffsNormalizer(F&& list) {
-    *this = std::move(static_cast<CliffsNormalizer<dpoint>&&>(list));
+    auto copy = std::move(list);
+    *this = static_cast<CliffsNormalizer<dpoint>>(copy);
 }
     // these methods are being used for cleaning up the segments before the corner detection
     void cliffFilters();

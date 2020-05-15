@@ -18,7 +18,8 @@ template<typename F> CornerNormalizer(const F& list) {
 }
 //Upcast Move Constructor
 template<typename F> CornerNormalizer(F&& list) {
-    *this = std::move(static_cast<CornerNormalizer<dpoint>&&>(list));
+    auto copy = std::move(list);
+    *this = static_cast<CornerNormalizer<dpoint>>(copy);
 }
     void requireMinimumLength(qreal length);
 	void intRaster(qreal threshold);

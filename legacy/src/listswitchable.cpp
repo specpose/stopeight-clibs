@@ -6,7 +6,7 @@
 //#define debug() QDebug::QDebug(QtDebugMsg)
 //#define debug() QNoDebug()
 
-#include "cliffsanalyzer.h"
+/*#include "cliffsanalyzer.h"
 template ListSwitchable<dpoint>::ListSwitchable(CliffsAnalyzer<dpoint>&&);
 template ListSwitchable<dpoint>::ListSwitchable(AreaCalculator<dpoint>&&);
 #include "areaanalyzer.h"
@@ -31,7 +31,7 @@ template AreaCalculator<dpoint>::AreaCalculator(const ListSwitchable<dpoint>&);
 #include "cliffsnormalizer.h"
 template CliffsNormalizer<dpoint>::CliffsNormalizer(const ListSwitchable<dpoint>&);
 #include "cliffsanalyzer.h"
-template CliffsAnalyzer<dpoint>::CliffsAnalyzer(const ListSwitchable<dpoint>&);
+template CliffsAnalyzer<dpoint>::CliffsAnalyzer(const ListSwitchable<dpoint>&);*/
 
 /*//Upcast Copy Assignment
 template<>template<typename F> void ListSwitchable<dpoint>::operator=(const F& list) {

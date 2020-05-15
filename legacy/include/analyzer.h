@@ -20,7 +20,8 @@ template<typename F> Analyzer(const F& list) {
 }
 //Upcast Move Constructor
 template<typename F> Analyzer(F&& list) {
-    *this = std::move(static_cast<Analyzer<dpoint>&&>(list));
+    auto copy = std::move(list);
+    *this = static_cast<Analyzer<dpoint>>(copy);
 }
     // careful: this is changing order
     // does not change index-numbering variable

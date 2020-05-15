@@ -19,7 +19,8 @@ template<typename F> CornerAnalyzer(const F& list) {
 }
 //Upcast Move Constructor
 template<typename F> CornerAnalyzer(F&& list) {
-    *this = std::move(static_cast<CornerAnalyzer<dpoint>&&>(list));
+    auto copy = std::move(list);
+    *this = static_cast<CornerAnalyzer<dpoint>>(copy);
 }
     // implementation of "clean" math; as opposed to old_code shrinkToDeltas
     ListSwitchable<dpoint> getFirstCorner();

@@ -18,7 +18,8 @@ template<typename F> CliffsAnalyzer(const F& list) {
 }
 //Upcast Move Constructor
 template<typename F> CliffsAnalyzer(F&& list) {
-    *this = std::move(static_cast<CliffsAnalyzer<dpoint>&&>(list));
+    auto copy = std::move(list);
+    *this = static_cast<CliffsAnalyzer<dpoint>>(copy);
 }
     // This is the replacement for getFirstCliff
     ListSwitchable<dpoint> getFirstLegalSegment();

@@ -19,7 +19,8 @@ template<typename F> TurnAnalyzer(const F& list) {
 }
 //Upcast Move Constructor
 template<typename F> TurnAnalyzer(F&& list) {
-    *this = std::move(static_cast<TurnAnalyzer<dpoint>&&>(list));
+    auto copy = std::move(list);
+    *this = static_cast<TurnAnalyzer<dpoint>>(copy);
 }
 
     ListCopyable<dpoint> getFirstTurnByTriplets();
