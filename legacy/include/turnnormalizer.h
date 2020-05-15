@@ -9,7 +9,7 @@
 template<typename T> class TurnNormalizer : public ListCopyable<T>
 {
 public:
-    using ListCopyable::ListCopyable;
+    using ListCopyable<T>::ListCopyable;
 
     void tripletFilters();
 };

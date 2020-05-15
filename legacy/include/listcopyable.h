@@ -12,10 +12,10 @@
 template<typename T> class ListCopyable : public TurnCalculator<T>
 {
 public:
-    ListCopyable<T>() = default;
+    //ListCopyable<T>() = default;
     //ListCopyable<T>(ListCopyable<T>& list) = delete;
-    ListCopyable<T>(const ListCopyable<T>& list) = default;
-    ListCopyable<T>(ListCopyable<T>&& list) = default;
+    //ListCopyable<T>(const ListCopyable<T>& list) = default;
+    //ListCopyable<T>(ListCopyable<T>&& list) = default;
 
     //ListCopyable<dpoint> chopCopy(int startPosition, int endPosition);
 

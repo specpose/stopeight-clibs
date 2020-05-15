@@ -10,7 +10,7 @@
 template<typename T> class Turns : public ListCopyable<T>
 {
 public:
-    using ListCopyable::ListCopyable;
+    using ListCopyable<T>::ListCopyable;
 
     // Note: These only work as expected, if crests have been sliced. Otherwise: Only 1st result reliable
     //static QList<dpoint> findTurns(ListCopyable<dpoint> toBeProcessed);

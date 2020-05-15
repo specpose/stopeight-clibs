@@ -10,8 +10,16 @@
 template<typename T> class AreaCalculator : public ListSwitchable<T>
 {
 public:
-    using ListSwitchable<T>::ListSwitchable;
-
+    //using ListSwitchable<T>::ListSwitchable;
+AreaCalculator<T>(): ListSwitchable<dpoint>() {}
+template<typename F> AreaCalculator(const F& list) {
+    auto copy = F(list);
+    *this = static_cast<AreaCalculator<dpoint>&>(copy);
+}
+//Upcast Move Constructor
+template<typename F> AreaCalculator(F&& list) {
+    *this = std::move(static_cast<AreaCalculator<dpoint>&&>(list));
+}
     // a.k.a integration up to triangle / curvature not included
     qreal sumOfDxAreasRotY();
 

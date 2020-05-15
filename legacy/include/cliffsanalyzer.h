@@ -10,8 +10,16 @@
 template<typename T> class CliffsAnalyzer : public CliffsNormalizer<T>
 {
 public:
-    using CliffsNormalizer<T>::CliffsNormalizer;
-
+    //using CliffsNormalizer<T>::CliffsNormalizer;
+CliffsAnalyzer<T>(): CliffsNormalizer<dpoint>() {}
+template<typename F> CliffsAnalyzer(const F& list) {
+    auto copy = F(list);
+    *this = static_cast<CliffsAnalyzer<dpoint>&>(copy);
+}
+//Upcast Move Constructor
+template<typename F> CliffsAnalyzer(F&& list) {
+    *this = std::move(static_cast<CliffsAnalyzer<dpoint>&&>(list));
+}
     // This is the replacement for getFirstCliff
     ListSwitchable<dpoint> getFirstLegalSegment();
 

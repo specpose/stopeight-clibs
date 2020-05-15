@@ -12,8 +12,16 @@
 template<typename T> class Analyzer : public Calculator<T>
 {
 public:
-    using Calculator<T>::Calculator;
-
+    //using Calculator<T>::Calculator;
+Analyzer<T>(): Calculator<dpoint>() {}
+template<typename F> Analyzer(const F& list) {
+    auto copy = F(list);
+    *this = static_cast<Analyzer<dpoint>&>(copy);
+}
+//Upcast Move Constructor
+template<typename F> Analyzer(F&& list) {
+    *this = std::move(static_cast<Analyzer<dpoint>&&>(list));
+}
     // careful: this is changing order
     // does not change index-numbering variable
     void reverseOrder();

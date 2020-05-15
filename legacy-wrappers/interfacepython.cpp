@@ -118,8 +118,7 @@ PyObject* legacy_wrappers::stroke_parallel(PyObject *self, PyObject *args) {
 		return legacy_wrappers::error("undefined");
 	}
 
-	ListCopyable<dpoint> result = ListCopyable<dpoint>();
-	result = editor.getOutput();
+	ListBase<dpoint> result = editor.getOutput();
 	return legacy_wrappers::convert(ListBase<dpoint>::convert(result));
 }
 
@@ -139,8 +138,7 @@ PyObject* legacy_wrappers::stroke_sequential(PyObject *self, PyObject *args) {
 		return legacy_wrappers::error("undefined");
 	}
 
-	ListCopyable<dpoint> result = ListCopyable<dpoint>();
-	result = editor.getOutput();
+	ListBase<dpoint> result = editor.getOutput();
 	return legacy_wrappers::convert(ListBase<dpoint>::convert(result));
 }
 
