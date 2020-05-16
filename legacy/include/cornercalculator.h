@@ -9,8 +9,17 @@
 template<typename T> class CornerCalculator : public ListSwitchable<T>
 {
 public:
-    using ListSwitchable<T>::ListSwitchable;
-
+    //using ListSwitchable<T>::ListSwitchable;
+    CornerCalculator<T>() : ListSwitchable<dpoint>() {}
+template<typename F> CornerCalculator(const F& list) {
+    auto copy = F(list);
+    *this = static_cast<CornerCalculator<dpoint>&>(copy);
+}
+//Upcast Move Constructor
+template<typename F> CornerCalculator(F&& list) {
+    auto copy = std::move(list);
+    *this = static_cast<CornerCalculator<dpoint>>(copy);
+}
 };
 
 #endif // CORNERCALCULATOR_H

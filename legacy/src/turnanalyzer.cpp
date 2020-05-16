@@ -101,15 +101,14 @@ template <> ListCopyable<dpoint> TurnAnalyzer<dpoint>::getFirstTurnByTriplets(){
                 twoTriplets.cornerFilters();
                 ListSwitchable<dpoint> secondCorner = twoTriplets.getFirstCorner();
                 it = origin.position_to_iterator(firstCorner.last().position,secondCorner.last().position);
-                auto cornerToCorner = ListSwitchable<dpoint>();
-                std::copy(it[0],it[1],std::front_inserter(cornerToCorner));
-                //cornerToCorner.reverse();
+                auto normalized_cornerToCorner = TurnAnalyzer<dpoint>();
+                std::copy(it[0],it[1],std::front_inserter(normalized_cornerToCorner));
+                //normalized_cornerToCorner.reverse();
                 // this check is asymetric, improve!
-                if (cornerToCorner.size()>0 && firstTriplet.size()>0){
-                    TurnAnalyzer<dpoint> normalized = TurnAnalyzer<dpoint>(cornerToCorner);
-                    normalized.tripletFilters();
+                if (normalized_cornerToCorner.size()>0 && firstTriplet.size()>0){
+                    normalized_cornerToCorner.tripletFilters();
                     // triplet lost! inline specialization!
-                    dpoint turnTwo = normalized.getFirstTriplet().last();
+                    dpoint turnTwo = normalized_cornerToCorner.getFirstTriplet().last();
                     dpoint turnOne = firstTriplet.last();
                     ListSwitchable<dpoint> container = ListSwitchable<dpoint>();
                     // eventually turnLine will have length 1

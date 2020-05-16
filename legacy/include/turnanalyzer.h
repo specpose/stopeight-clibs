@@ -11,17 +11,7 @@
 template<typename T> class TurnAnalyzer : public TurnNormalizer<T>
 {
 public:
-    //using TurnNormalizer<T>::TurnNormalizer;
-TurnAnalyzer<T>(): TurnNormalizer<dpoint>() {}
-template<typename F> TurnAnalyzer(const F& list) {
-    auto copy = F(list);
-    *this = static_cast<TurnAnalyzer<dpoint>&>(copy);
-}
-//Upcast Move Constructor
-template<typename F> TurnAnalyzer(F&& list) {
-    auto copy = std::move(list);
-    *this = static_cast<TurnAnalyzer<dpoint>>(copy);
-}
+    using TurnNormalizer<T>::TurnNormalizer;
 
     ListCopyable<dpoint> getFirstTurnByTriplets();
     // This is replacement for old_code scalar/crest approach
