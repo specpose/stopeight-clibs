@@ -17,7 +17,7 @@ template<> QList<dpoint> Spirals<dpoint>::findAreas(const ListSwitchable<dpoint>
 
     while (spiral.size()>2){
         //if (stroke.size()>2){
-        ListBase<dpoint> area = spiral.getFirstArea(limit);
+        ListSwitchable<dpoint> area = spiral.getFirstArea(limit);
         if (area.size()>0){
             //result << areas;
             result << area.last();
@@ -97,23 +97,23 @@ template<> QList<dpoint> Spirals<dpoint>::findSpiralCliffs(const ListSwitchable<
     //}
 
     // change: use reference?
-    QList<dpoint>* cliffs = new QList<dpoint>;
+    QList<dpoint> cliffs = ListSwitchable<dpoint>();
     if (limit!=backLimit){
         //debug()<< "ShapeMatcher::process: different limits found, using larger";
         if (backLimit>limit){
-            *cliffs = findAreas(backward,backLimit);
+            cliffs = findAreas(backward,backLimit);
             //if (cliffs->size()>0){
-            Calculator<dpoint> calc = Calculator<dpoint>(*cliffs);
+            Calculator<dpoint> calc = Calculator<dpoint>(cliffs);
             calc.reverse();
-            *cliffs = calc;
+            cliffs = calc;
             //}
         } else {
-            *cliffs = findAreas(toBeProcessed,limit);
+            cliffs = findAreas(toBeProcessed,limit);
         }
     } else {
         //debug()<<"******************* findAreas::Main **********************";
-        *cliffs = findAreas(toBeProcessed,limit);
+        cliffs = findAreas(toBeProcessed,limit);
     }
-    return *cliffs;
+    return cliffs;
 }
 

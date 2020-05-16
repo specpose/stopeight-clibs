@@ -66,7 +66,7 @@ template <> ListCopyable<dpoint> TurnAnalyzer<dpoint>::getFirstTriplet(){
 template <> ListCopyable<dpoint> TurnAnalyzer<dpoint>::getFirstTurnByTriplets(){
 
     TurnAnalyzer<dpoint> result = TurnAnalyzer<dpoint>();
-    ListSwitchable<dpoint> origin = ListSwitchable<dpoint>(*this);
+    ListCopyable<dpoint> origin = ListCopyable<dpoint>(*this);
 
     CornerAnalyzer<dpoint> cornerCalculator = CornerAnalyzer<dpoint>(*this);
     //findTurn: doCorner, findTriplet
@@ -83,10 +83,10 @@ template <> ListCopyable<dpoint> TurnAnalyzer<dpoint>::getFirstTurnByTriplets(){
     //debug()<<"Size after: "<<calculator.size();
     if (calculator.size()>4){
         calculator.tripletFilters();
-        ListSwitchable<dpoint> firstTriplet = calculator.getFirstTriplet();
+        ListCopyable<dpoint> firstTriplet = calculator.getFirstTriplet();
 
         if (calculator.size()>2){
-            ListSwitchable<dpoint> secondTriplet = calculator.getFirstTriplet();
+            ListCopyable<dpoint> secondTriplet = calculator.getFirstTriplet();
             if (secondTriplet.size()>2) {
                 auto it = origin.position_to_iterator(firstCorner.last().position,secondTriplet.last().position);
                 auto reverse = ListSwitchable<dpoint>();
@@ -111,7 +111,7 @@ template <> ListCopyable<dpoint> TurnAnalyzer<dpoint>::getFirstTurnByTriplets(){
                     // triplet lost! inline specialization!
                     dpoint turnTwo = normalized.getFirstTriplet().last();
                     dpoint turnOne = firstTriplet.last();
-                    ListSwitchable<dpoint> container = ListCopyable<dpoint>();
+                    ListSwitchable<dpoint> container = ListSwitchable<dpoint>();
                     // eventually turnLine will have length 1
                     // this belongs into chopcopy
                     //if (turnTwo.position>=turnOne.position){

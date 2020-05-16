@@ -11,7 +11,17 @@
 template<typename T> class Cliffs : public ListSwitchable<T>
 {
 public:
-    using ListSwitchable<T>::ListSwitchable;
+    //using ListSwitchable<T>::ListSwitchable;
+Cliffs<T>() : ListSwitchable<dpoint>() {}
+template<typename F> Cliffs(const F& list) {
+    auto copy = F(list);
+    *this = static_cast<Cliffs<dpoint>&>(copy);
+}
+//Upcast Move Constructor
+template<typename F> Cliffs(F&& list) {
+    auto copy = std::move(list);
+    *this = static_cast<Cliffs<dpoint>>(copy);
+}
 
     static QList<dpoint> findCliffs(ListSwitchable<dpoint> output);
 

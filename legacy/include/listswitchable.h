@@ -22,15 +22,17 @@ public:
 //    template<typename F> void operator=(const F& list);
 //    template<typename F> void operator=(F&& list);
 
-    ListSwitchable<T>(const QList<T>& list) {
-        auto copy = QList<T>(list);
-        *this = static_cast<ListSwitchable<T>&>(copy);
-    }
-    //Upcast Move Constructor
-    ListSwitchable<T>(QList<T>&& list) {
-        auto copy = std::move(list);
-        *this = static_cast<ListSwitchable<T>>(copy);
-    }
+/*
+//Upcast Move Constructor
+ListSwitchable<T>(const QList<T>& list) {
+    auto copy = QList<T>(list);
+    *this = static_cast<ListSwitchable<T>&>(copy);
+}
+//Upcast Move Constructor
+ListSwitchable<T>(QList<T>&& list) {
+    auto copy = std::move(list);
+    *this = static_cast<ListSwitchable<T>>(copy);
+}*/
 
     void removeAt(int i);
 
