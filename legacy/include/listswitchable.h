@@ -9,24 +9,22 @@
 #include "turncalculator.h"
 //#include <limits>
 
-template<typename T> class ListSwitchable : public TurnCalculator<dpoint>
+template<typename T> class ListSwitchable : public TurnCalculator<T>
 {
 public:
-    using TurnCalculator<T>::TurnCalculator;
-    //ListSwitchable<T>() = default;
-    //ListSwitchable<T>(const ListSwitchable<T>&) = default;
-    //ListSwitchable<T>(ListSwitchable<T>&&) = default;
-//    template<typename F> ListSwitchable<T>(const F&);
-//    template<typename F> ListSwitchable<T>(F&&);
-////THIS THING AND ALL INHERITING CAN NOT BE COPIED
-//    template<typename F> void operator=(const F& list);
-//    template<typename F> void operator=(F&& list);
+    ListSwitchable<T>() = default;
+    //for technical reasons, copy constructors are never generated from templates p.679
+    ListSwitchable<T>(const ListSwitchable&) = default;
+    ListSwitchable<T>(ListSwitchable&&) = default;
+    ListSwitchable<T>& operator=(const ListSwitchable<T>&) = default;
+    ListSwitchable<T>& operator=(ListSwitchable<T>&&) = default;
+    template<typename F> ListSwitchable<T>(const ListSwitchable<T>&);
+    template<typename F> ListSwitchable<T>(ListSwitchable<T>&&);
+//THIS THING AND ALL INHERITING CAN NOT BE COPIED
+    template<typename F> F& operator=(const ListSwitchable<T>& list);
+    template<typename F> F& operator=(ListSwitchable<T>&& list);
 
 /*
-ListSwitchable<T>(const ListSwitchable&) = default;
-ListSwitchable<T>(ListSwitchable&&) = default;
-ListSwitchable<T>& operator=(const ListSwitchable<T>&) = default;
-ListSwitchable<T>& operator=(ListSwitchable<T>&&) = default;
 //Upcast Move Constructor
 ListSwitchable<T>(const QList<T>& list) {
     auto copy = QList<T>(list);

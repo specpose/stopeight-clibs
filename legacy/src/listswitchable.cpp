@@ -6,6 +6,17 @@
 //#define debug() QDebug::QDebug(QtDebugMsg)
 //#define debug() QNoDebug()
 
+//Upcast Copy Constructor
+template<>template<typename F> ListSwitchable<dpoint>::ListSwitchable(const ListSwitchable<dpoint>& list) {
+    auto copy = TurnCalculator<dpoint>(list);//BUG
+    *this = static_cast<F&>(copy);
+}
+//Upcast Move Constructor
+template<>template<typename F> ListSwitchable<dpoint>::ListSwitchable(ListSwitchable<dpoint>&& list) {
+    auto copy = std::move(list);
+    *this = static_cast<F>(copy);
+}
+
 /*#include "cliffsanalyzer.h"
 template ListSwitchable<dpoint>::ListSwitchable(CliffsAnalyzer<dpoint>&&);
 template ListSwitchable<dpoint>::ListSwitchable(AreaCalculator<dpoint>&&);
@@ -33,21 +44,21 @@ template CliffsNormalizer<dpoint>::CliffsNormalizer(const ListSwitchable<dpoint>
 #include "cliffsanalyzer.h"
 template CliffsAnalyzer<dpoint>::CliffsAnalyzer(const ListSwitchable<dpoint>&);*/
 
-/*//Upcast Copy Assignment
-template<>template<typename F> void ListSwitchable<dpoint>::operator=(const F& list) {
-    auto copy = F(list);
-    *this = std::move(static_cast<ListSwitchable<dpoint>&>(copy));
+//Upcast Copy Assignment
+template<>template<typename F> F& ListSwitchable<dpoint>::operator=(const ListSwitchable<dpoint>& list) {
+    auto copy = TurnCalculator<dpoint>(list);//BUG
+    return std::move(static_cast<F&>(copy));
     //this->swap(copy);
 }
 //Upcast Move Assignment
-template<>template<typename F> void ListSwitchable<dpoint>::operator=(F&& list) {
+template<>template<typename F> F& ListSwitchable<dpoint>::operator=(ListSwitchable<dpoint>&& list) {
    ////REQUIRES PHYSICAL COPY: ERROR MSVC
    ////MEMORY LEAK
    //ListBase<dpoint> copy = ListBase<dpoint>(list);
    //*this = static_cast<ListSwitchable<dpoint>&>(copy);
    ////throw std::runtime_error("ListSwitchable assigned with const");
-    *this = std::move(static_cast<ListSwitchable<dpoint>&&>(list));
-}*/
+    return std::move(static_cast<F&&>(list));
+}
 
 template <> void ListSwitchable<dpoint>::removeAt(int i) {
     if (i<0) {
