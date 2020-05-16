@@ -1,6 +1,6 @@
 #include <IFPyShared.h>
 
-QListWrapper::QListWrapper(py::array_t<sp::timecode<double>, py::array::c_style> other) : ListSwitchable<dpoint>()
+QListWrapper::QListWrapper(py::array_t<sp::timecode<double>, py::array::c_style> other) : ListCopyable<dpoint>()
     {
         auto mod = py::module::import("stopeight.matrix");
         auto data = (mod.attr("Vectors")(other)).cast<Vectors<std::vector<sp::timecode<double>>>>();
@@ -22,8 +22,16 @@ py::array_t<sp::timecode<double>, py::array::c_style> QListWrapper::toPyArray(){
     return py::cast(result);
 }
 
-template<class inType> TurnAnalyzerWrapper::TurnAnalyzerWrapper(inType &other) : TurnAnalyzer<dpoint>(static_cast<ListSwitchable<dpoint> &>(other)) {}
-template TurnAnalyzerWrapper::TurnAnalyzerWrapper(QListWrapper& list);
+TurnAnalyzerWrapper::TurnAnalyzerWrapper(const ListCopyable& other) {//: TurnAnalyzer<dpoint>(static_cast<const TurnAnalyzer<dpoint>>(other)) {//Hack ListCopyable should not be cast
+    auto copy = TurnAnalyzer<dpoint>();
+    std::copy(std::begin(other),std::end(other),std::back_inserter(copy));
+    *this = std::move(copy);
+}
+TurnAnalyzerWrapper::TurnAnalyzerWrapper(ListCopyable&& other) : TurnAnalyzer<dpoint>{ std::move(static_cast<TurnAnalyzer<dpoint>&&>(other)) } {//Hack ListCopyable should not be cast
+//    auto copy = TurnAnalyzer<dpoint>();
+//    std::copy(std::begin(other), std::end(other), std::back_inserter(copy));
+//    *this = std::move(copy);
+}
 
-template<class inType> QListWrapper::QListWrapper(inType& other) : ListSwitchable<dpoint>(static_cast<TurnAnalyzer<dpoint> &>(other)){};
-//template QListWrapper::QListWrapper(TurnAnalyzerWrapper& list);
+template<class inType> QListWrapper::QListWrapper(inType& other) : ListCopyable<dpoint>(other){};
+template QListWrapper::QListWrapper(ListCopyable& list);

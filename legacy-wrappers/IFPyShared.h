@@ -7,12 +7,12 @@ namespace py = pybind11;
 #include <stopeight-clibs/shared_types.h>
 #include <stopeight-clibs/Matrix.h>
 
-class QListWrapper : public ListSwitchable<dpoint>
+class QListWrapper : public ListCopyable<dpoint>
 {
   public:
     QListWrapper(py::array_t<sp::timecode<double>, py::array::c_style> other);
     template<class inType> QListWrapper(inType& other);
-    using ListSwitchable<dpoint>::ListSwitchable;
+    using ListCopyable<dpoint>::ListCopyable;
 
     py::array_t<sp::timecode<double>, py::array::c_style> toPyArray();
 };
@@ -21,5 +21,8 @@ class QListWrapper : public ListSwitchable<dpoint>
 class TurnAnalyzerWrapper : public TurnAnalyzer<dpoint>
 {
   public:
-    template<class inType> TurnAnalyzerWrapper(inType &other);
+      using TurnAnalyzer<dpoint>::TurnAnalyzer;
+      TurnAnalyzerWrapper(const ListCopyable& other);
+      TurnAnalyzerWrapper(ListCopyable&& other);
+
 };

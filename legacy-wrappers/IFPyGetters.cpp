@@ -23,11 +23,8 @@ PYBIND11_MODULE(getters, g){
 	.def(py::init<QListWrapper&>())
     .def("next",[](TurnAnalyzerWrapper& in){
         ListCopyable<dpoint> result_qt = in.getFirstTurnByTriplets();
-        ListBase<dpoint>& result_ref = dynamic_cast<ListBase<dpoint>&>(result_qt);
-        ListSwitchable<dpoint>& ref = static_cast<ListSwitchable<dpoint>&>(result_ref);
-        QListWrapper& end = static_cast<QListWrapper&>(ref);
-        //auto out = TurnAnalyzerWrapper(end);
-		return end.toPyArray();
+		QListWrapper result = QListWrapper(static_cast<QListWrapper>(result_qt));//Hack ListCopyable should not be cast
+		return result.toPyArray();
     })
 	/*.def("__array__",[](TurnAnalyzerWrapper &in)->py::array_t<sp::timecode<double>,py::array::c_style>{
         QListWrapper result = QListWrapper(in);
