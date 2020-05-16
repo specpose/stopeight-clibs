@@ -14,6 +14,8 @@ public:
 Calculator<T>() : ListSwitchable<T>() {}
 Calculator<T>(const Calculator<T>&) = default;
 Calculator<T>(Calculator<T>&&) = default;
+Calculator<T>& operator=(const Calculator<T>&) = default;
+Calculator<T>& operator=(Calculator<T>&&) = default;
 template<typename F> Calculator(const F& list) {
     auto copy = F(list);
     *this = static_cast<Calculator<T>&>(copy);

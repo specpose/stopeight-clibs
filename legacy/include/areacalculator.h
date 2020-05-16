@@ -14,6 +14,8 @@ public:
 AreaCalculator<T>(): ListSwitchable<T>() {}
 AreaCalculator<T>(const AreaCalculator<T>&) = default;
 AreaCalculator<T>(AreaCalculator<T>&&) = default;
+AreaCalculator<T>& operator=(const AreaCalculator<T>&) = default;
+AreaCalculator<T>& operator=(AreaCalculator<T>&&) = default;
 template<typename F> AreaCalculator(const F& list) {
     auto copy = F(list);//BUG calls Upcast constructor from Upcast constructor
     *this = static_cast<AreaCalculator<T>&>(copy);

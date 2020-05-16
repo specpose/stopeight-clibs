@@ -25,6 +25,8 @@ public:
 /*
 ListSwitchable<T>(const ListSwitchable&) = default;
 ListSwitchable<T>(ListSwitchable&&) = default;
+ListSwitchable<T>& operator=(const ListSwitchable<T>&) = default;
+ListSwitchable<T>& operator=(ListSwitchable<T>&&) = default;
 //Upcast Move Constructor
 ListSwitchable<T>(const QList<T>& list) {
     auto copy = QList<T>(list);

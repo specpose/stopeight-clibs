@@ -13,6 +13,8 @@ public:
 CornerCalculator<T>() : ListSwitchable<T>() {}
 CornerCalculator<T>(const CornerCalculator<T>&) = default;
 CornerCalculator<T>(CornerCalculator<T>&&) = default;
+CornerCalculator<T>& operator=(const CornerCalculator<T>&) = default;
+CornerCalculator<T>& operator=(CornerCalculator<T>&&) = default;
 template<typename F> CornerCalculator(const F& list) {
     auto copy = F(list);
     *this = static_cast<CornerCalculator<T>&>(copy);

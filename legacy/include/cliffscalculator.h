@@ -13,6 +13,8 @@ public:
 CliffsCalculator<T>() : ListSwitchable<T>() {}
 CliffsCalculator<T>(const CliffsCalculator<T>&) = default;
 CliffsCalculator<T>(CliffsCalculator<T>&&) = default;
+CliffsCalculator<T>& operator=(const CliffsCalculator<T>&) = default;
+CliffsCalculator<T>& operator=(CliffsCalculator<T>&&) = default;
 template<typename F> CliffsCalculator(const F& list) {
     auto copy = F(list);
     *this = static_cast<CornerAnalyzer<T>&>(copy);

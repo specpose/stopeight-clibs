@@ -15,6 +15,8 @@ public:
 AreaNormalizer<T>() : AreaCalculator<T>() {}
 AreaNormalizer<T>(const AreaNormalizer<T>&) = default;
 AreaNormalizer<T>(AreaNormalizer<T>&&) = default;
+AreaNormalizer<T>& operator=(const AreaNormalizer<T>&) = default;
+AreaNormalizer<T>& operator=(AreaNormalizer<T>&&) = default;
 template<typename F> AreaNormalizer(const F & list) {
     auto copy = F(list);//BUG calls Upcast constructor from Upcast constructor
     *this = static_cast<AreaNormalizer<T>&>(copy);

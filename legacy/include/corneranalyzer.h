@@ -15,6 +15,8 @@ public:
 CornerAnalyzer<T>(): CornerNormalizer<T>() {}
 CornerAnalyzer<T>(const CornerAnalyzer<T>&) = default;
 CornerAnalyzer<T>(CornerAnalyzer<T>&&) = default;
+CornerAnalyzer<T>& operator=(const CornerAnalyzer<T>&) = default;
+CornerAnalyzer<T>& operator=(CornerAnalyzer<T>&&) = default;
 template<typename F> CornerAnalyzer(const F& list) {
     auto copy = F(list);
     *this = static_cast<CornerAnalyzer<T>&>(copy);

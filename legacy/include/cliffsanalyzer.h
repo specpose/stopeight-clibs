@@ -14,6 +14,8 @@ public:
 CliffsAnalyzer<T>(): CliffsNormalizer<T>() {}
 CliffsAnalyzer<T>(const CliffsAnalyzer<T>&) = default;
 CliffsAnalyzer<T>(CliffsAnalyzer<T>&&) = default;
+CliffsAnalyzer<T>& operator=(const CliffsAnalyzer<T>&) = default;
+CliffsAnalyzer<T>& operator=(CliffsAnalyzer<T>&&) = default;
 template<typename F> CliffsAnalyzer(const F& list) {
     auto copy = F(list);
     *this = static_cast<CliffsAnalyzer<T>&>(copy);
