@@ -22,10 +22,10 @@ py::array_t<sp::timecode<double>, py::array::c_style> QListWrapper::toPyArray(){
     return py::cast(result);
 }
 
-TurnAnalyzerWrapper::TurnAnalyzerWrapper(const ListCopyable& other) {//: TurnAnalyzer<dpoint>(static_cast<const TurnAnalyzer<dpoint>>(other)) {//Hack ListCopyable should not be cast
-    auto copy = TurnAnalyzer<dpoint>();
-    std::copy(std::begin(other),std::end(other),std::back_inserter(copy));
-    *this = std::move(copy);
+TurnAnalyzerWrapper::TurnAnalyzerWrapper(const ListCopyable& other) : TurnAnalyzer<dpoint>(static_cast<const TurnAnalyzer<dpoint>&>(other)) {//Hack ListCopyable should not be cast
+//    auto copy = TurnAnalyzer<dpoint>();
+//    std::copy(std::begin(other),std::end(other),std::back_inserter(copy));
+//    *this = std::move(copy);
 }
 TurnAnalyzerWrapper::TurnAnalyzerWrapper(ListCopyable&& other) : TurnAnalyzer<dpoint>{ std::move(static_cast<TurnAnalyzer<dpoint>&&>(other)) } {//Hack ListCopyable should not be cast
 //    auto copy = TurnAnalyzer<dpoint>();

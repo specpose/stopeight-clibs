@@ -22,8 +22,9 @@ PYBIND11_MODULE(getters, g){
     py::class_<TurnAnalyzerWrapper>(g,"Turn", py::buffer_protocol())
 	.def(py::init<QListWrapper&>())
     .def("next",[](TurnAnalyzerWrapper& in){
-        ListCopyable<dpoint> result_qt = in.getFirstTurnByTriplets();
-		QListWrapper result = QListWrapper(static_cast<QListWrapper>(result_qt));//Hack ListCopyable should not be cast
+        //ListCopyable<dpoint> result_qt = in.getFirstTurnByTriplets();
+		//QListWrapper result = QListWrapper(static_cast<QListWrapper>(result_qt));//Hack ListCopyable should not be cast
+		QListWrapper result = in.getFirstTurnByTriplets();
 		return result.toPyArray();
     })
 	/*.def("__array__",[](TurnAnalyzerWrapper &in)->py::array_t<sp::timecode<double>,py::array::c_style>{
