@@ -12,6 +12,8 @@ template<typename T> class CornerNormalizer : public CornerCalculator<T>
 public:
     //using CornerCalculator<T>::CornerCalculator;
 CornerNormalizer<T>(): CornerCalculator<T>() {}
+CornerNormalizer<T>(const CornerNormalizer<T>&) = default;
+CornerNormalizer<T>(CornerNormalizer<T>&&) = default;
 template<typename F> CornerNormalizer(const F& list) {
     auto copy = F(list);
     *this = static_cast<CornerNormalizer<T>&>(copy);

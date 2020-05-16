@@ -11,6 +11,8 @@ template<typename T> class CliffsCalculator : public ListSwitchable<T>
 public:
     //using ListSwitchable<T>::ListSwitchable;
 CliffsCalculator<T>() : ListSwitchable<T>() {}
+CliffsCalculator<T>(const CliffsCalculator<T>&) = default;
+CliffsCalculator<T>(CliffsCalculator<T>&&) = default;
 template<typename F> CliffsCalculator(const F& list) {
     auto copy = F(list);
     *this = static_cast<CornerAnalyzer<T>&>(copy);

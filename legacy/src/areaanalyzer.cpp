@@ -87,12 +87,12 @@ template<> ListSwitchable<dpoint> AreaAnalyzer<dpoint>::getFirstArea(qreal limit
     int illegalSegmentCounter=0;
 
     if (calculator.size()>1){
-        ListSwitchable<dpoint> tmp = ListSwitchable<dpoint>(calculator.getFirstLegalSegment());
-        AreaAnalyzer<dpoint> legalSegment = AreaAnalyzer<dpoint>(std::move(tmp));
+        //ListSwitchable<dpoint> tmp = ListSwitchable<dpoint>(calculator.getFirstLegalSegment());
+        AreaAnalyzer<dpoint> legalSegment = AreaAnalyzer<dpoint>{ std::move(calculator.getFirstLegalSegment()) };
         illegalSegmentCounter++;
         legalSegment.areaFilters();
-        tmp = legalSegment.getArea(limit,legalSegment.first());
-        AreaAnalyzer<dpoint> preceding = AreaAnalyzer<dpoint>(std::move(tmp));
+        //tmp = legalSegment.getArea(limit,legalSegment.first());
+        AreaAnalyzer<dpoint> preceding = AreaAnalyzer<dpoint>{std::move(legalSegment.getArea(limit, legalSegment.first()))};
         if (legalSegment.size()>0){
             foundOne = true;
             result = preceding.last();
@@ -100,28 +100,28 @@ template<> ListSwitchable<dpoint> AreaAnalyzer<dpoint>::getFirstArea(qreal limit
             qreal sumOfAllPreceding = 0;
             if (calculator.size()>1){
                 calculator.prepend(preceding.last());
-                tmp = calculator.getFirstLegalSegment();
-                legalSegment = AreaAnalyzer<dpoint>(std::move(tmp));
+                //tmp = calculator.getFirstLegalSegment();
+                legalSegment = AreaAnalyzer<dpoint>{ std::move(calculator.getFirstLegalSegment()) };
                 illegalSegmentCounter++;
                 legalSegment.areaFilters();
                 preceding.areaFilters();
-                tmp = legalSegment.getArea(limit,this->first(),preceding.sumOfDxAreasRotY());
-                preceding = AreaAnalyzer<dpoint>(std::move(tmp));
+                //tmp = legalSegment.getArea(limit,this->first(),preceding.sumOfDxAreasRotY());
+                preceding = AreaAnalyzer<dpoint>{ std::move(legalSegment.getArea(limit, this->first(), preceding.sumOfDxAreasRotY())) };
                 if (legalSegment.size()>0){
                     foundOne = true;
                     result = preceding.last();
                 } else {
                     while (calculator.size()>1){
                         calculator.prepend(preceding.last());
-                        tmp = calculator.getFirstLegalSegment();
-                        legalSegment = AreaAnalyzer<dpoint>(std::move(tmp));
+                        //tmp = calculator.getFirstLegalSegment();
+                        legalSegment = AreaAnalyzer<dpoint>{ std::move(calculator.getFirstLegalSegment()) };
                         illegalSegmentCounter++;
                         legalSegment.areaFilters();
                         preceding.areaFilters();
                         // sumOfDx over illegal segments is too agressive -> jitter/illegal separation
                         sumOfAllPreceding += preceding.sumOfDxAreasRotY() + preceding.area(preceding.lengthFromStartToEnd(),limit);
-                        tmp = legalSegment.getArea(limit,this->first(),sumOfAllPreceding);
-                        preceding = AreaAnalyzer<dpoint>(std::move(tmp));
+                        //tmp = legalSegment.getArea(limit,this->first(),sumOfAllPreceding);
+                        preceding = AreaAnalyzer<dpoint>{ std::move(legalSegment.getArea(limit,this->first(),sumOfAllPreceding)) };
                         if (legalSegment.size()>0){
                             foundOne = true;
                             result = preceding.last();

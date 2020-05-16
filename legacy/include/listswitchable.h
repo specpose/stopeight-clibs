@@ -23,6 +23,8 @@ public:
 //    template<typename F> void operator=(F&& list);
 
 /*
+ListSwitchable<T>(const ListSwitchable&) = default;
+ListSwitchable<T>(ListSwitchable&&) = default;
 //Upcast Move Constructor
 ListSwitchable<T>(const QList<T>& list) {
     auto copy = QList<T>(list);

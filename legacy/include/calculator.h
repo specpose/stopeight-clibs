@@ -12,6 +12,8 @@ template<typename T> class Calculator : public ListSwitchable<T>
 public:
     //using ListSwitchable<T>::ListSwitchable;
 Calculator<T>() : ListSwitchable<T>() {}
+Calculator<T>(const Calculator<T>&) = default;
+Calculator<T>(Calculator<T>&&) = default;
 template<typename F> Calculator(const F& list) {
     auto copy = F(list);
     *this = static_cast<Calculator<T>&>(copy);

@@ -14,6 +14,8 @@ template<typename T> class Analyzer : public Calculator<T>
 public:
     //using Calculator<T>::Calculator;
 Analyzer<T>(): Calculator<T>() {}
+Analyzer<T>(const Analyzer<T>&) = default;
+Analyzer<T>(Analyzer<T>&&) = default;
 template<typename F> Analyzer(const F& list) {
     auto copy = F(list);
     *this = static_cast<Analyzer<T>&>(copy);

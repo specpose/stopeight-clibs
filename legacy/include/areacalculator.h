@@ -12,13 +12,15 @@ template<typename T> class AreaCalculator : public ListSwitchable<T>
 public:
     //using ListSwitchable<T>::ListSwitchable;
 AreaCalculator<T>(): ListSwitchable<T>() {}
+AreaCalculator<T>(const AreaCalculator<T>&) = default;
+AreaCalculator<T>(AreaCalculator<T>&&) = default;
 template<typename F> AreaCalculator(const F& list) {
-    auto copy = F(list);
+    auto copy = F(list);//BUG calls Upcast constructor from Upcast constructor
     *this = static_cast<AreaCalculator<T>&>(copy);
 }
 //Upcast Move Constructor
 template<typename F> AreaCalculator(F&& list) {
-    auto copy = std::move(list);
+    auto copy = std::move(list);//BUG calls Upcast constructor from Upcast constructor
     *this = static_cast<AreaCalculator<T>>(copy);
 }
     // a.k.a integration up to triangle / curvature not included

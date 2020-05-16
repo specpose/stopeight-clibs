@@ -10,7 +10,9 @@ template<typename T> class CornerCalculator : public ListSwitchable<T>
 {
 public:
     //using ListSwitchable<T>::ListSwitchable;
-    CornerCalculator<T>() : ListSwitchable<T>() {}
+CornerCalculator<T>() : ListSwitchable<T>() {}
+CornerCalculator<T>(const CornerCalculator<T>&) = default;
+CornerCalculator<T>(CornerCalculator<T>&&) = default;
 template<typename F> CornerCalculator(const F& list) {
     auto copy = F(list);
     *this = static_cast<CornerCalculator<T>&>(copy);

@@ -13,6 +13,8 @@ template<typename T> class CliffsNormalizer : public AreaCalculator<T>
 public:
     //using AreaCalculator<T>::AreaCalculator;
 CliffsNormalizer<T>(): AreaCalculator<T>() {}
+CliffsNormalizer<T>(const CliffsNormalizer<T>&) = default;
+CliffsNormalizer<T>(CliffsNormalizer<T>&&) = default;
 template<typename F> CliffsNormalizer(const F& list) {
     auto copy = F(list);
     *this = static_cast<CliffsNormalizer<T>&>(copy);
