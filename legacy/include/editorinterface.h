@@ -4,7 +4,7 @@
 #ifndef EDITORINTERFACE_H
 #define EDITORINTERFACE_H
 
-#include "listbase.h"
+#include "listswitchable.h"
 
 template<typename T> class EditorInterface
 {
@@ -23,7 +23,7 @@ public:
 protected:
     //only these two have to be provided by implementations
     virtual QList<dpoint> processSegment(QList<dpoint>::iterator start,QList<dpoint>::iterator end) =0;
-    virtual void process(ListBase<dpoint>& toBeProcessed) =0;
+    virtual void process(ListSwitchable<dpoint>& toBeProcessed) =0;
 
 };
 

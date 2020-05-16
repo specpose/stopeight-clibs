@@ -17,7 +17,7 @@ public:
 
 protected:
     // automatic detection of "spirals" that don't include any illegal segments, which would make derivations invalid. See throw jitter detected
-    void process(ListBase<dpoint>& toBeProcessed);
+    void process(ListSwitchable<dpoint>& toBeProcessed);
 
 private:
     QList<dpoint> processSegment(QList<dpoint>::iterator start,QList<dpoint>::iterator end);

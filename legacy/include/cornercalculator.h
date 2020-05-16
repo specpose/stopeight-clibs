@@ -10,15 +10,15 @@ template<typename T> class CornerCalculator : public ListSwitchable<T>
 {
 public:
     //using ListSwitchable<T>::ListSwitchable;
-    CornerCalculator<T>() : ListSwitchable<dpoint>() {}
+    CornerCalculator<T>() : ListSwitchable<T>() {}
 template<typename F> CornerCalculator(const F& list) {
     auto copy = F(list);
-    *this = static_cast<CornerCalculator<dpoint>&>(copy);
+    *this = static_cast<CornerCalculator<T>&>(copy);
 }
 //Upcast Move Constructor
 template<typename F> CornerCalculator(F&& list) {
     auto copy = std::move(list);
-    *this = static_cast<CornerCalculator<dpoint>>(copy);
+    *this = static_cast<CornerCalculator<T>>(copy);
 }
 };
 

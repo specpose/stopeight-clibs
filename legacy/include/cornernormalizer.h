@@ -11,21 +11,21 @@ template<typename T> class CornerNormalizer : public CornerCalculator<T>
 {
 public:
     //using CornerCalculator<T>::CornerCalculator;
-CornerNormalizer<T>(): CornerCalculator<dpoint>() {}
+CornerNormalizer<T>(): CornerCalculator<T>() {}
 template<typename F> CornerNormalizer(const F& list) {
     auto copy = F(list);
-    *this = static_cast<CornerNormalizer<dpoint>&>(copy);
+    *this = static_cast<CornerNormalizer<T>&>(copy);
 }
 //Upcast Move Constructor
 template<typename F> CornerNormalizer(F&& list) {
     auto copy = std::move(list);
-    *this = static_cast<CornerNormalizer<dpoint>>(copy);
+    *this = static_cast<CornerNormalizer<T>>(copy);
 }
     void requireMinimumLength(qreal length);
 	void intRaster(qreal threshold);
 
     // utilities for line-detection
-    dpoint getPointInTheMiddle();
+    T getPointInTheMiddle();
 
     void cornerFilters();
 };

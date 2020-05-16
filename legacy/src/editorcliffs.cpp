@@ -5,7 +5,7 @@
 
 #define debug() QNoDebug()
 
-EditorCliffs::EditorCliffs() : EditorBase<ListBase<dpoint> >()
+EditorCliffs::EditorCliffs() : EditorBase<ListSwitchable<dpoint> >()
 {
 }
 
@@ -14,10 +14,10 @@ EditorCliffs::EditorCliffs() : EditorBase<ListBase<dpoint> >()
 //}
 
 //toBeProcessed is modifying data.output
-void EditorCliffs::process(ListBase<dpoint> &toBeProcessed){
+void EditorCliffs::process(ListSwitchable<dpoint> &toBeProcessed){
     if (this->getOutput().size()>0) {
         /* SHARED CLIFFS&SPIRALS */
-        Cliffs<dpoint> data = Cliffs<dpoint>(toBeProcessed);
+        Cliffs<dpoint> data = Cliffs<dpoint>(toBeProcessed);//Hack from ListBase!
 
         QList<dpoint> cliffs= Cliffs<dpoint>::findCliffs(data);
 
@@ -31,7 +31,7 @@ void EditorCliffs::process(ListBase<dpoint> &toBeProcessed){
         mainIterator(constCliffs,slicesRef);
         const QList<QList<dpoint> > constSlices= slices;
 
-        ListBase<dpoint> result = ListBase<dpoint>();
+        ListSwitchable<dpoint> result = ListSwitchable<dpoint>();
 
         /* SPIRALS&CLIFFS check */
         SpiralsAnalyzer<dpoint>::consistencyCheck(constCliffs);

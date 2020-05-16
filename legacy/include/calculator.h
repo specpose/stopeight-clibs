@@ -11,15 +11,15 @@ template<typename T> class Calculator : public ListSwitchable<T>
 {
 public:
     //using ListSwitchable<T>::ListSwitchable;
-Calculator<T>() : ListSwitchable<dpoint>() {}
+Calculator<T>() : ListSwitchable<T>() {}
 template<typename F> Calculator(const F& list) {
     auto copy = F(list);
-    *this = static_cast<Calculator<dpoint>&>(copy);
+    *this = static_cast<Calculator<T>&>(copy);
 }
 //Upcast Move Constructor
 template<typename F> Calculator(F&& list) {
     auto copy = std::move(list);
-    *this = static_cast<Calculator<dpoint>>(copy);
+    *this = static_cast<Calculator<T>>(copy);
 }
 
     // Note: this is simple reversal. it is not checking order. Should be static.

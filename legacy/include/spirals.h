@@ -12,23 +12,23 @@ template<typename T> class Spirals : public ListSwitchable<T>
 {
 public:
     //using ListSwitchable<T>::ListSwitchable;
-Spirals<T>() : ListSwitchable<dpoint>() {}
+Spirals<T>() : ListSwitchable<T>() {}
 template<typename F> Spirals(const F& list) {
     auto copy = F(list);
-    *this = static_cast<Spirals<dpoint>&>(copy);
+    *this = static_cast<Spirals<T>&>(copy);
 }
 //Upcast Move Constructor
 template<typename F> Spirals(F&& list) {
     auto copy = std::move(list);
-    *this = static_cast<Spirals<dpoint>>(copy);
+    *this = static_cast<Spirals<T>>(copy);
 }
 
-    static QList<dpoint> findSpiralCliffs(const ListSwitchable<dpoint> output);
+    static QList<T> findSpiralCliffs(const ListSwitchable<T> output);
 
 private:
-    static QList<dpoint> findAreas(const ListSwitchable<dpoint> stroke, qreal limit);
+    static QList<T> findAreas(const ListSwitchable<T> stroke, qreal limit);
     //auxiliary function for findAreas
-    static qreal findLimit(const ListSwitchable<dpoint> toBeProcessed);
+    static qreal findLimit(const ListSwitchable<T> toBeProcessed);
 
 };
 

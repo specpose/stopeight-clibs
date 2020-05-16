@@ -8,7 +8,7 @@
 #include "cliffs.h"
 #include "spiralsanalyzer.h"
 
-class EditorCliffs : public EditorBase<ListBase<dpoint> >
+class EditorCliffs : public EditorBase<ListSwitchable<dpoint> >
 {
     friend class EditorSpirals;
 public:
@@ -17,7 +17,7 @@ public:
 
 
 protected:
-    void process(ListBase<dpoint>& toBeProcessed);
+    void process(ListSwitchable<dpoint>& toBeProcessed);
 
 private:
     QList<dpoint> processSegment(QList<dpoint>::iterator start,QList<dpoint>::iterator end);

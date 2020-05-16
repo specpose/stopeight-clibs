@@ -13,15 +13,15 @@ template<typename T> class Analyzer : public Calculator<T>
 {
 public:
     //using Calculator<T>::Calculator;
-Analyzer<T>(): Calculator<dpoint>() {}
+Analyzer<T>(): Calculator<T>() {}
 template<typename F> Analyzer(const F& list) {
     auto copy = F(list);
-    *this = static_cast<Analyzer<dpoint>&>(copy);
+    *this = static_cast<Analyzer<T>&>(copy);
 }
 //Upcast Move Constructor
 template<typename F> Analyzer(F&& list) {
     auto copy = std::move(list);
-    *this = static_cast<Analyzer<dpoint>>(copy);
+    *this = static_cast<Analyzer<T>>(copy);
 }
     // careful: this is changing order
     // does not change index-numbering variable

@@ -37,7 +37,7 @@ PyObject* legacy_wrappers::parse_file(PyObject *self, PyObject *args) {
 	}
 	QList<QPointF> myList = QList<QPointF>();
 	try {
-		myList = ListBase<dpoint>::open(pythonpath);
+		myList = ListSwitchable<dpoint>::open(pythonpath);
 	}
 	catch (legacy::alg_logic_error exc) {
 		return legacy_wrappers::error(exc);
@@ -118,8 +118,8 @@ PyObject* legacy_wrappers::stroke_parallel(PyObject *self, PyObject *args) {
 		return legacy_wrappers::error("undefined");
 	}
 
-	ListBase<dpoint> result = editor.getOutput();
-	return legacy_wrappers::convert(ListBase<dpoint>::convert(result));
+	ListSwitchable<dpoint> result = editor.getOutput();
+	return legacy_wrappers::convert(ListSwitchable<dpoint>::convert(result));
 }
 
 PyObject* legacy_wrappers::stroke_sequential(PyObject *self, PyObject *args) {
@@ -138,8 +138,8 @@ PyObject* legacy_wrappers::stroke_sequential(PyObject *self, PyObject *args) {
 		return legacy_wrappers::error("undefined");
 	}
 
-	ListBase<dpoint> result = editor.getOutput();
-	return legacy_wrappers::convert(ListBase<dpoint>::convert(result));
+	ListSwitchable<dpoint> result = editor.getOutput();
+	return legacy_wrappers::convert(ListSwitchable<dpoint>::convert(result));
 }
 
 #ifdef PY_MAJOR_VERSION

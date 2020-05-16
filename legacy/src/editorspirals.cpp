@@ -15,14 +15,14 @@ EditorSpirals::EditorSpirals() : EditorCliffs()
 //}
 
 //toBeProcessed is modifying data.output
-void EditorSpirals::process(ListBase<dpoint> &toBeProcessed){
+void EditorSpirals::process(ListSwitchable<dpoint> &toBeProcessed){
     // use of output is a hack
     if (this->getOutput().size()>0) {
         /* SHARED CLIFFS&SPIRALS */
         QList<dpoint> cliffs;
 
         /* SPIRALS */
-        Spirals<dpoint> spirals = Spirals<dpoint>(toBeProcessed);//should be move? listswitchable::ListSwitchable(ListBase&&) not working
+        Spirals<dpoint> spirals = Spirals<dpoint>(toBeProcessed);//Hack from ListBase! //should be move? listswitchable::ListSwitchable(ListBase&&) not working
         cliffs= Spirals<dpoint>::findSpiralCliffs(spirals);
 
         /* SHARED After this cliffs is const */
@@ -35,7 +35,7 @@ void EditorSpirals::process(ListBase<dpoint> &toBeProcessed){
         mainIterator(constCliffs,slicesRef);
         const QList<QList<dpoint> > constSlices= slices;
 
-        ListBase<dpoint> result = ListBase<dpoint>();
+        ListSwitchable<dpoint> result = ListSwitchable<dpoint>();
 
         /* SPIRALS&CLIFFS check */
         SpiralsAnalyzer<dpoint>::consistencyCheck(constCliffs);

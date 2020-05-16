@@ -12,18 +12,18 @@ template<typename T> class CornerAnalyzer : public CornerNormalizer<T>
 {
 public:
     //using CornerNormalizer<T>::CornerNormalizer;
-CornerAnalyzer<T>(): CornerNormalizer<dpoint>() {}
+CornerAnalyzer<T>(): CornerNormalizer<T>() {}
 template<typename F> CornerAnalyzer(const F& list) {
     auto copy = F(list);
-    *this = static_cast<CornerAnalyzer<dpoint>&>(copy);
+    *this = static_cast<CornerAnalyzer<T>&>(copy);
 }
 //Upcast Move Constructor
 template<typename F> CornerAnalyzer(F&& list) {
     auto copy = std::move(list);
-    *this = static_cast<CornerAnalyzer<dpoint>>(copy);
+    *this = static_cast<CornerAnalyzer<T>>(copy);
 }
     // implementation of "clean" math; as opposed to old_code shrinkToDeltas
-    ListSwitchable<dpoint> getFirstCorner();
+    ListSwitchable<T> getFirstCorner();
 };
 
 #endif // CORNERANALYZER_H

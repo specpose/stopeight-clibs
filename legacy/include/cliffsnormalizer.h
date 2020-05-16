@@ -12,15 +12,15 @@ template<typename T> class CliffsNormalizer : public AreaCalculator<T>
 {
 public:
     //using AreaCalculator<T>::AreaCalculator;
-CliffsNormalizer<T>(): AreaCalculator<dpoint>() {}
+CliffsNormalizer<T>(): AreaCalculator<T>() {}
 template<typename F> CliffsNormalizer(const F& list) {
     auto copy = F(list);
-    *this = static_cast<CliffsNormalizer<dpoint>&>(copy);
+    *this = static_cast<CliffsNormalizer<T>&>(copy);
 }
 //Upcast Move Constructor
 template<typename F> CliffsNormalizer(F&& list) {
     auto copy = std::move(list);
-    *this = static_cast<CliffsNormalizer<dpoint>>(copy);
+    *this = static_cast<CliffsNormalizer<T>>(copy);
 }
     // these methods are being used for cleaning up the segments before the corner detection
     void cliffFilters();

@@ -12,18 +12,18 @@ template<typename T> EditorBase<T>::EditorBase() : EditorInterface<T>(), data(Li
     //debug()<<"EditorBase<T>::EditorBase() constructor called and data initialized";
 }
 
-template EditorBase<ListBase<dpoint> >::EditorBase();
+template EditorBase<ListSwitchable<dpoint> >::EditorBase();
 
 //EditorBase::~EditorBase(){
-//    data.input.~ListBase();
-//    data.output.~ListBase();
+//    data.input.~ListSwitchable();
+//    data.output.~ListSwitchable();
 //}
 
 template<typename T> T& EditorBase<T>::getOutput(){
     return data.output;
 }
 
-template ListBase<dpoint>& EditorBase<ListBase<dpoint> >::getOutput();
+template ListSwitchable<dpoint>& EditorBase<ListSwitchable<dpoint> >::getOutput();
 
 
 template<typename T> QList<QPointF> EditorBase<T>::getConvertedOutput() {
@@ -34,20 +34,20 @@ template<typename T> QList<QPointF> EditorBase<T>::getConvertedOutput() {
 	return newlist;
 }
 
-template QList<QPointF> EditorBase<ListBase<dpoint> >::getConvertedOutput();
+template QList<QPointF> EditorBase<ListSwitchable<dpoint> >::getConvertedOutput();
 
 template<typename T> void EditorBase<T>::setOutput(T list){
     data.output=list;
 }
 
-template void EditorBase<ListBase<dpoint> >::setOutput(ListBase<dpoint> list);
+template void EditorBase<ListSwitchable<dpoint> >::setOutput(ListSwitchable<dpoint> list);
 
-template<> void EditorBase<ListBase<dpoint> >::resetLists(){
+template<> void EditorBase<ListSwitchable<dpoint> >::resetLists(){
     data.input.clear();
     data.output.clear();
 }
 
-template<> void EditorBase<ListBase<dpoint> >::addPoint(QPointF p){
+template<> void EditorBase<ListSwitchable<dpoint> >::addPoint(QPointF p){
      if (p.x()>=0 && p.y()>=0){
          dpoint newpoint(p);
          newpoint.position = data.input.size();
@@ -57,18 +57,18 @@ template<> void EditorBase<ListBase<dpoint> >::addPoint(QPointF p){
      }
 }
 
-template<> void EditorBase<ListBase<dpoint> >::flushOutput(){
+template<> void EditorBase<ListSwitchable<dpoint> >::flushOutput(){
     data.output.clear();
     setOutput(data.input);
 }
 
-template<> void EditorBase<ListBase<dpoint> >::automatic(){
+template<> void EditorBase<ListSwitchable<dpoint> >::automatic(){
     this->flushOutput();
     //debug()<<"Computation started with data size "<<this->getOutput().size();
     this->process(this->getOutput());
 }
 
-template<> void EditorBase<ListBase<dpoint> >::automatic(QList<QPointF> list) {
+template<> void EditorBase<ListSwitchable<dpoint> >::automatic(QList<QPointF> list) {
 	if (list.size() > 2) {
 		for (int i = 0; i < list.size(); i++) {
 			this->addPoint(list.at(i));
@@ -80,8 +80,8 @@ template<> void EditorBase<ListBase<dpoint> >::automatic(QList<QPointF> list) {
 	}
 }
 
-template<> void EditorBase<ListBase<dpoint> >::mainIterator(const QList<dpoint>& constCliffs,QList<QList<dpoint> >& slicesRef){
-    ListBase<dpoint> out = this->getOutput();
+template<> void EditorBase<ListSwitchable<dpoint> >::mainIterator(const QList<dpoint>& constCliffs,QList<QList<dpoint> >& slicesRef){
+    ListSwitchable<dpoint> out = this->getOutput();
     int currentSegment = 0;
     //maemo works: check cliff size
     std::array<QList<dpoint>::iterator,2> it;

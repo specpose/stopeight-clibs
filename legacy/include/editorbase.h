@@ -11,8 +11,6 @@
 #define LIMIT_ITERATION_STEP 0.1
 
 #include "editorinterface.h"
-#include "listbase.h"
-#include "listcopyable.h"
 //#include "myreal.h"
 
 template<typename T> struct ListStorage{
