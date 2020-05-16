@@ -12,14 +12,14 @@
 template<typename T> class ListSwitchable : public TurnCalculator<T>
 {
 public:
-    ListSwitchable<T>() = default;
+    ListSwitchable() = default;
     //for technical reasons, copy constructors are never generated from templates p.679
-    ListSwitchable<T>(const ListSwitchable&) = default;
-    ListSwitchable<T>(ListSwitchable&&) = default;
-    ListSwitchable<T>& operator=(const ListSwitchable<T>&) = default;
-    ListSwitchable<T>& operator=(ListSwitchable<T>&&) = default;
-    template<typename F> ListSwitchable<T>(const ListSwitchable<T>&);
-    template<typename F> ListSwitchable<T>(ListSwitchable<T>&&);
+    ListSwitchable(const ListSwitchable&) = default;
+    ListSwitchable(ListSwitchable&&) = default;
+    ListSwitchable& operator=(const ListSwitchable&) = default;
+    ListSwitchable& operator=(ListSwitchable&&) = default;
+    template<typename F= typename ListSwitchable<T>> ListSwitchable<T>(const ListSwitchable<T>&);
+    template<typename F= typename ListSwitchable<T>> ListSwitchable<T>(ListSwitchable<T>&&);
 //THIS THING AND ALL INHERITING CAN NOT BE COPIED
     template<typename F> F& operator=(const ListSwitchable<T>& list);
     template<typename F> F& operator=(ListSwitchable<T>&& list);

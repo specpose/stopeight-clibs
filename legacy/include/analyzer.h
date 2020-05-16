@@ -12,21 +12,8 @@
 template<typename T> class Analyzer : public Calculator<T>
 {
 public:
-    //using Calculator<T>::Calculator;
-Analyzer<T>(): Calculator<T>() {}
-Analyzer<T>(const Analyzer<T>&) = default;
-Analyzer<T>(Analyzer<T>&&) = default;
-Analyzer<T>& operator=(const Analyzer<T>&) = default;
-Analyzer<T>& operator=(Analyzer<T>&&) = default;
-template<typename F> Analyzer(const F& list) {
-    auto copy = F(list);
-    *this = static_cast<Analyzer<T>&>(copy);
-}
-//Upcast Move Constructor
-template<typename F> Analyzer(F&& list) {
-    auto copy = std::move(list);
-    *this = static_cast<Analyzer<T>>(copy);
-}
+    using Calculator<T>::Calculator;
+
     // careful: this is changing order
     // does not change index-numbering variable
     void reverseOrder();

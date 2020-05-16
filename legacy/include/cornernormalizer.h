@@ -10,21 +10,8 @@
 template<typename T> class CornerNormalizer : public CornerCalculator<T>
 {
 public:
-    //using CornerCalculator<T>::CornerCalculator;
-CornerNormalizer<T>(): CornerCalculator<T>() {}
-CornerNormalizer<T>(const CornerNormalizer<T>&) = default;
-CornerNormalizer<T>(CornerNormalizer<T>&&) = default;
-CornerNormalizer<T>& operator=(const CornerNormalizer<T>&) = default;
-CornerNormalizer<T>& operator=(CornerNormalizer<T>&&) = default;
-template<typename F> CornerNormalizer(const F& list) {
-    auto copy = F(list);
-    *this = static_cast<CornerNormalizer<T>&>(copy);
-}
-//Upcast Move Constructor
-template<typename F> CornerNormalizer(F&& list) {
-    auto copy = std::move(list);
-    *this = static_cast<CornerNormalizer<T>>(copy);
-}
+    using CornerCalculator<T>::CornerCalculator;
+
     void requireMinimumLength(qreal length);
 	void intRaster(qreal threshold);
 

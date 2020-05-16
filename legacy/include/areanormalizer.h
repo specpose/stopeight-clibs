@@ -11,21 +11,7 @@
 template<typename T> class AreaNormalizer : public AreaCalculator<T>
 {
 public:
-    //using AreaCalculator<T>::AreaCalculator;
-AreaNormalizer<T>() : AreaCalculator<T>() {}
-AreaNormalizer<T>(const AreaNormalizer<T>&) = default;
-AreaNormalizer<T>(AreaNormalizer<T>&&) = default;
-AreaNormalizer<T>& operator=(const AreaNormalizer<T>&) = default;
-AreaNormalizer<T>& operator=(AreaNormalizer<T>&&) = default;
-template<typename F> AreaNormalizer(const F & list) {
-    auto copy = F(list);//BUG calls Upcast constructor from Upcast constructor
-    *this = static_cast<AreaNormalizer<T>&>(copy);
-}
-//Upcast Move Constructor
-template<typename F> AreaNormalizer(F && list) {
-    auto copy = std::move(list);//BUG calls Upcast constructor from Upcast constructor
-    *this = static_cast<AreaNormalizer<T>>(copy);
-}
+    using AreaCalculator<T>::AreaCalculator;
 
     // these methods are being used for cleaning up the segments before the corner detection
     void areaFilters();

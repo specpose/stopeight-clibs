@@ -10,21 +10,7 @@
 template<typename T> class AreaAnalyzer : public AreaNormalizer<T>
 {
 public:
-    //using AreaNormalizer<T>::AreaNormalizer;
-AreaAnalyzer<T>() : AreaNormalizer<T>() {}
-AreaAnalyzer<T>(const AreaAnalyzer<T>&) = default;
-AreaAnalyzer<T>(AreaAnalyzer<T>&&) = default;
-AreaAnalyzer<T>& operator=(const AreaAnalyzer<T>&) = default;
-AreaAnalyzer<T>& operator=(AreaAnalyzer<T>&&) = default;
-template<typename F> AreaAnalyzer(const F & list) {
-    auto copy = F(list);//BUG calls Upcast constructor from Upcast constructor
-    *this = static_cast<AreaAnalyzer<T>&>(copy);
-}
-//Upcast Move Constructor
-template<typename F> AreaAnalyzer(F && list) {
-    auto copy = std::move(list);//BUG calls Upcast constructor from Upcast constructor
-    *this = static_cast<AreaAnalyzer<T>>(copy);
-}
+    using AreaNormalizer<T>::AreaNormalizer;
 
     ListSwitchable<dpoint> getFirstArea(qreal limit);
 
