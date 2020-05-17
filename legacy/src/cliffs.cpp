@@ -15,13 +15,13 @@ template<> ListSwitchable<dpoint> Cliffs<dpoint>::findCliffs(ListSwitchable<dpoi
         calculator.cliffFilters();
         //older
         auto firstLegal = calculator.getFirstLegalSegment();
-        if (!(firstLegal.size() > size_t(1)))
-            throw std::logic_error("getFirstLegalSegment has returned illegal length");
+        //if (!(firstLegal.size() > size_t(1)))
+        //    throw std::logic_error("getFirstLegalSegment has returned illegal length");
         ListSwitchable<dpoint> cliff = ListSwitchable<dpoint>(std::move(firstLegal));
         //or newer impl?
         //ListCopyable<dpoint> cliff = calculator.getFirstCliff();
-        if (!(cliff.size() > size_t(1)))
-            throw std::logic_error("ListSwitchable upcast not working");
+        //if (!(cliff.size() > size_t(1)))
+        //    throw std::logic_error("ListSwitchable upcast not working");
         result << cliff.last();
     }
     // The last one is the end of the stroke

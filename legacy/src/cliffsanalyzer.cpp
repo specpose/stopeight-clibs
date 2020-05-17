@@ -5,10 +5,9 @@
 
 template<> ListSwitchable<dpoint> CliffsAnalyzer<dpoint>::getFirstLegalSegment(){
     CliffsAnalyzer<dpoint> result = CliffsAnalyzer<dpoint>();
-    if (this->size()>1){
-
+    if (this->size()>size_t(1)){
         bool foundOne=false;
-        for (int i=0;i<this->size();i++){
+        for (int i=size_t(0);i<this->size();i++){
             result<<this->at(i);
             if (result.hasIllegalSegment()!=-1){
                 foundOne=true;
@@ -20,7 +19,7 @@ template<> ListSwitchable<dpoint> CliffsAnalyzer<dpoint>::getFirstLegalSegment()
         }
     } else {
         //throw "ListAnalyzer::getFirstLegalSegment: segment size is below 2";
-        for (int i=0;i<this->size();i++){
+        for (int i=size_t(0);i<this->size();i++){
             result<<this->at(i);
         }
     }
