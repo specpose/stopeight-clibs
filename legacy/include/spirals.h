@@ -13,10 +13,10 @@ template<typename T> class Spirals : public ListSwitchable<T>
 public:
     using ListSwitchable<T>::ListSwitchable;
 
-    static QList<T> findSpiralCliffs(const ListSwitchable<T> output);
+    static ListSwitchable<T> findSpiralCliffs(const ListSwitchable<T> output);
 
 private:
-    static QList<T> findAreas(const ListSwitchable<T> stroke, qreal limit);
+    static ListSwitchable<T> findAreas(const ListSwitchable<T> stroke, qreal limit);
     //auxiliary function for findAreas
     static qreal findLimit(const ListSwitchable<T> toBeProcessed);
 

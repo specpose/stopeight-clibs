@@ -13,7 +13,7 @@ template<typename T> class Cliffs : public ListSwitchable<T>
 public:
     using ListSwitchable<T>::ListSwitchable;
 
-    static QList<dpoint> findCliffs(ListSwitchable<dpoint> output);
+    static ListSwitchable<dpoint> findCliffs(ListSwitchable<dpoint> output);
 
 };
 

@@ -7,9 +7,9 @@
 #define debug() QNoDebug()
 
 //ShapeMatcher::findCliffs
-template<> QList<dpoint> Cliffs<dpoint>::findCliffs(ListSwitchable<dpoint> toBeProcessed){
+template<> ListSwitchable<dpoint> Cliffs<dpoint>::findCliffs(ListSwitchable<dpoint> toBeProcessed){
     //test for illegalPointRemoval
-    QList<dpoint> result=QList<dpoint>();
+    ListSwitchable<dpoint> result=ListSwitchable<dpoint>();
     CliffsAnalyzer<dpoint> calculator = CliffsAnalyzer<dpoint>(toBeProcessed);
     while (calculator.size()>2) {
         calculator.cliffFilters();

@@ -19,21 +19,21 @@ void EditorSpirals::process(ListSwitchable<dpoint> &toBeProcessed){
     // use of output is a hack
     if (this->getOutput().size()>0) {
         /* SHARED CLIFFS&SPIRALS */
-        QList<dpoint> cliffs;
+        ListSwitchable<dpoint> cliffs;
 
         /* SPIRALS */
         Spirals<dpoint> spirals = Spirals<dpoint>(toBeProcessed);//Hack from ListBase! //should be move? listswitchable::ListSwitchable(ListBase&&) not working
         cliffs= Spirals<dpoint>::findSpiralCliffs(spirals);
 
         /* SHARED After this cliffs is const */
-        const QList<dpoint> constCliffs = cliffs;
+        const ListSwitchable<dpoint> constCliffs = cliffs;
 
         /* SHARED CLIFFS&SPIRALS, But replace cornerMeasuring?? */
-        QList<QList<dpoint> > slices= QList<QList<dpoint> >();
-        QList<QList<dpoint> >& slicesRef(slices);
+        QList<ListSwitchable<dpoint> > slices= QList<ListSwitchable<dpoint> >();
+        QList<ListSwitchable<dpoint> >& slicesRef(slices);
 
         mainIterator(constCliffs,slicesRef);
-        const QList<QList<dpoint> > constSlices= slices;
+        const QList<ListSwitchable<dpoint> > constSlices= slices;
 
         ListSwitchable<dpoint> result = ListSwitchable<dpoint>();
 
@@ -50,6 +50,6 @@ void EditorSpirals::process(ListSwitchable<dpoint> &toBeProcessed){
     }
 }
 
-QList<dpoint> EditorSpirals::processSegment(QList<dpoint>::iterator start, QList<dpoint>::iterator end){
+ListSwitchable<dpoint> EditorSpirals::processSegment(ListSwitchable<dpoint>::iterator start, ListSwitchable<dpoint>::iterator end){
     return EditorCliffs::processSegment(start,end);
 }

@@ -20,7 +20,7 @@ protected:
     void process(ListSwitchable<dpoint>& toBeProcessed);
 
 private:
-    QList<dpoint> processSegment(QList<dpoint>::iterator start,QList<dpoint>::iterator end);
+    ListSwitchable<dpoint> processSegment(ListSwitchable<dpoint>::iterator start,ListSwitchable<dpoint>::iterator end);
 
 };
 

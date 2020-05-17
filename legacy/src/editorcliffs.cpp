@@ -19,17 +19,17 @@ void EditorCliffs::process(ListSwitchable<dpoint> &toBeProcessed){
         /* SHARED CLIFFS&SPIRALS */
         Cliffs<dpoint> data = Cliffs<dpoint>(toBeProcessed);//Hack from ListBase!
 
-        QList<dpoint> cliffs= Cliffs<dpoint>::findCliffs(data);
+        ListSwitchable<dpoint> cliffs= Cliffs<dpoint>::findCliffs(data);
 
         /* SHARED After this cliffs is const */
-        const QList<dpoint> constCliffs = cliffs;
+        const ListSwitchable<dpoint> constCliffs = cliffs;
 
         /* SHARED CLIFFS&SPIRALS, But replace cornerMeasuring?? */
-        QList<QList<dpoint> > slices= QList<QList<dpoint> >();
-        QList<QList<dpoint> >& slicesRef(slices);
+        QList<ListSwitchable<dpoint> > slices= QList<ListSwitchable<dpoint> >();
+        QList<ListSwitchable<dpoint> >& slicesRef(slices);
 
         mainIterator(constCliffs,slicesRef);
-        const QList<QList<dpoint> > constSlices= slices;
+        const QList<ListSwitchable<dpoint> > constSlices= slices;
 
         ListSwitchable<dpoint> result = ListSwitchable<dpoint>();
 
@@ -46,10 +46,10 @@ void EditorCliffs::process(ListSwitchable<dpoint> &toBeProcessed){
 }
 
 // this is a drop-in replacement for processSegment used for clarifying math
-QList<dpoint> EditorCliffs::processSegment(QList<dpoint>::iterator start,QList<dpoint>::iterator end){
+ListSwitchable<dpoint> EditorCliffs::processSegment(ListSwitchable<dpoint>::iterator start,ListSwitchable<dpoint>::iterator end){
     auto cliff = ListRotator<dpoint>();
     std::copy(start,end,std::back_inserter(cliff));
-    QList<dpoint> path_section = QList<dpoint>();
+    ListSwitchable<dpoint> path_section = ListSwitchable<dpoint>();
     if (cliff.size()>1){
         cliff.rotateSegmentToXAxis();
         //debug()<<"removing illegal points because of illegal segments for debug calc.";
@@ -78,11 +78,11 @@ QList<dpoint> EditorCliffs::processSegment(QList<dpoint>::iterator start,QList<d
 }
 
 // This would be original but it never worked after switching from TCT implementation
-/*QList<dpoint> EditorCliffs::processSegment(QList<dpoint> cliff){
+/*ListSwitchable<dpoint> EditorCliffs::processSegment(ListSwitchable<dpoint> cliff){
     if (cliff.size()>2){
-        QList<dpoint> path_section = QList<dpoint>();
+        ListSwitchable<dpoint> path_section = ListSwitchable<dpoint>();
         path_section << cliff.first();
-        QList<dpoint> turns = Turns<dpoint>::findTurns(cliff);
+        ListSwitchable<dpoint> turns = Turns<dpoint>::findTurns(cliff);
         //debug()<< "Found "<<turns.size()<<" turns in cliff";
         //for (int i=0;i<turns.size();i++){
         //    debug()<< turns[i];
@@ -98,7 +98,7 @@ QList<dpoint> EditorCliffs::processSegment(QList<dpoint>::iterator start,QList<d
 // Not USED
 // TCT Implementation
 // FOR REFERENCE ONLY
-/*const void ShapeMatcher::cliffIterator(const QList<dpoint> constCliffs,ListCalculator<dpoint>& resultRef){
+/*const void ShapeMatcher::cliffIterator(const ListSwitchable<dpoint> constCliffs,ListCalculator<dpoint>& resultRef){
     //for (int i=0;i<constCliffs.size()+1;i++){
     // section commented old_implementation
 
@@ -111,7 +111,7 @@ QList<dpoint> EditorCliffs::processSegment(QList<dpoint>::iterator start,QList<d
             ListAnalyzer<dpoint> bugger = cliff;
             bugger.rotateSegmentToXAxis();
             //debug()<<bugger;
-            QList<dpoint> crests = ListAnalyzer<dpoint>();
+            ListSwitchable<dpoint> crests = ListAnalyzer<dpoint>();
             crests << cliff.first() << cliff.last();
 
             if (crests.size()>1){

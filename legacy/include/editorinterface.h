@@ -22,7 +22,7 @@ public:
 
 protected:
     //only these two have to be provided by implementations
-    virtual QList<dpoint> processSegment(QList<dpoint>::iterator start,QList<dpoint>::iterator end) =0;
+    virtual ListSwitchable<dpoint> processSegment(ListSwitchable<dpoint>::iterator start,ListSwitchable<dpoint>::iterator end) =0;
     virtual void process(ListSwitchable<dpoint>& toBeProcessed) =0;
 
 };

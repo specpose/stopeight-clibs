@@ -68,7 +68,8 @@ template <> ListCopyable<dpoint> TurnAnalyzer<dpoint>::getFirstTurnByTriplets(){
     TurnAnalyzer<dpoint> result = TurnAnalyzer<dpoint>();
     ListCopyable<dpoint> origin = ListCopyable<dpoint>(*this);
 
-    CornerAnalyzer<dpoint> cornerCalculator = CornerAnalyzer<dpoint>(*this);
+    CornerAnalyzer<dpoint> cornerCalculator = CornerAnalyzer<dpoint>();
+    std::copy(std::begin(*this),std::end(*this),std::back_inserter(cornerCalculator));//BUG ListCopyable to ListSwitchable
     //findTurn: doCorner, findTriplet
     // this has never been rotated, first time in cornerFilters
     cornerCalculator.cornerFilters();

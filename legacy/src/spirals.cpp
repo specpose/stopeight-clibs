@@ -10,10 +10,10 @@
 //#define LIMIT_TEST M_PIl
 #define LIMIT_ITERATION_STEP 0.1
 
-template<> QList<dpoint> Spirals<dpoint>::findAreas(const ListSwitchable<dpoint> stroke, qreal limit){
+template<> ListSwitchable<dpoint> Spirals<dpoint>::findAreas(const ListSwitchable<dpoint> stroke, qreal limit){
     AreaAnalyzer<dpoint> spiral = AreaAnalyzer<dpoint>(stroke);
 
-    QList<dpoint> result=QList<dpoint>();
+    ListSwitchable<dpoint> result=ListSwitchable<dpoint>();
 
     while (spiral.size()>2){
         //if (stroke.size()>2){
@@ -34,7 +34,7 @@ template<> QList<dpoint> Spirals<dpoint>::findAreas(const ListSwitchable<dpoint>
 
 // TODO use listcopyables
 template<> qreal Spirals<dpoint>::findLimit(const ListSwitchable<dpoint> toBeProcessed){
-    QList<dpoint> cliffs;
+    ListSwitchable<dpoint> cliffs;
     qreal MyLimit;
     //Old working:
     //MyLimit = M_El;
@@ -57,7 +57,7 @@ template<> qreal Spirals<dpoint>::findLimit(const ListSwitchable<dpoint> toBePro
     if (cliffs.size()>0){
             //debug()<<"Found "<<cliffs.size()<<"cliffs, adjusting limit to current minimum";
             int selector=cliffs.size();
-            QList<dpoint> backup;
+            ListSwitchable<dpoint> backup;
             qreal backupLimit;
             while (cliffs.size()==(selector)){
                 backupLimit = MyLimit;
@@ -75,7 +75,7 @@ template<> qreal Spirals<dpoint>::findLimit(const ListSwitchable<dpoint> toBePro
     return MyLimit;
 }
 
-template<> QList<dpoint> Spirals<dpoint>::findSpiralCliffs(const ListSwitchable<dpoint> toBeProcessed){
+template<> ListSwitchable<dpoint> Spirals<dpoint>::findSpiralCliffs(const ListSwitchable<dpoint> toBeProcessed){
 
     //qreal frontSpiral= toBeProcessed.measureSpiral();
     //debug()<<"Forward Spiral Size is: "<<frontSpiral;
@@ -97,7 +97,7 @@ template<> QList<dpoint> Spirals<dpoint>::findSpiralCliffs(const ListSwitchable<
     //}
 
     // change: use reference?
-    QList<dpoint> cliffs = ListSwitchable<dpoint>();
+    ListSwitchable<dpoint> cliffs = ListSwitchable<dpoint>();
     if (limit!=backLimit){
         //debug()<< "ShapeMatcher::process: different limits found, using larger";
         if (backLimit>limit){

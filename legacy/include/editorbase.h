@@ -33,17 +33,17 @@ public:
     void addPoint(QPointF p);
     //dont make getOutput const, see reversal in spiral process
     T& getOutput();
-	QList<QPointF> getConvertedOutput();
+	ListSwitchable<dpoint> getConvertedOutput();
     void flushOutput();
 
     void automatic();
-	void automatic(QList<QPointF> list);
+	void automatic(ListSwitchable<dpoint> list);
 
 protected:
 
     void setOutput(T list);
 
-    void mainIterator(const QList<dpoint>& constCliffs,QList<QList<dpoint> >& slicesRef);
+    void mainIterator(const ListSwitchable<dpoint>& constCliffs,QList<ListSwitchable<dpoint> >& slicesRef);
 
 private:
     //should ONLY be accessed for implementation instantiation
