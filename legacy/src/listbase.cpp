@@ -9,7 +9,8 @@
 
 //using namespace legacy;
 
-template<> QList<QPointF> ListBase<QPointF>::loadSPFile(const QString& fileName)
+//WAS: template<> QList<QPointF> ListBase<QPointF>::loadSPFile(const QString& fileName)
+template<> QList<QPointF> ListBase<dpoint>::loadSPFile(const QString& fileName)
 {
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly)) {
@@ -46,7 +47,10 @@ template<> QList<QPointF> ListBase<dpoint>::convert(ListBase<dpoint> list) {
 template<> QList<QPointF> ListBase<dpoint>::open(const char *fileName){
     const QString& myString = QString::fromLatin1(fileName);
     //return ListBase<dpoint>::convert(ListBase<dpoint>::loadSPFile(myString));
-	return ListBase<QPointF>::loadSPFile(myString);
+    QList<QPointF> fromFile = ListBase<dpoint>::loadSPFile(myString);
+    //ListBase<dpoint> result = ListBase<dpoint>();
+    //std::copy(std::begin(fromFile),std::end(fromFile),std::back_inserter(result));
+	return fromFile;
 
 }
 

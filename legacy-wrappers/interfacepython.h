@@ -22,7 +22,7 @@ static PyObject* LegacyError;
 static PyObject* error(const char* message);
 static PyObject* error(legacy::alg_logic_error err);
 static PyObject* convert(QList<QPointF> list);
-static QList<QPointF> parse_list(PyObject *self, PyObject *args);
+template<typename F> static F parse_list(PyObject *self, PyObject *args);
 //public
 static PyObject* parse_file(PyObject* self, PyObject* args);
 static PyObject* TCT_to_bezier(PyObject* self, PyObject* args);
