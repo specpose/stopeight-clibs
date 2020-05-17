@@ -7,12 +7,12 @@
 //#define debug() QNoDebug()
 
 //Upcast Copy Constructor
-template<>template<typename F> ListSwitchable<dpoint>::ListSwitchable(const ListSwitchable<dpoint>& list) {
+template<>template<typename F,typename> ListSwitchable<dpoint>::ListSwitchable(const ListSwitchable<dpoint>& list) {
     auto copy = TurnCalculator<dpoint>(list);//BUG
     *this = static_cast<F&>(copy);
 }
 //Upcast Move Constructor
-template<>template<typename F> ListSwitchable<dpoint>::ListSwitchable(ListSwitchable<dpoint>&& list) {
+template<>template<typename F,typename> ListSwitchable<dpoint>::ListSwitchable(ListSwitchable<dpoint>&& list) {
     auto copy = std::move(list);
     *this = static_cast<F>(copy);
 }
@@ -45,13 +45,13 @@ template CliffsNormalizer<dpoint>::CliffsNormalizer(const ListSwitchable<dpoint>
 template CliffsAnalyzer<dpoint>::CliffsAnalyzer(const ListSwitchable<dpoint>&);*/
 
 //Upcast Copy Assignment
-template<>template<typename F> F& ListSwitchable<dpoint>::operator=(const ListSwitchable<dpoint>& list) {
+template<>template<typename F,typename> F& ListSwitchable<dpoint>::operator=(const ListSwitchable<dpoint>& list) {
     auto copy = TurnCalculator<dpoint>(list);//BUG
     return std::move(static_cast<F&>(copy));
     //this->swap(copy);
 }
 //Upcast Move Assignment
-template<>template<typename F> F& ListSwitchable<dpoint>::operator=(ListSwitchable<dpoint>&& list) {
+template<>template<typename F,typename> F& ListSwitchable<dpoint>::operator=(ListSwitchable<dpoint>&& list) {
    ////REQUIRES PHYSICAL COPY: ERROR MSVC
    ////MEMORY LEAK
    //ListBase<dpoint> copy = ListBase<dpoint>(list);

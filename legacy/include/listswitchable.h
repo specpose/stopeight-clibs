@@ -18,11 +18,19 @@ public:
     ListSwitchable(ListSwitchable&&) = default;
     ListSwitchable& operator=(const ListSwitchable&) = default;
     ListSwitchable& operator=(ListSwitchable&&) = default;
-    template<typename F= typename ListSwitchable<T>> ListSwitchable<T>(const ListSwitchable<T>&);
-    template<typename F= typename ListSwitchable<T>> ListSwitchable<T>(ListSwitchable<T>&&);
+    template<typename F= typename ListSwitchable<T>
+        , typename = typename std::enable_if_t<std::is_base_of<ListSwitchable<T>, F>() || std::is_same<ListSwitchable<T>, F>()>
+    > ListSwitchable<T>(const ListSwitchable<T>&);
+    template<typename F= typename ListSwitchable<T>
+        , typename = typename std::enable_if_t<std::is_base_of<ListSwitchable<T>, F>() || std::is_same<ListSwitchable<T>, F>()>
+    > ListSwitchable<T>(ListSwitchable<T>&&);
 //THIS THING AND ALL INHERITING CAN NOT BE COPIED
-    template<typename F> F& operator=(const ListSwitchable<T>& list);
-    template<typename F> F& operator=(ListSwitchable<T>&& list);
+    template<typename F
+        , typename = typename std::enable_if_t<std::is_base_of<ListSwitchable<T>, F>() || std::is_same<ListSwitchable<T>, F>()>
+    > F& operator=(const ListSwitchable<T>& list);
+    template<typename F
+        , typename = typename std::enable_if_t<std::is_base_of<ListSwitchable<T>, F>() || std::is_same<ListSwitchable<T>, F>()>
+    > F& operator=(ListSwitchable<T>&& list);
 
 /*
 //Upcast Move Constructor
