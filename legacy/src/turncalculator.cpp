@@ -85,7 +85,7 @@ template <> void TurnCalculator<dpoint>::risingJitter(int pos) {
 }
 
 template <> int TurnCalculator<dpoint>::hasIllegalSegment() {
-    ListRotator<dpoint> rotator = ListRotator<dpoint>(std::move(*this));
+    ListRotator<dpoint> rotator = ListRotator<dpoint>(*this);
     // has to change to steepest possible?
     rotator.rotateSegmentToXAxis();
     //rotateLastVectorToYAxis();

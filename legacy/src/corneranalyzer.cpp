@@ -14,8 +14,7 @@ template <> ListSwitchable<dpoint> CornerAnalyzer<dpoint>::getFirstCorner(){
         result << this->at(0) << this->at(1) << this->at(2);
 
         // changed from this to calc
-        auto tmp = ListSwitchable<dpoint>(*this);
-        CliffsCalculator<dpoint> calc = CliffsCalculator<dpoint>(std::move(tmp));
+        CliffsCalculator<dpoint> calc = CliffsCalculator<dpoint>(std::move(*this));
         for (int i=3;i<calc.size();i++){
             if (calc.deriv1Crossed(i)){
                 break;
