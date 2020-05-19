@@ -4,10 +4,17 @@
 #ifndef CLIFFSANALYZER_H
 #define CLIFFSANALYZER_H
 
-#include "listbase.h"
-#include "cliffsnormalizer.h"
+#include "listswitchable.h"
 
-template<typename T> class CliffsAnalyzer : public CliffsNormalizer<T>
+namespace CliffsAnalyzer {
+    // This is the replacement for getFirstCliff
+    template<typename T> ListSwitchable<T> getFirstLegalSegment(ListSwitchable<T>& This);
+
+    template<typename T> ListSwitchable<T> getFirstCliff(ListSwitchable<T>& This,qreal limit=M_PIl);
+    //ListCopyable<dpoint> getFirstCliffTCT(ListSwitchable<T>& This,qreal limit=M_PIl);
+}
+
+/*template<typename T> class CliffsAnalyzer : public CliffsNormalizer<T>
 {
 public:
     using CliffsNormalizer<T>::CliffsNormalizer;
@@ -18,6 +25,6 @@ public:
     ListSwitchable<T> getFirstCliff(qreal limit=M_PIl);
     //ListCopyable<dpoint> getFirstCliffTCT(qreal limit=M_PIl);
 
-};
+};*/
 
 #endif // CLIFFSANALYZER_H

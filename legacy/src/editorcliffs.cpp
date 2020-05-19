@@ -2,7 +2,6 @@
 // GNU Lesser General Public License, version 2.1
 
 #include "editorcliffs.h"
-
 #define debug() QNoDebug()
 
 EditorCliffs::EditorCliffs() : EditorBase<ListSwitchable<dpoint> >()
@@ -17,27 +16,20 @@ EditorCliffs::EditorCliffs() : EditorBase<ListSwitchable<dpoint> >()
 void EditorCliffs::process(ListSwitchable<dpoint> &toBeProcessed){
     if (this->getOutput().size()>0) {
         /* SHARED CLIFFS&SPIRALS */
-        Cliffs<dpoint> data = Cliffs<dpoint>(toBeProcessed);//Hack from ListBase!
-
-        ListSwitchable<dpoint> cliffs= Cliffs<dpoint>::findCliffs(data);
-
-        /* SHARED After this cliffs is const */
-        const ListSwitchable<dpoint> constCliffs = cliffs;
+        const ListSwitchable<dpoint> cliffs= Cliffs::findCliffs(toBeProcessed);
 
         /* SHARED CLIFFS&SPIRALS, But replace cornerMeasuring?? */
         QList<ListSwitchable<dpoint> > slices= QList<ListSwitchable<dpoint> >();
-        QList<ListSwitchable<dpoint> >& slicesRef(slices);
 
-        mainIterator(constCliffs,slicesRef);
-        const QList<ListSwitchable<dpoint> > constSlices= slices;
+        mainIterator(cliffs,slices);
 
-        ListSwitchable<dpoint> result = ListSwitchable<dpoint>();
+        auto result = ListSwitchable<dpoint>();
 
         /* SPIRALS&CLIFFS check */
-        SpiralsAnalyzer<dpoint>::consistencyCheck(constCliffs);
+        SpiralsAnalyzer::consistencyCheck(cliffs);
 
         /* SHARED */
-        result = Analyzer<dpoint>::populateTurns(this->getOutput(),constSlices);
+        result = Analyzer::populateTurns(this->getOutput(),slices);
 
         this->setOutput(result);
     } else {
@@ -72,7 +64,7 @@ ListSwitchable<dpoint> EditorCliffs::processSegment(ListSwitchable<dpoint>::iter
         path_section << cliff.last();
         return path_section;
     } else {
-        //throw "EditorCliffs::cornerMeasuring: this is a humongously small cliff.";
+        throw std::logic_error("EditorCliffs::cornerMeasuring: this is a humongously small cliff.");
         return path_section;
     }
 }

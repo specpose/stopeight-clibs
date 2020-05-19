@@ -12,16 +12,17 @@
 template<typename T> class ListSwitchable : public TurnCalculator<T>
 {
 public:
-    ListSwitchable() = default;
+    //using TurnCalculator<T>::TurnCalculator;
+    ListSwitchable<T>() = default;
     //for technical reasons, copy constructors are never generated from templates p.679
-    ListSwitchable(const ListSwitchable&) = default;
-    ListSwitchable(ListSwitchable&&) = default;
-    ListSwitchable& operator=(const ListSwitchable&) = default;
-    ListSwitchable& operator=(ListSwitchable&&) = default;
-    template<typename F= typename ListSwitchable<T>
+    /*ListSwitchable<T>(const ListSwitchable<T>&) = default;
+    ListSwitchable<T>(ListSwitchable<T>&&) = default;
+    ListSwitchable<T>& operator=(const ListSwitchable<T>&) = default;
+    ListSwitchable<T>& operator=(ListSwitchable<T>&&) = default;*/
+    template<typename F= ListSwitchable<T>
         , typename = typename std::enable_if_t<std::is_base_of<ListSwitchable<T>, F>() || std::is_same<ListSwitchable<T>, F>()>
     > ListSwitchable<T>(const ListSwitchable<T>&);
-    template<typename F= typename ListSwitchable<T>
+    template<typename F= ListSwitchable<T>
         , typename = typename std::enable_if_t<std::is_base_of<ListSwitchable<T>, F>() || std::is_same<ListSwitchable<T>, F>()>
     > ListSwitchable<T>(ListSwitchable<T>&&);
 //THIS THING AND ALL INHERITING CAN NOT BE COPIED
@@ -45,11 +46,15 @@ ListSwitchable<T>(QList<T>&& list) {
 }*/
 
     void removeAt(int i);
-
+    // Note: this is simple reversal. it is not checking order. Should be static.
+    void reverse();
 };
 
-
-
-
+//namespace AreaKalculator {
+    //functions that want *this, and need it
+    //they all take ListSwitchable and return something (else), but they are in a namespace
+    //qreal sumOfDxAreasRotY(ListSwitchable& this)
+    //THEY ARE MODIFIYING ListSwitchable
+//}
 
 #endif // LISTSWITCHABLE_H

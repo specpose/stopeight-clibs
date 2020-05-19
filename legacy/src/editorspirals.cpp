@@ -2,7 +2,6 @@
 // GNU Lesser General Public License, version 2.1
 
 #include "editorspirals.h"
-
 //#define debug() QDebug(QtDebugMsg)//::QDebug(QtDebugMsg)
 //#define debug() QNoDebug()
 
@@ -17,31 +16,22 @@ EditorSpirals::EditorSpirals() : EditorCliffs()
 //toBeProcessed is modifying data.output
 void EditorSpirals::process(ListSwitchable<dpoint> &toBeProcessed){
     // use of output is a hack
-    if (this->getOutput().size()>0) {
-        /* SHARED CLIFFS&SPIRALS */
-        ListSwitchable<dpoint> cliffs;
-
-        /* SPIRALS */
-        Spirals<dpoint> spirals = Spirals<dpoint>(toBeProcessed);//Hack from ListBase! //should be move? listswitchable::ListSwitchable(ListBase&&) not working
-        cliffs= Spirals<dpoint>::findSpiralCliffs(spirals);
-
-        /* SHARED After this cliffs is const */
-        const ListSwitchable<dpoint> constCliffs = cliffs;
+    if (this->getOutput().size()>size_t(0)) {
+        /* SHARED CLIFFS&SPIRALS */        
+        const ListSwitchable<dpoint> cliffs= Spirals::findSpiralCliffs(toBeProcessed);
 
         /* SHARED CLIFFS&SPIRALS, But replace cornerMeasuring?? */
         QList<ListSwitchable<dpoint> > slices= QList<ListSwitchable<dpoint> >();
-        QList<ListSwitchable<dpoint> >& slicesRef(slices);
 
-        mainIterator(constCliffs,slicesRef);
-        const QList<ListSwitchable<dpoint> > constSlices= slices;
+        mainIterator(cliffs,slices);
 
-        ListSwitchable<dpoint> result = ListSwitchable<dpoint>();
+        auto result = ListSwitchable<dpoint>();
 
         /* SPIRALS&CLIFFS check */
-        SpiralsAnalyzer<dpoint>::consistencyCheck(constCliffs);
+        SpiralsAnalyzer::consistencyCheck(cliffs);
 
         /* SHARED */
-        result = Analyzer<dpoint>::populateTurns(this->getOutput(),constSlices);
+        result = Analyzer::populateTurns(this->getOutput(),slices);
 
         //hack
         this->setOutput(result);

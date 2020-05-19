@@ -5,18 +5,18 @@
 
 #define debug() QNoDebug()
 
-template <> ListSwitchable<dpoint> CornerAnalyzer<dpoint>::getFirstCorner(){
-    Analyzer<dpoint> result = Analyzer<dpoint>();
+template <typename T> ListSwitchable<T> CornerAnalyzer::getFirstCorner(ListSwitchable<T>& This){
+    auto result = ListSwitchable<T>();
 
     // used to be >1
-    if (this->size()>3){
+    if (This.size()>size_t(3)){
         //careful!
-        result << this->at(0) << this->at(1) << this->at(2);
+        result << This.at(size_t(0)) << This.at(size_t(1)) << This.at(size_t(2));
 
         // changed from this to calc
-        CliffsCalculator<dpoint> calc = CliffsCalculator<dpoint>(std::move(*this));
-        for (int i=3;i<calc.size();i++){
-            if (calc.deriv1Crossed(i)){
+        auto calc = ListSwitchable<T>(This);
+        for (auto i=size_t(3);i<calc.size();i++){
+            if (CliffsCalculator::deriv1Crossed(calc,i)){
                 break;
             }
             result << calc.at(i);
@@ -24,17 +24,18 @@ template <> ListSwitchable<dpoint> CornerAnalyzer<dpoint>::getFirstCorner(){
 
     } else {
         //throw "ListAnalyzer::getFirstCorner: Segment is below 4. too short for detecting corners.";
-        for (int i=0;i<this->size();i++){
-            result<<this->at(i);
+        for (auto i=size_t(0);i<This.size();i++){
+            result<<This.at(i);
         }
     }
 
     // removing
-    for (int i=0;i<result.size();i++){
-        this->removeFirst();
+    for (auto i=size_t(0);i<result.size();i++){
+        This.removeFirst();
     }
 
     // don't ever rotate in here!
 
     return result;
 }
+template ListSwitchable<dpoint> CornerAnalyzer::getFirstCorner(ListSwitchable<dpoint>& This);

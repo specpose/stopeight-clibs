@@ -7,7 +7,7 @@
 #include "editorbase.h"
 #include "cliffs.h"
 #include "spiralsanalyzer.h"
-
+#include "analyzer.h"
 class EditorCliffs : public EditorBase<ListSwitchable<dpoint> >
 {
     friend class EditorSpirals;

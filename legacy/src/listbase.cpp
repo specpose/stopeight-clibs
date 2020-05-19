@@ -2,7 +2,6 @@
 // GNU Lesser General Public License, version 2.1
 
 #include "listbase.h"
-#include <string>
 
 
 //#define debug() QNoDebug()
@@ -87,10 +86,11 @@ template <> ArrayOfTwoQListDpointIterators ListBase<dpoint>::position_to_iterato
         return ArrayOfTwoQListDpointIterators{ first,last };
     }
 }
-template ArrayOfTwoQListDpointIterators ListBase<dpoint>::position_to_iterator(int startPosition, int endPosition);
+
 template <> qreal ListBase<dpoint>::lengthOf(QPointF difference) {
     return sqrt(pow(difference.x(), 2) + pow(difference.y(), 2));
 }
+
 template <> qreal ListBase<dpoint>::lengthAt(int position) {
     QListIterator<dpoint> i(*this);
     if (i.findNext(this->at(position))) {

@@ -5,10 +5,10 @@
 
 //#define debug() QNoDebug()
 
-template<> bool SpiralsAnalyzer<dpoint>::consistencyCheck(QList<dpoint> cliffs){
+template<typename T> bool SpiralsAnalyzer::consistencyCheck(const QList<T>& cliffs){
     //debug()<<"We have "<< cliffs.size() << " cliffs in input.";
 	//if (cliffs.size()!=0 && fmod(cliffs.size(),2) == 0){
-    if (cliffs.size()!=0 && (cliffs.size()%2) == 0){
+    if (cliffs.size()!=size_t(0) && (cliffs.size()%size_t(2)) == size_t(0)){
         //debug()<< "ShapeMatcher::verify: ";
         throw legacy::alg_logic_error("Inconsistency: even number of cliffs not allowed",__FILE__,"");
                //C++11
@@ -18,7 +18,4 @@ template<> bool SpiralsAnalyzer<dpoint>::consistencyCheck(QList<dpoint> cliffs){
     }
     return false;
 }
-
-
-
-
+template bool SpiralsAnalyzer::consistencyCheck(const QList<dpoint>& cliffs);

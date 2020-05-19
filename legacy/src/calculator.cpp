@@ -3,11 +3,3 @@
 
 #include "calculator.h"
 
-template <> void Calculator<dpoint>::reverse(){
-    ListSwitchable<dpoint> reversed= ListSwitchable<dpoint>();
-    for (int i=this->size()-1;i>=0;i--){
-        reversed << this->at(i);
-    }
-    this->clear();
-    this->append(reversed);
-}

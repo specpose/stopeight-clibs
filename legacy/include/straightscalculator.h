@@ -5,7 +5,6 @@
 #define STRAIGHTSCALCULATOR_H
 
 #include "listcopyable.h"
-#include "calculator.h"
 
 template<typename T> class StraightsCalculator : public ListCopyable<T>
 {

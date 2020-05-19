@@ -2,30 +2,29 @@
 // GNU Lesser General Public License, version 2.1
 
 #include "areacalculator.h"
-#include "error.h"
 //#define debug() QNoDebug()
 // this is buggy has to be reworked. inlays are not properly removed by just subtracting them!
-template <> qreal AreaCalculator<dpoint>::sumOfDxAreasRotY(){
+template <typename T> qreal AreaCalculator::sumOfDxAreasRotY(ListSwitchable<T>& This){
     qreal sum = 0;
-    if (this->size()>1){
-        for (int i = 0;i<this->size()-1;i++){
-            if (this->at(i+1).rot.x()>this->at(i).rot.x()){
+    if (This.size()>size_t(1)){
+        for (int i = size_t(0);i<This.size()-size_t(1);i++){
+            if (This.at(i+1).rot.x()>This.at(i).rot.x()){
             qreal piece =
                     //fabs(this->at(i+1).rot.x()-this->at(i).rot.x())
-                    (this->at(i+1).rot.x()-this->at(i).rot.x())
+                    (This.at(i+1).rot.x()-This.at(i).rot.x())
                     *
                     //jitter big - needed unless turns detected - results more accurate with seg-rad-area
                     // actually this may not be jitter, but just negative rotation (from start)
                     //fabs(this->at(i).rot.y())
-                    this->at(i).rot.y()
+                    This.at(i).rot.y()
                     +
                     (
                             //jitter small
                             //fabs(this->at(i+1).rot.y()-this->at(i).rot.y())
-                            (this->at(i+1).rot.y()-this->at(i).rot.y())
+                            (This.at(i+size_t(1)).rot.y()-This.at(i).rot.y())
                             *
                             //fabs(this->at(i+1).rot.x()-this->at(i).rot.x())
-                            (this->at(i+1).rot.x()-this->at(i).rot.x())
+                            (This.at(i+size_t(1)).rot.x()-This.at(i).rot.x())
                             )/2
                     ;
             if ((sum>0 && piece<0) ||
@@ -44,24 +43,27 @@ template <> qreal AreaCalculator<dpoint>::sumOfDxAreasRotY(){
     }
     return fabs(sum);
 }
+template qreal AreaCalculator::sumOfDxAreasRotY(ListSwitchable<dpoint>& This);
 
-template <> qreal AreaCalculator<dpoint>::lengthFromStartToEnd(){
-    dpoint start = this->first();
-    dpoint end = this->last();
-    return Calculator<dpoint>::lengthOf(end-start);
+template <typename T> qreal AreaCalculator::lengthFromStartToEnd(ListSwitchable<T>& This){
+    dpoint start = This.first();
+    dpoint end = This.last();
+    return ListBase<dpoint>::lengthOf(end-start);
 }
+template qreal AreaCalculator::lengthFromStartToEnd(ListSwitchable<dpoint>& This);
 
-template <> qreal AreaCalculator<dpoint>::triangleArea(QPointF A, QPointF B, QPointF C)
+template <typename T> qreal AreaCalculator::triangleArea(T A, T B, T C)
 {
-    AreaCalculator<dpoint> a = AreaCalculator<dpoint>();
+    auto a = ListSwitchable<T>();
     a << C << B;
-    AreaCalculator<dpoint> b = AreaCalculator<dpoint>();
+    auto b = ListSwitchable<T>();
     b << A << C;
-    AreaCalculator<dpoint> c = AreaCalculator<dpoint>();
+    auto c = ListSwitchable<T>();
     c << A << B;
-    qreal s = ((a.lengthFromStartToEnd())+(b.lengthFromStartToEnd())+(c.lengthFromStartToEnd()))/2;
-    qreal Area = sqrt( s * (s-a.lengthFromStartToEnd()) * (s-b.lengthFromStartToEnd()) * (s-c.lengthFromStartToEnd()) );
-    if (Area<0){throw "AreaCalculator::triangleArea: is below zero";}
+    qreal s = ((AreaCalculator::lengthFromStartToEnd(a))+(AreaCalculator::lengthFromStartToEnd(b))+(AreaCalculator::lengthFromStartToEnd(c)))/qreal(2);
+    qreal Area = sqrt( s * (s-AreaCalculator::lengthFromStartToEnd(a)) * (s-AreaCalculator::lengthFromStartToEnd(b)) * (s-AreaCalculator::lengthFromStartToEnd(c)) );
+    if (Area<qreal(0)){throw "AreaCalculator::triangleArea: is below zero";}
 
     return Area;
 }
+template qreal AreaCalculator::triangleArea(dpoint A, dpoint B, dpoint C);

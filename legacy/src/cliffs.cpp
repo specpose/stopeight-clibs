@@ -7,17 +7,17 @@
 #define debug() QNoDebug()
 
 //ShapeMatcher::findCliffs
-template<> ListSwitchable<dpoint> Cliffs<dpoint>::findCliffs(ListSwitchable<dpoint> toBeProcessed){
+template<typename T> ListSwitchable<T> Cliffs::findCliffs(const ListSwitchable<T> toBeProcessed){
     //test for illegalPointRemoval
-    ListSwitchable<dpoint> result=ListSwitchable<dpoint>();
-    CliffsAnalyzer<dpoint> calculator = CliffsAnalyzer<dpoint>(toBeProcessed);
-    while (calculator.size()>2) {
-        calculator.cliffFilters();
+    auto result=ListSwitchable<T>();
+    auto calculator = ListSwitchable<T>(toBeProcessed);
+    while (calculator.size()>size_t(2)) {
+        CliffsNormalizer::cliffFilters(calculator);
         //older
-        auto firstLegal = calculator.getFirstLegalSegment();
+        auto firstLegal = CliffsAnalyzer::getFirstLegalSegment(calculator);
         //if (!(firstLegal.size() > size_t(1)))
         //    throw std::logic_error("getFirstLegalSegment has returned illegal length");
-        ListSwitchable<dpoint> cliff = ListSwitchable<dpoint>(std::move(firstLegal));
+        auto cliff = ListSwitchable<dpoint>(std::move(firstLegal));
         //or newer impl?
         //ListCopyable<dpoint> cliff = calculator.getFirstCliff();
         //if (!(cliff.size() > size_t(1)))
@@ -28,3 +28,4 @@ template<> ListSwitchable<dpoint> Cliffs<dpoint>::findCliffs(ListSwitchable<dpoi
     result.removeLast();
     return result;
 }
+template ListSwitchable<dpoint> Cliffs::findCliffs(const ListSwitchable<dpoint> toBeProcessed);

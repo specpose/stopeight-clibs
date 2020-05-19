@@ -6,17 +6,16 @@
 
 #include "listswitchable.h"
 
+/*namespace Calculator {
+}*/
 
-template<typename T> class Calculator : public ListSwitchable<T>
+
+/*template<typename T> class Calculator : public ListSwitchable<T>
 {
 public:
     using ListSwitchable<T>::ListSwitchable;
 
-    // Note: this is simple reversal. it is not checking order. Should be static.
-    void reverse();
 
-
-
-};
+};*/
 
 #endif // CALCULATOR_H

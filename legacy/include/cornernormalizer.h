@@ -4,10 +4,20 @@
 #ifndef CORNERNORMALIZER_H
 #define CORNERNORMALIZER_H
 
-#include "cornercalculator.h"
-#include "calculator.h"
+#include "listswitchable.h"
 
-template<typename T> class CornerNormalizer : public CornerCalculator<T>
+namespace CornerNormalizer {
+    //All Non-Const
+    template<typename T> void requireMinimumLength(ListSwitchable<T>& This,qreal length);
+    template<typename T> void intRaster(ListSwitchable<T>& This,qreal threshold);
+
+    // utilities for line-detection
+    dpoint getPointInTheMiddle(ListSwitchable<dpoint>& This);
+
+    template<typename T> void cornerFilters(ListSwitchable<T>& This);
+}
+
+/*template<typename T> class CornerNormalizer : public CornerCalculator<T>
 {
 public:
     using CornerCalculator<T>::CornerCalculator;
@@ -19,6 +29,6 @@ public:
     T getPointInTheMiddle();
 
     void cornerFilters();
-};
+};*/
 
 #endif // CORNERNORMALIZER_H

@@ -7,7 +7,6 @@
 #include "editorcliffs.h"
 #include "spirals.h"
 #include "spiralsanalyzer.h"
-
 class EditorSpirals : public EditorCliffs
 {
 public:

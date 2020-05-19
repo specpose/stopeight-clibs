@@ -5,9 +5,12 @@
 #define SPIRALSANALYZER_H
 
 #include "spiralscalculator.h"
-#include "areaanalyzer.h"
 
-template<typename T> class SpiralsAnalyzer : public SpiralsCalculator<T>
+namespace SpiralsAnalyzer {
+    template<typename T>  bool consistencyCheck(const QList<T>& cliffs);
+}
+
+/*template<typename T> class SpiralsAnalyzer : public SpiralsCalculator<T>
 {
 public:
     using SpiralsCalculator<T>::SpiralsCalculator;
@@ -15,6 +18,6 @@ public:
     static bool consistencyCheck(QList<dpoint> cliffs);
 
 
-};
+};*/
 
 #endif // SPIRALSANALYZER_H

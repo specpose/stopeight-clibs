@@ -2,7 +2,6 @@
 // GNU Lesser General Public License, version 2.1
 
 #include "listcopyable.h"
-
 //#define debug() QNoDebug()
 
 /*template<> ListCopyable<dpoint> ListCopyable<dpoint>::chopCopy(int startPosition, int endPosition){

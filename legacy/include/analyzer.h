@@ -4,12 +4,20 @@
 #ifndef ANALYZER_H
 #define ANALYZER_H
 
-#include "calculator.h"
 #include "listswitchable.h"
-#include "listcopyable.h"
+#include "calculator.h"
 #include "cornernormalizer.h"
 
-template<typename T> class Analyzer : public Calculator<T>
+namespace Analyzer {
+// careful: this is changing order
+    // does not change index-numbering variable
+    template<typename T>  void reverseOrder(ListSwitchable<T>& This);
+    // make const?
+    ListSwitchable<dpoint> populateTurns(const ListBase<dpoint> originalData, const QList<ListSwitchable<dpoint> > slices);
+
+}
+
+/*template<typename T> class Analyzer : public Calculator<T>
 {
 public:
     using Calculator<T>::Calculator;
@@ -21,6 +29,6 @@ public:
     // make const?
     static Calculator<dpoint> populateTurns(const ListBase<dpoint>& originalData, const QList<ListSwitchable<dpoint> > slices);
 
-};
+};*/
 
 #endif // ANALYZER_H

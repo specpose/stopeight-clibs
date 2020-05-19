@@ -26,15 +26,14 @@ template<typename T> T& EditorBase<T>::getOutput(){
 template ListSwitchable<dpoint>& EditorBase<ListSwitchable<dpoint> >::getOutput();
 
 
-template<typename T> ListSwitchable<dpoint> EditorBase<T>::getConvertedOutput() {
+/*template<typename T> ListSwitchable<dpoint> EditorBase<T>::getConvertedOutput() {
 	auto newlist = ListSwitchable<dpoint>();
 	for (int i = 0; i < data.output.size(); i++) {
 		newlist.append(QPointF(data.output[i].x(),data.output[i].y()));
 	}
 	return newlist;
 }
-
-template ListSwitchable<dpoint> EditorBase<ListSwitchable<dpoint> >::getConvertedOutput();
+template ListSwitchable<dpoint> EditorBase<ListSwitchable<dpoint> >::getConvertedOutput();*/
 
 template<typename T> void EditorBase<T>::setOutput(T list){
     data.output=list;
@@ -80,7 +79,7 @@ template<> void EditorBase<ListSwitchable<dpoint> >::automatic(ListSwitchable<dp
 	}
 }
 
-template<> void EditorBase<ListSwitchable<dpoint> >::mainIterator(const ListSwitchable<dpoint>& constCliffs,QList<ListSwitchable<dpoint> >& slicesRef){
+template<> void EditorBase<ListSwitchable<dpoint> >::mainIterator(const ListSwitchable<dpoint> constCliffs,QList<ListSwitchable<dpoint> >& slicesRef){
     ListSwitchable<dpoint> out = this->getOutput();
     int currentSegment = 0;
     //maemo works: check cliff size

@@ -4,17 +4,20 @@
 #ifndef CLIFFSNORMALIZER_H
 #define CLIFFSNORMALIZER_H
 
-#include "areacalculator.h"
-//#include "turnnormalizer.h"
+#include "listswitchable.h"
 #include "cornernormalizer.h"
+namespace CliffsNormalizer {
+    // these methods are being used for cleaning up the segments before the corner detection
+    template<typename T> void cliffFilters(ListSwitchable<T>& This);
+}
 
-template<typename T> class CliffsNormalizer : public AreaCalculator<T>
+/*template<typename T> class CliffsNormalizer : public AreaCalculator<T>
 {
 public:
     using AreaCalculator<T>::AreaCalculator;
 
     // these methods are being used for cleaning up the segments before the corner detection
     void cliffFilters();
-};
+};*/
 
 #endif // CLIFFSNORMALIZER_H

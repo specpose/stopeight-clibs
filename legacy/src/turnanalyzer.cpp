@@ -4,8 +4,6 @@
 #define SUMLENGTH_FACTOR_SUBDIVISION 1
 
 #include "turnanalyzer.h"
-#include "corneranalyzer.h"
-
 //#define debug() QNoDebug()
 
 template <> ListCopyable<dpoint> TurnAnalyzer<dpoint>::getFirstTriplet(){
@@ -68,12 +66,12 @@ template <> ListCopyable<dpoint> TurnAnalyzer<dpoint>::getFirstTurnByTriplets(){
     TurnAnalyzer<dpoint> result = TurnAnalyzer<dpoint>();
     ListCopyable<dpoint> origin = ListCopyable<dpoint>(*this);
 
-    CornerAnalyzer<dpoint> cornerCalculator = CornerAnalyzer<dpoint>();
+    auto cornerCalculator = ListSwitchable<dpoint>();
     std::copy(std::begin(*this),std::end(*this),std::back_inserter(cornerCalculator));//BUG ListCopyable to ListSwitchable
     //findTurn: doCorner, findTriplet
     // this has never been rotated, first time in cornerFilters
-    cornerCalculator.cornerFilters();
-    ListSwitchable<dpoint> firstCorner = cornerCalculator.getFirstCorner();
+    CornerNormalizer::cornerFilters(cornerCalculator);
+    auto firstCorner = CornerAnalyzer::getFirstCorner(cornerCalculator);
     // we might lose 1 point here: the corner. Prepend 1 point?
     //debug()<<"fresh 1";
 
@@ -82,13 +80,13 @@ template <> ListCopyable<dpoint> TurnAnalyzer<dpoint>::getFirstTurnByTriplets(){
 
 
     //debug()<<"Size after: "<<calculator.size();
-    if (calculator.size()>4){
+    if (calculator.size()>size_t(4)){
         calculator.tripletFilters();
         ListCopyable<dpoint> firstTriplet = calculator.getFirstTriplet();
 
-        if (calculator.size()>2){
+        if (calculator.size()>size_t(2)){
             ListCopyable<dpoint> secondTriplet = calculator.getFirstTriplet();
-            if (secondTriplet.size()>2) {
+            if (secondTriplet.size()>size_t(2)) {
                 auto it = origin.position_to_iterator(firstCorner.last().position,secondTriplet.last().position);
                 auto reverse = ListSwitchable<dpoint>();
                 std::copy(it[0],it[1],std::front_inserter(reverse));
@@ -98,15 +96,15 @@ template <> ListCopyable<dpoint> TurnAnalyzer<dpoint>::getFirstTurnByTriplets(){
                 //} else {
                 //reverse.reverse();
                 // get First Corner
-                CornerAnalyzer<dpoint> twoTriplets = CornerAnalyzer<dpoint>(reverse);
-                twoTriplets.cornerFilters();
-                ListSwitchable<dpoint> secondCorner = twoTriplets.getFirstCorner();
+                auto twoTriplets = ListSwitchable<dpoint>(reverse);
+                CornerNormalizer::cornerFilters(twoTriplets);
+                auto secondCorner = CornerAnalyzer::getFirstCorner(twoTriplets);
                 it = origin.position_to_iterator(firstCorner.last().position,secondCorner.last().position);
                 auto normalized_cornerToCorner = TurnAnalyzer<dpoint>();
                 std::copy(it[0],it[1],std::front_inserter(normalized_cornerToCorner));
                 //normalized_cornerToCorner.reverse();
                 // this check is asymetric, improve!
-                if (normalized_cornerToCorner.size()>0 && firstTriplet.size()>0){
+                if (normalized_cornerToCorner.size()>size_t(0) && firstTriplet.size()>size_t(0)){
                     normalized_cornerToCorner.tripletFilters();
                     // triplet lost! inline specialization!
                     dpoint turnTwo = normalized_cornerToCorner.getFirstTriplet().last();
@@ -124,38 +122,38 @@ template <> ListCopyable<dpoint> TurnAnalyzer<dpoint>::getFirstTurnByTriplets(){
                     container.clear();
                     std::copy(it[0],it[1],std::begin(container));
                     //}
-                    CornerNormalizer<dpoint> turnLine = CornerNormalizer<dpoint>(container);
-                    for (int i=0;this->at(i).position<=turnLine.getPointInTheMiddle().position;i++){
+                    auto turnLine = ListSwitchable<dpoint>(container);
+                    for (int i=0;this->at(i).position<=CornerNormalizer::getPointInTheMiddle(turnLine).position;i++){
                         result<<this->at(i);
                     }
                 } else {
                     throw "ListAnalyzer::getFirstTurnByTriplets: Reverse triplet too short.";
-                    for (int i=0;i<this->size();i++){
+                    for (auto i=size_t(0);i<this->size();i++){
                         result<<this->at(i);
                     }
                 }
                 //}
             } else {
                 throw "ListAnalyzer::getFirstTurnByTriplets: Second triplet too short.";
-                for (int i=0;i<this->size();i++){
+                for (auto i=size_t(0);i<this->size();i++){
                     result<<this->at(i);
                 }
             }
         } else {
             //throw "ListAnalyzer::getFirstTurnByTriplets: Could not find more than 1 triplet.";
-            for (int i=0;i<this->size();i++){
+            for (auto i=size_t(0);i<this->size();i++){
                 result<<this->at(i);
             }
         }
     } else {
         //throw "ListAnalyzer::getFirstTurnByTriplets: Segment is below 5. too short for detection";
-        for (int i=0;i<this->size();i++){
+        for (auto i=size_t(0);i<this->size();i++){
             result<<this->at(i);
         }
     }
 
     // removing
-    for (int i=0;i<result.size();i++){
+    for (auto i=size_t(0);i<result.size();i++){
         this->removeFirst();
     }
 

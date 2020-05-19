@@ -43,7 +43,7 @@ public:
     qreal sumLength();
 
 
-protected:
+//protected:
 	bool checkPrecision();
 
 };

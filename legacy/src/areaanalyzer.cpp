@@ -5,7 +5,7 @@
 
 #define debug() QNoDebug()
 // Segment-Radius-Area
-template<> qreal AreaAnalyzer<dpoint>::area(qreal diameter, qreal base){
+qreal AreaAnalyzer::area(qreal diameter, qreal base){
     qreal squareOfRadius = pow(diameter/2,2);
     //qreal criteria = (squareOfRadius*(base))/2;
     // accounting for integration error; dangerous when iterating limit
@@ -15,15 +15,15 @@ template<> qreal AreaAnalyzer<dpoint>::area(qreal diameter, qreal base){
     return criteria;
 }
 
-template<> ListSwitchable<dpoint> AreaAnalyzer<dpoint>::getArea(qreal limit,QPointF start,qreal preceding){
-    AreaCalculator<dpoint> result = AreaCalculator<dpoint>();
+template<typename T> ListSwitchable<T> AreaAnalyzer::getArea(ListSwitchable<T>& This,qreal limit,T start,qreal preceding){
+    auto result = ListSwitchable<T>();
 
     bool foundOne=false;
 
-    if (this->size()>1){
-        result<<this->first();
-        for (int i=1;i<this->size();i++){
-            result<<this->at(i);
+    if (This.size()>size_t(1)){
+        result<<This.first();
+        for (int i=size_t(1);i<This.size();i++){
+            result<<This.at(i);
 
             result.rotateSegmentToXAxis();
 
@@ -32,19 +32,19 @@ template<> ListSwitchable<dpoint> AreaAnalyzer<dpoint>::getArea(qreal limit,QPoi
                 // calculate current triangle based on iteration
                 // we need area starting point for this!
                 // currentArea += triangle
-                currentArea += triangleArea(start,result.first(),result.last());
+                currentArea += AreaCalculator::triangleArea(start,result.first(),result.last());
             }
             // instead of this we could be using an implementation that sums up doubleTriangles
-            currentArea += result.sumOfDxAreasRotY();
+            currentArea += AreaCalculator::sumOfDxAreasRotY(result);
 
             if (preceding<0){throw "ListAnalyzer::getArea: preceding is below zero";}
             if (currentArea<0){throw "ListAnalyzer::getArea: currentArea is below zero";}
 
             // IF preceding + currentArea >= norm: norm is area(fullDIAMETER from start, pi or e, 0)
 
-            AreaCalculator<dpoint> StartEnd = AreaCalculator<dpoint>();
+            auto StartEnd = ListSwitchable<T>();
             StartEnd << start << result.last();
-            qreal diameter = StartEnd.lengthFromStartToEnd();
+            qreal diameter = AreaCalculator::lengthFromStartToEnd(StartEnd);
             // using sumOfDx would require having all preceding legalSegments from start and adding up sums
 
             qreal norm = area(diameter,limit);//,0);
@@ -65,64 +65,64 @@ template<> ListSwitchable<dpoint> AreaAnalyzer<dpoint>::getArea(qreal limit,QPoi
 		throw legacy::alg_logic_error("Before area search segment size is below 2",__FILE__,"");
 		//C++11
         //throw legacy::alg_logic_error("Before area search segment size is below 2",__FILE__,__func__);
-        for (int i=0;i<this->size();i++){
-            result<<this->at(i);
+        for (auto i=size_t(0);i<This.size();i++){
+            result<<This.at(i);
         }
     }
     // removing
-    for (int i=0;i<result.size();i++){
-        this->removeFirst();
+    for (int i=size_t(0);i<result.size();i++){
+        This.removeFirst();
     }
 
     return result;
 }
+template ListSwitchable<dpoint> AreaAnalyzer::getArea(ListSwitchable<dpoint>& This,qreal limit,dpoint start,qreal preceding);
 
-template<> ListSwitchable<dpoint> AreaAnalyzer<dpoint>::getFirstArea(qreal limit){
-    dpoint result = dpoint();
+template<typename T> ListSwitchable<T> AreaAnalyzer::getFirstArea(ListSwitchable<T>& This,qreal limit){
+    auto result = T();
     // needs to be and is a COPY
-    ListSwitchable<dpoint> copy = ListSwitchable<dpoint>(*this);
-    CliffsAnalyzer<dpoint> calculator = CliffsAnalyzer<dpoint>(copy);
+    auto calculator = ListSwitchable<T>(This);
 
     bool foundOne = false;
     int illegalSegmentCounter=0;
 
-    if (calculator.size()>1){
+    if (calculator.size()>size_t(1)){
         //ListSwitchable<dpoint> tmp = ListSwitchable<dpoint>(calculator.getFirstLegalSegment());
-        AreaAnalyzer<dpoint> legalSegment = AreaAnalyzer<dpoint>{ std::move(calculator.getFirstLegalSegment()) };
+        auto legalSegment = ListSwitchable<T>{ std::move(CliffsAnalyzer::getFirstLegalSegment(calculator)) };
         illegalSegmentCounter++;
-        legalSegment.areaFilters();
+        AreaNormalizer::areaFilters(legalSegment);
         //tmp = legalSegment.getArea(limit,legalSegment.first());
-        AreaAnalyzer<dpoint> preceding = AreaAnalyzer<dpoint>{std::move(legalSegment.getArea(limit, legalSegment.first()))};
-        if (legalSegment.size()>0){
+        auto preceding = ListSwitchable<T>{std::move(AreaAnalyzer::getArea(legalSegment,limit, legalSegment.first()))};
+        if (legalSegment.size()>size_t(0)){
             foundOne = true;
             result = preceding.last();
         } else {
             qreal sumOfAllPreceding = 0;
-            if (calculator.size()>1){
+            if (calculator.size()>size_t(1)){
                 calculator.prepend(preceding.last());
                 //tmp = calculator.getFirstLegalSegment();
-                legalSegment = AreaAnalyzer<dpoint>{ std::move(calculator.getFirstLegalSegment()) };
+                legalSegment = ListSwitchable<T>{ std::move(CliffsAnalyzer::getFirstLegalSegment(calculator)) };
                 illegalSegmentCounter++;
-                legalSegment.areaFilters();
-                preceding.areaFilters();
+                AreaNormalizer::areaFilters(legalSegment);
+                AreaNormalizer::areaFilters(preceding);
                 //tmp = legalSegment.getArea(limit,this->first(),preceding.sumOfDxAreasRotY());
-                preceding = AreaAnalyzer<dpoint>{ std::move(legalSegment.getArea(limit, this->first(), preceding.sumOfDxAreasRotY())) };
-                if (legalSegment.size()>0){
+                preceding = ListSwitchable<T>{ std::move(AreaAnalyzer::getArea(legalSegment,limit, This.first(), AreaCalculator::sumOfDxAreasRotY(preceding))) };
+                if (legalSegment.size()>size_t(0)){
                     foundOne = true;
                     result = preceding.last();
                 } else {
-                    while (calculator.size()>1){
+                    while (calculator.size()>size_t(1)){
                         calculator.prepend(preceding.last());
                         //tmp = calculator.getFirstLegalSegment();
-                        legalSegment = AreaAnalyzer<dpoint>{ std::move(calculator.getFirstLegalSegment()) };
+                        legalSegment = ListSwitchable<T>{ std::move(CliffsAnalyzer::getFirstLegalSegment(calculator)) };
                         illegalSegmentCounter++;
-                        legalSegment.areaFilters();
-                        preceding.areaFilters();
+                        AreaNormalizer::areaFilters(legalSegment);
+                        AreaNormalizer::areaFilters(preceding);
                         // sumOfDx over illegal segments is too agressive -> jitter/illegal separation
-                        sumOfAllPreceding += preceding.sumOfDxAreasRotY() + preceding.area(preceding.lengthFromStartToEnd(),limit);
+                        sumOfAllPreceding += AreaCalculator::sumOfDxAreasRotY(preceding) + AreaAnalyzer::area(AreaCalculator::lengthFromStartToEnd(preceding),limit);
                         //tmp = legalSegment.getArea(limit,this->first(),sumOfAllPreceding);
-                        preceding = AreaAnalyzer<dpoint>{ std::move(legalSegment.getArea(limit,this->first(),sumOfAllPreceding)) };
-                        if (legalSegment.size()>0){
+                        preceding = ListSwitchable<T>{ std::move(AreaAnalyzer::getArea(legalSegment,limit, This.first(), sumOfAllPreceding)) };
+                        if (legalSegment.size()>size_t(0)){
                             foundOne = true;
                             result = preceding.last();
                             break;
@@ -132,20 +132,21 @@ template<> ListSwitchable<dpoint> AreaAnalyzer<dpoint>::getFirstArea(qreal limit
             }
         }
     }
-    AreaAnalyzer<dpoint> area = AreaAnalyzer<dpoint>();
+    auto area = ListSwitchable<T>();
     if (foundOne){
         //area = util.chopCopy(util.first().position,result.position);
         area.clear();
-        auto it = this->position_to_iterator(this->first().position,result.position);
+        auto it = This.position_to_iterator(This.first().position,result.position);
         std::copy(it[0],it[1],std::back_inserter(area));
         //debug()<<"Area has "<<illegalSegmentCounter<<" legal segments.";
     } else {
-        area = *this;
+        area = This;
     }
     // removing
-    for (int i=0;i<area.size();i++){
-        this->removeFirst();
+    for (int i=size_t(0);i<area.size();i++){
+        This.removeFirst();
     }
     return area;
 }
+template ListSwitchable<dpoint> AreaAnalyzer::getFirstArea(ListSwitchable<dpoint>& This,qreal limit);
 

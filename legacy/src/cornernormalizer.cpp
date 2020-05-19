@@ -3,48 +3,56 @@
 
 #include "cornernormalizer.h"
 
-template <> void CornerNormalizer<dpoint>::requireMinimumLength(qreal lnt){
+template <typename T> void CornerNormalizer::requireMinimumLength(ListSwitchable<T>& This,qreal lnt){
     bool foundOne = false;
-    for (int i=this->size()-2;i>0;i--){
+    //throw size
+    for (int i=This.size()-size_t(2);i>size_t(0);i--){
 
-        if (this->lengthAt(i)<lnt){
-            this->removeAt(i);
+        if (This.lengthAt(i)<lnt){
+            This.removeAt(i);
             foundOne = true;
             break;
         }
     }
     if (foundOne){
-        requireMinimumLength(lnt);
+        CornerNormalizer::requireMinimumLength(This,lnt);
     }
 }
+template void CornerNormalizer::requireMinimumLength(ListSwitchable<dpoint>& This,qreal lnt);
 
-template<>void CornerNormalizer<dpoint>::intRaster(qreal threshold)
+template<typename T>void CornerNormalizer::intRaster(ListSwitchable<T>& This,qreal threshold)
 {
-	for (int i = 0; i < this->size(); i++) {
-		if ( (fmod(this->at(i).x(),1) <=threshold) &&
-			 (fmod(this->at(i).y(),1) <= threshold) ) {
-			*this << this->at(i);
+    auto newlist = ListSwitchable<T>();
+	for (int i = size_t(0); i < This.size(); i++) {
+		if ( (fmod(This.at(i).x(),1) <=threshold) &&
+			 (fmod(This.at(i).y(),1) <= threshold) ) {
+			newlist << This.at(i);
 		}
 	}
+    This = std::move(newlist);
 }
+template void CornerNormalizer::intRaster(ListSwitchable<dpoint>& This,qreal threshold);
 
-
-template <> void CornerNormalizer<dpoint>::cornerFilters(){
+//CORNERFILTERS ARE BROKEN
+template <typename T> void CornerNormalizer::cornerFilters(ListSwitchable<T>& This){
 	// CHECKPRECISION?!
 	//debug() << "Before filter corner: ";
-    this->smoothingJitter(0);
-    CornerNormalizer<dpoint> b = CornerNormalizer<dpoint>(*this);
-    b.requireMinimumLength(1.00001);
-    ListSwitchable<dpoint> c = ListSwitchable<dpoint>(b);
+    //BEFORE REFACTORING WAS HERE : This.smoothingJitter(0);
+    auto b = ListSwitchable<T>(This);
+    b.smoothingJitter(0);// AFTER HERE
+    CornerNormalizer::requireMinimumLength(b,1.00001);
+    auto c = ListSwitchable<T>(std::move(b));
     c.rotateSegmentToXAxis();
-    //this->normalizeCorners();
+    //This.normalizeCorners();
     //debug() << "After filter corner: ";
 }
+template void CornerNormalizer::cornerFilters(ListSwitchable<dpoint>& This);
 
-template<> dpoint CornerNormalizer<dpoint>::getPointInTheMiddle(){
-    ListSwitchable<dpoint> myself = ListSwitchable<dpoint>(*this);
-    if (myself.size()>2){
-        QPointF middle;
+//HACK
+dpoint CornerNormalizer::getPointInTheMiddle(ListSwitchable<dpoint>& This){
+    auto myself = ListSwitchable<dpoint>(This);
+    if (myself.size()>size_t(2)){
+        dpoint middle;
 
         // It is a straight line!
         //draw corner or turn in middle
@@ -56,13 +64,13 @@ template<> dpoint CornerNormalizer<dpoint>::getPointInTheMiddle(){
         // -> create one
         // get the length of section
         // find position of adjacent to half length
-        ListSwitchable<dpoint> newsection = ListSwitchable<dpoint>();
+        auto newsection = ListSwitchable<dpoint>();
         newsection << myself.first();
-        for (int i=1;i<myself.size();i++){
+        for (int i=size_t(1);i<myself.size();i++){
             newsection<<myself.at(i);
-            if (newsection.sumLength()>(myself.sumLength()/2)){
+            if (newsection.sumLength()>(myself.sumLength()/qreal(2))){
                 // get the point1 < position
-                dpoint point1 = myself.at(i-1);
+                dpoint point1 = myself.at(i-size_t(1));
                 // get the point2 > position
                 dpoint point2 = myself.at(i);
                 // use middle of two adjacent points
@@ -91,21 +99,21 @@ template<> dpoint CornerNormalizer<dpoint>::getPointInTheMiddle(){
         p.setX(middle.x());
         p.setY(middle.y());
         return p;
-    } else if (myself.size()==2){
+    } else if (myself.size()==size_t(2)){
         //special case that might happen with integrating triplets from start/reverse
-        if (myself.at(0).position==myself.at(1).position){
-            return myself.at(0);
+        if (myself.at(size_t(0)).position==myself.at(size_t(1)).position){
+            return myself.at(size_t(0));
         } else {
             dpoint middle = dpoint();
-            middle.setX((myself.at(0).x()+myself.at(1).x())/2);
-            middle.setY((myself.at(0).y()+myself.at(1).y())/2);
+            middle.setX((myself.at(size_t(0)).x()+myself.at(size_t(1)).x())/2);
+            middle.setY((myself.at(size_t(0)).y()+myself.at(size_t(1)).y())/2);
             // setting the new index to half, got better solution?
-            middle.position=myself.at(0).position+((myself.at(1).position-myself.at(0).position)/2);
+            middle.position=myself.at(size_t(0)).position+((myself.at(size_t(1)).position-myself.at(size_t(0)).position)/2);
             return middle;
         }
-    }else if (myself.size()==1) {
+    }else if (myself.size()==size_t(1)) {
         throw legacy::alg_logic_error("Tried to get middle from 1 point",__FILE__,"");
-        return myself.at(0);
+        return myself.at(size_t(0));
     } else {
 		throw legacy::alg_logic_error("Tried to get middle from 0 points", __FILE__, "");
     }

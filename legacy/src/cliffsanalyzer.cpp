@@ -2,13 +2,14 @@
 // GNU Lesser General Public License, version 2.1
 
 #include "cliffsanalyzer.h"
+#include "listswitchable.h"
 
-template<> ListSwitchable<dpoint> CliffsAnalyzer<dpoint>::getFirstLegalSegment(){
-    CliffsAnalyzer<dpoint> result = CliffsAnalyzer<dpoint>();
-    if (this->size()>size_t(1)){
+template<typename T> ListSwitchable<T> CliffsAnalyzer::getFirstLegalSegment(ListSwitchable<T>& This){
+    auto result = ListSwitchable<T>();
+    if (This.size()>size_t(1)){
         bool foundOne=false;
-        for (int i=size_t(0);i<this->size();i++){
-            result<<this->at(i);
+        for (int i=size_t(0);i<This.size();i++){
+            result<<This.at(i);
             if (result.hasIllegalSegment()!=-1){
                 foundOne=true;
                 break;
@@ -19,19 +20,19 @@ template<> ListSwitchable<dpoint> CliffsAnalyzer<dpoint>::getFirstLegalSegment()
         }
     } else {
         //throw "ListAnalyzer::getFirstLegalSegment: segment size is below 2";
-        for (int i=size_t(0);i<this->size();i++){
-            result<<this->at(i);
+        for (int i=size_t(0);i<This.size();i++){
+            result<<This.at(i);
         }
     }
-    for (int i=0;i<result.size();i++){
-        this->removeFirst();
+    for (int i=size_t(0);i<result.size();i++){
+        This.removeFirst();
     }
 
     result.rotateSegmentToXAxis();
 
     return result;
 }
-
+template ListSwitchable<dpoint> CliffsAnalyzer::getFirstLegalSegment(ListSwitchable<dpoint>& This);
 //NEVER USED
 //editorcliffs implementation is using getFirstLegalSegment
 //FOR REFERENCE

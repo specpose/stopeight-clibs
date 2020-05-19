@@ -4,10 +4,7 @@
 #ifndef LISTCOPYABLE_H
 #define LISTCOPYABLE_H
 
-#include "dpoint.h"
 #include "turncalculator.h"
-#include "cliffsanalyzer.h"
-
 
 template<typename T> class ListCopyable : public TurnCalculator<T>
 {

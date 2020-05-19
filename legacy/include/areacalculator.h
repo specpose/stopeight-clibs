@@ -5,9 +5,17 @@
 #define AREACALCULATOR_H
 
 #include "listswitchable.h"
-#include "calculator.h"
 
-template<typename T> class AreaCalculator : public ListSwitchable<T>
+namespace AreaCalculator {
+    // a.k.a integration up to triangle / curvature not included
+    template<typename T>  qreal sumOfDxAreasRotY(ListSwitchable<T>& This);
+    // should be static OR member of List
+    template<typename T>  qreal triangleArea(T A, T B, T C);
+    template<typename T>  qreal lengthFromStartToEnd(ListSwitchable<T>& This);
+
+}
+
+/*template<typename T> class AreaCalculator : public ListSwitchable<T>
 {
 public:
     using ListSwitchable<T>::ListSwitchable;
@@ -21,6 +29,6 @@ public:
     qreal lengthFromStartToEnd();
 
 
-};
+};*/
 
 #endif // AREACALCULATOR_H

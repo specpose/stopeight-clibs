@@ -4,8 +4,6 @@
 #ifndef STRAIGHTSNORMALIZER_H
 #define STRAIGHTSNORMALIZER_H
 
-#include "turncalculator.h"
-#include "listswitchable.h"
 #include "straightscalculator.h"
 
 template<typename T> class StraightsNormalizer : public StraightsCalculator<T>

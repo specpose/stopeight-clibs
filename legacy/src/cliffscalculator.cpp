@@ -7,17 +7,17 @@
 #define ZERO_INCLIN2 0
 
 // inline specialisation
-template <> QPointF CliffsCalculator<dpoint>::delta1At(int position){
+template<typename T> T CliffsCalculator::delta1At(ListSwitchable<T>& This,int position){
 
-    if (position<this->size()){
+    if (position<This.size()){
 
         // this has to change to steepest possible
         //this->rotateSegmentToXAxis();
-        dpoint point1,point2;
-        QPointF delta1;
+        T point1,point2;
+        T delta1;
 
-        QListIterator<dpoint> i(*this);
-        if (i.findNext(this->at(position))) {
+        auto i = QListIterator<T>(This);
+        if (i.findNext(This.at(position))) {
             if (i.hasPrevious()){
                 point1 = i.previous();
                 if (i.hasNext()){
@@ -27,41 +27,43 @@ template <> QPointF CliffsCalculator<dpoint>::delta1At(int position){
                         delta1 = point2.rot-point1.rot;
                         return delta1;
                     } else {
-                        return QPointF(0,0);
+                        return T(0,0);
                     }
                 }
             } else {
-                return QPointF(0,0);
+                return T(0,0);
             }
         } else {
-            return QPointF(0,0);
+            return T(0,0);
         }
     } else {
         throw "ListCalculator<dpoint>::delta1At: index out of range";
         // never happens
-        return QPointF(0,0);
+        return T(0,0);
     }
     throw "ListCalculator<dpoint>::delta1At";
     // never happens
-    return QPointF(0,0);
+    return T(0,0);
 }
+template dpoint CliffsCalculator::delta1At(ListSwitchable<dpoint>& This,int position);
 
-template <> qreal CliffsCalculator<dpoint>::inclin1At(int i){
-    QPointF d1 = this->delta1At(i);
+template <typename T> qreal CliffsCalculator::inclin1At(ListSwitchable<T>& This,int i){
+    T d1 = CliffsCalculator::delta1At(This,i);
     //if (d1.x()==0) {
     //    return 0;
     //} else {
     return d1.y()/d1.x();
     //}
 }
+template qreal CliffsCalculator::inclin1At(ListSwitchable<dpoint>& This,int i);
 
 // Warning: this is looking back
-template <> bool CliffsCalculator<dpoint>::deriv1Crossed(int pos){
+template <typename T> bool CliffsCalculator::deriv1Crossed(ListSwitchable<T>& This,int pos){
     if(pos < 1)
         return false;
 
-    qreal d1 = this->inclin1At(pos-1);
-    qreal d2 = this->inclin1At(pos);
+    qreal d1 = CliffsCalculator::inclin1At(This,pos-1);
+    qreal d2 = CliffsCalculator::inclin1At(This,pos);
 
     // This will get the first corner but might be catching too early: d1=0,d2=0
     if ( (d2>=ZERO_INCLIN1&&d1<=-ZERO_INCLIN1) || (d2<=-ZERO_INCLIN1&&d1>=ZERO_INCLIN1)){
@@ -69,3 +71,4 @@ template <> bool CliffsCalculator<dpoint>::deriv1Crossed(int pos){
     }
     return false;
 }
+template bool CliffsCalculator::deriv1Crossed(ListSwitchable<dpoint>& This,int pos);

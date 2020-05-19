@@ -3,33 +3,34 @@
 
 #include "areanormalizer.h"
 //hdojo version
-template <> void AreaNormalizer<dpoint>::removeInlays(){
-    if (this->size()>4){
-        for (int i=0;i<this->size()-4;i++) {
-            ListSwitchable<dpoint> first, second, third;
-            first << this->at(0)<< this->at(1)<< this->at(2);first.rotateSegmentToXAxis(); qreal firstValue = first.at(1).rot.y();
-            second << this->at(1)<<this->at(2)<<this->at(3);second.rotateSegmentToXAxis(); qreal secondValue = second.at(1).rot.y();
-            third << this->at(2)<<this->at(3)<<this->at(4);third.rotateSegmentToXAxis(); qreal thirdValue = third.at(1).rot.y();
+template <typename T> void AreaNormalizer::removeInlays(ListSwitchable<T>& This){
+    if (This.size()>4){
+        for (int i=size_t(0);i<This.size()-size_t(4);i++) {
+            ListSwitchable<T> first, second, third = ListSwitchable<T>();
+            first << This.at(size_t(0))<< This.at(size_t(1))<< This.at(size_t(2));first.rotateSegmentToXAxis(); qreal firstValue = first.at(size_t(1)).rot.y();
+            second << This.at(size_t(1))<<This.at(size_t(2))<<This.at(size_t(3));second.rotateSegmentToXAxis(); qreal secondValue = second.at(size_t(1)).rot.y();
+            third << This.at(size_t(2))<<This.at(size_t(3))<<This.at(size_t(4));third.rotateSegmentToXAxis(); qreal thirdValue = third.at(size_t(1)).rot.y();
             if ((firstValue>0 && secondValue<0&&thirdValue<0) ||
-                (firstValue<0 && secondValue>0&&thirdValue>0)) {this->removeAt(1);this->removeInlays();break;}
+                (firstValue<0 && secondValue>0&&thirdValue>0)) {This.removeAt(size_t(1));AreaNormalizer::removeInlays(This);break;}
             else if ((secondValue>0 && firstValue<0&&thirdValue<0) ||
-                     (secondValue<0 && firstValue>0&&thirdValue>0)) {this->removeAt(2);this->removeInlays();break;}
+                     (secondValue<0 && firstValue>0&&thirdValue>0)) {This.removeAt(size_t(2));AreaNormalizer::removeInlays(This);break;}
             else if ((thirdValue>0 && firstValue<0&&secondValue<0) ||
-                     (thirdValue<0 && firstValue>0&&secondValue>0)) {this->removeAt(3);this->removeInlays();break;}
+                     (thirdValue<0 && firstValue>0&&secondValue>0)) {This.removeAt(size_t(3));AreaNormalizer::removeInlays(This);break;}
         }
     }
 }
+template void AreaNormalizer::removeInlays(ListSwitchable<dpoint>& This);
 
-template <>void AreaNormalizer<dpoint>::areaFilters(){
-	if (this->checkPrecision()) {
+template <typename T>void AreaNormalizer::areaFilters(ListSwitchable<T>& This){
+	if (This.checkPrecision()) {
 		//START OLD
-		//this->smoothingJitter(0);
-		//this->risingJitter(0);
+		//This.smoothingJitter(0);
+		//This.risingJitter(0);
 		//END OLD
 
 
-		CornerNormalizer<dpoint> zero = CornerNormalizer<dpoint>(std::move(*this));
-		zero.requireMinimumLength(5);
+		auto zero = ListSwitchable<T>(This);//BEFORE REFACTORING std::move(This)
+		CornerNormalizer::requireMinimumLength(zero,5);
 
 		//from linux wacom only:
 		//smoothing0
@@ -43,30 +44,32 @@ template <>void AreaNormalizer<dpoint>::areaFilters(){
 
 		//
 
-		CornerNormalizer<dpoint> b = CornerNormalizer<dpoint>(std::move(zero));
+		auto b = ListSwitchable<T>(std::move(zero));
 		//from below
-		b.requireMinimumLength(7);
+		CornerNormalizer::requireMinimumLength(b,7);
 		//
 		b.rotateSegmentToXAxis();
-		*this = AreaNormalizer<dpoint>(std::move(b));
-		this->removeInlays();
+		This = ListSwitchable<T>(std::move(b));
+		AreaNormalizer::removeInlays(This);
 	}
-	//if (this->checkPrecision()) {
+	//if (This.checkPrecision()) {
 	//	CornerNormalizer<dpoint> a = CornerNormalizer<dpoint>(*this);
 	//	a.intRaster(0.2);
 	//	*this = AreaNormalizer<dpoint>(a);
 	//}
 	else {
-		this->smoothingJitter(0);
-		CornerNormalizer<dpoint> b = CornerNormalizer<dpoint>(*this);
-		b.requireMinimumLength(9);
+		//BEFORE REFACTORING here :This.smoothingJitter(0);
+		auto b = ListSwitchable<T>(This);
+		b.smoothingJitter(0);//INSTEAD OF
+		CornerNormalizer::requireMinimumLength(b,9);
 		b.rotateSegmentToXAxis();
 
 		//Port: UNUSED
-		//this->risingJitter(0);
+		//This.risingJitter(0);
 
-		*this = AreaNormalizer<dpoint>(std::move(b));
-		this->removeInlays();
+		This = ListSwitchable<T>(std::move(b));
+		AreaNormalizer::removeInlays(This);
 	}
 
 }
+template void AreaNormalizer::areaFilters(ListSwitchable<dpoint>& This);

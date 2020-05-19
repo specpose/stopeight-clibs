@@ -65,18 +65,27 @@ template <> void ListSwitchable<dpoint>::removeAt(int i) {
         //debug()<<"Illegal position for point removal: "<<i;
         return;
     }
-    if (i>this->size()-1) {
+    if (i>this->size()-size_t(1)) {
         //debug()<<"Illegal position for point removal: "<<i;
         return;
     }
-    if ( (i==0 )|| (i==this->size()-1) ){
+    if ( (i==size_t(0) )|| (i==this->size()-size_t(1)) ){
         //debug() << "WARNING: deleting first or last point in subsegment, pos: "<< this->at(i).position;
     }
     QList<dpoint>::removeAt(i);
     // watch out, this happens AFTER remove
-    if ( (i==0 )|| (i==this->size()) ){
+    if ( (i==size_t(0) )|| (i==this->size()) ){
         //this has to change to steepest possible
         rotateSegmentToXAxis();
         //this->rotateLastVectorToYAxis();
     }
+}
+
+template <> void ListSwitchable<dpoint>::reverse(){
+    ListSwitchable<dpoint> reversed= ListSwitchable<dpoint>();
+    for (int i=this->size()-size_t(1);i>=size_t(0);i--){
+        reversed << this->at(i);
+    }
+    this->clear();
+    this->append(reversed);
 }

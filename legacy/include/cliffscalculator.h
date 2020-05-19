@@ -6,7 +6,14 @@
 
 #include "listswitchable.h"
 
-template<typename T> class CliffsCalculator : public ListSwitchable<T>
+namespace CliffsCalculator {
+    template<typename T>  T delta1At(ListSwitchable<T>& This,int position);
+    template<typename T>  bool deriv1Crossed(ListSwitchable<T>& This,int pos);
+    template<typename T>  qreal inclin1At(ListSwitchable<T>& This,int i);
+
+}
+
+/*template<typename T> class CliffsCalculator : public ListSwitchable<T>
 {
 public:
     using ListSwitchable<T>::ListSwitchable;
@@ -14,6 +21,6 @@ public:
     QPointF delta1At(int position);
     bool deriv1Crossed(int pos);
     qreal inclin1At(int i);
-};
+};*/
 
 #endif // CLIFFSCALCULATOR_H

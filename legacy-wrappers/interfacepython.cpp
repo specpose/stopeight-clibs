@@ -67,7 +67,7 @@ template<typename F> F legacy_wrappers::parse_list(PyObject *self, PyObject *arg
 		float xValue;
 		float yValue;
 		if (PyArg_ParseTuple(item, "ff", &xValue, &yValue)) {
-			list << F::value_type(xValue, yValue);
+			list << typename F::value_type(xValue, yValue);
 		}
 		else {
             throw std::runtime_error("Malformed number format");

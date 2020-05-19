@@ -3,10 +3,11 @@
 
 #include "cliffsnormalizer.h"
 
-template <> void CliffsNormalizer<dpoint>::cliffFilters() {
-	if (this->checkPrecision()) {
-		CornerNormalizer<dpoint> b = CornerNormalizer<dpoint>(*this);
-		b.requireMinimumLength(1);
+//BROKEN
+template <typename T> void CliffsNormalizer::cliffFilters(ListSwitchable<T>& This) {
+	if (This.checkPrecision()) {
+		auto b = ListSwitchable<dpoint>(This);
+		CornerNormalizer::requireMinimumLength(b,1);
 		// enabling this is good for circles, bad for certain spirals, sinus and strokes without enough input data
 		b.risingJitter(0);
 		//
@@ -14,11 +15,12 @@ template <> void CliffsNormalizer<dpoint>::cliffFilters() {
 		b.risingJitter(0);
 	}
 	else {
-		CornerNormalizer<dpoint> b = CornerNormalizer<dpoint>(*this);
-		b.requireMinimumLength(2);
+		auto b = ListSwitchable<dpoint>(This);
+		CornerNormalizer::requireMinimumLength(b,2);
 		//// enabling this is good for circles, bad for certain spirals, sinus and strokes without enough input data
 		////toBeProcessed.risingJitter(0);
 		b.smoothingJitter(0);
 		//c.risingJitter(0);
 	}
 }
+template void CliffsNormalizer::cliffFilters(ListSwitchable<dpoint>& This);

@@ -4,10 +4,11 @@
 #ifndef TURNANALYZER_H
 #define TURNANALYZER_H
 
-//#include "turnnormalizer.h"
-//#include "corneranalyzer.h"
+#include "turnnormalizer.h"
 #include "straightsanalyzer.h"
-
+#include "listswitchable.h"
+#include "cornernormalizer.h"
+#include "corneranalyzer.h"
 template<typename T> class TurnAnalyzer : public TurnNormalizer<T>
 {
 public:

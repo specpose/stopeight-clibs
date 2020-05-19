@@ -6,11 +6,11 @@
 
 #include "listswitchable.h"
 
-template<typename T> class SpiralsCalculator : public ListSwitchable<T>
+/*template<typename T> class SpiralsCalculator : public ListSwitchable<T>
 {
 public:
     using ListSwitchable<T>::ListSwitchable;
 
-};
+};*/
 
 #endif // SPIRALSCALCULATOR_H

@@ -6,11 +6,11 @@
 
 #include "listswitchable.h"
 
-template<typename T> class CornerCalculator : public ListSwitchable<T>
+/*template<typename T> class CornerCalculator : public ListSwitchable<T>
 {
 public:
     using ListSwitchable<T>::ListSwitchable;
 
-};
+};*/
 
 #endif // CORNERCALCULATOR_H

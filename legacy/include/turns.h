@@ -1,11 +1,10 @@
 // Copyright (C) 2009-2015 Specific Purpose Software GmbH
 // GNU Lesser General Public License, version 2.1
 
-//#ifndef TURNS_H
-//#define TURNS_H
+#ifndef TURNS_H
+#define TURNS_H
 
 #include "listcopyable.h"
-#include "turnanalyzer.h"
 
 template<typename T> class Turns : public ListCopyable<T>
 {
@@ -17,4 +16,4 @@ public:
 
 };
 
-//#endif // TURNS_H
+#endif // TURNS_H

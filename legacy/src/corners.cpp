@@ -6,15 +6,15 @@
 #define debug() QNoDebug()
 
 //ShapeMatcher::findCorners
-template<> QList<dpoint> Corners<dpoint>::findCorners(ListSwitchable<dpoint> toBeProcessed){
-    QList<dpoint> result = QList<dpoint>();
+template<typename T> QList<T> Corners::findCorners(ListSwitchable<T> toBeProcessed){
+    auto result = QList<T>();
 
-    CornerAnalyzer<dpoint> crest = CornerAnalyzer<dpoint>(toBeProcessed);
+    auto crest = ListSwitchable<dpoint>(toBeProcessed);
     // do this once and don't do it anymore for the rest of the journey: rotation inside
-    crest.cornerFilters();
+    CornerNormalizer::cornerFilters(crest);
 
-    while (crest.size()>0){
-        ListSwitchable<dpoint> corner = crest.getFirstCorner();
+    while (crest.size()>size_t(0)){
+        auto corner = CornerAnalyzer::getFirstCorner(crest);
         result<<corner.last();
     }
     // The last one is the end of the crest
@@ -22,3 +22,4 @@ template<> QList<dpoint> Corners<dpoint>::findCorners(ListSwitchable<dpoint> toB
     //debug()<<"ShapeMatcher::findCorners: detected "<<result.size()<<" corners in algorithm.";
     return result;
 }
+template QList<dpoint> Corners::findCorners(ListSwitchable<dpoint> toBeProcessed);
