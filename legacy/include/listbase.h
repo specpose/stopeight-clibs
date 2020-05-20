@@ -8,6 +8,7 @@
 
 #include <QtCore/QString>
 #include <QtCore/QFile>
+#include <QtCore/QFileInfo>
 #include <QtCore/QDataStream>
 
 #include "dpoint.h"

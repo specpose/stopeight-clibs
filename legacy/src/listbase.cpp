@@ -12,8 +12,13 @@
 template<> QList<QPointF> ListBase<dpoint>::loadSPFile(const QString& fileName)
 {
     QFile file(fileName);
+    QFileInfo info(file);
+    if (info.size() == 0) {
+        //throw legacy::runtime_error("File " + fileName.toStdString()+" is empty");
+        return QList<QPointF>();
+    }
     if (!file.open(QIODevice::ReadOnly)) {
-        throw legacy::runtime_error(file.errorString().toStdString()+" "+file.fileName().toStdString(),__FILE__,__func__);
+        throw legacy::runtime_error(file.errorString().toStdString()+" "+fileName.toStdString(),__FILE__,__func__);
     }
     QDataStream in(&file);
     in.setVersion(QDataStream::Qt_4_5);
@@ -21,7 +26,7 @@ template<> QList<QPointF> ListBase<dpoint>::loadSPFile(const QString& fileName)
     unsigned int magic;
     in >> magic;
     if (magic != MagicNumber) {
-        throw legacy::runtime_error("Wrong magic number: "+std::to_string(magic)+" in file "+file.fileName().toStdString(),__FILE__,__func__);
+        throw legacy::runtime_error("Wrong magic number: "+std::to_string(magic)+" in file "+fileName.toStdString(),__FILE__,__func__);
     }
 
     dpoint p;
