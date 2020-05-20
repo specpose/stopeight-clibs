@@ -15,10 +15,14 @@ public:
     //using TurnCalculator<T>::TurnCalculator;
     ListSwitchable<T>() = default;
     //for technical reasons, copy constructors are never generated from templates p.679
-    /*ListSwitchable<T>(const ListSwitchable<T>&) = default;
+    ListSwitchable<T>(const ListSwitchable<T>&) = default;
     ListSwitchable<T>(ListSwitchable<T>&&) = default;
     ListSwitchable<T>& operator=(const ListSwitchable<T>&) = default;
-    ListSwitchable<T>& operator=(ListSwitchable<T>&&) = default;*/
+    ListSwitchable<T>& operator=(ListSwitchable<T>&&) = default;
+    /*//clang specialization error
+    //GCC no inheritance
+    //MSVC works
+    //Upcast Constructors and Assignments
     template<typename F= ListSwitchable<T>
         , typename = typename std::enable_if_t<std::is_base_of<ListSwitchable<T>, F>() || std::is_same<ListSwitchable<T>, F>()>
     > ListSwitchable<T>(const ListSwitchable<T>&);
@@ -31,7 +35,7 @@ public:
     > F& operator=(const ListSwitchable<T>& list);
     template<typename F
         , typename = typename std::enable_if_t<std::is_base_of<ListSwitchable<T>, F>() || std::is_same<ListSwitchable<T>, F>()>
-    > F& operator=(ListSwitchable<T>&& list);
+    > F& operator=(ListSwitchable<T>&& list);*/
 
 /*
 //Upcast Move Constructor

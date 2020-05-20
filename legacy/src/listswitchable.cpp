@@ -6,7 +6,7 @@
 //#define debug() QDebug::QDebug(QtDebugMsg)
 //#define debug() QNoDebug()
 
-//Upcast Copy Constructor
+/*//Upcast Copy Constructor
 template<>template<typename F,typename> ListSwitchable<dpoint>::ListSwitchable(const ListSwitchable<dpoint>& list) {
     auto copy = TurnCalculator<dpoint>(list);//BUG
     *this = static_cast<F&>(copy);
@@ -15,7 +15,7 @@ template<>template<typename F,typename> ListSwitchable<dpoint>::ListSwitchable(c
 template<>template<typename F,typename> ListSwitchable<dpoint>::ListSwitchable(ListSwitchable<dpoint>&& list) {
     auto copy = std::move(list);
     *this = static_cast<F>(copy);
-}
+}*/
 
 /*#include "cliffsanalyzer.h"
 template ListSwitchable<dpoint>::ListSwitchable(CliffsAnalyzer<dpoint>&&);
@@ -44,7 +44,7 @@ template CliffsNormalizer<dpoint>::CliffsNormalizer(const ListSwitchable<dpoint>
 #include "cliffsanalyzer.h"
 template CliffsAnalyzer<dpoint>::CliffsAnalyzer(const ListSwitchable<dpoint>&);*/
 
-//Upcast Copy Assignment
+/*//Upcast Copy Assignment
 template<>template<typename F,typename> F& ListSwitchable<dpoint>::operator=(const ListSwitchable<dpoint>& list) {
     auto copy = TurnCalculator<dpoint>(list);//BUG
     return std::move(static_cast<F&>(copy));
@@ -58,7 +58,7 @@ template<>template<typename F,typename> F& ListSwitchable<dpoint>::operator=(Lis
    //*this = static_cast<ListSwitchable<dpoint>&>(copy);
    ////throw std::runtime_error("ListSwitchable assigned with const");
     return std::move(static_cast<F&&>(list));
-}
+}*/
 
 template <> void ListSwitchable<dpoint>::removeAt(int i) {
     if (i<0) {
