@@ -16,6 +16,8 @@ template <typename T> ListSwitchable<T> CornerAnalyzer::getFirstCorner(ListSwitc
         // changed from this to calc
         auto calc = ListSwitchable<T>(This);
         for (auto i=size_t(3);i<calc.size();i++){
+            //if (i==4)
+            //    break;
             if (CliffsCalculator::deriv1Crossed(calc,i)){
                 break;
             }
@@ -36,6 +38,6 @@ template <typename T> ListSwitchable<T> CornerAnalyzer::getFirstCorner(ListSwitc
 
     // don't ever rotate in here!
 
-    return result;
+    return std::move(result);
 }
 template ListSwitchable<dpoint> CornerAnalyzer::getFirstCorner(ListSwitchable<dpoint>& This);

@@ -4,15 +4,16 @@
 namespace py = pybind11;
 
 #include "turnanalyzer.h"
+#include "corneranalyzer.h"
 #include <stopeight-clibs/shared_types.h>
 #include <stopeight-clibs/Matrix.h>
 
-class QListWrapper : public ListCopyable<dpoint>
+class ListCopyableWrapper : public ListCopyable<dpoint>
 {
   public:
-    QListWrapper(py::array_t<sp::timecode<double>, py::array::c_style> other);
-    QListWrapper(ListCopyable<dpoint>& other);
-    using ListCopyable<dpoint>::ListCopyable;
+    ListCopyableWrapper(py::array_t<sp::timecode<double>, py::array::c_style> other);
+    ListCopyableWrapper(ListCopyable<dpoint>&& other);
+    //using ListCopyable<dpoint>::ListCopyable;
 
     py::array_t<sp::timecode<double>, py::array::c_style> toPyArray();
 };
@@ -25,4 +26,13 @@ class TurnAnalyzerWrapper : public TurnAnalyzer<dpoint>
       TurnAnalyzerWrapper(const ListCopyable<dpoint>& other);
       TurnAnalyzerWrapper(ListCopyable<dpoint>&& other);
 
+};
+
+class ListSwitchableWrapper : public ListSwitchable<dpoint>{
+  public:
+    ListSwitchableWrapper(py::array_t<sp::timecode<double>, py::array::c_style> other);
+    ListSwitchableWrapper(ListSwitchable<dpoint>&& other);
+    //using ListSwitchable<dpoint>::ListSwitchable;
+
+    py::array_t<sp::timecode<double>, py::array::c_style> toPyArray();
 };

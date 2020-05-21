@@ -7,20 +7,10 @@
 #include "listswitchable.h"
 
 namespace CliffsCalculator {
-    template<typename T>  T delta1At(ListSwitchable<T>& This,int position);
-    template<typename T>  bool deriv1Crossed(ListSwitchable<T>& This,int pos);
-    template<typename T>  qreal inclin1At(ListSwitchable<T>& This,int i);
+    template<typename T>  T delta1At(ListSwitchable<T>& This,size_t position);
+    template<typename T>  bool deriv1Crossed(ListSwitchable<T>& This,size_t pos);
+    template<typename T>  qreal inclin1At(ListSwitchable<T>& This,size_t i);
 
 }
-
-/*template<typename T> class CliffsCalculator : public ListSwitchable<T>
-{
-public:
-    using ListSwitchable<T>::ListSwitchable;
-
-    QPointF delta1At(int position);
-    bool deriv1Crossed(int pos);
-    qreal inclin1At(int i);
-};*/
 
 #endif // CLIFFSCALCULATOR_H
