@@ -15,36 +15,23 @@ PYBIND11_MODULE(getters, g){
 		}
 		g.attr("version") = sha;
 	}
-    py::class_<ListCopyableWrapper>(g,"ListCopyable", py::buffer_protocol())
+    py::class_<ListCopyableWrapper<ListCopyable<dpoint>>>(g,"ListCopyable", py::buffer_protocol())
 	.def(py::init<py::array_t<sp::timecode<double>,py::array::c_style>>())
-	.def("__len__",[](ListCopyableWrapper& in)->int{return in.size();})
+	.def("__len__",[](ListCopyableWrapper<ListCopyable<dpoint>>& in)->int{return in.size();})
 	;
-    py::class_<TurnAnalyzerWrapper>(g,"Turn", py::buffer_protocol())
-	.def(py::init<ListCopyableWrapper&>())
-    .def("next",[](TurnAnalyzerWrapper& in){
+    py::class_<ListCopyableWrapper<TurnAnalyzer<dpoint>>>(g,"Turn", py::buffer_protocol())
+	.def(py::init<py::array_t<sp::timecode<double>,py::array::c_style>>())
+	.def("__len__",[](ListCopyableWrapper<TurnAnalyzer<dpoint>>& in)->int{return in.size();})
+	;
+	g.def("getFirstTurnByTriplets",[](ListCopyableWrapper<TurnAnalyzer<dpoint>>& in){
 		in.rotateSegmentToXAxis();
-        ListCopyableWrapper result = in.getFirstTurnByTriplets();
+		ListCopyableWrapper<ListCopyable<dpoint>> result = in.getFirstTurnByTriplets();
 		return result.toPyArray();
-    })
-	/*.def("__array__",[](TurnAnalyzerWrapper &in)->py::array_t<sp::timecode<double>,py::array::c_style>{
-        ListCopyableWrapper result = ListCopyableWrapper(in);
-        return result.toPyArray();
-    })*/
-	.def("__len__",[](TurnAnalyzerWrapper& in)->int{return in.size();})
-	;
+	});
 	py::class_<ListSwitchableWrapper>(g,"ListSwitchable", py::buffer_protocol())
 	.def(py::init<py::array_t<sp::timecode<double>,py::array::c_style>>())
 	.def("__len__",[](ListSwitchableWrapper& in)->int{return in.size();})
 	;
-	/*py::class_<ListSwitchable<dpoint>>(g,"Corner", py::buffer_protocol())
-	.def(py::init<ListSwitchableWrapper&>())
-    .def("next",[](ListSwitchable<dpoint>& in){
-		in.rotateSegmentToXAxis();
-		ListSwitchableWrapper result = CornerAnalyzer::getFirstCorner(in);//Uses LSW move constructor
-		return result.toPyArray();
-    })
-	.def("__len__",[](ListSwitchable<dpoint>& in)->int{return in.size();})
-	;*/
 	g.def("getFirstCorner",[](ListSwitchableWrapper& in){
 		in.rotateSegmentToXAxis();
 		ListSwitchableWrapper result = CornerAnalyzer::getFirstCorner(in);//Uses LSW move constructor

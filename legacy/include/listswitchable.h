@@ -21,6 +21,7 @@ public:
     ListSwitchable<T>& operator=(const ListSwitchable<T>&) = default;
     ListSwitchable<T>& operator=(ListSwitchable<T>&&) = default;
     /*
+    //Virtual Contructors are not allowed
     //clang specialization error
     //GCC no inheritance
     //MSVC works
