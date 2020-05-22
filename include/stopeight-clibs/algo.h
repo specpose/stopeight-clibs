@@ -12,20 +12,6 @@ namespace grapher {
 
 	template<class InputIterator, class OutputIterator,
 		typename = typename std::enable_if_t<std::is_base_of<std::random_access_iterator_tag, typename std::iterator_traits<InputIterator>::iterator_category>::value && std::is_arithmetic<typename std::iterator_traits<InputIterator>::value_type>::value>
-	> void __differences(InputIterator begin, InputIterator end, OutputIterator begin2);
-
-	//OVERLOAD: multiple functions for class hierarchy (btw. SPECIALISATION is only for class-templates)
-	template<class InputIterator, class OutputIterator,
-		typename = typename std::enable_if_t<std::is_base_of<std::input_iterator_tag, typename std::iterator_traits<InputIterator>::iterator_category>::value && std::is_arithmetic<typename std::iterator_traits<InputIterator>::value_type>::value>
-	> void __calculate_rotations(InputIterator begin, InputIterator end, OutputIterator begin2, sp::sharing_functor<double,double>& angleFunction);
-	//readonly functor and input_iterator_tag combination is nonsense
-	template<class InputIterator, class OutputIterator,
-		typename = typename std::enable_if_t<std::is_base_of<std::input_iterator_tag, typename std::iterator_traits<InputIterator>::iterator_category>::value && std::is_arithmetic<typename std::iterator_traits<InputIterator>::value_type>::value>
-	> void __calculate_rotations(InputIterator begin, InputIterator end, OutputIterator begin2, sp::readonly_functor<double,double>& angleFunction);
-
-
-	template<class InputIterator, class OutputIterator,
-		typename = typename std::enable_if_t<std::is_base_of<std::random_access_iterator_tag, typename std::iterator_traits<InputIterator>::iterator_category>::value && std::is_arithmetic<typename std::iterator_traits<InputIterator>::value_type>::value>
 	> void __apply_rotation_matrix(InputIterator begin, InputIterator end, OutputIterator begin2);
 
 	class _fixpoints {
@@ -37,15 +23,6 @@ namespace grapher {
 		>void operator()(InputIterator begin, InputIterator end, OutputIterator begin2);
 	private:
 		std::vector<size_t>& _fixPoint_indices;
-	};
-
-	class _blocks {
-	public:
-		_blocks(size_t samplesPerVector);
-		~_blocks();
-		template <class InputIterator, class OutputIterator>void operator()(InputIterator begin, InputIterator end, OutputIterator begin2);
-	private:
-		size_t _samplesPerVector;
 	};
 
 	template <class InputIterator, class OutputIterator>void _sum_blocks(InputIterator begin, InputIterator end, OutputIterator begin2);//freedom vector or deque//type in or out?
@@ -72,6 +49,7 @@ namespace grapher {
 		std::vector<size_t> _fixPoint_indices;
 	};
 
+	//HACK These need to be samples_To_VG members, Generic out_to_in, in_to_out
 	int samples_To_VG_vectorSize(int inputSize, int samplesPerVector=1);
 	double samples_To_VG_vectorLength(int showSamples, double unitaryLength = 1);
 

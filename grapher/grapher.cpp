@@ -59,7 +59,7 @@ namespace speczilla {
 
 		if (buf->size() > 2) {
 			std::vector<T> differences = std::vector<T>(buf->size(), 0.0);
-			grapher::__differences(std::begin(*buf), std::end(*buf), std::begin(differences));
+			std::adjacent_difference(std::begin(*buf), std::end(*buf), std::begin(differences));
 
 			//in general if uneven, middle is on left side
 			//-1 differences, -1 size

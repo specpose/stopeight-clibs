@@ -24,7 +24,7 @@ namespace speczilla {
 		const int size = buf->size();
 		if (size > 0) {
 			std::vector<T> differences = std::vector<T>(size, 0.0f);
-			grapher::__differences(std::begin(*buf), std::end(*buf), std::begin(differences));
+			std::adjacent_difference(std::begin(*buf), std::end(*buf), std::begin(differences));
             return angle::__average(std::begin(differences)+1, std::end(differences));
 		}
 		else {

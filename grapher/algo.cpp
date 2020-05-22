@@ -17,50 +17,8 @@
 #include <math.h>
 
 namespace grapher {
-    template<class InputIterator,
-		class OutputIterator,
-		typename>
-		void __differences(InputIterator begin, InputIterator end, OutputIterator begin2)
-    {
-        std::adjacent_difference(begin, end, begin2);
-        //*std::begin(differences) = 0;
-    }
-    template void __differences(std::vector<double>::iterator, std::vector<double>::iterator, std::vector<double>::iterator) ;
-    template void __differences(std::vector<float>::iterator, std::vector<float>::iterator, std::vector<float>::iterator);
-	template void __differences(std::vector<int16_t>::iterator, std::vector<int16_t>::iterator, std::vector<int16_t>::iterator);
-	
-	template<class InputIterator,
-		class OutputIterator,
-		typename
-	>
-		void __calculate_rotations(InputIterator begin, InputIterator end, OutputIterator begin2, sp::sharing_functor<double,double>& angleFunction)
-    {
-		using T = typename std::iterator_traits<InputIterator>::value_type;//todo remove back_inserter -> std::iterator_traits<OutputIterator>::value_type;
-        std::transform(begin, end, begin2, [&angleFunction](T diff) {
-            return angleFunction(diff);
-        });
-    }
-	template void __calculate_rotations(std::vector<double>::iterator, std::vector<double>::iterator, std::vector<double>::iterator, sp::sharing_functor<double,double>&);
-	template void __calculate_rotations(std::vector<float>::iterator, std::vector<float>::iterator, std::vector<float>::iterator, sp::sharing_functor<double,double>&);
-	template void __calculate_rotations(std::vector<int16_t>::iterator, std::vector<int16_t>::iterator, std::vector<int16_t>::iterator, sp::sharing_functor<double,double>&);
-    
-	//todo make par_unseq
-	template<class InputIterator,
-		class OutputIterator,
-		typename
-	>
-		void __calculate_rotations(InputIterator begin, InputIterator end, OutputIterator begin2, sp::readonly_functor<double,double>& angleFunction)
-	{
-		using T = typename std::iterator_traits<InputIterator>::value_type;//todo remove back_inserter -> std::iterator_traits<OutputIterator>::value_type;
-		std::transform(begin, end, begin2, [&angleFunction](T diff) {
-			return angleFunction(diff);
-		});
-	}
-	template void __calculate_rotations(std::vector<double>::iterator, std::vector<double>::iterator, std::vector<double>::iterator, sp::readonly_functor<double,double>&);
-	template void __calculate_rotations(std::vector<float>::iterator, std::vector<float>::iterator, std::vector<float>::iterator, sp::readonly_functor<double,double>&);
-	template void __calculate_rotations(std::vector<int16_t>::iterator, std::vector<int16_t>::iterator, std::vector<int16_t>::iterator, sp::readonly_functor<double,double>&);
 
-
+    //InputIterator = decltype(OutputIterator)<OutputElement::value_type>
     template<class InputIterator
 		, class OutputIterator,
 		typename> void __apply_rotation_matrix(InputIterator begin, InputIterator end, OutputIterator begin2)
@@ -133,36 +91,6 @@ namespace grapher {
     }
     template void _fixpoints::operator()(std::vector<sp::timecode<double>>::iterator begin, std::vector<sp::timecode<double>>::iterator end, std::vector<it_pair<double>>::iterator begin2);
 	template void _fixpoints::operator()(std::vector<sp::timecode<float>>::iterator begin, std::vector<sp::timecode<float>>::iterator end, std::vector<it_pair<float>>::iterator begin2);
-
-    _blocks::_blocks(size_t samplesPerVector) : _samplesPerVector(samplesPerVector) {
-        
-    }
-    _blocks::~_blocks() {
-        
-    }
-    template <class InputIterator, class OutputIterator> void _blocks::operator()(InputIterator begin, InputIterator end, OutputIterator begin2)
-    {
-		using my_pair = typename std::iterator_traits<InputIterator>::value_type;//todo from OutputIterator; remove backinserter
-		auto spV = _samplesPerVector;
-        std::for_each(begin, end, [&begin2, spV](my_pair slice) {
-            auto size = std::distance(slice.first, slice.second);
-            if (size > 0) {
-                auto sectionend = (spV > size) ? size : spV;
-                for (int i = 0; i < (size / sectionend); i++) {
-                    *begin2++ = (my_pair{ (slice.first + (i*sectionend)),(slice.first + (i*sectionend) + sectionend) });
-                }
-                auto remainder = size%sectionend;
-                if (remainder != 0)
-                    *begin2++ = (my_pair{ (slice.second - remainder),slice.second });
-            }
-            else {
-                *begin2++ = (my_pair{ slice.first, slice.first });
-            }
-        });
-    }
-    template void _blocks::operator()(std::vector<it_pair<double>>::iterator begin, std::vector<it_pair<double>>::iterator end, std::vector<it_pair<double>>::iterator begin2);
-	template void _blocks::operator()(std::vector<it_pair<float>>::iterator begin, std::vector<it_pair<float>>::iterator end, std::vector<it_pair<float>>::iterator begin2);
-
     
     template <class InputIterator, class OutputIterator> void _sum_blocks(InputIterator begin, InputIterator end, OutputIterator begin2)
     {
@@ -233,36 +161,26 @@ namespace grapher {
 		typename
 	> std::vector<sp::timecode<T>> __differences_To_VG<T>::operator()(std::vector<T>& differences, UnaryFunction& angleFunction)
     {
-        std::vector<T> rotations;
+        auto rotations = std::vector<T>(differences.size()-1);
         //first one is invalid
-        __calculate_rotations(std::begin(differences) + 1, std::end(differences), std::back_inserter(rotations), angleFunction);
-        
+        std::transform(std::begin(differences) + 1, std::end(differences), std::begin(rotations), [&angleFunction](T diff) {
+			return angleFunction(diff);
+		});
+
+
 		auto tc = sp::timecode<T>{};
 		tc.__init({T(_vectorLength),T(0)});
-        const auto vectors_size = std::distance(std::begin(rotations), std::end(rotations));
-        auto vectors = std::vector<sp::timecode<T>>(vectors_size);
-		std::fill_n(std::begin(vectors), vectors_size, tc);//sp::make_timecode<T>(T(_vectorLength), 0));//sp::timecode<T>{T(_vectorLength), 0});
+        auto vectors = std::vector<sp::timecode<T>>(rotations.size());
+		std::fill(std::begin(vectors), std::end(vectors), tc);//sp::make_timecode<T>(T(_vectorLength), 0));//sp::timecode<T>{T(_vectorLength), 0});
         __apply_rotation_matrix(std::begin(rotations), std::end(rotations), std::begin(vectors));
         
+        //BUG No default constructor: iterator allocator?
         std::vector<std::pair< typename std::vector<sp::timecode<T>>::iterator, typename std::vector<sp::timecode<T>>::iterator >> vectors_sliced;
         auto func = _fixpoints(_fixPoint_indices);
         func(std::begin(vectors), std::end(vectors), std::back_inserter(vectors_sliced));
         
-		auto out_vectors = std::vector<sp::timecode<T>>{};//((vectorSize * 2) + add);
-        
-        
-         //HERESTART
-         /* using bounds = std::pair< typename std::vector<sp::timecode<T>>::iterator, typename std::vector<sp::timecode<T>>::iterator >;//same as it_pair shared_types
-         std::vector<bounds> blocks;
-         auto b = _blocks(_samplesPerVector);
-         b(std::begin(vectors_sliced), std::end(vectors_sliced), std::back_inserter(blocks));
-         
-         std::vector<sp::timecode<T>> sums;
-         _sum_blocks(std::begin(blocks), std::end(blocks), std::back_inserter(sums));
-         
-         std::move(std::begin(sums), std::end(sums), std::back_inserter(out_vectors));*/
-         //HEREEND
-         
+		//HACK out_vectors needs to know size from blocks static func
+        auto out_vectors = std::vector<sp::timecode<T>>{};//((vectorSize * 2) + add);
         
         //hierarchy all to 1
         //std::transform(std::begin(vectors_sliced), std::end(vectors_sliced), std::back_inserter(out_vectors), [_samplesPerVector](decltype(vectors_sliced) v) {
@@ -318,7 +236,7 @@ namespace grapher {
         size_t size = std::distance(std::begin(samples), std::end(samples));
         if (size > 0) {
             std::vector<T> differences = std::vector<T>(size, 0);
-            __differences(std::begin(samples), std::end(samples), std::begin(differences));
+            std::adjacent_difference(std::begin(samples), std::end(samples), std::begin(differences));
             
             return __differences_To_VG<T>(_samplesPerVector, _vectorLength, _fixPoint_indices)(differences, angleFunction);
         }
