@@ -19,15 +19,20 @@ PYBIND11_MODULE(getters, g){
 	.def(py::init<py::array_t<sp::timecode<double>,py::array::c_style>>())
 	.def("__len__",[](ListCopyableWrapper<ListCopyable<dpoint>>& in)->int{return in.size();})
 	;
-    py::class_<ListCopyableWrapper<TurnAnalyzer<dpoint>>>(g,"Turn", py::buffer_protocol())
+    py::class_<ListCopyableWrapper<TurnAnalyzer<dpoint>>>(g,"TurnAnalyzer", py::buffer_protocol())
 	.def(py::init<py::array_t<sp::timecode<double>,py::array::c_style>>())
 	.def("__len__",[](ListCopyableWrapper<TurnAnalyzer<dpoint>>& in)->int{return in.size();})
-	;
-	g.def("getFirstTurnByTriplets",[](ListCopyableWrapper<TurnAnalyzer<dpoint>>& in){
+	.def("getFirstTurnByTriplets",[](ListCopyableWrapper<TurnAnalyzer<dpoint>>& in){
 		in.rotateSegmentToXAxis();
 		ListCopyableWrapper<ListCopyable<dpoint>> result = in.getFirstTurnByTriplets();
 		return result.toPyArray();
-	});
+	})
+	;
+	/*g.def("getFirstTurnByTriplets",[](ListCopyableWrapper<TurnAnalyzer<dpoint>>& in){
+		in.rotateSegmentToXAxis();
+		ListCopyableWrapper<ListCopyable<dpoint>> result = in.getFirstTurnByTriplets();
+		return result.toPyArray();
+	});*/
 	py::class_<ListSwitchableWrapper>(g,"ListSwitchable", py::buffer_protocol())
 	.def(py::init<py::array_t<sp::timecode<double>,py::array::c_style>>())
 	.def("__len__",[](ListSwitchableWrapper& in)->int{return in.size();})

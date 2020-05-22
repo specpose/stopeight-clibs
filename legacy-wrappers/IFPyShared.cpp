@@ -8,8 +8,12 @@ template<typename F> ListCopyableWrapper<F>::ListCopyableWrapper(py::array_t<sp:
 {
     auto mod = py::module::import("stopeight.matrix");
     auto data = (mod.attr("Vectors")(other)).cast<Vectors<std::vector<sp::timecode<double>>>>();
-    std::transform(std::begin(data), std::end(data), std::back_inserter(*this), [](sp::timecode<double> &it_in) {
-        return typename F::value_type(qreal(it_in.coords[0]), qreal(it_in.coords[1]));
+    int counter = 0;
+    std::transform(std::begin(data), std::end(data), std::back_inserter(*this), [&counter](sp::timecode<double> &it_in) {
+        auto point = typename F::value_type(qreal(it_in.coords[0]), qreal(it_in.coords[1]));
+        //if is_class
+        point.position=counter++;
+        return std::move(point);
     });
 }
 template ListCopyableWrapper<ListCopyable<dpoint>>::ListCopyableWrapper(py::array_t<sp::timecode<double>, py::array::c_style> other);
@@ -39,8 +43,11 @@ ListSwitchableWrapper::ListSwitchableWrapper(py::array_t<sp::timecode<double>, p
     {
         auto mod = py::module::import("stopeight.matrix");
         auto data = (mod.attr("Vectors")(other)).cast<Vectors<std::vector<sp::timecode<double>>>>();
-        std::transform(std::begin(data), std::end(data), std::back_inserter(*this), [](sp::timecode<double> &it_in) {
-            return dpoint(qreal(it_in.coords[0]), qreal(it_in.coords[1]));
+        int counter = 0;
+        std::transform(std::begin(data), std::end(data), std::back_inserter(*this), [&counter](sp::timecode<double> &it_in) {
+            auto point = dpoint(qreal(it_in.coords[0]), qreal(it_in.coords[1]));
+            point.position = counter++;
+            return std::move(point);
         });
     }
 

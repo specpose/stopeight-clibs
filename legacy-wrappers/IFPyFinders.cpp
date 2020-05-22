@@ -5,11 +5,12 @@
 //cant remove opaque; no custom caster vector -> array?
 PYBIND11_MAKE_OPAQUE(std::vector<sp::timecode<double>>);
 
-#include "turns.h"
 #include "spirals.h"
 #include "cliffs.h"
+#include "editorbase.h"
+#include "analyzer.h"
 
-std::vector<size_t> transform_indices(QList<dpoint> result_qt){
+std::vector<size_t> transform_indices(ListSwitchable<dpoint> result_qt){
     auto result = std::vector<size_t>();
     //gcc: auto or  windows: decltype
     std::transform(std::begin(result_qt),std::end(result_qt),std::back_inserter(result),[](dpoint& it_in){
@@ -20,22 +21,21 @@ std::vector<size_t> transform_indices(QList<dpoint> result_qt){
 
 PYBIND11_MODULE(finders, f){
 	if(GitMetadata::Populated()) {
-		object sha;
+		py::object sha;
 	        if(GitMetadata::AnyUncommittedChanges()) {
-			sha = cast(GitMetadata::CommitSHA1()+"+dirty");
+			    sha = py::cast(GitMetadata::CommitSHA1()+"+dirty");
 	        } else {
-			sha = cast(GitMetadata::CommitSHA1());
+			    sha = py::cast(GitMetadata::CommitSHA1());
 		}
 		f.attr("version") = sha;
 	}
-        //static QList<dpoint> findTurns(ListCopyable<dpoint> toBeProcessed);
-        f.def("Turns",[](QList<dpoint>& in)->std::vector<size_t>{
-            return transform_indices(Turns<dpoint>::findTurns(in));
-        });
-        f.def("Spirals",[](QList<dpoint>& in)->std::vector<size_t>{
-            return transform_indices(Spirals<dpoint>::findSpiralCliffs(in));
-        });
-        f.def("Cliffs",[](QList<dpoint>& in)->std::vector<size_t>{
-            return transform_indices(Cliffs<dpoint>::findCliffs(in));
-        });
+	py::object getters_module = py::module::import("stopeight.getters");
+    f.def("findSpiralCliffs",[](ListSwitchableWrapper& in)->std::vector<size_t>{
+        return transform_indices(Spirals::findSpiralCliffs(in));
+    });
+    f.def("findCliffs",[](ListSwitchableWrapper& in)->std::vector<size_t>{
+        //in.rotateSegmentToXAxis();
+        ListSwitchableWrapper cliffs= Cliffs::findCliffs(in);
+        return transform_indices(cliffs);
+    });
 }

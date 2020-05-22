@@ -25,28 +25,29 @@ target_include_directories(${PROJECT_NAME}
 )
 #endif (stopeight-clibs-legacy_FOUND)
 
-##find_package(stopeight-clibs-legacy)
-##if (stopeight-clibs-legacy_FOUND)
-#project(finders)
-#pybind11_add_module(${PROJECT_NAME} 
-#    IFPyFinders.cpp
-#    IFPyShared.cpp
-#)
-#target_link_libraries(${PROJECT_NAME}
-#    PRIVATE
-#    stopeight-clibs-legacy
-#    Qt5::Core
+#find_package(stopeight-clibs-legacy)
+#if (stopeight-clibs-legacy_FOUND)
+project(finders)
+pybind11_add_module(${PROJECT_NAME} 
+    IFPyFinders.cpp
+    IFPyShared.cpp
+)
+target_link_libraries(${PROJECT_NAME}
+    PRIVATE
+    stopeight-clibs-legacy
+    stopeight-clibs-matrix
+    Qt5::Core
 #    Qt5::Gui
-#)
-#target_include_directories(${PROJECT_NAME}
-#    PRIVATE
-#    "../legacy/include"
-#    "../include"
-#    "./"
-#    "../cmake-git-version-tracking/better-example"
-#    ${Qt5Core_INCLUDE_DIRS}
-#)
-##endif (stopeight-clibs-legacy_FOUND)
+)
+target_include_directories(${PROJECT_NAME}
+    PRIVATE
+    "../legacy/include"
+    "../include"
+    "./"
+    "../cmake-git-version-tracking/better-example"
+    ${Qt5Core_INCLUDE_DIRS}
+)
+#endif (stopeight-clibs-legacy_FOUND)
 
 #find_package(stopeight-clibs-legacy)
 #find_package(stopeight-clibs-matrix)
