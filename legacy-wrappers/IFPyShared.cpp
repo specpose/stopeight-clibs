@@ -32,11 +32,6 @@ template<typename F> py::array_t<sp::timecode<double>, py::array::c_style> ListC
 template py::array_t<sp::timecode<double>, py::array::c_style> ListCopyableWrapper<TurnAnalyzer<dpoint>>::toPyArray();
 template py::array_t<sp::timecode<double>, py::array::c_style> ListCopyableWrapper<ListCopyable<dpoint>>::toPyArray();
 
-/*TurnAnalyzerWrapper::TurnAnalyzerWrapper(const ListCopyable<dpoint>& other) : TurnAnalyzer<dpoint>(static_cast<const TurnAnalyzer<dpoint>&>(other)) {//Hack ListCopyable should not be cast
-}
-TurnAnalyzerWrapper::TurnAnalyzerWrapper(ListCopyable<dpoint>&& other) : TurnAnalyzer<dpoint>{ std::move(static_cast<TurnAnalyzer<dpoint>&&>(other)) } {//Hack ListCopyable should not be cast
-}*/
-
 ListSwitchableWrapper::ListSwitchableWrapper(ListSwitchable<dpoint>&& other) : ListSwitchable<dpoint>{std::move(other)}{};
 
 ListSwitchableWrapper::ListSwitchableWrapper(py::array_t<sp::timecode<double>, py::array::c_style> other) : ListSwitchable<dpoint>()

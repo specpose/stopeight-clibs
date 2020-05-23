@@ -174,12 +174,12 @@ namespace grapher {
 		std::fill(std::begin(vectors), std::end(vectors), tc);//sp::make_timecode<T>(T(_vectorLength), 0));//sp::timecode<T>{T(_vectorLength), 0});
         __apply_rotation_matrix(std::begin(rotations), std::end(rotations), std::begin(vectors));
         
-        //BUG No default constructor: iterator allocator?
+        //BUG No default constructor: iterator allocator? Workaround ranges::view
         std::vector<std::pair< typename std::vector<sp::timecode<T>>::iterator, typename std::vector<sp::timecode<T>>::iterator >> vectors_sliced;
         auto func = _fixpoints(_fixPoint_indices);
         func(std::begin(vectors), std::end(vectors), std::back_inserter(vectors_sliced));
         
-		//HACK out_vectors needs to know size from blocks static func
+		//HACK out_vectors needs to know size from blocks static func. Workaround ranges::view
         auto out_vectors = std::vector<sp::timecode<T>>{};//((vectorSize * 2) + add);
         
         //hierarchy all to 1
