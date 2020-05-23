@@ -1,17 +1,17 @@
 // Copyright (C) 2017 Fassio Blatter
 // GNU Lesser General Public License, version 2.1
 #include "git.h"
-#include <stopeight-clibs/shared_types.h>
 #include <stopeight-clibs/grapher.h>
-#include <stopeight-clibs/algo.h>
-#include <stopeight-clibs/angle_functions.h>
 #include <stopeight-clibs/Matrix.h>
 
 #undef NDEBUG
 #include <iostream>
 
 #include <pybind11/pybind11.h>
+#include <pybind11/stl_bind.h>
 #include <pybind11/numpy.h>
+
+PYBIND11_MAKE_OPAQUE(std::vector<double>);
 
 using namespace pybind11;
 
@@ -26,7 +26,8 @@ PYBIND11_MODULE(grapher, m){
 		m.attr("version") = sha;
 	}
 	object matrix_module = module::import("stopeight.matrix");
-    class_<std::vector<double>>(m,"VectorDouble",buffer_protocol())
+	bind_vector<std::vector<double>>(m,"VectorDouble");
+    /*class_<std::vector<double>>(m,"VectorDouble",buffer_protocol())
 	.def(init<>())
 	.def(init([](array_t<double,array::c_style> buffer){
 		auto info = buffer.request();
@@ -50,11 +51,11 @@ PYBIND11_MODULE(grapher, m){
 			{sizeof(double)}
 		);
 		})
-	/*.def("create_vector_graph", [](std::vector<double>& vec, int samplesPerVector, double unitaryLength, bool relative , double average, double averageScale)->Vectors<std::vector<sp::timecode<double>>>{
-		auto op = speczilla::Buffer<double>(&vec,vec.size(),samplesPerVector,unitaryLength,relative,average,averageScale);
-		return op();//is sp::result, not std::vector<timecode>
-    },arg("samplesPerVector")=1,arg("unitaryLength")=1.0,arg("relative")=false,arg("average")=0.0,arg("averageScale")=1.0)*/
-	;
+	//.def("create_vector_graph", [](std::vector<double>& vec, int samplesPerVector, double unitaryLength, bool relative , double average, double averageScale)->Vectors<std::vector<sp::timecode<double>>>{
+	//	auto op = speczilla::Buffer<double>(&vec,vec.size(),samplesPerVector,unitaryLength,relative,average,averageScale);
+	//	return op();//is sp::result, not std::vector<timecode>
+    //},arg("samplesPerVector")=1,arg("unitaryLength")=1.0,arg("relative")=false,arg("average")=0.0,arg("averageScale")=1.0)
+	;*/
 	m.def("create_vector_graph", [](std::vector<double>& vec, int samplesPerVector, double unitaryLength, bool relative , double average, double averageScale)->array_t<sp::timecode<double>,array::c_style>{
 		auto op = speczilla::Buffer<double>(&vec,vec.size(),samplesPerVector,unitaryLength,relative,average,averageScale);
 		Vectors<std::vector<sp::timecode<double>>> result = Vectors<std::vector<sp::timecode<double>>>{std::move(op())};

@@ -2,7 +2,7 @@
 #include <IFPyShared.h>
 #undef NDEBUG
 #include <pybind11/stl.h>
-//cant remove opaque; no custom caster vector -> array?
+//dont remove opaque; custom caster return type std::vector<int> -> py_list
 PYBIND11_MAKE_OPAQUE(std::vector<sp::timecode<double>>);
 
 #include "spirals.h"
@@ -34,8 +34,6 @@ PYBIND11_MODULE(finders, f){
         return transform_indices(Spirals::findSpiralCliffs(in));
     });
     f.def("findCliffs",[](ListSwitchableWrapper& in)->std::vector<size_t>{
-        //in.rotateSegmentToXAxis();
-        ListSwitchableWrapper cliffs= Cliffs::findCliffs(in);
-        return transform_indices(cliffs);
+        return transform_indices(Cliffs::findCliffs(in));
     });
 }

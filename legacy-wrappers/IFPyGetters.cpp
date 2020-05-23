@@ -1,9 +1,7 @@
 #include "git.h"
 #include <IFPyShared.h>
 #undef NDEBUG
-#include <pybind11/stl.h>
-//cant remove opaque; no custom caster vector -> array?
-PYBIND11_MAKE_OPAQUE(std::vector<sp::timecode<double>>);
+#include <pybind11/pybind11.h>
 
 PYBIND11_MODULE(getters, g){
 	if(GitMetadata::Populated()) {
