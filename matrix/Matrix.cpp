@@ -25,6 +25,10 @@ template<typename Container, typename tf> Vectors<Container,tf>::Vectors() : Con
 //todo span
 template Vectors<std::vector<sp::timecode<float>>>::Vectors();
 template Vectors<std::vector<sp::timecode<double>>>::Vectors();
+//Hack: external dependency
+template Vectors<std::vector<Vector<float>>>::Vectors();
+template Vectors<std::vector<Vector<double>>>::Vectors();
+
 template<typename Container, typename tf> Vectors<Container,tf>::Vectors(const Container& other) : Container(other) {
 //	int test = 5/0;
 //	*this = Vectors<Container,tf>();//other;
