@@ -5,6 +5,7 @@
 #include "stopeight-clibs/shared_types.h"
 #include <cmath>
 #include <algorithm>
+#include <stdexcept>
 //#include "GLPlatform.h"
 
 // not available on windows:
