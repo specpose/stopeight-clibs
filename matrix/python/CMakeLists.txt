@@ -11,10 +11,10 @@ target_link_libraries(${PROJECT_NAME}
 )
 target_include_directories(${PROJECT_NAME}
     PRIVATE
-    "../include"
-    "../matrix"
+    "../../include"
+    "../"
     ${stopeight-clibs_INCLUDE_DIRS}
-    "../cmake-git-version-tracking/better-example"
+    "../../cmake-git-version-tracking/better-example"
 )
 
 #endif (stopeight-clibs-matrix_FOUND)

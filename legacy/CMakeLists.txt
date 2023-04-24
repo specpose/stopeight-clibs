@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.4.3)
+cmake_minimum_required (VERSION 3.12)
 
 find_package(Qt5Core)
 find_package(Qt5Gui)
@@ -60,4 +60,11 @@ target_include_directories(${PROJECT_NAME}
 )
 install(TARGETS ${PROJECT_NAME} DESTINATION lib)
 
+find_package(Python COMPONENTS Development)
+if (Python_Development_FOUND)
+#find_package(pybind11 CONFIG)
+#if (pybind11_FOUND)
+add_subdirectory(python)
+#endif (pybind11_FOUND)
+endif (Python_Development_FOUND)
 endif (Qt5Core_FOUND AND Qt5Gui_FOUND)

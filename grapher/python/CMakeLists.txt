@@ -15,10 +15,10 @@ target_link_libraries(${PROJECT_NAME}
 
 target_include_directories(${PROJECT_NAME}
     PRIVATE
-    "../include"
-    "../grapher"
+    "../../include"
+    "../"
     ${stopeight-clibs_INCLUDE_DIRS}
-    "../cmake-git-version-tracking/better-example"
+    "../../cmake-git-version-tracking/better-example"
 )
 
 #endif (stopeight-clibs-grapher_FOUND AND stopeight-clibs-matrix_FOUND)

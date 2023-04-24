@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.4.3)
+cmake_minimum_required (VERSION 3.12)
 
 project(stopeight-clibs-analyzer)
 aux_source_directory(. SRC_LIST)
@@ -21,3 +21,11 @@ target_include_directories(${PROJECT_NAME}
     ${GIT_HEADER_DIR}
 )
 install(TARGETS ${PROJECT_NAME} DESTINATION lib)
+
+find_package(Python COMPONENTS Development)
+if (Python_Development_FOUND)
+#find_package(pybind11 CONFIG)
+#if (pybind11_FOUND)
+add_subdirectory(python)
+#endif (pybind11_FOUND)
+endif (Python_Development_FOUND)
