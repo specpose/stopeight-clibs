@@ -14,8 +14,9 @@ source:
 
 requirements:
   build:
+    - vs2019_win-64  # [win]
     - cmake >=3.12
-    - qt >=5.15.0
+    - qt <5.12.0
 
 about:
   summary: Comparing sequences of points in 2 dimensions.

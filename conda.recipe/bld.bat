@@ -1,11 +1,9 @@
-setlocal EnableDelayedExpansion
-
 :: Make a build folder and change to it.
 mkdir build
 cd build
 
 :: Configure using the CMakeFiles
-cmake -G "NMake Makefiles" ^
+cmake -G "Visual Studio 16 2019" ^
       -DCMAKE_INSTALL_PREFIX:PATH="%LIBRARY_PREFIX%" ^
       -DCMAKE_PREFIX_PATH:PATH="%LIBRARY_PREFIX%" ^
       -DCMAKE_BUILD_TYPE:STRING=Release ^
