@@ -20,7 +20,6 @@ jobs:
         run: |
           git submodule update --init --recursive
       - name: Run setup-conda
-        uses: ./
         with:
           update-conda: true
           python-version: '3.10'
