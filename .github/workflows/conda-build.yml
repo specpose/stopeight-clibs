@@ -22,8 +22,10 @@ jobs:
       - name: Checkout submodules
         run: |
           git submodule update --init --recursive
-      - name: Install conda-build
+      - name: Activate conda and Install conda-build
         run: |
+          conda create --name btest
+          conda activate btest
           conda install conda-build
       - name: Check env
         run: printenv
