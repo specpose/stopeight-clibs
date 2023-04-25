@@ -14,7 +14,7 @@ source:
 
 requirements:
   build:
-    - {{ compiler('c') }}  # [win]
+    - {{ compiler('c')  # [win] }}
     - cmake >=3.12
     - qt <5.12.0
 
