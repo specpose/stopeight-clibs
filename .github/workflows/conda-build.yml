@@ -8,7 +8,6 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       ENV_PYTHON: '3.10'
-      CONDA_CHANNELS: 'defaults,anaconda,conda-forge'
     strategy:
       matrix:
         os: [ubuntu-latest]
@@ -44,7 +43,6 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       ENV_PYTHON: '3.10'
-      CONDA_CHANNELS: 'defaults,anaconda,conda-forge'
     strategy:
       matrix:
         os: [macOS-latest]
@@ -61,6 +59,7 @@ jobs:
       - name: Activate conda and Install conda-build
         shell: zsh -l {0}
         run: |
+          sudo chown -R 501:20 /usr/local/miniconda
           cd $CONDA_PREFIX
           conda init zsh
           conda activate base
@@ -68,7 +67,7 @@ jobs:
       - name: Build package
         shell: zsh -l {0}
         run: |
-          conda build --debug .
+          conda build .
       - name: Run tests
         shell: zsh -l {0}
         run: |
@@ -80,7 +79,6 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       ENV_PYTHON: '3.10'
-      CONDA_CHANNELS: 'defaults,anaconda,conda-forge'
     strategy:
       matrix:
         os: [windows-latest]
@@ -104,7 +102,7 @@ jobs:
       - name: Build package
         shell: powershell
         run: |
-          conda build --debug .
+          conda build .
       - name: Run tests
         shell: powershell
         run: |
