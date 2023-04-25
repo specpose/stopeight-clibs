@@ -56,8 +56,9 @@ jobs:
         run: |
           sudo chown -R 501:20 /usr/local/miniconda
           eval "$($CONDA/condabin/conda shell.zsh hook)"
-          conda create --name btest
-          conda activate btest
+          conda init zsh
+          conda install conda>=23.3.1
+          conda activate base
           conda install conda-build
       - name: Build package
         shell: zsh -l {0}
