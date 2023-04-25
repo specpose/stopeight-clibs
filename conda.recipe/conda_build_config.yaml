@@ -1,0 +1,4 @@
+c_compiler:
+  - vs2019
+target_platform:
+  - win-64
