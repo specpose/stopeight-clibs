@@ -11,7 +11,7 @@ jobs:
       CONDA_CHANNELS: 'defaults,anaconda,conda-forge'
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macOS-latest]
+        os: [ubuntu-latest, macOS-latest]
     steps:
       - uses: actions/checkout@v3
         with:
@@ -24,8 +24,43 @@ jobs:
           git submodule update --init --recursive
       - name: Activate conda and Install conda-build
         run: |
-          conda create --name btest
-          conda activate btest
+          cd $CONDA_PREFIX
+          conda create --name analytics
+          conda activate analytics
+          conda install conda-build
+      - name: Check env
+        run: printenv
+      - name: Build package
+        run: |
+          conda build --debug .
+      - name: Run tests
+        run: |
+          python -m pip install -q pytest
+          python -m pytest -v integrationtests
+
+  conda-build-win:
+    name: Conda Build Windows
+    runs-on: ${{ matrix.os }}
+    env:
+      CONDA_CHANNELS: 'defaults,anaconda,conda-forge'
+    strategy:
+      matrix:
+        os: [windows-latest]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          persist-credentials: 'false'
+          update-conda: true
+          python-version: '3.10'
+          conda-channels: anaconda, conda-forge
+      - name: Checkout submodules
+        run: |
+          git submodule update --init --recursive
+      - name: Activate conda and Install conda-build
+        run: |
+          cd %CONDA_PREFIX%
+          conda create --name analytics
+          conda activate analytics
           conda install conda-build
       - name: Check env
         run: printenv
