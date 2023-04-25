@@ -24,8 +24,8 @@ jobs:
           git submodule update --init --recursive
       - name: Activate conda and Install conda-build
         run: |
-          conda init bash
           conda create --name analytics
+          conda init bash
           conda activate analytics
           conda install conda-build
       - name: Check env
@@ -59,8 +59,8 @@ jobs:
           git submodule update --init --recursive
       - name: Activate conda and Install conda-build
         run: |
-          conda init zsh
           conda create --name analytics
+          conda init zsh
           conda activate analytics
           conda install conda-build
       - name: Check env
@@ -93,8 +93,8 @@ jobs:
           git submodule update --init --recursive
       - name: Activate conda and Install conda-build
         run: |
-          conda init cmd.exe
           conda create --name analytics
+          conda init powershell
           conda activate analytics
           conda install conda-build
       - name: Check env
