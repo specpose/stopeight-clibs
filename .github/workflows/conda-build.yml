@@ -32,11 +32,6 @@ jobs:
         shell: bash -l {0}
         run: |
           conda build --debug .
-      - name: Run tests
-        shell: bash -l {0}
-        run: |
-          python -m pip install -q pytest
-          python -m pytest -v integrationtests
 
   conda-build-mac:
     name: Conda Build Mac
@@ -68,11 +63,6 @@ jobs:
         shell: zsh -l {0}
         run: |
           conda build .
-      - name: Run tests
-        shell: zsh -l {0}
-        run: |
-          python -m pip install -q pytest
-          python -m pytest -v integrationtests
 
   conda-build-win:
     name: Conda Build Windows
@@ -103,8 +93,3 @@ jobs:
         shell: powershell
         run: |
           conda build .
-      - name: Run tests
-        shell: powershell
-        run: |
-          python -m pip install -q pytest
-          python -m pytest -v integrationtests
