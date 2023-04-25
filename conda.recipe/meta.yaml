@@ -14,7 +14,7 @@ source:
 
 requirements:
   build:
-    - vs2022_win-64  # [win]
+    - vs2017_win-64  # [win]
     - cmake >=3.12
     - qt <5.12.0
 
