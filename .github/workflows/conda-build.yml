@@ -3,73 +3,37 @@ name: "Conda Build"
 on: [push, pull_request]
 
 jobs:
-  conda-build-ubuntu:
-    name: Ubuntu Conda Build
-    runs-on: 'ubuntu-latest'
+  conda-build:
+    name: Conda Build
+    runs-on: ${{ matrix.os }}
+    env:
+      ENV_PYTHON: '3.10'
+      CONDA_CHANNELS: 'defaults,anaconda,conda-forge'
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           persist-credentials: 'false'
       - name: Checkout submodules
-        shell: bash -l {0}
         run: |
           git submodule update --init --recursive
-      - name: Bash
-        shell: bash -l {0}
-        run: |
-          eval "$($CONDA/condabin/conda shell.bash hook)"
-          conda create --name btest
-          conda activate btest
-          conda install conda-build
-          conda build .
-
-  conda-build-mac:
-    name: Mac Conda Build
-    runs-on: 'macos-latest'
-    steps:
-      - uses: actions/checkout@v2
+      - name: Run setup-conda
+        uses: ./
         with:
-          persist-credentials: 'false'
-      - name: Checkout submodules
-        shell: zsh -l {0}
+          update-conda: true
+          python-version: '3.10'
+          conda-channels: anaconda, conda-forge
+      - name: Install conda-build
         run: |
-          git submodule update --init --recursive
-      - name: Zsh
-        shell: zsh -l {0}
-        run: |
-          echo `ls -alF /usr/bin/gcc`
-          echo `clang --version`
-          echo "Activating conda version 4.8.x"
-          sudo chown -R 501:20 /usr/local/miniconda
-          eval "$($CONDA/condabin/conda shell.zsh hook)"
-          conda create --name btest
-          conda activate btest
           conda install conda-build
+      - name: Check env
+        run: printenv
+      - name: Build package
+        run: |
           conda build --debug .
-
-  conda-build-win:
-    name: Windows Conda Build
-    runs-on: 'windows-latest'
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          persist-credentials: 'false'
-      - name: Checkout submodules
-        shell: powershell
+      - name: Run tests
         run: |
-          git submodule update --init --recursive
-      - name: PowerShell
-        shell: powershell
-        run: |
-          $ErrorActionPreference = 'Continue'
-          echo $ErrorActionPreference
-          Get-ExecutionPolicy
-          Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
-          Get-ExecutionPolicy
-          echo "Activating conda version 4.6.x"
-          (& $env:CONDA"\Scripts\conda.exe" "shell.powershell" "hook") | Out-String | Invoke-Expression
-          conda create --name btest
-          conda activate btest
-          conda install conda-build
-          Remove-Item "C:\Program Files (x86)\Windows Kits\10\\include\wdf" -Recurse -Force -ErrorAction SilentlyContinue
-          conda build .
+          python -m pip install -q pytest
+          python -m pytest -v integrationtests
