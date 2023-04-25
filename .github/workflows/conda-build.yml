@@ -18,7 +18,6 @@ jobs:
           persist-credentials: 'false'
           update-conda: true
           python-version: '3.10'
-          conda-channels: anaconda, conda-forge
       - name: Checkout submodules
         shell: bash -l {0}
         run: |
@@ -55,7 +54,6 @@ jobs:
           persist-credentials: 'false'
           update-conda: true
           python-version: '3.10'
-          conda-channels: anaconda, conda-forge
       - name: Checkout submodules
         shell: zsh -l {0}
         run: |
@@ -92,7 +90,6 @@ jobs:
           persist-credentials: 'false'
           update-conda: true
           python-version: '3.10'
-          conda-channels: anaconda, conda-forge
       - name: Checkout submodules
         shell: powershell
         run: |
@@ -100,7 +97,7 @@ jobs:
       - name: Activate conda and Install conda-build
         shell: powershell
         run: |
-          cd %CONDA_PREFIX%
+          (& $env:CONDA"\Scripts\conda.exe" "shell.powershell" "hook") | Out-String | Invoke-Expression
           conda init powershell
           conda activate base
           conda install conda-build
