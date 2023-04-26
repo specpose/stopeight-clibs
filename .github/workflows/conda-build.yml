@@ -21,12 +21,15 @@ jobs:
         shell: bash -l {0}
         run: |
           git submodule update --init --recursive
-      - name: Activate conda and Install conda-build
+      - name: Activate conda
         shell: bash -l {0}
         run: |
           cd $CONDA_PREFIX
           conda init bash
           conda activate base
+      - name: Install conda-build
+        shell: bash -l {0}
+        run: |
           conda install conda-build
       - name: Build package
         shell: bash -l {0}
@@ -51,14 +54,17 @@ jobs:
         shell: zsh -l {0}
         run: |
           git submodule update --init --recursive
-      - name: Activate conda and Install conda-build
+      - name: Activate conda
         shell: zsh -l {0}
         run: |
           sudo chown -R 501:20 /usr/local/miniconda
           eval "$($CONDA/condabin/conda shell.zsh hook)"
           conda init zsh
-          conda install conda>=23.3.1
+          conda install --update conda
           conda activate base
+      - name: Install conda-build
+        shell: bash -l {0}
+        run: |
           conda install conda-build
       - name: Build package
         shell: zsh -l {0}
@@ -83,12 +89,15 @@ jobs:
         shell: powershell
         run: |
           git submodule update --init --recursive
-      - name: Activate conda and Install conda-build
+      - name: Activate conda
         shell: powershell
         run: |
           (& $env:CONDA"\Scripts\conda.exe" "shell.powershell" "hook") | Out-String | Invoke-Expression
           conda init powershell
           conda activate base
+      - name: Install conda-build
+        shell: bash -l {0}
+        run: |
           conda install conda-build
       - name: Build package
         shell: powershell
