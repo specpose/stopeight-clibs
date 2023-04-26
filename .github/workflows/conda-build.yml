@@ -18,21 +18,21 @@ jobs:
           update-conda: true
           python-version: '3.10'
       - name: Checkout submodules
-        shell: bash
+        shell: bash -l {0}
         run: |
           git submodule update --init --recursive
       - name: Activate conda
-        shell: bash
+        shell: bash -l {0}
         run: |
           eval "$($CONDA/condabin/conda shell.zsh hook)"
           conda init bash
           conda activate base
       - name: Install conda-build
-        shell: bash
+        shell: bash -l {0}
         run: |
           conda install conda-build
       - name: Build package
-        shell: bash
+        shell: bash -l {0}
         run: |
           conda build .
 
@@ -51,22 +51,22 @@ jobs:
           update-conda: true
           python-version: '3.10'
       - name: Checkout submodules
-        shell: zsh
+        shell: zsh -l {0}
         run: |
           git submodule update --init --recursive
       - name: Activate conda
-        shell: zsh
+        shell: zsh -l {0}
         run: |
           sudo chown -R 501:20 /usr/local/miniconda
           eval "$($CONDA/condabin/conda shell.zsh hook)"
           conda init zsh
           conda activate base
       - name: Install conda-build
-        shell: zsh
+        shell: zsh -l {0}
         run: |
           conda install conda-build
       - name: Build package
-        shell: zsh
+        shell: zsh -l {0}
         run: |
           conda build .
 
