@@ -24,16 +24,16 @@ jobs:
       - name: Activate conda
         shell: bash -l {0}
         run: |
-          cd $CONDA_PREFIX
+          eval "$($CONDA/condabin/conda shell.zsh hook)"
           conda init bash
           conda activate base
       - name: Install conda-build
         shell: bash -l {0}
-        run: |
+        run: ./
           conda install conda-build
       - name: Build package
         shell: bash -l {0}
-        run: |
+        run: ./
           conda build .
 
   conda-build-mac:
@@ -60,15 +60,14 @@ jobs:
           sudo chown -R 501:20 /usr/local/miniconda
           eval "$($CONDA/condabin/conda shell.zsh hook)"
           conda init zsh
-          conda install --update conda
           conda activate base
       - name: Install conda-build
         shell: bash -l {0}
-        run: |
+        run: ./
           conda install conda-build
       - name: Build package
         shell: zsh -l {0}
-        run: |
+        run: ./
           conda build .
 
   conda-build-win:
@@ -97,9 +96,9 @@ jobs:
           conda activate base
       - name: Install conda-build
         shell: bash -l {0}
-        run: |
+        run: ./
           conda install conda-build
       - name: Build package
         shell: powershell
-        run: |
+        run: ./
           conda build .
