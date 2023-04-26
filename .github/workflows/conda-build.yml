@@ -25,6 +25,7 @@ jobs:
         shell: bash -l {0}
         run: |
           eval "$($CONDA/condabin/conda shell.zsh hook)"
+          conda init bash
           conda activate base
       - name: Install conda-build
         shell: bash -l {0}
@@ -58,6 +59,7 @@ jobs:
         run: |
           sudo chown -R 501:20 /usr/local/miniconda
           eval "$($CONDA/condabin/conda shell.zsh hook)"
+          conda init zsh
           conda activate base
       - name: Install conda-build
         shell: zsh -l {0}
@@ -90,6 +92,7 @@ jobs:
         shell: powershell
         run: |
           (& $env:CONDA"\Scripts\conda.exe" "shell.powershell" "hook") | Out-String | Invoke-Expression
+          conda init powershell
           conda activate base
       - name: Install conda-build
         shell: powershell
