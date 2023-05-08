@@ -16,7 +16,6 @@ target_include_directories(${PROJECT_NAME}
     "../../include"
     "../"
     ${stopeight-clibs_INCLUDE_DIRS}
-    "../../cmake-git-version-tracking/better-example"
 )
 
 #endif (stopeight-clibs-analyzer_FOUND)

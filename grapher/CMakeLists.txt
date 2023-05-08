@@ -10,7 +10,6 @@ set(${PROJECT_NAME}_sources
     grapher.cpp
     mean.cpp
     main.cpp
-    ${POST_CONFIGURE_FILE}
 )
 
 #add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_sources})
@@ -21,9 +20,7 @@ add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_sources})
 target_include_directories(${PROJECT_NAME}
     PRIVATE
     ${stopeight-clibs_INCLUDE_DIRS}
-    ${GIT_HEADER_DIR}
 )
-target_link_libraries(${PROJECT_NAME} git)
 install(TARGETS ${PROJECT_NAME} DESTINATION lib)
 
 find_package(Python COMPONENTS Development)

@@ -1,4 +1,3 @@
-include(${PROJECT_SOURCE_DIR}/Includes.cmake)
 find_package(Git)
 if(Git_FOUND)
   execute_process(COMMAND ${GIT_EXECUTABLE} describe --tags --long --dirty OUTPUT_VARIABLE __VERSION__)

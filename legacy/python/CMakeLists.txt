@@ -19,7 +19,6 @@ target_include_directories(${PROJECT_NAME}
     PRIVATE
     "../include"
     "../../include"
-    "../../cmake-git-version-tracking/better-example"
     ${Qt5Core_INCLUDE_DIRS}
 #ubuntu includes/qt5/
 )
@@ -44,7 +43,6 @@ target_include_directories(${PROJECT_NAME}
     "../include"
     "../../include"
     "./"
-    "../../cmake-git-version-tracking/better-example"
     ${Qt5Core_INCLUDE_DIRS}
 )
 #endif (stopeight-clibs-legacy_FOUND)
@@ -68,7 +66,6 @@ target_include_directories(${PROJECT_NAME}
     "../include"
     "../../include"
     "./"
-    "../../cmake-git-version-tracking/better-example"
     ${Qt5Core_INCLUDE_DIRS}
 )
 #endif (stopeight-clibs-legacy_FOUND AND stopeight-clibs-matrix_FOUND)

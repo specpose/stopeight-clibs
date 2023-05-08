@@ -41,7 +41,6 @@ set(${PROJECT_NAME}_sources
     src/straightsnormalizer.cpp
     src/corners.cpp
     src/render.cpp
-    ${POST_CONFIGURE_FILE}
 )
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
 add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_sources})
@@ -50,13 +49,11 @@ target_link_libraries(${PROJECT_NAME}
     PRIVATE
     Qt5::Core
     Qt5::Gui
-    git
 )
 
 target_include_directories(${PROJECT_NAME}
     PRIVATE
     "include"
-    ${GIT_HEADER_DIR}
 )
 install(TARGETS ${PROJECT_NAME} DESTINATION lib)
 

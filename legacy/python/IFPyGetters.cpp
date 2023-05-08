@@ -1,10 +1,9 @@
 #ifdef __VERSION__
 #define VERSION __VERSION__
 #elif
-#define VERSION 0
+#define VERSION "0"
 #endif
 
-#include "git.h"
 #include <IFPyShared.h>
 #undef NDEBUG
 #include <pybind11/pybind11.h>

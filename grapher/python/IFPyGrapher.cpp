@@ -3,10 +3,9 @@
 #ifdef __VERSION__
 #define VERSION __VERSION__
 #elif
-#define VERSION 0
+#define VERSION "0"
 #endif
 
-#include "git.h"
 #include <stopeight-clibs/grapher.h>
 #include <stopeight-clibs/Matrix.h>
 
