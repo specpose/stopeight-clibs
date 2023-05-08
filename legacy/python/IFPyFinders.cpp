@@ -1,3 +1,9 @@
+#ifdef __VERSION__
+#define VERSION __VERSION__
+#elif
+#define VERSION 0
+#endif
+
 #include "git.h"
 #include <IFPyShared.h>
 #undef NDEBUG
@@ -20,15 +26,7 @@ std::vector<size_t> transform_indices(ListSwitchable<dpoint> result_qt){
 }
 
 PYBIND11_MODULE(finders, f){
-	if(GitMetadata::Populated()) {
-		py::object sha;
-	        if(GitMetadata::AnyUncommittedChanges()) {
-			    sha = py::cast(GitMetadata::CommitSHA1()+"+dirty");
-	        } else {
-			    sha = py::cast(GitMetadata::CommitSHA1());
-		}
-		f.attr("version") = sha;
-	}
+	f.attr("version") = VERSION;
 	py::object getters_module = py::module::import("stopeight.getters");
     f.def("findSpiralCliffs",[](ListSwitchableWrapper& in)->std::vector<size_t>{
         return transform_indices(Spirals::findSpiralCliffs(in));

@@ -1,18 +1,16 @@
+#ifdef __VERSION__
+#define VERSION __VERSION__
+#elif
+#define VERSION 0
+#endif
+
 #include "git.h"
 #include <IFPyShared.h>
 #undef NDEBUG
 #include <pybind11/pybind11.h>
 
 PYBIND11_MODULE(getters, g){
-	if(GitMetadata::Populated()) {
-		py::object sha;
-	        if(GitMetadata::AnyUncommittedChanges()) {
-			sha = py::cast(GitMetadata::CommitSHA1()+"+dirty");
-	        } else {
-			sha = py::cast(GitMetadata::CommitSHA1());
-		}
-		g.attr("version") = sha;
-	}
+	g.attr("version") = VERSION;
     py::class_<ListCopyableWrapper<ListCopyable<dpoint>>>(g,"ListCopyable", py::buffer_protocol())
 	.def(py::init<py::array_t<sp::timecode<double>,py::array::c_style>>())
 	.def("__len__",[](ListCopyableWrapper<ListCopyable<dpoint>>& in)->int{return in.size();})

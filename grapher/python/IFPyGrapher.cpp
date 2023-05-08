@@ -1,5 +1,11 @@
 // Copyright (C) 2017 Fassio Blatter
 // GNU Lesser General Public License, version 2.1
+#ifdef __VERSION__
+#define VERSION __VERSION__
+#elif
+#define VERSION 0
+#endif
+
 #include "git.h"
 #include <stopeight-clibs/grapher.h>
 #include <stopeight-clibs/Matrix.h>
@@ -16,15 +22,7 @@ PYBIND11_MAKE_OPAQUE(std::vector<double>);
 using namespace pybind11;
 
 PYBIND11_MODULE(grapher, m){
-	if(GitMetadata::Populated()) {
-		object sha;
-	        if(GitMetadata::AnyUncommittedChanges()) {
-			sha = cast(GitMetadata::CommitSHA1()+"+dirty");
-	        } else {
-			sha = cast(GitMetadata::CommitSHA1());
-		}
-		m.attr("version") = sha;
-	}
+	m.attr("version") = VERSION;
 	object matrix_module = module::import("stopeight.matrix");
 	bind_vector<std::vector<double>>(m,"VectorDouble");
     /*class_<std::vector<double>>(m,"VectorDouble",buffer_protocol())

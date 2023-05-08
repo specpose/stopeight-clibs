@@ -1,5 +1,11 @@
 // Copyright (C) 2017 Fassio Blatter
 // GNU Lesser General Public License, version 2.1
+#ifdef __VERSION__
+#define VERSION __VERSION__
+#elif
+#define VERSION 0
+#endif
+
 #include "git.h"
 #include <stopeight-clibs/Matrix.h>
 #include <stopeight-clibs/shared_types.h>
@@ -17,15 +23,7 @@
 using namespace pybind11;
 
 PYBIND11_MODULE(matrix, m){
-	if(GitMetadata::Populated()) {
-		object sha;
-	        if(GitMetadata::AnyUncommittedChanges()) {
-			sha = cast(GitMetadata::CommitSHA1()+"+dirty");
-	        } else {
-			sha = cast(GitMetadata::CommitSHA1());
-		}
-		m.attr("version") = sha;
-	}
+	m.attr("version") = VERSION;
 	enum_<sp::FixpointType>(m,"FixpointType",module_local(false))
 		.value("EMPTY",sp::FixpointType::EMPTY)
 		.value("FIXPOINT",sp::FixpointType::FIXPOINT);
