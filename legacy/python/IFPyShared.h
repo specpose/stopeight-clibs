@@ -6,7 +6,7 @@ namespace py = pybind11;
 #include "turnanalyzer.h"
 #include "corneranalyzer.h"
 #include <stopeight-clibs/shared_types.h>
-#include <stopeight-clibs/Matrix.h>
+#include <stopeight-clibs-matrix/Matrix.h>
 
 template<typename F> class ListCopyableWrapper : public F
 {

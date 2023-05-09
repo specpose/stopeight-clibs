@@ -6,7 +6,7 @@
 #define VERSION "0"
 #endif
 
-#include <stopeight-clibs/Matrix.h>
+#include <stopeight-clibs-matrix/Matrix.h>
 #include <stopeight-clibs/shared_types.h>
 
 #include <pybind11/pybind11.h>

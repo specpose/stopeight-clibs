@@ -1,11 +1,10 @@
 cmake_minimum_required (VERSION 3.12)
 
-find_package(Qt5Core)
-find_package(Qt5Gui)
-
-if (Qt5Core_FOUND AND Qt5Gui_FOUND)
-
 project(stopeight-clibs-legacy)
+find_package(Qt5 COMPONENTS Core Gui REQUIRED)
+
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
+
 aux_source_directory(. SRC_LIST)
 set(${PROJECT_NAME}_sources
     src/listcopyable.cpp
@@ -42,26 +41,13 @@ set(${PROJECT_NAME}_sources
     src/corners.cpp
     src/render.cpp
 )
-set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
 add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_sources})
-
 target_link_libraries(${PROJECT_NAME}
-    PRIVATE
-    Qt5::Core
-    Qt5::Gui
+    PRIVATE Qt5::Core
+    PRIVATE Qt5::Gui
 )
-
 target_include_directories(${PROJECT_NAME}
     PRIVATE
     "include"
 )
 install(TARGETS ${PROJECT_NAME} DESTINATION lib)
-
-find_package(Python COMPONENTS Development)
-if (Python_Development_FOUND)
-#find_package(pybind11 CONFIG)
-#if (pybind11_FOUND)
-add_subdirectory(python)
-#endif (pybind11_FOUND)
-endif (Python_Development_FOUND)
-endif (Qt5Core_FOUND AND Qt5Gui_FOUND)

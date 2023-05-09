@@ -1,6 +1,6 @@
 // Copyright (C) 2019 Fassio Blatter
 // GNU Lesser General Public License, version 2.1
-#include "stopeight-clibs/analyzer.h"
+#include "stopeight-clibs-analyzer/analyzer.h"
 #include "stopeight-clibs/shared_types.h"
 
 #include <thread>

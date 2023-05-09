@@ -1,7 +1,7 @@
 // Copyright (C) 2017 Fassio Blatter
 // GNU Lesser General Public License, version 2.1
 
-#include "stopeight-clibs/Matrix.h"
+#include "stopeight-clibs-matrix/Matrix.h"
 #include "stopeight-clibs/shared_types.h"
 #include <cmath>
 #include <algorithm>

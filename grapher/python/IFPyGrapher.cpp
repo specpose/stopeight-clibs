@@ -7,7 +7,7 @@
 #endif
 
 #include <stopeight-clibs/grapher.h>
-#include <stopeight-clibs/Matrix.h>
+#include <stopeight-clibs-matrix/Matrix.h>
 
 #undef NDEBUG
 #include <iostream>
