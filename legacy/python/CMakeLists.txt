@@ -1,15 +1,14 @@
-cmake_minimum_required (VERSION 3.4.3)
+cmake_minimum_required (VERSION 3.18)
 
 project(legacy)
-#find_package(stopeight-clibs-legacy)
-#if (stopeight-clibs-legacy_FOUND)
+find_package(Qt5 COMPONENTS Core REQUIRED)
+
+find_library(stopeight-clibs-legacy_FOUND stopeight-clibs-legacy REQUIRED)
 
 find_package(Python COMPONENTS Development Interpreter)
 if (Python_Development_FOUND AND Python_Interpreter_FOUND)
 find_package(pybind11 CONFIG)
 if (pybind11_FOUND)
-
-find_package(Qt5 COMPONENTS Core REQUIRED)
 
 pybind11_add_module(${PROJECT_NAME} 
     interfacepython.cpp
@@ -28,18 +27,18 @@ target_include_directories(${PROJECT_NAME}
 
 endif (pybind11_FOUND)
 endif (Python_Development_FOUND AND Python_Interpreter_FOUND)
-#endif (stopeight-clibs-legacy_FOUND
 
 project(finders)
-#find_package(stopeight-clibs-legacy)
-#if (stopeight-clibs-legacy_FOUND)
+find_package(Qt5 COMPONENTS Core Gui REQUIRED)
+
+find_library(stopeight-clibs-legacy_FOUND stopeight-clibs-legacy REQUIRED)
+find_path(stopeight-clibs_FOUND stopeight-clibs REQUIRED)
 
 find_package(Python COMPONENTS Development Interpreter)
 if (Python_Development_FOUND AND Python_Interpreter_FOUND)
 find_package(pybind11 CONFIG)
 if (pybind11_FOUND)
 
-find_package(Qt5 COMPONENTS Core Gui REQUIRED)
 pybind11_add_module(${PROJECT_NAME} 
     IFPyFinders.cpp
     IFPyShared.cpp
@@ -61,12 +60,10 @@ target_include_directories(${PROJECT_NAME}
 endif (pybind11_FOUND)
 endif (Python_Development_FOUND AND Python_Interpreter_FOUND)
 
-#endif (stopeight-clibs-legacy_FOUND)
-
 project(getters)
-#find_package(stopeight-clibs-legacy)
-#find_package(stopeight-clibs-matrix)
-#if (stopeight-clibs-legacy_FOUND AND stopeight-clibs-matrix_FOUND)
+find_library(stopeight-clibs-legacy_FOUND stopeight-clibs-legacy REQUIRED)
+find_library(stopeight-clibs-matrix_FOUND stopeight-clibs-matrix REQUIRED)
+find_path(stopeight-clibs_FOUND stopeight-clibs REQUIRED)
 
 find_package(Python COMPONENTS Development Interpreter)
 if (Python_Development_FOUND AND Python_Interpreter_FOUND)
@@ -94,5 +91,3 @@ target_include_directories(${PROJECT_NAME}
 
 endif (pybind11_FOUND)
 endif (Python_Development_FOUND AND Python_Interpreter_FOUND)
-
-#endif (stopeight-clibs-legacy_FOUND AND stopeight-clibs-matrix_FOUND)

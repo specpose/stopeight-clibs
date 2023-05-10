@@ -1,14 +1,14 @@
-cmake_minimum_required (VERSION 3.12)
+cmake_minimum_required (VERSION 3.18)
 
-#find_package(stopeight-clibs-analyzer)
-#if (stopeight-clibs-analyzer_FOUND)
+project(analyzer)
+find_library(stopeight-clibs-analyzer_FOUND stopeight-clibs-analyzer REQUIRED)
+find_path(stopeight-clibs_FOUND stopeight-clibs REQUIRED)
 
 find_package(Python COMPONENTS Development Interpreter)
 if (Python_Development_FOUND AND Python_Interpreter_FOUND)
 find_package(pybind11 CONFIG)
 if (pybind11_FOUND)
 
-project(analyzer)
 pybind11_add_module(${PROJECT_NAME} IFPyAnalyzer.cpp)
 target_link_libraries(${PROJECT_NAME} PRIVATE stopeight-clibs-analyzer)
 target_include_directories(${PROJECT_NAME}
@@ -18,5 +18,3 @@ target_include_directories(${PROJECT_NAME}
 
 endif (pybind11_FOUND)
 endif (Python_Development_FOUND AND Python_Interpreter_FOUND)
-
-#endif (stopeight-clibs-analyzer_FOUND)
