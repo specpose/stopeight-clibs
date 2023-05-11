@@ -5,10 +5,11 @@ find_package(Qt5 COMPONENTS Core REQUIRED)
 
 find_library(stopeight-clibs-legacy_FOUND stopeight-clibs-legacy REQUIRED)
 
-find_package(Python COMPONENTS Development Interpreter)
-if (Python_Development_FOUND AND Python_Interpreter_FOUND)
-find_package(pybind11 CONFIG)
-if (pybind11_FOUND)
+find_package(Python COMPONENTS Development)
+if (NOT Python_Development_FOUND)
+message(FATAL_ERROR,"Python development headers not found")
+endif (NOT Python_Development_FOUND)
+find_package(pybind11 CONFIG REQUIRED)
 
 pybind11_add_module(${PROJECT_NAME} 
     interfacepython.cpp
@@ -25,19 +26,17 @@ target_include_directories(${PROJECT_NAME}
 #ubuntu includes/qt5/
 )
 
-endif (pybind11_FOUND)
-endif (Python_Development_FOUND AND Python_Interpreter_FOUND)
-
 project(finders)
 find_package(Qt5 COMPONENTS Core Gui REQUIRED)
 
 find_library(stopeight-clibs-legacy_FOUND stopeight-clibs-legacy REQUIRED)
 find_path(stopeight-clibs_FOUND stopeight-clibs REQUIRED)
 
-find_package(Python COMPONENTS Development Interpreter)
-if (Python_Development_FOUND AND Python_Interpreter_FOUND)
-find_package(pybind11 CONFIG)
-if (pybind11_FOUND)
+find_package(Python COMPONENTS Development Interpreter Numpy )
+if (NOT (Python_Development_FOUND AND Python_Interpreter_FOUND AND Python_NumPy_FOUND))
+message(FATAL_ERROR,"NumPy headers are required for dtype symbol generation")
+endif (NOT (Python_Development_FOUND AND Python_Interpreter_FOUND AND Python_NumPy_FOUND))
+find_package(pybind11 CONFIG REQUIRED)
 
 pybind11_add_module(${PROJECT_NAME} 
     IFPyFinders.cpp
@@ -57,20 +56,18 @@ target_include_directories(${PROJECT_NAME}
     ${Qt5_Core_INCLUDE_DIRS}
 )
 
-endif (pybind11_FOUND)
-endif (Python_Development_FOUND AND Python_Interpreter_FOUND)
-
 project(getters)
+find_package(Qt5 COMPONENTS Core REQUIRED)
+
 find_library(stopeight-clibs-legacy_FOUND stopeight-clibs-legacy REQUIRED)
 find_library(stopeight-clibs-matrix_FOUND stopeight-clibs-matrix REQUIRED)
 find_path(stopeight-clibs_FOUND stopeight-clibs REQUIRED)
 
-find_package(Python COMPONENTS Development Interpreter)
-if (Python_Development_FOUND AND Python_Interpreter_FOUND)
-find_package(pybind11 CONFIG)
-if (pybind11_FOUND)
-
-find_package(Qt5 COMPONENTS Core REQUIRED)
+find_package(Python COMPONENTS Development Interpreter Numpy )
+if (NOT (Python_Development_FOUND AND Python_Interpreter_FOUND AND Python_NumPy_FOUND))
+message(FATAL_ERROR,"NumPy headers are required for dtype symbol generation")
+endif (NOT (Python_Development_FOUND AND Python_Interpreter_FOUND AND Python_NumPy_FOUND))
+find_package(pybind11 CONFIG REQUIRED)
 
 pybind11_add_module(${PROJECT_NAME}
     IFPyGetters.cpp
@@ -88,6 +85,3 @@ target_include_directories(${PROJECT_NAME}
     "./"
     ${Qt5_Core_INCLUDE_DIRS}
 )
-
-endif (pybind11_FOUND)
-endif (Python_Development_FOUND AND Python_Interpreter_FOUND)
