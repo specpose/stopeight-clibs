@@ -5,10 +5,10 @@ find_package(Qt5 COMPONENTS Core REQUIRED)
 
 find_library(stopeight-clibs-legacy_FOUND stopeight-clibs-legacy REQUIRED)
 
-find_package(Python COMPONENTS Development)
-if (NOT Python_Development_FOUND)
-message(FATAL_ERROR,"Python development headers not found")
-endif (NOT Python_Development_FOUND)
+find_package(Python COMPONENTS Development Interpreter)
+if (NOT (Python_Development_FOUND AND Python_Interpreter_FOUND))
+message(FATAL_ERROR,"Python development headers and/or interpreter not found")
+endif (NOT (Python_Development_FOUND AND Python_Interpreter_FOUND))
 find_package(pybind11 CONFIG REQUIRED)
 
 pybind11_add_module(${PROJECT_NAME} 
