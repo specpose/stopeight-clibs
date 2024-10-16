@@ -2,7 +2,6 @@
 // GNU Lesser General Public License, version 2.1
 
 #include <vector>
-
 #include <stopeight-clibs/shared_types.h>
 
 namespace speczilla {
