@@ -3,6 +3,7 @@
 
 #include "stopeight-clibs/grapher_impl.h"
 #include "stopeight-clibs/algo.h"
+#include "stopeight-clibs/error.hpp"
 
 namespace speczilla {
 
@@ -10,6 +11,10 @@ namespace speczilla {
     : buf(s), _showSamples(s->size()), _samplesPerVector(1)
                 , _unitaryLength(1.0), _relative(false), _average(0.0), _angleScale(1.0)
 	{
+		if (buf->size() % 2 != 0)
+			throw SFA::util::runtime_error("Number of samples has to be even",__FILE__,__func__);
+		if (buf->size() < 4)
+			throw SFA::util::runtime_error("Graph needs at least 4 samples", __FILE__, __func__);
 	}
 	template Buffer<float>::Buffer(std::vector<float>*);
 	template Buffer<double>::Buffer(std::vector<double>*);
@@ -38,24 +43,20 @@ namespace speczilla {
 	{
         T vectorLength = grapher::samples_To_VG_vectorLength(_showSamples, _unitaryLength);
 		auto output = std::vector<sp::timecode<T>>{};
+		std::vector<T> differences = std::vector<T>(buf->size(), 0.0);
+		std::adjacent_difference(std::begin(*buf), std::end(*buf), std::begin(differences));
 
-		if (buf->size() > 2) {
-			std::vector<T> differences = std::vector<T>(buf->size(), 0.0);
-			std::adjacent_difference(std::begin(*buf), std::end(*buf), std::begin(differences));
-
-			//in general if uneven, middle is on left side
-			//-1 differences, -1 size
-			auto dvg = (grapher::__differences_To_VG<T>(_samplesPerVector, vectorLength, std::vector<size_t>(1, (((buf->size() - 1) / 2) - 1))));
-			if (_relative) {
-				angle::relative afunc = angle::relative(std::begin(differences) + 1, std::end(differences),_average,_angleScale);
-				output = dvg(differences, afunc);//((vectorSize * 2) + add);
-			}
-			else {
-				angle::independent afunc = angle::independent(std::begin(differences) + 1, std::end(differences),_average,_angleScale);
-				output = dvg(differences, afunc);//((vectorSize * 2) + add);
-			}			                                                            
+		//in general if uneven, middle is on left side
+		//-1 differences, -1 size
+		auto dvg = (grapher::__differences_To_VG<T>(_samplesPerVector, vectorLength, std::vector<size_t>(1, (((buf->size() - 1) / 2) - 1))));
+		if (_relative) {
+			angle::relative afunc = angle::relative(std::begin(differences) + 1, std::end(differences),_average,_angleScale);
+			output = dvg(differences, afunc);//((vectorSize * 2) + add);
 		}
-
+		else {
+			angle::independent afunc = angle::independent(std::begin(differences) + 1, std::end(differences),_average,_angleScale);
+			output = dvg(differences, afunc);//((vectorSize * 2) + add);
+		}			                                                            
 		return output;
 	}
 	template std::vector<sp::timecode<float>> Buffer<float>::operator()();
