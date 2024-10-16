@@ -1,18 +1,13 @@
 // Copyright (C) 2017 Fassio Blatter
 // GNU Lesser General Public License, version 2.1
 
-#ifndef GRAPHER_H
-#define GRAPHER_H
-
 #include <vector>
 
 #include <stopeight-clibs/shared_types.h>
 
-#include <stopeight-clibs/preloaderif.h>
-
 namespace speczilla {
 
-	template<typename T>class Buffer : public PreloaderIF<T, std::vector<sp::timecode<T>>>
+	template<typename T>class Buffer
 	{
 	public:
 		Buffer<T>(std::vector<T>* s);
@@ -31,4 +26,3 @@ namespace speczilla {
 		double _angleScale;
 	};
 }
-#endif
