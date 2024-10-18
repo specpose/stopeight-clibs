@@ -1,7 +1,7 @@
 // Copyright (C) 2009-2016 Specific Purpose Software GmbH
 // GNU Lesser General Public License, version 2.1
 
-#include "stopeight-clibs/mean_impl.h"
+#include "stopeight-clibs/mean.h"
 #include "stopeight-clibs/algo.h"
 
 namespace speczilla {

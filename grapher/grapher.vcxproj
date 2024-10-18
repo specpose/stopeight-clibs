@@ -156,15 +156,9 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="algo.cpp" />
+    <ClCompile Include="algo_gpx.cpp" />
     <ClCompile Include="containers.cpp" />
-    <ClCompile Include="grapher.cpp" />
     <ClCompile Include="grapher_gpx.cpp" />
-    <ClCompile Include="mean.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="grapher_impl.h" />
-    <ClInclude Include="mean_impl.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

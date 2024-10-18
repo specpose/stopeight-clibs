@@ -1,7 +1,7 @@
 // Copyright (C) 2009-2016 Specific Purpose Software GmbH
 // GNU Lesser General Public License, version 2.1
 
-#include "stopeight-clibs/grapher_impl.h"
+#include "stopeight-clibs/grapher.h"
 #include "stopeight-clibs/algo.h"
 #include "stopeight-clibs/error.hpp"
 

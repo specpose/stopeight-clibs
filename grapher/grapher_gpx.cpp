@@ -2,7 +2,7 @@
 // GNU Lesser General Public License, version 2.1
 
 #include "stopeight-clibs/grapher_gpx.h"
-#include "stopeight-clibs/algo.h"
+#include "stopeight-clibs/algo_gpx.h"
 #include "stopeight-clibs/error.hpp"
 
 namespace speczilla {
