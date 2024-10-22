@@ -18,14 +18,22 @@ namespace grapher {
 	public:
 		_fixpoints(std::vector<size_t>& points);
 		~_fixpoints();
-		template <class InputIterator, class OutputIterator,
+		template <class InputIterator,
 		typename = typename sp::random_access<InputIterator>
-		>void operator()(InputIterator begin, InputIterator end, OutputIterator begin2);
+		>void operator()(InputIterator begin, InputIterator end);
 	private:
 		std::vector<size_t>& _fixPoint_indices;
 	};
 
 	template <class InputIterator, class OutputIterator>void _sum_blocks(InputIterator begin, InputIterator end, OutputIterator begin2);//freedom vector or deque//type in or out?
+
+	template<typename output_t> class _sum_blocks2 {
+	public:
+		_sum_blocks2(size_t samplesPerVector);
+		template <class InputIterator>std::vector<sp::timecode<output_t>> operator()(InputIterator begin, InputIterator end);//, OutputIterator begin2);
+	private:
+		size_t _samplesPerVector = 1;
+	};
 
 	template <class InputIterator, class OutputIterator,
 		typename = typename sp::input_iterator<InputIterator>

@@ -16,6 +16,7 @@
 
 #include <vector>
 #include <math.h>
+#include "stopeight-clibs/error.hpp"
 
 namespace grapher {
 
@@ -31,7 +32,9 @@ namespace grapher {
             T x = (cos(rot)*vec.get_x() - sin(rot)*vec.get_y());
             T y = (sin(rot)*vec.get_x() + cos(rot)*vec.get_y());
 			auto p = OutputElement{};
-			p.__init({x,y});
+			//p.__init({x,y});
+            p.set_x(x);
+            p.set_y(y);
             return p;
         });
     }
@@ -43,56 +46,28 @@ namespace grapher {
     _fixpoints::~_fixpoints() {
     }
     template <class InputIterator,
-		class OutputIterator,
-		typename> void _fixpoints::operator()(InputIterator begin, InputIterator end, OutputIterator begin2)
+		typename> void _fixpoints::operator()(InputIterator begin, InputIterator end)
     {
-        //remove all illegal fixpoint_indices
+        /*//remove all illegal fixpoint_indices
         //Note: last can not be fixPoint
         const auto vectors_size = std::distance(begin, end);
         std::remove_if(std::begin(_fixPoint_indices), std::end(_fixPoint_indices), [vectors_size](size_t index) {
             if ((index >= (vectors_size - size_t(1) )) || (index == size_t(0) ))
                 return true;
             return false;
-        });
+        });*/
         //make it a fixPoint
-        for (auto index : _fixPoint_indices) {
-			(begin + index)->set_category(sp::FixpointType::FIXPOINT);
+        for (const auto& index : _fixPoint_indices) {
+            if (index < std::distance(begin,end))
+                (begin + index)->set_category(sp::FixpointType::FIXPOINT);
+            else
+                throw SFA::util::runtime_error("A fixpoint beyond the number of vectors in the VectorGraph has been found", __FILE__, __func__);
         }
-        std::vector<std::pair<size_t, size_t>> slices = std::vector<std::pair<size_t, size_t>>{};
-        class prev {
-        public:
-            prev() : _prev(0) {};
-            std::pair<size_t, size_t> operator()(size_t curr) {
-                auto result = std::pair<size_t, size_t>{ _prev,curr };
-                _prev = curr + 1;
-                return result;
-            };
-        private:
-            size_t _prev;
-        };
-        auto it = std::back_inserter(slices);
-        std::for_each(std::begin(_fixPoint_indices), std::end(_fixPoint_indices), [&it](size_t index) {
-            *it++ = (prev()(index));//was index
-            *it++ = (std::pair<size_t, size_t>{index, index + 1});//was index+1
-        });
-        //tail end
-        std::pair<size_t, size_t> last = std::pair<size_t, size_t>{ 0,vectors_size };
-        if (vectors_size > 0) {
-            last = std::pair<size_t, size_t>{ _fixPoint_indices.back() + 1, vectors_size };// was _fixPoint_indices.back() + 1
-        }
-        *it++ = (last);
-		using T = typename std::iterator_traits<InputIterator>::value_type::value_type;//todo remove backinserter//std::iterator_traits<std::iterator_traits<OutputIterator>::value_type::first_type>::value_type::value_type;
-
-        std::transform(std::begin(slices), std::end(slices), begin2, [begin](std::pair<size_t, size_t> p) {//todo derive it_pair
-            it_pair<T> e = it_pair<T>();
-            e.first = (begin + p.first);
-            e.second = (begin + p.second);
-            return e;
-        });
     }
-    template void _fixpoints::operator()(std::vector<sp::timecode<double>>::iterator begin, std::vector<sp::timecode<double>>::iterator end, std::vector<it_pair<double>>::iterator begin2);
-	template void _fixpoints::operator()(std::vector<sp::timecode<float>>::iterator begin, std::vector<sp::timecode<float>>::iterator end, std::vector<it_pair<float>>::iterator begin2);
-    
+    template void _fixpoints::operator()(std::vector<sp::timecode<double>>::iterator begin, std::vector<sp::timecode<double>>::iterator end);
+	template void _fixpoints::operator()(std::vector<sp::timecode<float>>::iterator begin, std::vector<sp::timecode<float>>::iterator end);
+    template void _fixpoints::operator()(std::vector<sp::timecode<int16_t>>::iterator begin, std::vector<sp::timecode<int16_t>>::iterator end);
+
     template <class InputIterator, class OutputIterator> void _sum_blocks(InputIterator begin, InputIterator end, OutputIterator begin2)
     {
 		using it_pair = typename std::iterator_traits<InputIterator>::value_type;//vector of pairs -> pair//it_pair not available from OutputIterator
@@ -102,7 +77,9 @@ namespace grapher {
             //both can be nonempty; preserve type of last
             if (block.first != block.second) {
 				tc e {};
-				e.__init({0,0});
+				//e.__init({0,0});
+                e.set_x(0);
+                e.set_y(0);
                 return std::accumulate(block.first, block.second, e, [](tc v1, tc v2) {
                     v2 += v1;
                     return v2;
@@ -118,6 +95,98 @@ namespace grapher {
     template void _sum_blocks(std::vector<it_pair<double>>::iterator begin, std::vector<it_pair<double>>::iterator end, std::vector<sp::timecode<double>>::iterator begin2);
 	template void _sum_blocks(std::vector<it_pair<float>>::iterator begin, std::vector<it_pair<float>>::iterator end, std::vector<sp::timecode<float>>::iterator begin2);
 
+    template<typename output_t> _sum_blocks2<output_t>::_sum_blocks2(size_t samplesPerVector) :_samplesPerVector(samplesPerVector) {};//TODO: Align a grid of samplesPerVector to fixPoint
+    template _sum_blocks2<float>::_sum_blocks2(size_t);
+    template _sum_blocks2<double>::_sum_blocks2(size_t);
+    template _sum_blocks2<int16_t>::_sum_blocks2(size_t);
+    template<typename output_t> template<typename InputIterator>std::vector<sp::timecode<output_t>> _sum_blocks2<output_t>::operator()(const InputIterator begin, const InputIterator end){//, OutputIterator begin2) {
+        std::vector<sp::timecode<output_t>> output(0);
+        auto __fixpoint_tester = [](sp::timecode<output_t>& tct_point) {//const
+            return (tct_point.category() == sp::FixpointType::FIXPOINT) ? true : false;
+        };
+        /*if (std::distance(begin, end) < _samplesPerVector)
+            throw SFA::util::runtime_error("The requested samplesPerVector size is bigger than the number of input samples", __FILE__, __func__);
+        auto number_of_fixpoints = std::count_if(begin, end, __fixpoint_tester);
+        if (number_of_fixpoints == 0)
+            throw SFA::util::runtime_error("This function needs more than zero Fixpoints", __FILE__, __func__);
+        else if (number_of_fixpoints > 1)
+            throw SFA::util::runtime_error("This function can not work with more than one Fixpoint", __FILE__, __func__);*/
+        auto index_it = std::find_if(begin, end, __fixpoint_tester);
+        InputIterator new_end = end;
+        InputIterator new_beginning = begin;
+        //The overhanging bits on either side are hacked of
+        if (std::distance(begin, end) > 3 * _samplesPerVector) {//wing test
+            //End should always point to the element after the last
+            if (std::distance(index_it, end - 1) < _samplesPerVector) {//shift right
+                new_beginning += std::distance(begin, end) % _samplesPerVector;
+            }
+            else if (std::distance(begin, index_it) < _samplesPerVector) {//shift left
+                //hack off the rest
+                new_end -= std::distance(begin, end) % _samplesPerVector;
+            }
+            else {//center
+                new_beginning += int(std::distance(begin, end) % _samplesPerVector) / 2;//floor
+                new_end -= int(std::distance(new_beginning, end) % _samplesPerVector) % 2;//floor
+            }
+        }
+        else if (std::distance(begin, end) < 3 * _samplesPerVector) {
+            throw SFA::util::runtime_error("The requested samplesPerVector and/or Fixpoint would result in a VectorGraph smaller than 3", __FILE__, __func__);
+        }
+        //if (int(std::distance(new_beginning, new_end) / _samplesPerVector) % 2 == 0)//floor
+            //new_end = new_end - _samplesPerVector;//HACK
+            //throw SFA::util::runtime_error("The requested samplesPerVector and/or Fixpoint would result in a VectorGraph with an even number of vectors", __FILE__, __func__);
+        //The middle ones get promoted
+        //for each _samplesPerVectors from the front:
+        struct Promoter { std::array<InputIterator, 2> bounds{}; bool isFixpoint = false; };
+        std::vector<Promoter> promotableBounds(0);
+        //1. Create the bounds
+        for (int i = 0; i < std::distance(new_beginning, new_end); i++) {
+            for (int j = 0; j < std::distance(new_beginning, new_end) / _samplesPerVector; j++) {
+                Promoter section{};
+                std::get<0>(section.bounds) = new_beginning + _samplesPerVector * j;
+                std::get<1>(section.bounds) = new_beginning + _samplesPerVector * (j + 1);
+                section.isFixpoint = false;
+                promotableBounds.push_back(section);
+            }
+        }
+        auto test0 = std::distance(std::begin(promotableBounds),std::end(promotableBounds));
+        //2. Extract the Fixpoint
+        std::for_each(std::begin(promotableBounds), std::end(promotableBounds), [](auto& section) {
+            for (int i = 0; i < std::distance(std::get<0>(section.bounds), std::get<1>(section.bounds)); i++)
+                (std::get<0>(section.bounds) + i)->category() ? section.isFixpoint = true : section.isFixpoint = false;
+            });
+        //3. Sum them up in sequence and append to begin2
+        //4. Promote the Fixpoint
+        std::transform(std::begin(promotableBounds), std::end(promotableBounds), std::back_insert_iterator(output), [](const Promoter& section) {
+            //std::transform(std::begin(promotableBounds), std::end(promotableBounds), begin2, [](const Promoter& section) {
+            if (std::get<0>(section.bounds) != std::get<1>(section.bounds)) {
+                sp::timecode<output_t> accumulator{};
+                accumulator.set_x(0);
+                accumulator.set_y(0);
+                sp::timecode<output_t> blocksum = std::accumulate(std::get<0>(section.bounds), std::get<1>(section.bounds), accumulator,
+                    [](sp::timecode<output_t> v1, sp::timecode<output_t> v2) {
+                v2 += v1;
+                return v2;
+                    });
+                if (section.isFixpoint)
+                    blocksum.set_category(sp::FixpointType::FIXPOINT);
+                return blocksum;
+            }
+            else {
+                sp::timecode<output_t> accumulator{};
+                accumulator = *std::get<0>(section.bounds);
+                if (section.isFixpoint)
+                    accumulator.set_category(sp::FixpointType::FIXPOINT);
+                return accumulator;
+            }
+        });
+        auto test1 = std::distance(std::begin(output), std::end(output));
+        return output;
+    };
+    template std::vector<sp::timecode<float>> _sum_blocks2<float>::operator()(std::vector<sp::timecode<float>>::iterator, std::vector<sp::timecode<float>>::iterator);// , std::back_insert_iterator<std::vector<sp::timecode<float>>>);
+    template std::vector<sp::timecode<double>> _sum_blocks2<double>::operator()(std::vector<sp::timecode<double>>::iterator, std::vector<sp::timecode<double>>::iterator);//, std::back_insert_iterator<std::vector<sp::timecode<double>>>);
+    template std::vector<sp::timecode<int16_t>> _sum_blocks2<int16_t>::operator()(std::vector<sp::timecode<int16_t>>::iterator, std::vector<sp::timecode<int16_t>>::iterator);//, std::back_insert_iterator<std::vector<sp::timecode<int16_t>>>);
+
     template <class InputIterator,
 		class OutputIterator,
 		typename>
@@ -126,7 +195,9 @@ namespace grapher {
 		using tc = typename std::iterator_traits<OutputIterator>::value_type;
         class my_add {
         public:
-			my_add() : cache({}) { cache.__init({0,0}); };
+            my_add() : cache(tc{}) {
+                cache.set_x(0); cache.set_y(0);
+            };//cache.__init({0,0}); };
             tc operator()(tc e) {
                 auto newvalue = e;//type preserved
                 newvalue += cache;//type preserved
@@ -142,12 +213,11 @@ namespace grapher {
 	template void _append(std::vector<sp::timecode<float>>::iterator begin, std::vector<sp::timecode<float>>::iterator end, std::vector<sp::timecode<float>>::iterator begin2);
 
     template <class T> __differences_To_VG<T>::__differences_To_VG(size_t samplesPerVector, double vectorLength, std::vector<size_t> fixPoints_indices)
-    : _samplesPerVector(samplesPerVector)
-    , _vectorLength(vectorLength)
+    : _samplesPerVector(samplesPerVector), _vectorLength(vectorLength)
     , _fixPoint_indices(fixPoints_indices)
     {
     }
-	template __differences_To_VG<double>::__differences_To_VG(size_t,double, std::vector<size_t>);
+	template __differences_To_VG<double>::__differences_To_VG(size_t, double, std::vector<size_t>);
 	template __differences_To_VG<float>::__differences_To_VG(size_t, double, std::vector<size_t>);
 	template __differences_To_VG<int16_t>::__differences_To_VG(size_t, double, std::vector<size_t>);
 
@@ -170,36 +240,21 @@ namespace grapher {
 
 
 		auto tc = sp::timecode<T>{};
-		tc.__init({T(_vectorLength),T(0)});
+		//tc.__init({T(_vectorLength),T(0)});
+        tc.set_x(_vectorLength);//HACKED?
+        tc.set_y(0);
         auto vectors = std::vector<sp::timecode<T>>(rotations.size());
 		std::fill(std::begin(vectors), std::end(vectors), tc);//sp::make_timecode<T>(T(_vectorLength), 0));//sp::timecode<T>{T(_vectorLength), 0});
         __apply_rotation_matrix(std::begin(rotations), std::end(rotations), std::begin(vectors));
         
         //BUG No default constructor: iterator allocator? Workaround ranges::view
-        std::vector<std::pair< typename std::vector<sp::timecode<T>>::iterator, typename std::vector<sp::timecode<T>>::iterator >> vectors_sliced;
+        //std::vector<std::pair< typename std::vector<sp::timecode<T>>::iterator, typename std::vector<sp::timecode<T>>::iterator >> vectors_sliced;
         auto func = _fixpoints(_fixPoint_indices);
-        func(std::begin(vectors), std::end(vectors), std::back_inserter(vectors_sliced));
-        
-		//HACK out_vectors needs to know size from blocks static func. Workaround ranges::view
-        auto out_vectors = std::vector<sp::timecode<T>>{};//((vectorSize * 2) + add);
-        
-        //hierarchy all to 1
-        //std::transform(std::begin(vectors_sliced), std::end(vectors_sliced), std::back_inserter(out_vectors), [_samplesPerVector](decltype(vectors_sliced) v) {
-        for (auto v : vectors_sliced) {
-            stopeight::blocks<sp::timecode<T>> blocks_vector = stopeight::blocks<sp::timecode<T>>(v, _samplesPerVector);//v is it_pair<T>
-            //std::move(slice), _samplesPerVector);
-            
-            std::vector<sp::timecode<T>> ov = std::vector<sp::timecode<T>>{};//(blocks_vector.size(), { double(0), double(0) });
-            //std::fill<typename std::vector<sp::element>::iterator>(std::begin(ov), std::end(ov), sp::element{ 1.0f, 1.0f });
-            
-            _sum_blocks(std::begin(blocks_vector), std::end(blocks_vector), std::back_inserter(ov));
-            std::move(std::begin(ov), std::end(ov), std::back_inserter(out_vectors));
-        }
-        //});
-        
-        _append(std::begin(out_vectors), std::end(out_vectors), std::begin(out_vectors));
-        
-		return out_vectors;
+        func(std::begin(vectors), std::end(vectors));
+        grapher::_sum_blocks2<T> blocks(_samplesPerVector);
+        auto output = blocks(std::begin(vectors), std::end(vectors));
+        _append(std::begin(vectors), std::end(vectors), std::begin(vectors));
+		return vectors;
     }
 	template std::vector<sp::timecode<double>> __differences_To_VG<double>::operator()(std::vector<double>&, angle::relative&);
 	template std::vector<sp::timecode<float>> __differences_To_VG<float>::operator()(std::vector<float>&, angle::relative&);
@@ -221,13 +276,12 @@ namespace grapher {
     }
     
 	template<class T> samples_To_VG<T>::samples_To_VG(size_t samplesPerVector, double vectorLength, std::vector<size_t> fixPoints_indices)
-    : _samplesPerVector(samplesPerVector)
-    , _vectorLength(vectorLength)
+    : _samplesPerVector(samplesPerVector), _vectorLength(vectorLength)
     , _fixPoint_indices(fixPoints_indices)
     {
     }
-    template samples_To_VG<double>::samples_To_VG(size_t,double,std::vector<size_t>);
-    template samples_To_VG<float>::samples_To_VG(size_t,double,std::vector<size_t>);
+    template samples_To_VG<double>::samples_To_VG(size_t, double,std::vector<size_t>);
+    template samples_To_VG<float>::samples_To_VG(size_t, double,std::vector<size_t>);
 	template<class T> samples_To_VG<T>::~samples_To_VG() {
     }
     template samples_To_VG<double>::~samples_To_VG();

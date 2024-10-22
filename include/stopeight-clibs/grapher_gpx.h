@@ -18,8 +18,7 @@ namespace speczilla {
 		std::vector<sp::timecode<T>> operator()();
 
 	private:
-		std::vector<T>* buf;
-		std::vector<sp::timecode<T>> output;
+		std::vector<T>* buf = nullptr;
 		size_t _samplesPerVector,_showSamples;
 		double _unitaryLength;
 		bool _relative;

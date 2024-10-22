@@ -1,13 +1,14 @@
 cmake_minimum_required (VERSION 3.12)
+set(CMAKE_CXX_STANDARD 17)
 
 project(stopeight-clibs-grapher)
 
 aux_source_directory(. SRC_LIST)
 set(${PROJECT_NAME}_sources
-    containers.cpp
-    algo.cpp
-    grapher.cpp
-    mean.cpp
+#    containers.cpp
+    algo_gpx.cpp
+    grapher_gpx.cpp
+#    mean.cpp
     main.cpp
 )
 

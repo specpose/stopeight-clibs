@@ -13,6 +13,12 @@
 #define M_PI        3.14159265358979323846264338327950288
 #endif
 
+template<typename T, size_t Size, typename tf> Vector<T, Size, tf>::Vector(std::initializer_list<T> list) {
+	__init(list);
+}
+template Vector<double>::Vector(std::initializer_list<double>);
+template Vector<float>::Vector(std::initializer_list<float>);
+
 template<typename T, size_t Size, typename tf> Vector<T, Size,tf>& Vector<T,Size,tf>::__init(std::initializer_list<T> list) {
 	std::copy(std::begin(list),std::end(list),std::begin(coords));
 	std::fill(std::begin(coords)+list.size(), std::end(coords), T(0));
@@ -209,20 +215,31 @@ template<typename Container> Matrix<Container> Matrix<Container>::mul(const Matr
 template<typename Container> void Matrix<Container>::apply3(Vectors<Container>& transform) {
 	auto& e = elems;
 	std::transform(std::begin(transform), std::end(transform), std::begin(transform), [&e](PodClass a) {
-		return PodClass{}.__init(	{
+		PodClass value{
+		(e[0] * a.coords[0] + e[1] * a.coords[1] + e[2] * a.coords[2]),
+		(e[3] * a.coords[0] + e[4] * a.coords[1] + e[5] * a.coords[2]),
+		(e[6] * a.coords[0] + e[7] * a.coords[1] + e[8] * a.coords[2])
+		};
+		return value;
+		/*return PodClass{}.__init({
 			(e[0]* a.coords[0] +e[1]* a.coords[1] +e[2]* a.coords[2]),
 			(e[3]* a.coords[0] +e[4]* a.coords[1] +e[5]* a.coords[2]),
 			(e[6]* a.coords[0] +e[7]* a.coords[1] +e[8]* a.coords[2])}
-		);
+		);*/
 	});
 }
 template<typename Container> void Matrix<Container>::apply2(Vectors<Container>& transform) {
 	auto& e = elems;
 	std::transform(std::begin(transform), std::end(transform), std::begin(transform), [&e](PodClass a) {
-		return PodClass{}.__init({
+		PodClass value{
+		(e[0] * a.coords[0] + e[1] * a.coords[1] + e[2] * 1),
+		(e[3] * a.coords[0] + e[4] * a.coords[1] + e[5] * 1)
+		};
+		return value;
+		/*return PodClass{}.__init({
 			(e[0] * a.coords[0] + e[1] * a.coords[1] + e[2] * 1),
 			(e[3] * a.coords[0] + e[4] * a.coords[1] + e[5] * 1)}
-		);
+		);*/
 	});
 }
 

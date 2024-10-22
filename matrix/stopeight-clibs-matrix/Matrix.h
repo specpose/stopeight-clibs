@@ -14,12 +14,16 @@ public:
 	typedef typename element::value_type value_type;
 	typedef typename element::reference reference;
 
-	Vector<T, Size,tf>& __init(std::initializer_list<T> list);
+	Vector(std::initializer_list<T> list);
+	Vector<T, Size,tf>& __init(std::initializer_list<T> list);//REMOVE: not a pod
 
 	std::array<T, Size> coords;
 };
 
-template<typename Container, typename tf = typename std::enable_if_t<std::is_pod<typename Container::value_type>::value>> class Vectors;//forward declaration! same as in real declaration below
+//template<typename Container, typename tf = typename std::enable_if_t<std::is_pod<typename Container::value_type>::value>> class Vectors;//forward declaration! same as in real declaration below
+//template<typename Container, typename tf = typename std::enable_if_t<std::is_trivially_constructible<typename Container::value_type>::value>> class Vectors;//forward declaration! same as in real declaration below
+template<typename Container, typename tf = typename std::enable_if_t<true>> class Vectors;//forward declaration! same as in real declaration below
+
 
 /* Row Major 2D*/
 template<typename Container> class Matrix {

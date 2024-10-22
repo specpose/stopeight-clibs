@@ -11,32 +11,34 @@
 #include <algorithm>
 
 namespace sp {
-
-	enum class FixpointType {
-		EMPTY,
-		FIXPOINT
-	};
-
-	enum class tctype
-	{
-		EMPTY,
-		SWING,
-		CREST,
-		DUNE,
-		EDGE,
-		LEGALSEGMENT,
-		CLIFF,
-		SPIRAL,
-		//Corner??
-		STRAIGHT
-	};
-
-	enum class covertype {
-		EMPTY,
-		SWELL,
-		SPIRAL,
-		ZIGZAG
-	};
+	namespace FixpointType  {
+		enum {
+			EMPTY,
+			FIXPOINT
+		};
+	}
+	namespace tctype {
+		enum {
+			EMPTY,
+			SWING,
+			CREST,
+			DUNE,
+			EDGE,
+			LEGALSEGMENT,
+			CLIFF,
+			SPIRAL,
+			//Corner??
+			STRAIGHT
+		};
+	}
+	namespace covertype {
+		enum {
+			EMPTY,
+			SWELL,
+			SPIRAL,
+			ZIGZAG
+		};
+	}
 	//const sp::tctype turns[3] = { tctype::SWING,tctype::CREST,tctype::SPIRAL };
 	//ENABLE_IF does work for classes (not in MSVC doc)
 	template<class T, size_t Size = 2,
@@ -44,68 +46,61 @@ namespace sp {
 		>
 	> struct timecode {//inheritance AND data members present, or tuple: not pod
 		using element = typename std::array<T, Size>;
-		//timecode(std::initializer_list<T>) = delete;
+		timecode() {
+			std::fill(std::begin(coords), std::end(coords), T(0));
+			type = sp::FixpointType::EMPTY;
+			tct_type = sp::tctype::EMPTY;
+			cov_type = sp::covertype::EMPTY;
+		}//not a pod
+		timecode(std::initializer_list<T> list) {//= delete;//not a pod
+			std::copy(std::begin(list), std::end(list), std::begin(coords));
+			std::fill(std::begin(coords) + list.size(), std::end(coords), T(0));
+			type = sp::FixpointType::EMPTY;
+			tct_type = sp::tctype::EMPTY;
+			cov_type = sp::covertype::EMPTY;
+		}
+		typedef typename element::value_type value_type;
+		typedef typename element::reference reference;
 		/*timecode<T,Size>& operator=(std::initializer_list<T>& other) {
 			static_assert(other.size() == std::tuple_size<element>::value);
 			auto e = element{other};
 			this->coords = e;
 			this->clear_types();
 			return *this;
-		}*/
-		timecode<T, Size>& __init(std::initializer_list<T> list){//U x = U(0), U y = U(0), U z = U(1)) {
-			//todo compile-time/stack loops?
-			std::copy(std::begin(list),std::end(list),std::begin(coords));
-			std::fill(std::begin(coords)+list.size(), std::end(coords), T(0));
-			this->clear_types();
-			return *this;
-		}
-		timecode<T,Size>& operator+=(const timecode<T,Size>& other) {
-			//assert(this->type==FixpointType::EMPTY && other.type==FixpointType::EMPTY);
+        }*/
+		//timecode<T, Size>& operator+=(const timecode<T, Size>& other) {
+		const timecode<T, Size> operator+=(const timecode<T, Size> other) {
 			std::transform(std::begin(this->coords), std::end(this->coords), std::begin(other.coords), std::begin(this->coords), std::plus<T>{});
 			return *this;
 		}
 		bool operator==(const timecode<T,Size>& other) {
 			return std::equal(std::begin(this->coords), std::end(this->coords),std::begin(other.coords)) ;
 		}
-
-		typedef typename element::value_type value_type;
-		typedef typename element::reference reference;
-		sp::FixpointType category() {
+		auto category() {
 			return type;
 		}
-		void set_category(sp::FixpointType type) {
+		void set_category(unsigned int type) {
 			this->type = type;
 		}
-		void clear_types() {
-			type = sp::FixpointType::EMPTY;
-			tct_type = sp::tctype::EMPTY;
-			cov_type = sp::covertype::EMPTY;
-		}
 
-//todo get/set element-wise with templated size
+		//todo get/set element-wise with templated size
 		value_type get_x() { return coords[0]; };
 		value_type get_y() { return coords[1]; };
 		void set_x(value_type other) { coords[0] = other; };
 		void set_y(value_type other) { coords[1] = other; };
 
-	//public: //assignment operator does not work when private members present and no CLASS constructor
-	//construction by order of appearance!
-		element coords;//1
-		sp::FixpointType type;//2
-		sp::tctype tct_type;//3
-		sp::covertype cov_type;//4
+		element coords{0,0};//1
+		unsigned int type = sp::FixpointType::EMPTY;//2
+		unsigned int tct_type = sp::tctype::EMPTY;//3
+		unsigned int cov_type = sp::covertype::EMPTY;//4
 	};
-	/*template<typename T> timecode<T> make_timecode(T x,T y,FixpointType type= FixpointType::EMPTY) {
-		timecode<T> tc;
-		tc.set_x(x);
-		tc.set_y(y);
-		tc.set_category(type);
-		return tc;
-	};*/
-
 	//todo unify with inclass operator
-	template<typename T>bool operator==(const sp::timecode<T> a,const sp::timecode<T> b){
-		return std::equal(std::begin(a.coords), std::end(a.coords),std::begin(b.coords)) ;
+	/*template<typename T>bool operator==(const sp::timecode<T> a, const sp::timecode<T> b) {
+		return std::equal(std::begin(a.coords), std::end(a.coords), std::begin(b.coords));*/
+	template<typename T>sp::timecode<T> operator+(const sp::timecode<T> a, const sp::timecode<T> b) {
+		sp::timecode<T> c{};
+		std::transform(std::begin(a.coords), std::end(a.coords), std::begin(b.coords), std::begin(c.coords), std::plus<T>{});
+		return c;
 	}
 	
 	template<typename T> using input_iterator = typename std::enable_if_t < std::is_base_of<std::input_iterator_tag, typename std::iterator_traits<T>::iterator_category>::value>; //&& std::is_arithmetic<typename std::iterator_traits<T>::value_type::value_type>::value>;
@@ -138,7 +133,5 @@ namespace sp {
 	template<class Ftor> struct functor_traits{
 		using functor_category = typename Ftor::functor_category;
 	};
-
 }
-
 #endif
